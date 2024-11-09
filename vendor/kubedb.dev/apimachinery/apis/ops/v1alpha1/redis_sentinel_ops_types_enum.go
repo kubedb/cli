@@ -24,6 +24,8 @@ const (
 	RedisSentinelOpsRequestTypeReconfigure RedisSentinelOpsRequestType = "Reconfigure"
 	// RedisSentinelOpsRequestTypeReconfigureTLS is a RedisSentinelOpsRequestType of type ReconfigureTLS.
 	RedisSentinelOpsRequestTypeReconfigureTLS RedisSentinelOpsRequestType = "ReconfigureTLS"
+	// RedisSentinelOpsRequestTypeRotateAuth is a RedisSentinelOpsRequestType of type RotateAuth.
+	RedisSentinelOpsRequestTypeRotateAuth RedisSentinelOpsRequestType = "RotateAuth"
 )
 
 var ErrInvalidRedisSentinelOpsRequestType = fmt.Errorf("not a valid RedisSentinelOpsRequestType, try [%s]", strings.Join(_RedisSentinelOpsRequestTypeNames, ", "))
@@ -35,6 +37,7 @@ var _RedisSentinelOpsRequestTypeNames = []string{
 	string(RedisSentinelOpsRequestTypeRestart),
 	string(RedisSentinelOpsRequestTypeReconfigure),
 	string(RedisSentinelOpsRequestTypeReconfigureTLS),
+	string(RedisSentinelOpsRequestTypeRotateAuth),
 }
 
 // RedisSentinelOpsRequestTypeNames returns a list of possible string values of RedisSentinelOpsRequestType.
@@ -53,6 +56,7 @@ func RedisSentinelOpsRequestTypeValues() []RedisSentinelOpsRequestType {
 		RedisSentinelOpsRequestTypeRestart,
 		RedisSentinelOpsRequestTypeReconfigure,
 		RedisSentinelOpsRequestTypeReconfigureTLS,
+		RedisSentinelOpsRequestTypeRotateAuth,
 	}
 }
 
@@ -75,6 +79,7 @@ var _RedisSentinelOpsRequestTypeValue = map[string]RedisSentinelOpsRequestType{
 	"Restart":           RedisSentinelOpsRequestTypeRestart,
 	"Reconfigure":       RedisSentinelOpsRequestTypeReconfigure,
 	"ReconfigureTLS":    RedisSentinelOpsRequestTypeReconfigureTLS,
+	"RotateAuth":        RedisSentinelOpsRequestTypeRotateAuth,
 }
 
 // ParseRedisSentinelOpsRequestType attempts to convert a string to a RedisSentinelOpsRequestType.

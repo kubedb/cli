@@ -69,6 +69,8 @@ type SinglestoreOpsRequestSpec struct {
 	Configuration *SinglestoreCustomConfigurationSpec `json:"configuration,omitempty"`
 	// Specifies information necessary for configuring TLS
 	TLS *TLSSpec `json:"tls,omitempty"`
+	// Specifies information necessary for configuring authSecret of the database
+	Authentication *AuthSpec `json:"authentication,omitempty"`
 	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
 	Timeout *metav1.Duration `json:"timeout,omitempty"`
 	// ApplyOption is to control the execution of OpsRequest depending on the database state.
@@ -76,8 +78,8 @@ type SinglestoreOpsRequestSpec struct {
 	Apply ApplyOption `json:"apply,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Configuration;ReconfigureTLS
-// ENUM(UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Restart, Configuration, ReconfigureTLS)
+// +kubebuilder:validation:Enum=UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS;RotateAuth
+// ENUM(UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Restart, Reconfigure, ReconfigureTLS, RotateAuth)
 type SinglestoreOpsRequestType string
 
 // SinglestoreUpdateVersionSpec contains the update version information of a kafka cluster

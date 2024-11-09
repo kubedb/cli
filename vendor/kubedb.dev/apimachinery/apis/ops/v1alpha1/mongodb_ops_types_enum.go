@@ -28,6 +28,8 @@ const (
 	MongoDBOpsRequestTypeReconfigureTLS MongoDBOpsRequestType = "ReconfigureTLS"
 	// MongoDBOpsRequestTypeReprovision is a MongoDBOpsRequestType of type Reprovision.
 	MongoDBOpsRequestTypeReprovision MongoDBOpsRequestType = "Reprovision"
+	// MongoDBOpsRequestTypeRotateAuth is a MongoDBOpsRequestType of type RotateAuth.
+	MongoDBOpsRequestTypeRotateAuth MongoDBOpsRequestType = "RotateAuth"
 )
 
 var ErrInvalidMongoDBOpsRequestType = fmt.Errorf("not a valid MongoDBOpsRequestType, try [%s]", strings.Join(_MongoDBOpsRequestTypeNames, ", "))
@@ -41,6 +43,7 @@ var _MongoDBOpsRequestTypeNames = []string{
 	string(MongoDBOpsRequestTypeReconfigure),
 	string(MongoDBOpsRequestTypeReconfigureTLS),
 	string(MongoDBOpsRequestTypeReprovision),
+	string(MongoDBOpsRequestTypeRotateAuth),
 }
 
 // MongoDBOpsRequestTypeNames returns a list of possible string values of MongoDBOpsRequestType.
@@ -61,6 +64,7 @@ func MongoDBOpsRequestTypeValues() []MongoDBOpsRequestType {
 		MongoDBOpsRequestTypeReconfigure,
 		MongoDBOpsRequestTypeReconfigureTLS,
 		MongoDBOpsRequestTypeReprovision,
+		MongoDBOpsRequestTypeRotateAuth,
 	}
 }
 
@@ -85,6 +89,7 @@ var _MongoDBOpsRequestTypeValue = map[string]MongoDBOpsRequestType{
 	"Reconfigure":       MongoDBOpsRequestTypeReconfigure,
 	"ReconfigureTLS":    MongoDBOpsRequestTypeReconfigureTLS,
 	"Reprovision":       MongoDBOpsRequestTypeReprovision,
+	"RotateAuth":        MongoDBOpsRequestTypeRotateAuth,
 }
 
 // ParseMongoDBOpsRequestType attempts to convert a string to a MongoDBOpsRequestType.

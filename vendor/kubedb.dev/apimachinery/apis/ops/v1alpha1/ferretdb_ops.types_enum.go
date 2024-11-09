@@ -22,6 +22,8 @@ const (
 	FerretDBOpsRequestTypeHorizontalScaling FerretDBOpsRequestType = "HorizontalScaling"
 	// FerretDBOpsRequestTypeReconfigureTLS is a FerretDBOpsRequestType of type ReconfigureTLS.
 	FerretDBOpsRequestTypeReconfigureTLS FerretDBOpsRequestType = "ReconfigureTLS"
+	// FerretDBOpsRequestTypeRotateAuth is a FerretDBOpsRequestType of type RotateAuth.
+	FerretDBOpsRequestTypeRotateAuth FerretDBOpsRequestType = "RotateAuth"
 )
 
 var ErrInvalidFerretDBOpsRequestType = fmt.Errorf("not a valid FerretDBOpsRequestType, try [%s]", strings.Join(_FerretDBOpsRequestTypeNames, ", "))
@@ -32,6 +34,7 @@ var _FerretDBOpsRequestTypeNames = []string{
 	string(FerretDBOpsRequestTypeVerticalScaling),
 	string(FerretDBOpsRequestTypeHorizontalScaling),
 	string(FerretDBOpsRequestTypeReconfigureTLS),
+	string(FerretDBOpsRequestTypeRotateAuth),
 }
 
 // FerretDBOpsRequestTypeNames returns a list of possible string values of FerretDBOpsRequestType.
@@ -49,6 +52,7 @@ func FerretDBOpsRequestTypeValues() []FerretDBOpsRequestType {
 		FerretDBOpsRequestTypeVerticalScaling,
 		FerretDBOpsRequestTypeHorizontalScaling,
 		FerretDBOpsRequestTypeReconfigureTLS,
+		FerretDBOpsRequestTypeRotateAuth,
 	}
 }
 
@@ -70,6 +74,7 @@ var _FerretDBOpsRequestTypeValue = map[string]FerretDBOpsRequestType{
 	"VerticalScaling":   FerretDBOpsRequestTypeVerticalScaling,
 	"HorizontalScaling": FerretDBOpsRequestTypeHorizontalScaling,
 	"ReconfigureTLS":    FerretDBOpsRequestTypeReconfigureTLS,
+	"RotateAuth":        FerretDBOpsRequestTypeRotateAuth,
 }
 
 // ParseFerretDBOpsRequestType attempts to convert a string to a FerretDBOpsRequestType.

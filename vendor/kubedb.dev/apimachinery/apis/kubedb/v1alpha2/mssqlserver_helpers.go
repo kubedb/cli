@@ -88,7 +88,7 @@ func (m *MSSQLServer) ServiceName() string {
 }
 
 func (m *MSSQLServer) SecondaryServiceName() string {
-	return metautil.NameWithPrefix(m.ServiceName(), "secondary")
+	return metautil.NameWithPrefix(m.ServiceName(), string(SecondaryServiceAlias))
 }
 
 func (m *MSSQLServer) GoverningServiceName() string {
@@ -245,6 +245,7 @@ func (m *MSSQLServer) GetPersistentSecrets() []string {
 	secrets = append(secrets, m.EndpointCertSecretName())
 	secrets = append(secrets, m.DbmLoginSecretName())
 	secrets = append(secrets, m.MasterKeySecretName())
+	secrets = append(secrets, m.ConfigSecretName())
 
 	return secrets
 }
@@ -378,8 +379,14 @@ func (m *MSSQLServer) SetDefaults() {
 
 	m.setDefaultContainerResourceLimits(m.Spec.PodTemplate)
 
-	m.Spec.Monitor.SetDefaults()
-	if m.Spec.Monitor != nil && m.Spec.Monitor.Prometheus != nil {
+	if m.Spec.Monitor != nil {
+		if m.Spec.Monitor.Prometheus == nil {
+			m.Spec.Monitor.Prometheus = &mona.PrometheusSpec{}
+		}
+		if m.Spec.Monitor.Prometheus.Exporter.Port == 0 {
+			m.Spec.Monitor.Prometheus.Exporter.Port = kubedb.MSSQLMonitoringDefaultServicePort
+		}
+		m.Spec.Monitor.SetDefaults()
 		if m.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser == nil {
 			m.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser = mssqlVersion.Spec.SecurityContext.RunAsUser
 		}

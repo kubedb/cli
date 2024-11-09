@@ -180,6 +180,7 @@ const (
 	SolrNodeRoleOverseer    SolrNodeRoleType = "overseer"
 	SolrNodeRoleData        SolrNodeRoleType = "data"
 	SolrNodeRoleCoordinator SolrNodeRoleType = "coordinator"
+	SolrNodeRoleCombined    SolrNodeRoleType = "combined"
 	SolrNodeRoleSet                          = "set"
 )
 

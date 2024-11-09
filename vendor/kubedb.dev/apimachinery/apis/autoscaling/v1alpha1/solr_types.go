@@ -71,11 +71,20 @@ type SolrComputeAutoscalerSpec struct {
 	// +optional
 	NodeTopology *NodeTopology `json:"nodeTopology,omitempty"`
 
-	Solr *ComputeAutoscalerSpec `json:"solr,omitempty"`
+	Node        *ComputeAutoscalerSpec `json:"node,omitempty"`
+	Overseer    *ComputeAutoscalerSpec `json:"overseer,omitempty"`
+	Data        *ComputeAutoscalerSpec `json:"data,omitempty"`
+	Coordinator *ComputeAutoscalerSpec `json:"coordinator,omitempty"`
 }
 
 type SolrStorageAutoscalerSpec struct {
-	Solr *StorageAutoscalerSpec `json:"solr,omitempty"`
+	// +optional
+	NodeTopology *NodeTopology `json:"nodeTopology,omitempty"`
+
+	Node        *StorageAutoscalerSpec `json:"node,omitempty"`
+	Overseer    *StorageAutoscalerSpec `json:"overseer,omitempty"`
+	Data        *StorageAutoscalerSpec `json:"data,omitempty"`
+	Coordinator *StorageAutoscalerSpec `json:"coordinator,omitempty"`
 }
 
 type SolrOpsRequestOptions struct {

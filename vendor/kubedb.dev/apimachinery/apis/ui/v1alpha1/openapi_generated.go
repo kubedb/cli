@@ -507,8 +507,10 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.ElasticsearchSchemaOverview":                       schema_apimachinery_apis_ui_v1alpha1_ElasticsearchSchemaOverview(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.ElasticsearchSchemaOverviewList":                   schema_apimachinery_apis_ui_v1alpha1_ElasticsearchSchemaOverviewList(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.ElasticsearchSchemaOverviewSpec":                   schema_apimachinery_apis_ui_v1alpha1_ElasticsearchSchemaOverviewSpec(ref),
+		"kubedb.dev/apimachinery/apis/ui/v1alpha1.GatewayConnection":                                 schema_apimachinery_apis_ui_v1alpha1_GatewayConnection(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.GenericDatabaseSpec":                               schema_apimachinery_apis_ui_v1alpha1_GenericDatabaseSpec(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.GenericSchemaOverviewSpec":                         schema_apimachinery_apis_ui_v1alpha1_GenericSchemaOverviewSpec(ref),
+		"kubedb.dev/apimachinery/apis/ui/v1alpha1.InClusterConnection":                               schema_apimachinery_apis_ui_v1alpha1_InClusterConnection(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.MariaDBInsight":                                    schema_apimachinery_apis_ui_v1alpha1_MariaDBInsight(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.MariaDBInsightList":                                schema_apimachinery_apis_ui_v1alpha1_MariaDBInsightList(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.MariaDBInsightSpec":                                schema_apimachinery_apis_ui_v1alpha1_MariaDBInsightSpec(ref),
@@ -599,7 +601,6 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.PostgresSettingsList":                              schema_apimachinery_apis_ui_v1alpha1_PostgresSettingsList(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.PostgresSettingsSpec":                              schema_apimachinery_apis_ui_v1alpha1_PostgresSettingsSpec(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.PostgresVacuumInfo":                                schema_apimachinery_apis_ui_v1alpha1_PostgresVacuumInfo(ref),
-		"kubedb.dev/apimachinery/apis/ui/v1alpha1.PrivateConnection":                                 schema_apimachinery_apis_ui_v1alpha1_PrivateConnection(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.ProxySQLInsight":                                   schema_apimachinery_apis_ui_v1alpha1_ProxySQLInsight(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.ProxySQLInsightList":                               schema_apimachinery_apis_ui_v1alpha1_ProxySQLInsightList(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.ProxySQLInsightSpec":                               schema_apimachinery_apis_ui_v1alpha1_ProxySQLInsightSpec(ref),
@@ -611,7 +612,6 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.ProxySQLSettingsList":                              schema_apimachinery_apis_ui_v1alpha1_ProxySQLSettingsList(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.ProxySQLSettingsSpec":                              schema_apimachinery_apis_ui_v1alpha1_ProxySQLSettingsSpec(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.ProxySQLSlowQuerySpec":                             schema_apimachinery_apis_ui_v1alpha1_ProxySQLSlowQuerySpec(ref),
-		"kubedb.dev/apimachinery/apis/ui/v1alpha1.PublicConnection":                                  schema_apimachinery_apis_ui_v1alpha1_PublicConnection(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.RedisDatabaseSpec":                                 schema_apimachinery_apis_ui_v1alpha1_RedisDatabaseSpec(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.RedisInsight":                                      schema_apimachinery_apis_ui_v1alpha1_RedisInsight(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.RedisInsightList":                                  schema_apimachinery_apis_ui_v1alpha1_RedisInsightList(ref),
@@ -21204,7 +21204,7 @@ func schema_kmodulesxyz_client_go_api_v1_CertificateSpec(ref common.ReferenceCal
 					},
 					"renewBefore": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Certificate renew before expiration duration",
+							Description: "Certificate renew before expiration duration\n\nDeprecated use `ReconfigureTLS` type OpsRequest instead.",
 							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Duration"),
 						},
 					},
@@ -21320,8 +21320,7 @@ func schema_kmodulesxyz_client_go_api_v1_ClusterInfo(ref common.ReferenceCallbac
 					},
 					"capi": {
 						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("kmodules.xyz/client-go/api/v1.CAPIClusterInfo"),
+							Ref: ref("kmodules.xyz/client-go/api/v1.CAPIClusterInfo"),
 						},
 					},
 				},
@@ -21383,6 +21382,18 @@ func schema_kmodulesxyz_client_go_api_v1_ClusterMetadata(ref common.ReferenceCal
 						},
 					},
 					"caBundle": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"managerID": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"hubClusterID": {
 						SchemaProps: spec.SchemaProps{
 							Type:   []string{"string"},
 							Format: "",
@@ -25532,32 +25543,23 @@ func schema_apimachinery_apis_ui_v1alpha1_DatabaseConnectionSpec(ref common.Refe
 				Description: "DatabaseConnectionSpec defines the desired state of DatabaseConnection",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
-					"public": {
+					"gateway": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Public Connections are exposed via Gateway",
-							Type:        []string{"array"},
+							Type: []string{"array"},
 							Items: &spec.SchemaOrArray{
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.PublicConnection"),
+										Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.GatewayConnection"),
 									},
 								},
 							},
 						},
 					},
-					"private": {
+					"inCluster": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Private Connections are in-cluster. Accessible from another pod in the same cluster.",
-							Type:        []string{"array"},
-							Items: &spec.SchemaOrArray{
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: map[string]interface{}{},
-										Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.PrivateConnection"),
-									},
-								},
-							},
+							Default: map[string]interface{}{},
+							Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.InClusterConnection"),
 						},
 					},
 					"connectOptions": {
@@ -25576,11 +25578,17 @@ func schema_apimachinery_apis_ui_v1alpha1_DatabaseConnectionSpec(ref common.Refe
 							},
 						},
 					},
+					"caCert": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "byte",
+						},
+					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/ui/v1alpha1.PrivateConnection", "kubedb.dev/apimachinery/apis/ui/v1alpha1.PublicConnection"},
+			"kubedb.dev/apimachinery/apis/ui/v1alpha1.GatewayConnection", "kubedb.dev/apimachinery/apis/ui/v1alpha1.InClusterConnection"},
 	}
 }
 
@@ -26254,6 +26262,80 @@ func schema_apimachinery_apis_ui_v1alpha1_ElasticsearchSchemaOverviewSpec(ref co
 	}
 }
 
+func schema_apimachinery_apis_ui_v1alpha1_GatewayConnection(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"namespace": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"ip": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"hostname": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"services": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Services is an optional configuration for services used to expose database",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kmodules.xyz/offshoot-api/api/v1.NamedServiceStatus"),
+									},
+								},
+							},
+						},
+					},
+					"ui": {
+						SchemaProps: spec.SchemaProps{
+							Description: "UI is an optional list of database web uis",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kmodules.xyz/offshoot-api/api/v1.NamedURL"),
+									},
+								},
+							},
+						},
+					},
+					"secretRef": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kmodules.xyz/client-go/api/v1.ObjectReference"),
+						},
+					},
+				},
+				Required: []string{"name", "namespace"},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/client-go/api/v1.ObjectReference", "kmodules.xyz/offshoot-api/api/v1.NamedServiceStatus", "kmodules.xyz/offshoot-api/api/v1.NamedURL"},
+	}
+}
+
 func schema_apimachinery_apis_ui_v1alpha1_GenericDatabaseSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -26309,6 +26391,44 @@ func schema_apimachinery_apis_ui_v1alpha1_GenericSchemaOverviewSpec(ref common.R
 		},
 		Dependencies: []string{
 			"kubedb.dev/apimachinery/apis/ui/v1alpha1.GenericDatabaseSpec"},
+	}
+}
+
+func schema_apimachinery_apis_ui_v1alpha1_InClusterConnection(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"host": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"port": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"integer"},
+							Format: "int32",
+						},
+					},
+					"exec": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Command for exec-ing into the db pod Example: kubectl exec -it -n default service/mongo-test1  -c mongodb -- bash -c '<the actual command>'",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"secretRef": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kmodules.xyz/client-go/api/v1.ObjectReference"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/client-go/api/v1.ObjectReference"},
 	}
 }
 
@@ -31107,37 +31227,6 @@ func schema_apimachinery_apis_ui_v1alpha1_PostgresVacuumInfo(ref common.Referenc
 	}
 }
 
-func schema_apimachinery_apis_ui_v1alpha1_PrivateConnection(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Type: []string{"object"},
-				Properties: map[string]spec.Schema{
-					"host": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
-					"port": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"integer"},
-							Format: "int32",
-						},
-					},
-					"secretRef": {
-						SchemaProps: spec.SchemaProps{
-							Ref: ref("kmodules.xyz/client-go/api/v1.ObjectReference"),
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"kmodules.xyz/client-go/api/v1.ObjectReference"},
-	}
-}
-
 func schema_apimachinery_apis_ui_v1alpha1_ProxySQLInsight(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -31681,80 +31770,6 @@ func schema_apimachinery_apis_ui_v1alpha1_ProxySQLSlowQuerySpec(ref common.Refer
 		},
 		Dependencies: []string{
 			"k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
-	}
-}
-
-func schema_apimachinery_apis_ui_v1alpha1_PublicConnection(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Type: []string{"object"},
-				Properties: map[string]spec.Schema{
-					"name": {
-						SchemaProps: spec.SchemaProps{
-							Default: "",
-							Type:    []string{"string"},
-							Format:  "",
-						},
-					},
-					"namespace": {
-						SchemaProps: spec.SchemaProps{
-							Default: "",
-							Type:    []string{"string"},
-							Format:  "",
-						},
-					},
-					"ip": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
-					"hostname": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
-					"services": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Services is an optional configuration for services used to expose database",
-							Type:        []string{"array"},
-							Items: &spec.SchemaOrArray{
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: map[string]interface{}{},
-										Ref:     ref("kmodules.xyz/offshoot-api/api/v1.NamedServiceStatus"),
-									},
-								},
-							},
-						},
-					},
-					"ui": {
-						SchemaProps: spec.SchemaProps{
-							Description: "UI is an optional list of database web uis",
-							Type:        []string{"array"},
-							Items: &spec.SchemaOrArray{
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: map[string]interface{}{},
-										Ref:     ref("kmodules.xyz/offshoot-api/api/v1.NamedURL"),
-									},
-								},
-							},
-						},
-					},
-					"secretRef": {
-						SchemaProps: spec.SchemaProps{
-							Ref: ref("kmodules.xyz/client-go/api/v1.ObjectReference"),
-						},
-					},
-				},
-				Required: []string{"name", "namespace"},
-			},
-		},
-		Dependencies: []string{
-			"kmodules.xyz/client-go/api/v1.ObjectReference", "kmodules.xyz/offshoot-api/api/v1.NamedServiceStatus", "kmodules.xyz/offshoot-api/api/v1.NamedURL"},
 	}
 }
 

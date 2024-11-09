@@ -16,7 +16,7 @@ spec:
     listKind: MariaDBVersionList
     plural: mariadbversions
     shortNames:
-    - mariaversion
+    - mdversion
     singular: mariadbversion
   scope: Cluster
   versions:

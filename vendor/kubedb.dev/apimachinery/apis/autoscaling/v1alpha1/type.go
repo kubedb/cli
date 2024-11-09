@@ -80,7 +80,7 @@ type ComputeAutoscalerSpec struct {
 	// +optional
 	ResourceDiffPercentage int32 `json:"resourceDiffPercentage,omitempty"`
 
-	// Specifies the minimum pod life time. The default is 15m.
+	// Specifies the minimum pod lifetime. The default is 15m.
 	// If the resource Request is inside the recommended range & there is no quickOOM (out-of-memory),
 	// we can still update the pod, if that pod's lifeTime is greater than this threshold.
 	// +optional

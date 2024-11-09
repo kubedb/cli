@@ -33,7 +33,7 @@ type PublisherSpec struct {
 	// Name of the publisher
 	Name string `json:"name"`
 	// ServerRef specifies the database appbinding reference in any namespace.
-	ServerRef core.LocalObjectReference `json:"serverRef"`
+	DatabaseRef core.LocalObjectReference `json:"databaseRef"`
 	// DatabaseName is the name of the target database inside a Postgres instance.
 	DatabaseName string `json:"databaseName"`
 	// PublishAllTables is the option to publish all tables in the database

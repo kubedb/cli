@@ -26,6 +26,8 @@ const (
 	ElasticsearchOpsRequestTypeReconfigure ElasticsearchOpsRequestType = "Reconfigure"
 	// ElasticsearchOpsRequestTypeReconfigureTLS is a ElasticsearchOpsRequestType of type ReconfigureTLS.
 	ElasticsearchOpsRequestTypeReconfigureTLS ElasticsearchOpsRequestType = "ReconfigureTLS"
+	// ElasticsearchOpsRequestTypeRotateAuth is a ElasticsearchOpsRequestType of type RotateAuth.
+	ElasticsearchOpsRequestTypeRotateAuth ElasticsearchOpsRequestType = "RotateAuth"
 )
 
 var ErrInvalidElasticsearchOpsRequestType = fmt.Errorf("not a valid ElasticsearchOpsRequestType, try [%s]", strings.Join(_ElasticsearchOpsRequestTypeNames, ", "))
@@ -38,6 +40,7 @@ var _ElasticsearchOpsRequestTypeNames = []string{
 	string(ElasticsearchOpsRequestTypeRestart),
 	string(ElasticsearchOpsRequestTypeReconfigure),
 	string(ElasticsearchOpsRequestTypeReconfigureTLS),
+	string(ElasticsearchOpsRequestTypeRotateAuth),
 }
 
 // ElasticsearchOpsRequestTypeNames returns a list of possible string values of ElasticsearchOpsRequestType.
@@ -57,6 +60,7 @@ func ElasticsearchOpsRequestTypeValues() []ElasticsearchOpsRequestType {
 		ElasticsearchOpsRequestTypeRestart,
 		ElasticsearchOpsRequestTypeReconfigure,
 		ElasticsearchOpsRequestTypeReconfigureTLS,
+		ElasticsearchOpsRequestTypeRotateAuth,
 	}
 }
 
@@ -80,6 +84,7 @@ var _ElasticsearchOpsRequestTypeValue = map[string]ElasticsearchOpsRequestType{
 	"Restart":           ElasticsearchOpsRequestTypeRestart,
 	"Reconfigure":       ElasticsearchOpsRequestTypeReconfigure,
 	"ReconfigureTLS":    ElasticsearchOpsRequestTypeReconfigureTLS,
+	"RotateAuth":        ElasticsearchOpsRequestTypeRotateAuth,
 }
 
 // ParseElasticsearchOpsRequestType attempts to convert a string to a ElasticsearchOpsRequestType.

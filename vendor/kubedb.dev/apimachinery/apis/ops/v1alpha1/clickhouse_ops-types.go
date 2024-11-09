@@ -54,6 +54,8 @@ type ClickHouseOpsRequestSpec struct {
 	DatabaseRef core.LocalObjectReference `json:"databaseRef"`
 	// Specifies the ops request type: UpdateVersion, HorizontalScaling, VerticalScaling etc.
 	Type ClickHouseOpsRequestType `json:"type"`
+	// Specifies information necessary for configuring authSecret of the database
+	Authentication *AuthSpec `json:"authentication,omitempty"`
 	// Specifies information necessary for restarting database
 	Restart *RestartSpec `json:"restart,omitempty"`
 	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
@@ -63,8 +65,8 @@ type ClickHouseOpsRequestSpec struct {
 	Apply ApplyOption `json:"apply,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=Restart
-// ENUM(Restart)
+// +kubebuilder:validation:Enum=Restart;RotateAuth
+// ENUM(Restart, RotateAuth)
 type ClickHouseOpsRequestType string
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

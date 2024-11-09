@@ -501,6 +501,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.CassandraApp":                                  schema_apimachinery_apis_kubedb_v1alpha2_CassandraApp(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.CassandraList":                                 schema_apimachinery_apis_kubedb_v1alpha2_CassandraList(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.CassandraSpec":                                 schema_apimachinery_apis_kubedb_v1alpha2_CassandraSpec(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.CassandraStatsService":                         schema_apimachinery_apis_kubedb_v1alpha2_CassandraStatsService(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.CassandraStatus":                               schema_apimachinery_apis_kubedb_v1alpha2_CassandraStatus(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ClickHouse":                                    schema_apimachinery_apis_kubedb_v1alpha2_ClickHouse(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ClickHouseKeeper":                              schema_apimachinery_apis_kubedb_v1alpha2_ClickHouseKeeper(ref),
@@ -21280,7 +21281,7 @@ func schema_kmodulesxyz_client_go_api_v1_CertificateSpec(ref common.ReferenceCal
 					},
 					"renewBefore": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Certificate renew before expiration duration",
+							Description: "Certificate renew before expiration duration\n\nDeprecated use `ReconfigureTLS` type OpsRequest instead.",
 							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Duration"),
 						},
 					},
@@ -21396,8 +21397,7 @@ func schema_kmodulesxyz_client_go_api_v1_ClusterInfo(ref common.ReferenceCallbac
 					},
 					"capi": {
 						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("kmodules.xyz/client-go/api/v1.CAPIClusterInfo"),
+							Ref: ref("kmodules.xyz/client-go/api/v1.CAPIClusterInfo"),
 						},
 					},
 				},
@@ -21459,6 +21459,18 @@ func schema_kmodulesxyz_client_go_api_v1_ClusterMetadata(ref common.ReferenceCal
 						},
 					},
 					"caBundle": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"managerID": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"hubClusterID": {
 						SchemaProps: spec.SchemaProps{
 							Type:   []string{"string"},
 							Format: "",
@@ -25665,6 +25677,12 @@ func schema_apimachinery_apis_kubedb_v1alpha2_ArchiverRecovery(ref common.Refere
 							Ref:         ref("kmodules.xyz/client-go/api/v1.ObjectReference"),
 						},
 					},
+					"replicationStrategy": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
 				},
 				Required: []string{"recoveryTimestamp"},
 			},
@@ -25889,6 +25907,12 @@ func schema_apimachinery_apis_kubedb_v1alpha2_CassandraSpec(ref common.Reference
 							},
 						},
 					},
+					"monitor": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Monitor is used monitor database instance",
+							Ref:         ref("kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec"),
+						},
+					},
 					"deletionPolicy": {
 						SchemaProps: spec.SchemaProps{
 							Description: "DeletionPolicy controls the delete operation for database",
@@ -25908,7 +25932,27 @@ func schema_apimachinery_apis_kubedb_v1alpha2_CassandraSpec(ref common.Reference
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Topology"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Topology"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1alpha2_CassandraStatsService(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"Cassandra": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Cassandra"),
+						},
+					},
+				},
+				Required: []string{"Cassandra"},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Cassandra"},
 	}
 }
 
@@ -26929,7 +26973,7 @@ func schema_apimachinery_apis_kubedb_v1alpha2_DruidSpec(ref common.ReferenceCall
 					"authSecret": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Database authentication secret",
-							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"),
 						},
 					},
 					"init": {
@@ -26942,6 +26986,25 @@ func schema_apimachinery_apis_kubedb_v1alpha2_DruidSpec(ref common.ReferenceCall
 						SchemaProps: spec.SchemaProps{
 							Description: "ConfigSecret is an optional field to provide custom configuration file for database (i.e. config.properties). If specified, this file will be used as configuration file otherwise default configuration file will be used.",
 							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
+						},
+					},
+					"enableSSL": {
+						SchemaProps: spec.SchemaProps{
+							Description: "To enable ssl for http layer",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"keystoreCredSecret": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Keystore encryption secret",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"),
+						},
+					},
+					"tls": {
+						SchemaProps: spec.SchemaProps{
+							Description: "TLS contains tls configurations",
+							Ref:         ref("kmodules.xyz/client-go/api/v1.TLSConfig"),
 						},
 					},
 					"metadataStorage": {
@@ -27008,7 +27071,7 @@ func schema_apimachinery_apis_kubedb_v1alpha2_DruidSpec(ref common.ReferenceCall
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.DeepStorageSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.DruidClusterTopology", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MetadataStorage", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ZookeeperRef"},
+			"k8s.io/api/core/v1.LocalObjectReference", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.DeepStorageSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.DruidClusterTopology", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MetadataStorage", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ZookeeperRef"},
 	}
 }
 
@@ -34174,6 +34237,18 @@ func schema_apimachinery_apis_kubedb_v1alpha2_SecretReference(ref common.Referen
 							Format:      "",
 						},
 					},
+					"rotateAfter": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Recommendation engine will generate RotateAuth opsReq using this field",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Duration"),
+						},
+					},
+					"activeFrom": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ActiveFrom holds the RFC3339 time. The referred authSecret is in-use from this timestamp.",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
+						},
+					},
 					"externallyManaged": {
 						SchemaProps: spec.SchemaProps{
 							Type:   []string{"boolean"},
@@ -34183,6 +34258,8 @@ func schema_apimachinery_apis_kubedb_v1alpha2_SecretReference(ref common.Referen
 				},
 			},
 		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
 	}
 }
 
@@ -35180,10 +35257,24 @@ func schema_apimachinery_apis_kubedb_v1alpha2_ZooKeeperSpec(ref common.Reference
 							Format:  "int32",
 						},
 					},
+					"clientSecurePort": {
+						SchemaProps: spec.SchemaProps{
+							Default: 0,
+							Type:    []string{"integer"},
+							Format:  "int32",
+						},
+					},
 					"storage": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Storage to specify how storage shall be used.",
 							Ref:         ref("k8s.io/api/core/v1.PersistentVolumeClaimSpec"),
+						},
+					},
+					"enableSSL": {
+						SchemaProps: spec.SchemaProps{
+							Description: "To enable ssl for http layer",
+							Type:        []string{"boolean"},
+							Format:      "",
 						},
 					},
 					"disableAuth": {
@@ -35203,6 +35294,18 @@ func schema_apimachinery_apis_kubedb_v1alpha2_ZooKeeperSpec(ref common.Reference
 						SchemaProps: spec.SchemaProps{
 							Description: "ConfigSecret is an optional field to provide custom configuration file for database (i.e config.properties). If specified, this file will be used as configuration file otherwise default configuration file will be used.",
 							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
+						},
+					},
+					"keystoreCredSecret": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Keystore encryption secret",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"),
+						},
+					},
+					"tls": {
+						SchemaProps: spec.SchemaProps{
+							Description: "TLS contains tls configurations",
+							Ref:         ref("kmodules.xyz/client-go/api/v1.TLSConfig"),
 						},
 					},
 					"podTemplate": {
@@ -35258,7 +35361,7 @@ func schema_apimachinery_apis_kubedb_v1alpha2_ZooKeeperSpec(ref common.Reference
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"},
 	}
 }
 

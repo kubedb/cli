@@ -51,7 +51,7 @@ type PgBouncerOpsRequest struct {
 // PgBouncerOpsRequestSpec is the spec for PgBouncerOpsRequest
 type PgBouncerOpsRequestSpec struct {
 	// Specifies the PgBouncer reference
-	ServerRef core.LocalObjectReference `json:"serverRef"`
+	DatabaseRef core.LocalObjectReference `json:"databaseRef"`
 	// Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.
 	Type PgBouncerOpsRequestType `json:"type"`
 	// Specifies information necessary for upgrading PgBouncer
@@ -64,6 +64,8 @@ type PgBouncerOpsRequestSpec struct {
 	Configuration *PgBouncerCustomConfigurationSpec `json:"configuration,omitempty"`
 	// Specifies information necessary for configuring TLS
 	TLS *TLSSpec `json:"tls,omitempty"`
+	// Specifies information necessary for configuring authSecret of the database
+	Authentication *AuthSpec `json:"authentication,omitempty"`
 	// Specifies information necessary for restarting database
 	Restart *RestartSpec `json:"restart,omitempty"`
 	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
@@ -73,8 +75,8 @@ type PgBouncerOpsRequestSpec struct {
 	Apply ApplyOption `json:"apply,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=HorizontalScaling;VerticalScaling;UpdateVersion;Reconfigure
-// ENUM(HorizontalScaling, VerticalScaling, UpdateVersion, Reconfigure)
+// +kubebuilder:validation:Enum=HorizontalScaling;VerticalScaling;UpdateVersion;Reconfigure;RotateAuth
+// ENUM(HorizontalScaling, VerticalScaling, UpdateVersion, Reconfigure, RotateAuth)
 type PgBouncerOpsRequestType string
 
 type PgBouncerUpdateVersionSpec struct {

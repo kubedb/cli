@@ -48,6 +48,16 @@ spec:
                 - IfReady
                 - Always
                 type: string
+              authentication:
+                properties:
+                  secretRef:
+                    properties:
+                      name:
+                        default: ""
+                        type: string
+                    type: object
+                    x-kubernetes-map-type: atomic
+                type: object
               configuration:
                 properties:
                   applyConfig:
@@ -81,6 +91,111 @@ spec:
                 type: object
               timeout:
                 type: string
+              tls:
+                properties:
+                  certificates:
+                    items:
+                      properties:
+                        alias:
+                          type: string
+                        dnsNames:
+                          items:
+                            type: string
+                          type: array
+                        duration:
+                          type: string
+                        emailAddresses:
+                          items:
+                            type: string
+                          type: array
+                        ipAddresses:
+                          items:
+                            type: string
+                          type: array
+                        issuerRef:
+                          properties:
+                            apiGroup:
+                              type: string
+                            kind:
+                              type: string
+                            name:
+                              type: string
+                          required:
+                          - kind
+                          - name
+                          type: object
+                          x-kubernetes-map-type: atomic
+                        privateKey:
+                          properties:
+                            encoding:
+                              enum:
+                              - PKCS1
+                              - PKCS8
+                              type: string
+                          type: object
+                        renewBefore:
+                          type: string
+                        secretName:
+                          type: string
+                        subject:
+                          properties:
+                            countries:
+                              items:
+                                type: string
+                              type: array
+                            localities:
+                              items:
+                                type: string
+                              type: array
+                            organizationalUnits:
+                              items:
+                                type: string
+                              type: array
+                            organizations:
+                              items:
+                                type: string
+                              type: array
+                            postalCodes:
+                              items:
+                                type: string
+                              type: array
+                            provinces:
+                              items:
+                                type: string
+                              type: array
+                            serialNumber:
+                              type: string
+                            streetAddresses:
+                              items:
+                                type: string
+                              type: array
+                          type: object
+                        uris:
+                          items:
+                            type: string
+                          type: array
+                      required:
+                      - alias
+                      type: object
+                    type: array
+                  issuerRef:
+                    properties:
+                      apiGroup:
+                        type: string
+                      kind:
+                        type: string
+                      name:
+                        type: string
+                    required:
+                    - kind
+                    - name
+                    type: object
+                    x-kubernetes-map-type: atomic
+                  remove:
+                    type: boolean
+                  rotateCertificates:
+                    type: boolean
+                type: object
               type:
                 enum:
                 - UpdateVersion
@@ -89,6 +204,8 @@ spec:
                 - VolumeExpansion
                 - Restart
                 - Reconfigure
+                - ReconfigureTLS
+                - RotateAuth
                 type: string
               updateVersion:
                 properties:

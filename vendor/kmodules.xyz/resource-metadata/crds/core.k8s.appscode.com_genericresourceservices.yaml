@@ -71,18 +71,17 @@ spec:
                     type: string
                   provider:
                     enum:
-                    - Aws
-                    - Azure
+                    - AKS
                     - DigitalOcean
-                    - GoogleCloud
+                    - EKS
+                    - Exoscale
+                    - Generic
+                    - GKE
                     - Linode
                     - Packet
+                    - Rancher
                     - Scaleway
                     - Vultr
-                    - BareMetal
-                    - KIND
-                    - Generic
-                    - Private
                     type: string
                   uid:
                     type: string

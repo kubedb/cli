@@ -24,6 +24,8 @@ const (
 	PgpoolOpsRequestTypeHorizontalScaling PgpoolOpsRequestType = "HorizontalScaling"
 	// PgpoolOpsRequestTypeReconfigureTLS is a PgpoolOpsRequestType of type ReconfigureTLS.
 	PgpoolOpsRequestTypeReconfigureTLS PgpoolOpsRequestType = "ReconfigureTLS"
+	// PgpoolOpsRequestTypeRotateAuth is a PgpoolOpsRequestType of type RotateAuth.
+	PgpoolOpsRequestTypeRotateAuth PgpoolOpsRequestType = "RotateAuth"
 )
 
 var ErrInvalidPgpoolOpsRequestType = fmt.Errorf("not a valid PgpoolOpsRequestType, try [%s]", strings.Join(_PgpoolOpsRequestTypeNames, ", "))
@@ -35,6 +37,7 @@ var _PgpoolOpsRequestTypeNames = []string{
 	string(PgpoolOpsRequestTypeVerticalScaling),
 	string(PgpoolOpsRequestTypeHorizontalScaling),
 	string(PgpoolOpsRequestTypeReconfigureTLS),
+	string(PgpoolOpsRequestTypeRotateAuth),
 }
 
 // PgpoolOpsRequestTypeNames returns a list of possible string values of PgpoolOpsRequestType.
@@ -53,6 +56,7 @@ func PgpoolOpsRequestTypeValues() []PgpoolOpsRequestType {
 		PgpoolOpsRequestTypeVerticalScaling,
 		PgpoolOpsRequestTypeHorizontalScaling,
 		PgpoolOpsRequestTypeReconfigureTLS,
+		PgpoolOpsRequestTypeRotateAuth,
 	}
 }
 
@@ -75,6 +79,7 @@ var _PgpoolOpsRequestTypeValue = map[string]PgpoolOpsRequestType{
 	"VerticalScaling":   PgpoolOpsRequestTypeVerticalScaling,
 	"HorizontalScaling": PgpoolOpsRequestTypeHorizontalScaling,
 	"ReconfigureTLS":    PgpoolOpsRequestTypeReconfigureTLS,
+	"RotateAuth":        PgpoolOpsRequestTypeRotateAuth,
 }
 
 // ParsePgpoolOpsRequestType attempts to convert a string to a PgpoolOpsRequestType.

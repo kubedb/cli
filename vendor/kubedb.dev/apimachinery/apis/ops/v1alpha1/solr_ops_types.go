@@ -49,8 +49,8 @@ type SolrOpsRequest struct {
 	Status            OpsRequestStatus   `json:"status,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Reconfigure;Restart;ReconfigureTLS
-// ENUM(UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Reconfigure, Restart, ReconfigureTLS)
+// +kubebuilder:validation:Enum=UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Reconfigure;Restart;ReconfigureTLS;RotateAuth
+// ENUM(UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Reconfigure, Restart, ReconfigureTLS, RotateAuth)
 type SolrOpsRequestType string
 
 // SolrOpsRequestSpec is the spec for SolrOpsRequest
@@ -73,6 +73,8 @@ type SolrOpsRequestSpec struct {
 	Configuration *SolrCustomConfigurationSpec `json:"configuration,omitempty"`
 	// Specifies information necessary for configuring TLS
 	TLS *TLSSpec `json:"tls,omitempty"`
+	// Specifies information necessary for configuring authSecret of the database
+	Authentication *AuthSpec `json:"authentication,omitempty"`
 	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
 	Timeout *metav1.Duration `json:"timeout,omitempty"`
 	// ApplyOption is to control the execution of OpsRequest depending on the database state.

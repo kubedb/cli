@@ -231,7 +231,14 @@ func (k *Kafka) GetAuthSecretName() string {
 	if k.Spec.AuthSecret != nil && k.Spec.AuthSecret.Name != "" {
 		return k.Spec.AuthSecret.Name
 	}
-	return k.DefaultUserCredSecretName("admin")
+	return meta_util.NameWithSuffix(k.OffshootName(), "auth")
+}
+
+func (k *Kafka) GetKeystoreSecretName() string {
+	if k.Spec.KeystoreCredSecret != nil && k.Spec.KeystoreCredSecret.Name != "" {
+		return k.Spec.KeystoreCredSecret.Name
+	}
+	return meta_util.NameWithSuffix(k.OffshootName(), "keystore-cred")
 }
 
 func (k *Kafka) GetPersistentSecrets() []string {
@@ -247,14 +254,6 @@ func (k *Kafka) GetPersistentSecrets() []string {
 
 func (k *Kafka) CruiseControlConfigSecretName() string {
 	return meta_util.NameWithSuffix(k.OffshootName(), "cruise-control-config")
-}
-
-func (k *Kafka) DefaultUserCredSecretName(username string) string {
-	return meta_util.NameWithSuffix(k.Name, strings.ReplaceAll(fmt.Sprintf("%s-cred", username), "_", "-"))
-}
-
-func (k *Kafka) DefaultKeystoreCredSecretName() string {
-	return meta_util.NameWithSuffix(k.Name, strings.ReplaceAll("keystore-cred", "_", "-"))
 }
 
 // CertificateName returns the default certificate name and/or certificate secret name for a certificate alias

@@ -56,11 +56,17 @@ func (r *SolrAutoscaler) setDefaults() {
 	r.setOpsReqOptsDefaults()
 
 	if r.Spec.Storage != nil {
-		setDefaultStorageValues(r.Spec.Storage.Solr)
+		setDefaultStorageValues(r.Spec.Storage.Node)
+		setDefaultStorageValues(r.Spec.Storage.Overseer)
+		setDefaultStorageValues(r.Spec.Storage.Data)
+		setDefaultStorageValues(r.Spec.Storage.Coordinator)
 	}
 
 	if r.Spec.Compute != nil {
-		setDefaultComputeValues(r.Spec.Compute.Solr)
+		setDefaultStorageValues(r.Spec.Storage.Node)
+		setDefaultStorageValues(r.Spec.Storage.Overseer)
+		setDefaultStorageValues(r.Spec.Storage.Data)
+		setDefaultStorageValues(r.Spec.Storage.Coordinator)
 	}
 }
 

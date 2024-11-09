@@ -6,7 +6,7 @@ toolchain go1.22.5
 
 require (
 	github.com/Masterminds/semver/v3 v3.3.0
-	github.com/cert-manager/cert-manager v1.15.1
+	github.com/cert-manager/cert-manager v1.15.2
 	github.com/fatih/camelcase v1.0.0
 	github.com/go-sql-driver/mysql v1.8.1
 	github.com/prometheus/client_golang v1.18.0
@@ -26,11 +26,11 @@ require (
 	k8s.io/klog/v2 v2.130.1
 	k8s.io/kubectl v0.29.0
 	kmodules.xyz/cert-manager-util v0.29.0
-	kmodules.xyz/client-go v0.30.17
+	kmodules.xyz/client-go v0.30.32
 	kmodules.xyz/custom-resources v0.30.0
-	kmodules.xyz/monitoring-agent-api v0.30.1
-	kubedb.dev/apimachinery v0.48.0
-	kubedb.dev/db-client-go v0.3.0
+	kmodules.xyz/monitoring-agent-api v0.30.2
+	kubedb.dev/apimachinery v0.49.0-rc.0
+	kubedb.dev/db-client-go v0.4.0-rc.0
 	sigs.k8s.io/controller-runtime v0.18.4
 	sigs.k8s.io/yaml v1.4.0
 	stash.appscode.dev/apimachinery v0.36.0
@@ -144,7 +144,7 @@ require (
 	kmodules.xyz/objectstore-api v0.29.1 // indirect
 	kmodules.xyz/offshoot-api v0.30.1 // indirect
 	kmodules.xyz/prober v0.29.0 // indirect
-	kmodules.xyz/resource-metadata v0.18.15 // indirect
+	kmodules.xyz/resource-metadata v0.20.0 // indirect
 	kubeops.dev/petset v0.0.7 // indirect
 	kubeops.dev/sidekick v0.0.8 // indirect
 	kubestash.dev/apimachinery v0.13.0 // indirect

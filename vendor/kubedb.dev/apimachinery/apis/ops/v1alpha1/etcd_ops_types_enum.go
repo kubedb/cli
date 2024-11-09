@@ -26,6 +26,8 @@ const (
 	EtcdOpsRequestTypeReconfigure EtcdOpsRequestType = "Reconfigure"
 	// EtcdOpsRequestTypeReconfigureTLS is a EtcdOpsRequestType of type ReconfigureTLS.
 	EtcdOpsRequestTypeReconfigureTLS EtcdOpsRequestType = "ReconfigureTLS"
+	// EtcdOpsRequestTypeRotateAuth is a EtcdOpsRequestType of type RotateAuth.
+	EtcdOpsRequestTypeRotateAuth EtcdOpsRequestType = "RotateAuth"
 )
 
 var ErrInvalidEtcdOpsRequestType = fmt.Errorf("not a valid EtcdOpsRequestType, try [%s]", strings.Join(_EtcdOpsRequestTypeNames, ", "))
@@ -38,6 +40,7 @@ var _EtcdOpsRequestTypeNames = []string{
 	string(EtcdOpsRequestTypeRestart),
 	string(EtcdOpsRequestTypeReconfigure),
 	string(EtcdOpsRequestTypeReconfigureTLS),
+	string(EtcdOpsRequestTypeRotateAuth),
 }
 
 // EtcdOpsRequestTypeNames returns a list of possible string values of EtcdOpsRequestType.
@@ -57,6 +60,7 @@ func EtcdOpsRequestTypeValues() []EtcdOpsRequestType {
 		EtcdOpsRequestTypeRestart,
 		EtcdOpsRequestTypeReconfigure,
 		EtcdOpsRequestTypeReconfigureTLS,
+		EtcdOpsRequestTypeRotateAuth,
 	}
 }
 
@@ -80,6 +84,7 @@ var _EtcdOpsRequestTypeValue = map[string]EtcdOpsRequestType{
 	"Restart":           EtcdOpsRequestTypeRestart,
 	"Reconfigure":       EtcdOpsRequestTypeReconfigure,
 	"ReconfigureTLS":    EtcdOpsRequestTypeReconfigureTLS,
+	"RotateAuth":        EtcdOpsRequestTypeRotateAuth,
 }
 
 // ParseEtcdOpsRequestType attempts to convert a string to a EtcdOpsRequestType.

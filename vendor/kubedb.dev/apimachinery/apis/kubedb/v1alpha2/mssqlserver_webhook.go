@@ -19,10 +19,13 @@ package v1alpha2
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	catalog "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
 	"kubedb.dev/apimachinery/apis/kubedb"
 
+	"gomodules.xyz/x/arrays"
+	core "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
@@ -156,6 +159,14 @@ func (m *MSSQLServer) ValidateCreateOrUpdate() field.ErrorList {
 			m.Name, "spec.tls.issuerRef' is missing"))
 	}
 
+	if m.Spec.PodTemplate != nil {
+		if err = ValidateMSSQLServerEnvVar(getMSSQLServerContainerEnvs(m), forbiddenMSSQLServerEnvVars, m.ResourceKind()); err != nil {
+			allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("podTemplate"),
+				m.Name,
+				err.Error()))
+		}
+	}
+
 	err = mssqlValidateVolumes(m.Spec.PodTemplate)
 	if err != nil {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("podTemplate").Child("spec").Child("volumes"),
@@ -274,5 +285,33 @@ func mssqlValidateVolumesMountPaths(podTemplate *ofst.PodTemplateSpec) error {
 		}
 	}
 
+	return nil
+}
+
+var forbiddenMSSQLServerEnvVars = []string{
+	kubedb.EnvMSSQLSAUsername,
+	kubedb.EnvMSSQLSAPassword,
+	kubedb.EnvAcceptEula,
+	kubedb.EnvMSSQLEnableHADR,
+	kubedb.EnvMSSQLAgentEnabled,
+	kubedb.EnvMSSQLVersion,
+}
+
+func getMSSQLServerContainerEnvs(m *MSSQLServer) []core.EnvVar {
+	for _, container := range m.Spec.PodTemplate.Spec.Containers {
+		if container.Name == kubedb.MSSQLContainerName {
+			return container.Env
+		}
+	}
+	return []core.EnvVar{}
+}
+
+func ValidateMSSQLServerEnvVar(envs []core.EnvVar, forbiddenEnvs []string, resourceType string) error {
+	for _, env := range envs {
+		present, _ := arrays.Contains(forbiddenEnvs, env.Name)
+		if present {
+			return fmt.Errorf("environment variable %s is forbidden to use in %s spec", env.Name, resourceType)
+		}
+	}
 	return nil
 }

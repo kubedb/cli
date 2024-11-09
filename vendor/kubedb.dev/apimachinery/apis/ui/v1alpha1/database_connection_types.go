@@ -43,11 +43,8 @@ type DatabaseConnection struct {
 
 // DatabaseConnectionSpec defines the desired state of DatabaseConnection
 type DatabaseConnectionSpec struct {
-	// Public Connections are exposed via Gateway
-	Public []PublicConnection `json:"public,omitempty"`
-
-	// Private Connections are in-cluster. Accessible from another pod in the same cluster.
-	Private []PrivateConnection `json:"private,omitempty"`
+	Gateway   []GatewayConnection `json:"gateway,omitempty"`
+	InCluster InClusterConnection `json:"inCluster,omitempty"`
 
 	// Parameters: `username = <username>\n
 	// password = <password>\n
@@ -61,6 +58,7 @@ type DatabaseConnectionSpec struct {
 	//
 	// And some language specific template strings. Like: Java, C#, Go, Python, Javascript, Ruby etc.
 	ConnectOptions map[string]string `json:"connectOptions,omitempty"`
+	CACert         []byte            `json:"caCert,omitempty"`
 }
 
 //type ConnectOption struct {
@@ -80,14 +78,17 @@ type DatabaseConnectionSpec struct {
 //	Flags string `json:"flags,omitempty"`
 //}
 
-type PublicConnection struct {
+type GatewayConnection struct {
 	*ofst.Gateway `json:",inline"`
 	SecretRef     *kmapi.ObjectReference `json:"secretRef,omitempty"`
 }
 
-type PrivateConnection struct {
-	Host      string                 `json:"host,omitempty"`
-	Port      int32                  `json:"port,omitempty"`
+type InClusterConnection struct {
+	Host string `json:"host,omitempty"`
+	Port int32  `json:"port,omitempty"`
+	// Command for exec-ing into the db pod
+	// Example: kubectl exec -it -n default service/mongo-test1  -c mongodb -- bash -c '<the actual command>'
+	Exec      string                 `json:"exec,omitempty"`
 	SecretRef *kmapi.ObjectReference `json:"secretRef,omitempty"`
 }
 

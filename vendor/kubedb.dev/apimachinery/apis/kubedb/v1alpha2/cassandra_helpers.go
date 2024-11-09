@@ -27,6 +27,7 @@ import (
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
+	promapi "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1"
 	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -37,6 +38,7 @@ import (
 	meta_util "kmodules.xyz/client-go/meta"
 	"kmodules.xyz/client-go/policy/secomp"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
+	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v2"
 )
 
@@ -146,7 +148,7 @@ func (r *Cassandra) GetAuthSecretName() string {
 	if r.Spec.AuthSecret != nil && r.Spec.AuthSecret.Name != "" {
 		return r.Spec.AuthSecret.Name
 	}
-	return r.DefaultUserCredSecretName("admin")
+	return meta_util.NameWithSuffix(r.OffshootName(), "auth")
 }
 
 func (r *Cassandra) ConfigSecretName() string {
@@ -178,6 +180,73 @@ func (r *Cassandra) GetConnectionScheme() string {
 	return scheme
 }
 
+func (r *Cassandra) OffShootSelectors(extraSelectors ...map[string]string) map[string]string {
+	selector := map[string]string{
+		meta_util.NameLabelKey:      r.ResourceFQN(),
+		meta_util.InstanceLabelKey:  r.Name,
+		meta_util.ManagedByLabelKey: kubedb.GroupName,
+	}
+	return meta_util.OverwriteKeys(selector, extraSelectors...)
+}
+
+func (r *Cassandra) offShootLabels(selector, override map[string]string) map[string]string {
+	selector[meta_util.ComponentLabelKey] = kubedb.ComponentDatabase
+	return meta_util.FilterKeys(kubedb.GroupName, selector, meta_util.OverwriteKeys(nil, r.Labels, override))
+}
+
+func (r *Cassandra) OffShootLabels() map[string]string {
+	return r.offShootLabels(r.OffShootSelectors(), nil)
+}
+
+func (r *Cassandra) ServiceLabels(alias ServiceAlias, extraLabels ...map[string]string) map[string]string {
+	svcTemplate := GetServiceTemplate(r.Spec.ServiceTemplates, alias)
+	return r.offShootLabels(meta_util.OverwriteKeys(r.OffShootSelectors(), extraLabels...), svcTemplate.Labels)
+}
+
+func (r *Cassandra) OffShootName() string {
+	return r.Name
+}
+
+type CassandraStatsService struct {
+	*Cassandra
+}
+
+func (ks CassandraStatsService) TLSConfig() *promapi.TLSConfig {
+	return nil
+}
+
+func (ks CassandraStatsService) GetNamespace() string {
+	return ks.Cassandra.GetNamespace()
+}
+
+func (ks CassandraStatsService) ServiceName() string {
+	return ks.OffShootName() + "-stats"
+}
+
+func (ks CassandraStatsService) ServiceMonitorName() string {
+	return ks.ServiceName()
+}
+
+func (ks CassandraStatsService) ServiceMonitorAdditionalLabels() map[string]string {
+	return ks.OffshootLabels()
+}
+
+func (ks CassandraStatsService) Path() string {
+	return kubedb.DefaultStatsPath
+}
+
+func (ks CassandraStatsService) Scheme() string {
+	return ""
+}
+
+func (r *Cassandra) StatsService() mona.StatsAccessor {
+	return &CassandraStatsService{r}
+}
+
+func (r *Cassandra) StatsServiceLabels() map[string]string {
+	return r.ServiceLabels(StatsServiceAlias, map[string]string{kubedb.LabelRole: kubedb.RoleStats})
+}
+
 func (r *Cassandra) SetHealthCheckerDefaults() {
 	if r.Spec.HealthChecker.PeriodSeconds == nil {
 		r.Spec.HealthChecker.PeriodSeconds = pointer.Int32P(30)
@@ -201,17 +270,6 @@ func (r *Cassandra) ResourceSingular() string {
 func (r *Cassandra) SetDefaults() {
 	if r.Spec.DeletionPolicy == "" {
 		r.Spec.DeletionPolicy = TerminationPolicyDelete
-	}
-
-	if !r.Spec.DisableSecurity {
-		if r.Spec.AuthSecret == nil {
-			r.Spec.AuthSecret = &SecretReference{
-				LocalObjectReference: core.LocalObjectReference{
-					Name: r.DefaultUserCredSecretName(kubedb.CassandraUserAdmin),
-				},
-				ExternallyManaged: false,
-			}
-		}
 	}
 
 	var casVersion catalog.CassandraVersion
@@ -274,6 +332,17 @@ func (r *Cassandra) SetDefaults() {
 		}
 		r.SetHealthCheckerDefaults()
 	}
+
+	r.Spec.Monitor.SetDefaults()
+
+	if r.Spec.Monitor != nil && r.Spec.Monitor.Prometheus != nil {
+		if r.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser == nil {
+			r.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser = casVersion.Spec.SecurityContext.RunAsUser
+		}
+		if r.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup == nil {
+			r.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup = casVersion.Spec.SecurityContext.RunAsUser
+		}
+	}
 }
 
 func (r *Cassandra) setDefaultContainerSecurityContext(csVersion *catalog.CassandraVersion, podTemplate *ofst.PodTemplateSpec) {
@@ -334,14 +403,17 @@ func (r *Cassandra) assignDefaultContainerSecurityContext(csVersion *catalog.Cas
 
 func (r *Cassandra) GetSeed() string {
 	seed := " "
+	namespace := r.Namespace
+	name := r.Name
 	if r.Spec.Topology == nil {
-		seed = kubedb.CassandraStandaloneSeed + " , "
+		seed = fmt.Sprintf("%s-0.%s-pods.%s.svc.cluster.local", name, name, namespace)
+		seed = seed + " , "
 		return seed
 	}
 	for _, rack := range r.Spec.Topology.Rack {
 		rackCount := min(*rack.Replicas, 3)
 		for i := int32(0); i < rackCount; i++ {
-			current_seed := fmt.Sprintf("cassandra-sample-rack-%s-%d.cassandra-sample-rack-%s-pods.default.svc.cluster.local", rack.Name, i, rack.Name)
+			current_seed := fmt.Sprintf("%s-rack-%s-%d.%s-rack-%s-pods.%s.svc.cluster.local", name, rack.Name, i, name, rack.Name, namespace)
 			seed += current_seed + " , "
 		}
 	}

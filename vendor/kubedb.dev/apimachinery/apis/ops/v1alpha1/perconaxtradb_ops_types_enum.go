@@ -26,6 +26,8 @@ const (
 	PerconaXtraDBOpsRequestTypeReconfigure PerconaXtraDBOpsRequestType = "Reconfigure"
 	// PerconaXtraDBOpsRequestTypeReconfigureTLS is a PerconaXtraDBOpsRequestType of type ReconfigureTLS.
 	PerconaXtraDBOpsRequestTypeReconfigureTLS PerconaXtraDBOpsRequestType = "ReconfigureTLS"
+	// PerconaXtraDBOpsRequestTypeRotateAuth is a PerconaXtraDBOpsRequestType of type RotateAuth.
+	PerconaXtraDBOpsRequestTypeRotateAuth PerconaXtraDBOpsRequestType = "RotateAuth"
 )
 
 var ErrInvalidPerconaXtraDBOpsRequestType = fmt.Errorf("not a valid PerconaXtraDBOpsRequestType, try [%s]", strings.Join(_PerconaXtraDBOpsRequestTypeNames, ", "))
@@ -38,6 +40,7 @@ var _PerconaXtraDBOpsRequestTypeNames = []string{
 	string(PerconaXtraDBOpsRequestTypeRestart),
 	string(PerconaXtraDBOpsRequestTypeReconfigure),
 	string(PerconaXtraDBOpsRequestTypeReconfigureTLS),
+	string(PerconaXtraDBOpsRequestTypeRotateAuth),
 }
 
 // PerconaXtraDBOpsRequestTypeNames returns a list of possible string values of PerconaXtraDBOpsRequestType.
@@ -57,6 +60,7 @@ func PerconaXtraDBOpsRequestTypeValues() []PerconaXtraDBOpsRequestType {
 		PerconaXtraDBOpsRequestTypeRestart,
 		PerconaXtraDBOpsRequestTypeReconfigure,
 		PerconaXtraDBOpsRequestTypeReconfigureTLS,
+		PerconaXtraDBOpsRequestTypeRotateAuth,
 	}
 }
 
@@ -80,6 +84,7 @@ var _PerconaXtraDBOpsRequestTypeValue = map[string]PerconaXtraDBOpsRequestType{
 	"Restart":           PerconaXtraDBOpsRequestTypeRestart,
 	"Reconfigure":       PerconaXtraDBOpsRequestTypeReconfigure,
 	"ReconfigureTLS":    PerconaXtraDBOpsRequestTypeReconfigureTLS,
+	"RotateAuth":        PerconaXtraDBOpsRequestTypeRotateAuth,
 }
 
 // ParsePerconaXtraDBOpsRequestType attempts to convert a string to a PerconaXtraDBOpsRequestType.

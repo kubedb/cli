@@ -26,6 +26,8 @@ const (
 	RabbitMQOpsRequestTypeReconfigure RabbitMQOpsRequestType = "Reconfigure"
 	// RabbitMQOpsRequestTypeReconfigureTLS is a RabbitMQOpsRequestType of type ReconfigureTLS.
 	RabbitMQOpsRequestTypeReconfigureTLS RabbitMQOpsRequestType = "ReconfigureTLS"
+	// RabbitMQOpsRequestTypeRotateAuth is a RabbitMQOpsRequestType of type RotateAuth.
+	RabbitMQOpsRequestTypeRotateAuth RabbitMQOpsRequestType = "RotateAuth"
 )
 
 var ErrInvalidRabbitMQOpsRequestType = fmt.Errorf("not a valid RabbitMQOpsRequestType, try [%s]", strings.Join(_RabbitMQOpsRequestTypeNames, ", "))
@@ -38,6 +40,7 @@ var _RabbitMQOpsRequestTypeNames = []string{
 	string(RabbitMQOpsRequestTypeRestart),
 	string(RabbitMQOpsRequestTypeReconfigure),
 	string(RabbitMQOpsRequestTypeReconfigureTLS),
+	string(RabbitMQOpsRequestTypeRotateAuth),
 }
 
 // RabbitMQOpsRequestTypeNames returns a list of possible string values of RabbitMQOpsRequestType.
@@ -57,6 +60,7 @@ func RabbitMQOpsRequestTypeValues() []RabbitMQOpsRequestType {
 		RabbitMQOpsRequestTypeRestart,
 		RabbitMQOpsRequestTypeReconfigure,
 		RabbitMQOpsRequestTypeReconfigureTLS,
+		RabbitMQOpsRequestTypeRotateAuth,
 	}
 }
 
@@ -80,6 +84,7 @@ var _RabbitMQOpsRequestTypeValue = map[string]RabbitMQOpsRequestType{
 	"Restart":           RabbitMQOpsRequestTypeRestart,
 	"Reconfigure":       RabbitMQOpsRequestTypeReconfigure,
 	"ReconfigureTLS":    RabbitMQOpsRequestTypeReconfigureTLS,
+	"RotateAuth":        RabbitMQOpsRequestTypeRotateAuth,
 }
 
 // ParseRabbitMQOpsRequestType attempts to convert a string to a RabbitMQOpsRequestType.

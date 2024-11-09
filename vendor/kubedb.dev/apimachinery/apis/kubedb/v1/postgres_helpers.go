@@ -34,6 +34,7 @@ import (
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
+	"k8s.io/utils/ptr"
 	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	meta_util "kmodules.xyz/client-go/meta"
@@ -265,6 +266,9 @@ func (p *Postgres) SetDefaults(postgresVersion *catalog.PostgresVersion) {
 		if p.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup == nil {
 			p.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup = postgresVersion.Spec.SecurityContext.RunAsUser
 		}
+	}
+	if p.Spec.Init != nil && p.Spec.Init.Archiver != nil && p.Spec.Init.Archiver.ReplicationStrategy == nil {
+		p.Spec.Init.Archiver.ReplicationStrategy = ptr.To(ReplicationStrategyNone)
 	}
 }
 

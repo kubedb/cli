@@ -26,6 +26,8 @@ const (
 	KafkaOpsRequestTypeReconfigure KafkaOpsRequestType = "Reconfigure"
 	// KafkaOpsRequestTypeReconfigureTLS is a KafkaOpsRequestType of type ReconfigureTLS.
 	KafkaOpsRequestTypeReconfigureTLS KafkaOpsRequestType = "ReconfigureTLS"
+	// KafkaOpsRequestTypeRotateAuth is a KafkaOpsRequestType of type RotateAuth.
+	KafkaOpsRequestTypeRotateAuth KafkaOpsRequestType = "RotateAuth"
 )
 
 var ErrInvalidKafkaOpsRequestType = fmt.Errorf("not a valid KafkaOpsRequestType, try [%s]", strings.Join(_KafkaOpsRequestTypeNames, ", "))
@@ -38,6 +40,7 @@ var _KafkaOpsRequestTypeNames = []string{
 	string(KafkaOpsRequestTypeRestart),
 	string(KafkaOpsRequestTypeReconfigure),
 	string(KafkaOpsRequestTypeReconfigureTLS),
+	string(KafkaOpsRequestTypeRotateAuth),
 }
 
 // KafkaOpsRequestTypeNames returns a list of possible string values of KafkaOpsRequestType.
@@ -57,6 +60,7 @@ func KafkaOpsRequestTypeValues() []KafkaOpsRequestType {
 		KafkaOpsRequestTypeRestart,
 		KafkaOpsRequestTypeReconfigure,
 		KafkaOpsRequestTypeReconfigureTLS,
+		KafkaOpsRequestTypeRotateAuth,
 	}
 }
 
@@ -80,6 +84,7 @@ var _KafkaOpsRequestTypeValue = map[string]KafkaOpsRequestType{
 	"Restart":           KafkaOpsRequestTypeRestart,
 	"Reconfigure":       KafkaOpsRequestTypeReconfigure,
 	"ReconfigureTLS":    KafkaOpsRequestTypeReconfigureTLS,
+	"RotateAuth":        KafkaOpsRequestTypeRotateAuth,
 }
 
 // ParseKafkaOpsRequestType attempts to convert a string to a KafkaOpsRequestType.

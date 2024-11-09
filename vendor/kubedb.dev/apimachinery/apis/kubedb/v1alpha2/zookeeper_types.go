@@ -65,8 +65,15 @@ type ZooKeeperSpec struct {
 	// +kubebuilder:default=8080
 	AdminServerPort int32 `json:"adminServerPort"`
 
+	// +optional
+	// +kubebuilder:default=2182
+	ClientSecurePort int32 `json:"clientSecurePort"`
+
 	// Storage to specify how storage shall be used.
 	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty"`
+
+	// To enable ssl for http layer
+	EnableSSL bool `json:"enableSSL,omitempty"`
 
 	// If disable Auth true then don't create any auth secret
 	// +optional
@@ -80,6 +87,14 @@ type ZooKeeperSpec struct {
 	// If specified, this file will be used as configuration file otherwise default configuration file will be used.
 	// +optional
 	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty"`
+
+	// Keystore encryption secret
+	// +optional
+	KeystoreCredSecret *SecretReference `json:"keystoreCredSecret,omitempty"`
+
+	// TLS contains tls configurations
+	// +optional
+	TLS *kmapi.TLSConfig `json:"tls,omitempty"`
 
 	// PodTemplate is an optional configuration for pods used to expose database
 	// +optional
@@ -121,6 +136,14 @@ type ZooKeeperStatus struct {
 	Conditions []kmapi.Condition `json:"conditions,omitempty"`
 }
 
+// +kubebuilder:validation:Enum=server;client
+type ZooKeeperCertificateAlias string
+
+const (
+	ZooKeeperServerCert ZooKeeperCertificateAlias = "server"
+	ZooKeeperClientCert ZooKeeperCertificateAlias = "client"
+)
+
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 type ZooKeeperList struct {
@@ -128,3 +151,12 @@ type ZooKeeperList struct {
 	metav1.ListMeta `json:"metadata,omitempty"`
 	Items           []ZooKeeper `json:"items"`
 }
+
+// +kubebuilder:validation:Enum=controller;broker;combined
+type ZooKeeperNodeRoleType string
+
+const (
+	ZooKeeperNodeRoleController ZooKeeperNodeRoleType = "controller"
+	ZooKeeperNodeRoleBroker     ZooKeeperNodeRoleType = "broker"
+	ZooKeeperNodeRoleCombined   ZooKeeperNodeRoleType = "combined"
+)

@@ -64,6 +64,8 @@ type FerretDBOpsRequestSpec struct {
 	VerticalScaling *FerretDBVerticalScalingSpec `json:"verticalScaling,omitempty"`
 	// Specifies information necessary for configuring TLS
 	TLS *FerretDBTLSSpec `json:"tls,omitempty"`
+	// Specifies information necessary for configuring authSecret of the database
+	Authentication *AuthSpec `json:"authentication,omitempty"`
 	// Specifies information necessary for restarting database
 	Restart *RestartSpec `json:"restart,omitempty"`
 	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
@@ -85,8 +87,8 @@ type FerretDBTLSSpec struct {
 	ClientAuthMode v1alpha2.ClusterAuthMode `json:"clientAuthMode,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=UpdateVersion;VerticalScaling;Restart;HorizontalScaling;ReconfigureTLS
-// ENUM(UpdateVersion, Restart, VerticalScaling, HorizontalScaling, ReconfigureTLS)
+// +kubebuilder:validation:Enum=UpdateVersion;VerticalScaling;Restart;HorizontalScaling;ReconfigureTLS;RotateAuth
+// ENUM(UpdateVersion, Restart, VerticalScaling, HorizontalScaling, ReconfigureTLS, RotateAuth)
 type FerretDBOpsRequestType string
 
 // FerretDBUpdateVersionSpec contains the update version information of a ferretdb cluster

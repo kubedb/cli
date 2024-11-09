@@ -19,6 +19,7 @@ package v1alpha2
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"kubedb.dev/apimachinery/apis"
 	catalog "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
@@ -32,6 +33,7 @@ import (
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/klog/v2"
+	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	coreutil "kmodules.xyz/client-go/core/v1"
 	meta_util "kmodules.xyz/client-go/meta"
@@ -145,6 +147,21 @@ func (z *ZooKeeper) GetAuthSecretName() string {
 	return meta_util.NameWithSuffix(z.OffshootName(), "auth")
 }
 
+func (z *ZooKeeper) GetKeystoreSecretName() string {
+	if z.Spec.KeystoreCredSecret != nil && z.Spec.KeystoreCredSecret.Name != "" {
+		return z.Spec.KeystoreCredSecret.Name
+	}
+	return meta_util.NameWithSuffix(z.OffshootName(), "keystore-cred")
+}
+
+func (k *ZooKeeper) DefaultUserCredSecretName(username string) string {
+	return meta_util.NameWithSuffix(k.Name, strings.ReplaceAll(fmt.Sprintf("%s-cred", username), "_", "-"))
+}
+
+func (z *ZooKeeper) DefaultKeystoreCredSecretName() string {
+	return meta_util.NameWithSuffix(z.Name, strings.ReplaceAll("keystore-cred", "_", "-"))
+}
+
 func (z *ZooKeeper) GetPersistentSecrets() []string {
 	if z == nil {
 		return nil
@@ -204,6 +221,10 @@ func (z *ZooKeeper) SetDefaults() {
 		apis.SetDefaultResourceLimits(&initContainer.Resources, kubedb.DefaultInitContainerResource)
 	}
 
+	if z.Spec.EnableSSL {
+		z.SetTLSDefaults()
+	}
+
 	z.SetHealthCheckerDefaults()
 	if z.Spec.Monitor != nil {
 		if z.Spec.Monitor.Prometheus == nil {
@@ -214,6 +235,14 @@ func (z *ZooKeeper) SetDefaults() {
 		}
 		z.Spec.Monitor.SetDefaults()
 	}
+}
+
+func (z *ZooKeeper) SetTLSDefaults() {
+	if z.Spec.TLS == nil || z.Spec.TLS.IssuerRef == nil {
+		return
+	}
+	z.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(z.Spec.TLS.Certificates, string(ZooKeeperServerCert), z.CertificateName(ZooKeeperServerCert))
+	z.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(z.Spec.TLS.Certificates, string(ZooKeeperClientCert), z.CertificateName(ZooKeeperClientCert))
 }
 
 func (z *ZooKeeper) setDefaultContainerSecurityContext(zkVersion *catalog.ZooKeeperVersion, podTemplate *ofst.PodTemplateSpec) {
@@ -346,4 +375,27 @@ func (z *ZooKeeper) ReplicasAreReady(lister pslister.PetSetLister) (bool, string
 	// Desire number of petSets
 	expectedItems := 1
 	return checkReplicasOfPetSet(lister.PetSets(z.Namespace), labels.SelectorFromSet(z.OffshootLabels()), expectedItems)
+}
+
+// CertificateName returns the default certificate name and/or certificate secret name for a certificate alias
+func (z *ZooKeeper) CertificateName(alias ZooKeeperCertificateAlias) string {
+	return meta_util.NameWithSuffix(z.Name, fmt.Sprintf("%s-cert", string(alias)))
+}
+
+// GetCertSecretName returns the secret name for a certificate alias if any,
+// otherwise returns default certificate secret name for the given alias.
+func (z *ZooKeeper) GetCertSecretName(alias ZooKeeperCertificateAlias) string {
+	if z.Spec.TLS != nil {
+		name, ok := kmapi.GetCertificateSecretName(z.Spec.TLS.Certificates, string(alias))
+		if ok {
+			return name
+		}
+	}
+	return z.CertificateName(alias)
+}
+
+// CertSecretVolumeName returns the CertSecretVolumeName
+// Values will be like: client-certs, server-certs etc.
+func (k *ZooKeeper) CertSecretVolumeName(alias ZooKeeperCertificateAlias) string {
+	return string(alias) + "-certs"
 }

@@ -60,6 +60,9 @@ type CassandraVersionSpec struct {
 	// Database Image
 	DB CassandraVersionDatabase `json:"db"`
 
+	// Exporter Image
+	Exporter CassandraVersionExporter `json:"exporter"`
+
 	// Database Image
 	InitContainer CassandraInitContainer `json:"initContainer"`
 
@@ -69,6 +72,11 @@ type CassandraVersionSpec struct {
 
 	// +optional
 	UI []ChartInfo `json:"ui,omitempty"`
+}
+
+// CassandraVersionExporter is the image for the Cassandra exporter
+type CassandraVersionExporter struct {
+	Image string `json:"image"`
 }
 
 // CassandraVersionDatabase is the Cassandra Database image
