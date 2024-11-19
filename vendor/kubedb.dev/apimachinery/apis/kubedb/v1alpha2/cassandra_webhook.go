@@ -69,7 +69,7 @@ func (r *Cassandra) ValidateDelete() (admission.Warnings, error) {
 	cassandralog.Info("validate delete", "name", r.Name)
 
 	var allErr field.ErrorList
-	if r.Spec.DeletionPolicy == TerminationPolicyDoNotTerminate {
+	if r.Spec.DeletionPolicy == DeletionPolicyDoNotTerminate {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("deletionPolicy"),
 			r.Name,
 			"Can not delete as terminationPolicy is set to \"DoNotTerminate\""))

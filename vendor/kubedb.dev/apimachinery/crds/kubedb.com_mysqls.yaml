@@ -4815,6 +4815,7 @@ spec:
                         default: Single-Primary
                         enum:
                         - Single-Primary
+                        - Multi-Primary
                         type: string
                       name:
                         type: string
@@ -4825,6 +4826,7 @@ spec:
                         default: Single-Primary
                         enum:
                         - Single-Primary
+                        - Multi-Primary
                         type: string
                       router:
                         properties:
@@ -12478,6 +12480,7 @@ spec:
                         default: Single-Primary
                         enum:
                         - Single-Primary
+                        - Multi-Primary
                         type: string
                       name:
                         type: string
@@ -12488,6 +12491,7 @@ spec:
                         default: Single-Primary
                         enum:
                         - Single-Primary
+                        - Multi-Primary
                         type: string
                       router:
                         properties:

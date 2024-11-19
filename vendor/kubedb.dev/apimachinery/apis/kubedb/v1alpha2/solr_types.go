@@ -102,7 +102,7 @@ type SolrSpec struct {
 	KeystoreSecret *core.LocalObjectReference `json:"keystoreSecret,omitempty"`
 
 	// +optional
-	AuthSecret *core.LocalObjectReference `json:"authSecret,omitempty"`
+	AuthSecret *SecretReference `json:"authSecret,omitempty"`
 
 	// +optional
 	ZookeeperDigestSecret *core.LocalObjectReference `json:"zookeeperDigestSecret,omitempty"`
@@ -123,7 +123,7 @@ type SolrSpec struct {
 
 	// DeletionPolicy controls the delete operation for database
 	// +optional
-	DeletionPolicy TerminationPolicy `json:"deletionPolicy,omitempty"`
+	DeletionPolicy DeletionPolicy `json:"deletionPolicy,omitempty"`
 
 	// HealthChecker defines attributes of the health checker
 	// +optional

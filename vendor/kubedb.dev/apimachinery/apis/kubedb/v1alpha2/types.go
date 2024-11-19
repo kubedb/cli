@@ -111,17 +111,17 @@ const (
 )
 
 // +kubebuilder:validation:Enum=Halt;Delete;WipeOut;DoNotTerminate
-type TerminationPolicy string
+type DeletionPolicy string
 
 const (
 	// Deletes database pods, service but leave the PVCs and stash backup data intact.
-	TerminationPolicyHalt TerminationPolicy = "Halt"
+	DeletionPolicyHalt DeletionPolicy = "Halt"
 	// Deletes database pods, service, pvcs but leave the stash backup data intact.
-	TerminationPolicyDelete TerminationPolicy = "Delete"
+	DeletionPolicyDelete DeletionPolicy = "Delete"
 	// Deletes database pods, service, pvcs and stash backup data.
-	TerminationPolicyWipeOut TerminationPolicy = "WipeOut"
+	DeletionPolicyWipeOut DeletionPolicy = "WipeOut"
 	// Rejects attempt to delete database using ValidationWebhook.
-	TerminationPolicyDoNotTerminate TerminationPolicy = "DoNotTerminate"
+	DeletionPolicyDoNotTerminate DeletionPolicy = "DoNotTerminate"
 )
 
 // +kubebuilder:validation:Enum=primary;standby;stats;dashboard;secondary

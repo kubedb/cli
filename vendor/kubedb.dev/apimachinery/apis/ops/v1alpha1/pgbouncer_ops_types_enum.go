@@ -22,6 +22,8 @@ const (
 	PgBouncerOpsRequestTypeReconfigure PgBouncerOpsRequestType = "Reconfigure"
 	// PgBouncerOpsRequestTypeRotateAuth is a PgBouncerOpsRequestType of type RotateAuth.
 	PgBouncerOpsRequestTypeRotateAuth PgBouncerOpsRequestType = "RotateAuth"
+	// PgBouncerOpsRequestTypeRestart is a PgBouncerOpsRequestType of type Restart.
+	PgBouncerOpsRequestTypeRestart PgBouncerOpsRequestType = "Restart"
 )
 
 var ErrInvalidPgBouncerOpsRequestType = fmt.Errorf("not a valid PgBouncerOpsRequestType, try [%s]", strings.Join(_PgBouncerOpsRequestTypeNames, ", "))
@@ -32,6 +34,7 @@ var _PgBouncerOpsRequestTypeNames = []string{
 	string(PgBouncerOpsRequestTypeUpdateVersion),
 	string(PgBouncerOpsRequestTypeReconfigure),
 	string(PgBouncerOpsRequestTypeRotateAuth),
+	string(PgBouncerOpsRequestTypeRestart),
 }
 
 // PgBouncerOpsRequestTypeNames returns a list of possible string values of PgBouncerOpsRequestType.
@@ -49,6 +52,7 @@ func PgBouncerOpsRequestTypeValues() []PgBouncerOpsRequestType {
 		PgBouncerOpsRequestTypeUpdateVersion,
 		PgBouncerOpsRequestTypeReconfigure,
 		PgBouncerOpsRequestTypeRotateAuth,
+		PgBouncerOpsRequestTypeRestart,
 	}
 }
 
@@ -70,6 +74,7 @@ var _PgBouncerOpsRequestTypeValue = map[string]PgBouncerOpsRequestType{
 	"UpdateVersion":     PgBouncerOpsRequestTypeUpdateVersion,
 	"Reconfigure":       PgBouncerOpsRequestTypeReconfigure,
 	"RotateAuth":        PgBouncerOpsRequestTypeRotateAuth,
+	"Restart":           PgBouncerOpsRequestTypeRestart,
 }
 
 // ParsePgBouncerOpsRequestType attempts to convert a string to a PgBouncerOpsRequestType.

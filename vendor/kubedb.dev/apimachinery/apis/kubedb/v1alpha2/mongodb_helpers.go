@@ -618,7 +618,7 @@ func (m *MongoDB) SetDefaults(mgVersion *v1alpha1.MongoDBVersion, topology *core
 		m.Spec.StorageEngine = StorageEngineWiredTiger
 	}
 	if m.Spec.TerminationPolicy == "" {
-		m.Spec.TerminationPolicy = TerminationPolicyDelete
+		m.Spec.TerminationPolicy = DeletionPolicyDelete
 	}
 
 	if m.Spec.SSLMode == "" {
@@ -634,8 +634,10 @@ func (m *MongoDB) SetDefaults(mgVersion *v1alpha1.MongoDBVersion, topology *core
 	}
 
 	defaultResource := kubedb.DefaultResources
-	if m.isVersion6OrLater(mgVersion) {
-		defaultResource = kubedb.DefaultResourcesCPUIntensive
+	if m.isLaterVersion(mgVersion, 8) {
+		defaultResource = kubedb.DefaultResourcesCPUIntensiveMongoDBv8
+	} else if m.isLaterVersion(mgVersion, 6) {
+		defaultResource = kubedb.DefaultResourcesCPUIntensiveMongoDBv6
 	}
 
 	if m.Spec.ShardTopology != nil {
@@ -890,13 +892,13 @@ func (m *MongoDB) SetTLSDefaults() {
 	})
 }
 
-func (m *MongoDB) isVersion6OrLater(mgVersion *v1alpha1.MongoDBVersion) bool {
+func (m *MongoDB) isLaterVersion(mgVersion *v1alpha1.MongoDBVersion, version uint64) bool {
 	v, _ := semver.NewVersion(mgVersion.Spec.Version)
-	return v.Major() >= 6
+	return v.Major() >= version
 }
 
 func (m *MongoDB) GetEntryCommand(mgVersion *v1alpha1.MongoDBVersion) string {
-	if m.isVersion6OrLater(mgVersion) {
+	if m.isLaterVersion(mgVersion, 6) {
 		return "mongosh"
 	}
 	return "mongo"

@@ -436,7 +436,7 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion, top
 	}
 
 	if e.Spec.TerminationPolicy == "" {
-		e.Spec.TerminationPolicy = TerminationPolicyDelete
+		e.Spec.TerminationPolicy = DeletionPolicyDelete
 	}
 
 	if e.Spec.PodTemplate.Spec.ServiceAccountName == "" {

@@ -92,7 +92,7 @@ func (f *FerretDB) ValidateDelete() (admission.Warnings, error) {
 	ferretdblog.Info("validate delete", "name", f.Name)
 
 	var allErr field.ErrorList
-	if f.Spec.DeletionPolicy == TerminationPolicyDoNotTerminate {
+	if f.Spec.DeletionPolicy == DeletionPolicyDoNotTerminate {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("terminationPolicy"),
 			f.Name,
 			"Can not delete as terminationPolicy is set to \"DoNotTerminate\""))
@@ -154,7 +154,7 @@ func (f *FerretDB) ValidateCreateOrUpdate() field.ErrorList {
 	}
 
 	// Termination policy related
-	if f.Spec.DeletionPolicy == TerminationPolicyHalt {
+	if f.Spec.DeletionPolicy == DeletionPolicyHalt {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("terminationPolicy"),
 			f.Name,
 			`'spec.terminationPolicy' value 'Halt' is not supported yet for FerretDB`))

@@ -35,6 +35,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	appslister "k8s.io/client-go/listers/apps/v1"
+	"k8s.io/utils/ptr"
 	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	core_util "kmodules.xyz/client-go/core/v1"
@@ -193,7 +194,7 @@ func (p *Postgres) SetDefaults(postgresVersion *catalog.PostgresVersion, topolog
 		p.Spec.StorageType = StorageTypeDurable
 	}
 	if p.Spec.TerminationPolicy == "" {
-		p.Spec.TerminationPolicy = TerminationPolicyDelete
+		p.Spec.TerminationPolicy = DeletionPolicyDelete
 	}
 
 	if p.Spec.LeaderElection == nil {
@@ -304,10 +305,10 @@ func (p *Postgres) SetDefaultReplicationMode(postgresVersion *catalog.PostgresVe
 		}
 	}
 	if p.Spec.Replication.WALLimitPolicy == WALKeepSegment && p.Spec.Replication.WalKeepSegment == nil {
-		p.Spec.Replication.WalKeepSegment = pointer.Int32P(64)
+		p.Spec.Replication.WalKeepSegment = pointer.Int32P(96)
 	}
 	if p.Spec.Replication.WALLimitPolicy == WALKeepSize && p.Spec.Replication.WalKeepSizeInMegaBytes == nil {
-		p.Spec.Replication.WalKeepSizeInMegaBytes = pointer.Int32P(1024)
+		p.Spec.Replication.WalKeepSizeInMegaBytes = pointer.Int32P(1536)
 	}
 	if p.Spec.Replication.WALLimitPolicy == ReplicationSlot && p.Spec.Replication.MaxSlotWALKeepSizeInMegaBytes == nil {
 		p.Spec.Replication.MaxSlotWALKeepSizeInMegaBytes = pointer.Int32P(-1)
@@ -315,12 +316,12 @@ func (p *Postgres) SetDefaultReplicationMode(postgresVersion *catalog.PostgresVe
 }
 
 func (p *Postgres) SetArbiterDefault() {
-	if p.Spec.Arbiter == nil {
+	if ptr.Deref(p.Spec.Replicas, 0)%2 == 0 && p.Spec.Arbiter == nil {
 		p.Spec.Arbiter = &ArbiterSpec{
 			Resources: core.ResourceRequirements{},
 		}
+		apis.SetDefaultResourceLimits(&p.Spec.Arbiter.Resources, kubedb.DefaultArbiter(false))
 	}
-	apis.SetDefaultResourceLimits(&p.Spec.Arbiter.Resources, kubedb.DefaultArbiter(false))
 }
 
 func (p *Postgres) setDefaultInitContainerSecurityContext(podTemplate *ofst.PodTemplateSpec, pgVersion *catalog.PostgresVersion) {

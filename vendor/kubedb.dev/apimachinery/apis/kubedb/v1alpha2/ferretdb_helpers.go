@@ -181,7 +181,7 @@ func (f *FerretDB) SetDefaults() {
 	}
 
 	if f.Spec.DeletionPolicy == "" {
-		f.Spec.DeletionPolicy = TerminationPolicyWipeOut
+		f.Spec.DeletionPolicy = DeletionPolicyWipeOut
 	}
 
 	if f.Spec.SSLMode == "" {

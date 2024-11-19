@@ -69,7 +69,7 @@ func (c *ClickHouse) ValidateDelete() (admission.Warnings, error) {
 	clickhouselog.Info("validate delete", "name", c.Name)
 
 	var allErr field.ErrorList
-	if c.Spec.DeletionPolicy == TerminationPolicyDoNotTerminate {
+	if c.Spec.DeletionPolicy == DeletionPolicyDoNotTerminate {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("teminationPolicy"),
 			c.Name,
 			"Can not delete as terminationPolicy is set to \"DoNotTerminate\""))

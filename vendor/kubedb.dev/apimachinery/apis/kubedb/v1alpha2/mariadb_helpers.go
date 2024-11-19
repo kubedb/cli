@@ -210,7 +210,7 @@ func (m *MariaDB) SetDefaults(mdVersion *v1alpha1.MariaDBVersion, topology *core
 		m.Spec.StorageType = StorageTypeDurable
 	}
 	if m.Spec.TerminationPolicy == "" {
-		m.Spec.TerminationPolicy = TerminationPolicyDelete
+		m.Spec.TerminationPolicy = DeletionPolicyDelete
 	}
 
 	if m.Spec.PodTemplate.Spec.ServiceAccountName == "" {

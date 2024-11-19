@@ -431,7 +431,7 @@ func (d *Druid) GetCertSecretName(alias DruidCertificateAlias) string {
 
 func (d *Druid) SetDefaults() {
 	if d.Spec.DeletionPolicy == "" {
-		d.Spec.DeletionPolicy = TerminationPolicyDelete
+		d.Spec.DeletionPolicy = DeletionPolicyDelete
 	}
 
 	if d.Spec.EnableSSL {

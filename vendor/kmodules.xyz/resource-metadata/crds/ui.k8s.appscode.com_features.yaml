@@ -100,6 +100,11 @@ spec:
               featureBlock:
                 description: FeatureBlock specifies the ui block name of this feature.
                 type: string
+              featureExclusionGroup:
+                description: FeatureExclusionGroup specifies the name of the exclusion
+                  group for features Only one feature in a feature exclusion group
+                  can be installed
+                type: string
               featureSet:
                 description: FeatureSet specifies the name of the FeatureSet where
                   this feature belong to.

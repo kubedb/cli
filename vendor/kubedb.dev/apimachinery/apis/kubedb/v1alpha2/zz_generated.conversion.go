@@ -2045,7 +2045,7 @@ func autoConvert_v1_KafkaSpec_To_v1alpha2_KafkaSpec(in *v1.KafkaSpec, out *Kafka
 	out.TLS = (*clientgoapiv1.TLSConfig)(unsafe.Pointer(in.TLS))
 	out.PodTemplate = in.PodTemplate
 	out.ServiceTemplates = *(*[]NamedServiceTemplateSpec)(unsafe.Pointer(&in.ServiceTemplates))
-	out.DeletionPolicy = TerminationPolicy(in.DeletionPolicy)
+	out.DeletionPolicy = DeletionPolicy(in.DeletionPolicy)
 	out.HealthChecker = in.HealthChecker
 	out.CruiseControl = (*KafkaCruiseControl)(unsafe.Pointer(in.CruiseControl))
 	out.Monitor = (*monitoringagentapiapiv1.AgentSpec)(unsafe.Pointer(in.Monitor))
@@ -4300,6 +4300,8 @@ func Convert_v1_ScriptSourceSpec_To_v1alpha2_ScriptSourceSpec(in *v1.ScriptSourc
 
 func autoConvert_v1alpha2_SecretReference_To_v1_SecretReference(in *SecretReference, out *v1.SecretReference, s conversion.Scope) error {
 	out.LocalObjectReference = in.LocalObjectReference
+	out.RotateAfter = (*metav1.Duration)(unsafe.Pointer(in.RotateAfter))
+	out.ActiveFrom = (*metav1.Time)(unsafe.Pointer(in.ActiveFrom))
 	out.ExternallyManaged = in.ExternallyManaged
 	return nil
 }
@@ -4311,6 +4313,8 @@ func Convert_v1alpha2_SecretReference_To_v1_SecretReference(in *SecretReference,
 
 func autoConvert_v1_SecretReference_To_v1alpha2_SecretReference(in *v1.SecretReference, out *SecretReference, s conversion.Scope) error {
 	out.LocalObjectReference = in.LocalObjectReference
+	out.RotateAfter = (*metav1.Duration)(unsafe.Pointer(in.RotateAfter))
+	out.ActiveFrom = (*metav1.Time)(unsafe.Pointer(in.ActiveFrom))
 	out.ExternallyManaged = in.ExternallyManaged
 	return nil
 }

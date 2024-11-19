@@ -192,7 +192,7 @@ func (p *PgBouncer) SetDefaults(pgBouncerVersion *catalog.PgBouncerVersion, uses
 	}
 
 	if p.Spec.TerminationPolicy == "" {
-		p.Spec.TerminationPolicy = PgBouncerTerminationPolicyDelete
+		p.Spec.TerminationPolicy = DeletionPolicyDelete
 	}
 
 	p.setConnectionPoolConfigDefaults()

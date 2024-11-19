@@ -75,8 +75,8 @@ type PgBouncerOpsRequestSpec struct {
 	Apply ApplyOption `json:"apply,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=HorizontalScaling;VerticalScaling;UpdateVersion;Reconfigure;RotateAuth
-// ENUM(HorizontalScaling, VerticalScaling, UpdateVersion, Reconfigure, RotateAuth)
+// +kubebuilder:validation:Enum=HorizontalScaling;VerticalScaling;UpdateVersion;Reconfigure;RotateAuth;Restart
+// ENUM(HorizontalScaling, VerticalScaling, UpdateVersion, Reconfigure, RotateAuth, Restart)
 type PgBouncerOpsRequestType string
 
 type PgBouncerUpdateVersionSpec struct {

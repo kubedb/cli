@@ -106,7 +106,7 @@ type ZooKeeperSpec struct {
 
 	// DeletionPolicy controls the delete operation for database
 	// +optional
-	DeletionPolicy TerminationPolicy `json:"deletionPolicy,omitempty"`
+	DeletionPolicy DeletionPolicy `json:"deletionPolicy,omitempty"`
 
 	// Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
 	// +optional

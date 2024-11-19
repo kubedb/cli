@@ -18,6 +18,8 @@ limitations under the License.
 package v1alpha1
 
 import (
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+
 	core "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -66,7 +68,7 @@ type MSSQLServerOpsRequestSpec struct {
 	// Specifies information necessary for custom configuration of MSSQLServer
 	Configuration *MSSQLServerCustomConfigurationSpec `json:"configuration,omitempty"`
 	// Specifies information necessary for configuring TLS
-	TLS *TLSSpec `json:"tls,omitempty"`
+	TLS *MSSQLServerTLSSpec `json:"tls,omitempty"`
 	// Specifies information necessary for configuring authSecret of the database
 	Authentication *AuthSpec `json:"authentication,omitempty"`
 	// Specifies information necessary for restarting database
@@ -117,6 +119,20 @@ type MSSQLServerCustomConfigurationSpec struct {
 	ConfigSecret       *core.LocalObjectReference `json:"configSecret,omitempty"`
 	ApplyConfig        map[string]string          `json:"applyConfig,omitempty"`
 	RemoveCustomConfig bool                       `json:"removeCustomConfig,omitempty"`
+}
+
+type MSSQLServerTLSSpec struct {
+	// SQLServerTLSSpec contains updated tls configurations for client and server.
+	// +optional
+	dbapi.MSSQLServerTLSConfig `json:",inline,omitempty"`
+
+	// RotateCertificates tells operator to initiate certificate rotation
+	// +optional
+	RotateCertificates bool `json:"rotateCertificates,omitempty"`
+
+	// Remove tells operator to remove TLS configuration
+	// +optional
+	Remove bool `json:"remove,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

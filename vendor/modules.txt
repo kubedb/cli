@@ -821,7 +821,7 @@ github.com/munnerz/goautoneg
 # github.com/mxk/go-flowrate v0.0.0-20140419014527-cca7078d478f
 ## explicit
 github.com/mxk/go-flowrate/flowrate
-# github.com/onsi/gomega v1.33.1
+# github.com/onsi/gomega v1.34.0
 ## explicit; go 1.20
 github.com/onsi/gomega
 github.com/onsi/gomega/format
@@ -1079,7 +1079,7 @@ gopkg.in/yaml.v2
 # gopkg.in/yaml.v3 v3.0.1
 ## explicit
 gopkg.in/yaml.v3
-# k8s.io/api v0.30.2
+# k8s.io/api v0.30.3
 ## explicit; go 1.22.0
 k8s.io/api/admission/v1
 k8s.io/api/admission/v1beta1
@@ -1149,7 +1149,7 @@ k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset
 k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset/scheme
 k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset/typed/apiextensions/v1
 k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset/typed/apiextensions/v1beta1
-# k8s.io/apimachinery v0.30.2
+# k8s.io/apimachinery v0.30.3
 ## explicit; go 1.22.0
 k8s.io/apimachinery/pkg/api/equality
 k8s.io/apimachinery/pkg/api/errors
@@ -1211,13 +1211,16 @@ k8s.io/apimachinery/pkg/watch
 k8s.io/apimachinery/third_party/forked/golang/json
 k8s.io/apimachinery/third_party/forked/golang/netutil
 k8s.io/apimachinery/third_party/forked/golang/reflect
+# k8s.io/apiserver v0.30.2 => github.com/kmodules/apiserver v0.30.2-0.20240519082755-d7b8c2d9e699
+## explicit; go 1.22.0
+k8s.io/apiserver/pkg/authentication/user
 # k8s.io/cli-runtime v0.30.2
 ## explicit; go 1.22.0
 k8s.io/cli-runtime/pkg/genericclioptions
 k8s.io/cli-runtime/pkg/genericiooptions
 k8s.io/cli-runtime/pkg/printers
 k8s.io/cli-runtime/pkg/resource
-# k8s.io/client-go v0.30.2
+# k8s.io/client-go v0.30.3
 ## explicit; go 1.22.0
 k8s.io/client-go/applyconfigurations/admissionregistration/v1
 k8s.io/client-go/applyconfigurations/admissionregistration/v1alpha1
@@ -1408,7 +1411,7 @@ k8s.io/kube-aggregator/pkg/apis/apiregistration
 k8s.io/kube-aggregator/pkg/apis/apiregistration/v1
 k8s.io/kube-aggregator/pkg/apis/apiregistration/v1beta1
 k8s.io/kube-aggregator/pkg/client/clientset_generated/clientset/scheme
-# k8s.io/kube-openapi v0.0.0-20240703190633-0aa61b46e8c2
+# k8s.io/kube-openapi v0.0.0-20240726031636-6f6746feab9c
 ## explicit; go 1.20
 k8s.io/kube-openapi/pkg/cached
 k8s.io/kube-openapi/pkg/common
@@ -1446,7 +1449,7 @@ k8s.io/metrics/pkg/apis/metrics
 k8s.io/metrics/pkg/apis/metrics/v1alpha1
 k8s.io/metrics/pkg/apis/metrics/v1beta1
 k8s.io/metrics/pkg/client/clientset/versioned/scheme
-# k8s.io/utils v0.0.0-20240502163921-fe8a2dddb1d0
+# k8s.io/utils v0.0.0-20240711033017-18e509b52bc8
 ## explicit; go 1.18
 k8s.io/utils/buffer
 k8s.io/utils/clock
@@ -1464,7 +1467,7 @@ kmodules.xyz/apiversion
 # kmodules.xyz/cert-manager-util v0.29.0
 ## explicit; go 1.21.5
 kmodules.xyz/cert-manager-util/certmanager/v1
-# kmodules.xyz/client-go v0.30.32
+# kmodules.xyz/client-go v0.30.38
 ## explicit; go 1.22.0
 kmodules.xyz/client-go
 kmodules.xyz/client-go/api/v1
@@ -1506,12 +1509,12 @@ kmodules.xyz/offshoot-api/util
 # kmodules.xyz/prober v0.29.0
 ## explicit; go 1.21.5
 kmodules.xyz/prober/api/v1
-# kmodules.xyz/resource-metadata v0.20.0
+# kmodules.xyz/resource-metadata v0.22.5
 ## explicit; go 1.22.1
 kmodules.xyz/resource-metadata/apis/node
 kmodules.xyz/resource-metadata/apis/node/v1alpha1
 kmodules.xyz/resource-metadata/crds
-# kubedb.dev/apimachinery v0.49.0-rc.0
+# kubedb.dev/apimachinery v0.49.0
 ## explicit; go 1.22.1
 kubedb.dev/apimachinery/apis
 kubedb.dev/apimachinery/apis/archiver/v1alpha1
@@ -1555,10 +1558,15 @@ kubedb.dev/apimachinery/crds
 kubedb.dev/apimachinery/pkg/double_optin
 kubedb.dev/apimachinery/pkg/factory
 kubedb.dev/apimachinery/pkg/validator
-# kubedb.dev/db-client-go v0.4.0-rc.0
+# kubedb.dev/db-client-go v0.4.0
 ## explicit; go 1.22.1
 kubedb.dev/db-client-go/elasticsearch
 kubedb.dev/db-client-go/redis
+# kubeops.dev/csi-driver-cacerts v0.1.0
+## explicit; go 1.22.0
+kubeops.dev/csi-driver-cacerts/apis/cacerts
+kubeops.dev/csi-driver-cacerts/apis/cacerts/v1alpha1
+kubeops.dev/csi-driver-cacerts/crds
 # kubeops.dev/petset v0.0.7
 ## explicit; go 1.22.1
 kubeops.dev/petset/apis/apps/v1

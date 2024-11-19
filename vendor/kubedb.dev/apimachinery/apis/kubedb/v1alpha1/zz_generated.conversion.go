@@ -738,7 +738,7 @@ func autoConvert_v1alpha1_ElasticsearchSpec_To_v1alpha2_ElasticsearchSpec(in *El
 	// WARNING: in.ServiceTemplate requires manual conversion: does not exist in peer-type
 	out.MaxUnavailable = (*intstr.IntOrString)(unsafe.Pointer(in.MaxUnavailable))
 	// WARNING: in.UpdateStrategy requires manual conversion: does not exist in peer-type
-	out.TerminationPolicy = v1alpha2.TerminationPolicy(in.TerminationPolicy)
+	out.TerminationPolicy = v1alpha2.DeletionPolicy(in.TerminationPolicy)
 	return nil
 }
 
@@ -896,7 +896,7 @@ func autoConvert_v1alpha1_EtcdSpec_To_v1alpha2_EtcdSpec(in *EtcdSpec, out *v1alp
 	out.PodTemplate = in.PodTemplate
 	// WARNING: in.ServiceTemplate requires manual conversion: does not exist in peer-type
 	// WARNING: in.UpdateStrategy requires manual conversion: does not exist in peer-type
-	out.DeletionPolicy = v1alpha2.TerminationPolicy(in.TerminationPolicy)
+	out.DeletionPolicy = v1alpha2.DeletionPolicy(in.TerminationPolicy)
 	return nil
 }
 
@@ -1048,7 +1048,7 @@ func autoConvert_v1alpha1_MariaDBSpec_To_v1alpha2_MariaDBSpec(in *MariaDBSpec, o
 	out.PodTemplate = in.PodTemplate
 	// WARNING: in.ServiceTemplate requires manual conversion: does not exist in peer-type
 	// WARNING: in.UpdateStrategy requires manual conversion: does not exist in peer-type
-	out.TerminationPolicy = v1alpha2.TerminationPolicy(in.TerminationPolicy)
+	out.TerminationPolicy = v1alpha2.DeletionPolicy(in.TerminationPolicy)
 	return nil
 }
 
@@ -1202,7 +1202,7 @@ func autoConvert_v1alpha1_MemcachedSpec_To_v1alpha2_MemcachedSpec(in *MemcachedS
 	out.PodTemplate = in.PodTemplate
 	// WARNING: in.ServiceTemplate requires manual conversion: does not exist in peer-type
 	// WARNING: in.UpdateStrategy requires manual conversion: does not exist in peer-type
-	out.TerminationPolicy = v1alpha2.TerminationPolicy(in.TerminationPolicy)
+	out.TerminationPolicy = v1alpha2.DeletionPolicy(in.TerminationPolicy)
 	return nil
 }
 
@@ -1484,7 +1484,7 @@ func autoConvert_v1alpha1_MongoDBSpec_To_v1alpha2_MongoDBSpec(in *MongoDBSpec, o
 	out.PodTemplate = (*offshootapiapiv1.PodTemplateSpec)(unsafe.Pointer(in.PodTemplate))
 	// WARNING: in.ServiceTemplate requires manual conversion: does not exist in peer-type
 	// WARNING: in.UpdateStrategy requires manual conversion: does not exist in peer-type
-	out.TerminationPolicy = v1alpha2.TerminationPolicy(in.TerminationPolicy)
+	out.TerminationPolicy = v1alpha2.DeletionPolicy(in.TerminationPolicy)
 	return nil
 }
 
@@ -1679,7 +1679,7 @@ func autoConvert_v1alpha1_MySQLSpec_To_v1alpha2_MySQLSpec(in *MySQLSpec, out *v1
 	out.PodTemplate = in.PodTemplate
 	// WARNING: in.ServiceTemplate requires manual conversion: does not exist in peer-type
 	// WARNING: in.UpdateStrategy requires manual conversion: does not exist in peer-type
-	out.TerminationPolicy = v1alpha2.TerminationPolicy(in.TerminationPolicy)
+	out.TerminationPolicy = v1alpha2.DeletionPolicy(in.TerminationPolicy)
 	return nil
 }
 
@@ -1870,7 +1870,7 @@ func autoConvert_v1alpha1_PerconaXtraDBSpec_To_v1alpha2_PerconaXtraDBSpec(in *Pe
 	out.PodTemplate = in.PodTemplate
 	// WARNING: in.ServiceTemplate requires manual conversion: does not exist in peer-type
 	// WARNING: in.UpdateStrategy requires manual conversion: does not exist in peer-type
-	out.TerminationPolicy = v1alpha2.TerminationPolicy(in.TerminationPolicy)
+	out.TerminationPolicy = v1alpha2.DeletionPolicy(in.TerminationPolicy)
 	return nil
 }
 
@@ -2028,7 +2028,7 @@ func autoConvert_v1alpha1_PostgresSpec_To_v1alpha2_PostgresSpec(in *PostgresSpec
 	// WARNING: in.ServiceTemplate requires manual conversion: does not exist in peer-type
 	// WARNING: in.ReplicaServiceTemplate requires manual conversion: does not exist in peer-type
 	// WARNING: in.UpdateStrategy requires manual conversion: does not exist in peer-type
-	out.TerminationPolicy = v1alpha2.TerminationPolicy(in.TerminationPolicy)
+	out.TerminationPolicy = v1alpha2.DeletionPolicy(in.TerminationPolicy)
 	return nil
 }
 
@@ -2224,7 +2224,7 @@ func autoConvert_v1alpha1_RedisSpec_To_v1alpha2_RedisSpec(in *RedisSpec, out *v1
 	out.PodTemplate = in.PodTemplate
 	// WARNING: in.ServiceTemplate requires manual conversion: does not exist in peer-type
 	// WARNING: in.UpdateStrategy requires manual conversion: does not exist in peer-type
-	out.TerminationPolicy = v1alpha2.TerminationPolicy(in.TerminationPolicy)
+	out.TerminationPolicy = v1alpha2.DeletionPolicy(in.TerminationPolicy)
 	return nil
 }
 
