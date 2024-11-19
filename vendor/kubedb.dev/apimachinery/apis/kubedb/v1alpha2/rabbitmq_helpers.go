@@ -281,7 +281,7 @@ func (r *RabbitMQ) SetDefaults() {
 	}
 
 	if r.Spec.DeletionPolicy == "" {
-		r.Spec.DeletionPolicy = TerminationPolicyDelete
+		r.Spec.DeletionPolicy = DeletionPolicyDelete
 	}
 
 	if r.Spec.StorageType == "" {

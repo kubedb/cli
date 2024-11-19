@@ -45,6 +45,10 @@ spec:
                 type: string
               displayName:
                 type: string
+              hubClusterID:
+                type: string
+              managerID:
+                type: string
               name:
                 type: string
               ownerID:

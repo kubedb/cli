@@ -295,10 +295,10 @@ func (p *Postgres) SetDefaultReplicationMode(postgresVersion *catalog.PostgresVe
 		}
 	}
 	if p.Spec.Replication.WALLimitPolicy == WALKeepSegment && p.Spec.Replication.WalKeepSegment == nil {
-		p.Spec.Replication.WalKeepSegment = pointer.Int32P(160)
+		p.Spec.Replication.WalKeepSegment = pointer.Int32P(96)
 	}
 	if p.Spec.Replication.WALLimitPolicy == WALKeepSize && p.Spec.Replication.WalKeepSizeInMegaBytes == nil {
-		p.Spec.Replication.WalKeepSizeInMegaBytes = pointer.Int32P(2560)
+		p.Spec.Replication.WalKeepSizeInMegaBytes = pointer.Int32P(1536)
 	}
 	if p.Spec.Replication.WALLimitPolicy == ReplicationSlot && p.Spec.Replication.MaxSlotWALKeepSizeInMegaBytes == nil {
 		p.Spec.Replication.MaxSlotWALKeepSizeInMegaBytes = pointer.Int32P(-1)
@@ -306,12 +306,12 @@ func (p *Postgres) SetDefaultReplicationMode(postgresVersion *catalog.PostgresVe
 }
 
 func (p *Postgres) SetArbiterDefault() {
-	if p.Spec.Arbiter == nil {
+	if ptr.Deref(p.Spec.Replicas, 0)%2 == 0 && p.Spec.Arbiter == nil {
 		p.Spec.Arbiter = &ArbiterSpec{
 			Resources: core.ResourceRequirements{},
 		}
+		apis.SetDefaultResourceLimits(&p.Spec.Arbiter.Resources, kubedb.DefaultArbiter(false))
 	}
-	apis.SetDefaultResourceLimits(&p.Spec.Arbiter.Resources, kubedb.DefaultArbiter(false))
 }
 
 func (p *Postgres) setDefaultPodSecurityContext(podTemplate *ofstv2.PodTemplateSpec, pgVersion *catalog.PostgresVersion) {

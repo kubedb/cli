@@ -81,7 +81,7 @@ func (k *Kafka) ValidateDelete() (admission.Warnings, error) {
 
 	// TODO(user): fill in your validation logic upon object deletion.
 	var allErr field.ErrorList
-	if k.Spec.DeletionPolicy == TerminationPolicyDoNotTerminate {
+	if k.Spec.DeletionPolicy == DeletionPolicyDoNotTerminate {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("teminationPolicy"),
 			k.Name,
 			"Can not delete as terminationPolicy is set to \"DoNotTerminate\""))
@@ -170,7 +170,7 @@ func (k *Kafka) ValidateCreateOrUpdate() error {
 		}
 	}
 
-	if k.Spec.Halted && k.Spec.DeletionPolicy == TerminationPolicyDoNotTerminate {
+	if k.Spec.Halted && k.Spec.DeletionPolicy == DeletionPolicyDoNotTerminate {
 		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("halted"),
 			k.Name,
 			`can't halt if deletionPolicy is set to "DoNotTerminate"`))
@@ -207,7 +207,7 @@ func (k *Kafka) ValidateCreateOrUpdate() error {
 				k.Name,
 				"StorageType should be either durable or ephemeral"))
 		}
-		if k.Spec.StorageType == StorageTypeEphemeral && k.Spec.DeletionPolicy == TerminationPolicyHalt {
+		if k.Spec.StorageType == StorageTypeEphemeral && k.Spec.DeletionPolicy == DeletionPolicyHalt {
 			allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("deletionPolicy"),
 				k.Name,
 				`'spec.deletionPolicy: Halt' can not be used for 'Ephemeral' storage`))

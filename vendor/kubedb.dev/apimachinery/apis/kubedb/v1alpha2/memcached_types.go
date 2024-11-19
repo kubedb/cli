@@ -101,7 +101,7 @@ type MemcachedSpec struct {
 
 	// TerminationPolicy controls the delete operation for database
 	// +optional
-	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty"`
+	TerminationPolicy DeletionPolicy `json:"terminationPolicy,omitempty"`
 
 	// HealthChecker defines attributes of the health checker
 	// +optional

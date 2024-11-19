@@ -410,6 +410,8 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kmodules.xyz/client-go/api/v1.CAPIClusterInfo":                                              schema_kmodulesxyz_client_go_api_v1_CAPIClusterInfo(ref),
 		"kmodules.xyz/client-go/api/v1.CertificatePrivateKey":                                        schema_kmodulesxyz_client_go_api_v1_CertificatePrivateKey(ref),
 		"kmodules.xyz/client-go/api/v1.CertificateSpec":                                              schema_kmodulesxyz_client_go_api_v1_CertificateSpec(ref),
+		"kmodules.xyz/client-go/api/v1.ClusterClaimFeatures":                                         schema_kmodulesxyz_client_go_api_v1_ClusterClaimFeatures(ref),
+		"kmodules.xyz/client-go/api/v1.ClusterClaimInfo":                                             schema_kmodulesxyz_client_go_api_v1_ClusterClaimInfo(ref),
 		"kmodules.xyz/client-go/api/v1.ClusterInfo":                                                  schema_kmodulesxyz_client_go_api_v1_ClusterInfo(ref),
 		"kmodules.xyz/client-go/api/v1.ClusterMetadata":                                              schema_kmodulesxyz_client_go_api_v1_ClusterMetadata(ref),
 		"kmodules.xyz/client-go/api/v1.Condition":                                                    schema_kmodulesxyz_client_go_api_v1_Condition(ref),
@@ -21328,6 +21330,81 @@ func schema_kmodulesxyz_client_go_api_v1_CertificateSpec(ref common.ReferenceCal
 		},
 		Dependencies: []string{
 			"k8s.io/api/core/v1.TypedLocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kmodules.xyz/client-go/api/v1.CertificatePrivateKey", "kmodules.xyz/client-go/api/v1.X509Subject"},
+	}
+}
+
+func schema_kmodulesxyz_client_go_api_v1_ClusterClaimFeatures(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"enabledFeatures": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"externallyManagedFeatures": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"disabledFeatures": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
+func schema_kmodulesxyz_client_go_api_v1_ClusterClaimInfo(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"clusterMetadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kmodules.xyz/client-go/api/v1.ClusterInfo"),
+						},
+					},
+				},
+				Required: []string{"clusterMetadata"},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/client-go/api/v1.ClusterInfo"},
 	}
 }
 

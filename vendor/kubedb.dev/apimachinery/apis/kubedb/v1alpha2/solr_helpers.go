@@ -274,7 +274,7 @@ func (s Solr) CoordinatorSelectors() map[string]string {
 
 func (s *Solr) SetDefaults() {
 	if s.Spec.DeletionPolicy == "" {
-		s.Spec.DeletionPolicy = TerminationPolicyDelete
+		s.Spec.DeletionPolicy = DeletionPolicyDelete
 	}
 
 	if s.Spec.ClientAuthSSL != "need" && s.Spec.ClientAuthSSL != "want" {

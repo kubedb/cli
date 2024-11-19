@@ -30,6 +30,7 @@ import (
 	aggscheme "k8s.io/kube-aggregator/pkg/client/clientset_generated/clientset/scheme"
 	metricsscheme "k8s.io/metrics/pkg/client/clientset/versioned/scheme"
 	crscheme "kmodules.xyz/custom-resources/client/clientset/versioned/scheme"
+	cacertsv1alpha1 "kubeops.dev/csi-driver-cacerts/apis/cacerts/v1alpha1"
 	psapi "kubeops.dev/petset/apis/apps/v1"
 	sidekickapi "kubeops.dev/sidekick/apis/apps/v1alpha1"
 	stashcoreapi "kubestash.dev/apimachinery/apis/core/v1alpha1"
@@ -54,6 +55,9 @@ func NewUncachedClient(cfg *rest.Config) (client.Client, error) {
 		return nil, err
 	}
 	if err := kubedbscheme.AddToScheme(scheme); err != nil {
+		return nil, err
+	}
+	if err := cacertsv1alpha1.AddToScheme(scheme); err != nil {
 		return nil, err
 	}
 	if err := sidekickapi.AddToScheme(scheme); err != nil {

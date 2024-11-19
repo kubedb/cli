@@ -95,11 +95,6 @@ type MSSQLServerSpec struct {
 	// +optional
 	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty"`
 
-	// InternalAuth is used to authenticate endpoint
-	// +optional
-	// +nullable
-	InternalAuth *InternalAuthentication `json:"internalAuth,omitempty"`
-
 	// Init is used to initialize database
 	// +optional
 	Init *InitSpec `json:"init,omitempty"`
@@ -109,7 +104,7 @@ type MSSQLServerSpec struct {
 	PodTemplate *ofst.PodTemplateSpec `json:"podTemplate,omitempty"`
 
 	// TLS contains tls configurations for client and server.
-	TLS *SQLServerTLSConfig `json:"tls,omitempty"`
+	TLS *MSSQLServerTLSConfig `json:"tls,omitempty"`
 
 	// ServiceTemplates is an optional configuration for services used to expose database
 	// +optional
@@ -121,15 +116,7 @@ type MSSQLServerSpec struct {
 
 	// DeletionPolicy controls the delete operation for database
 	// +optional
-	DeletionPolicy TerminationPolicy `json:"deletionPolicy,omitempty"`
-
-	// Coordinator defines attributes of the coordinator container
-	// +optional
-	Coordinator CoordinatorSpec `json:"coordinator,omitempty"`
-
-	// Leader election configuration
-	// +optional
-	LeaderElection *MSSQLServerLeaderElectionConfig `json:"leaderElection,omitempty"`
+	DeletionPolicy DeletionPolicy `json:"deletionPolicy,omitempty"`
 
 	// HealthChecker defines attributes of the health checker
 	// +optional
@@ -145,15 +132,11 @@ type MSSQLServerSpec struct {
 	Archiver *Archiver `json:"archiver,omitempty"`
 }
 
-// InternalAuthentication provides different way of endpoint authentication
-type InternalAuthentication struct {
-	// EndpointCert is used for endpoint authentication of MSSql Server
-	EndpointCert *kmapi.TLSConfig `json:"endpointCert"`
-}
-
-type SQLServerTLSConfig struct {
+type MSSQLServerTLSConfig struct {
 	kmapi.TLSConfig `json:",inline"`
-	ClientTLS       bool `json:"clientTLS"`
+
+	// +optional
+	ClientTLS *bool `json:"clientTLS"`
 }
 
 type MSSQLServerTopology struct {
@@ -171,6 +154,10 @@ type MSSQLServerAvailabilityGroupSpec struct {
 	// AvailabilityDatabases is an array of databases to be included in the availability group
 	// +optional
 	Databases []string `json:"databases"`
+
+	// Leader election configuration
+	// +optional
+	LeaderElection *MSSQLServerLeaderElectionConfig `json:"leaderElection,omitempty"`
 }
 
 // MSSQLServerStatus defines the observed state of MSSQLServer

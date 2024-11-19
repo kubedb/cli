@@ -269,7 +269,7 @@ func (r *Cassandra) ResourceSingular() string {
 
 func (r *Cassandra) SetDefaults() {
 	if r.Spec.DeletionPolicy == "" {
-		r.Spec.DeletionPolicy = TerminationPolicyDelete
+		r.Spec.DeletionPolicy = DeletionPolicyDelete
 	}
 
 	var casVersion catalog.CassandraVersion

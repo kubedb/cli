@@ -18,19 +18,19 @@ require (
 	gomodules.xyz/pointer v0.1.0
 	gomodules.xyz/runtime v0.3.0
 	gomodules.xyz/x v0.0.17
-	k8s.io/api v0.30.2
-	k8s.io/apimachinery v0.30.2
+	k8s.io/api v0.30.3
+	k8s.io/apimachinery v0.30.3
 	k8s.io/cli-runtime v0.30.2
-	k8s.io/client-go v0.30.2
+	k8s.io/client-go v0.30.3
 	k8s.io/component-base v0.30.2
 	k8s.io/klog/v2 v2.130.1
 	k8s.io/kubectl v0.29.0
 	kmodules.xyz/cert-manager-util v0.29.0
-	kmodules.xyz/client-go v0.30.32
+	kmodules.xyz/client-go v0.30.38
 	kmodules.xyz/custom-resources v0.30.0
 	kmodules.xyz/monitoring-agent-api v0.30.2
-	kubedb.dev/apimachinery v0.49.0-rc.0
-	kubedb.dev/db-client-go v0.4.0-rc.0
+	kubedb.dev/apimachinery v0.49.0
+	kubedb.dev/db-client-go v0.4.0
 	sigs.k8s.io/controller-runtime v0.18.4
 	sigs.k8s.io/yaml v1.4.0
 	stash.appscode.dev/apimachinery v0.36.0
@@ -96,7 +96,7 @@ require (
 	github.com/monochromegane/go-gitignore v0.0.0-20200626010858-205db1a8cc00 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/mxk/go-flowrate v0.0.0-20140419014527-cca7078d478f // indirect
-	github.com/onsi/gomega v1.33.1 // indirect
+	github.com/onsi/gomega v1.34.0 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opensearch-project/opensearch-go v1.1.0 // indirect
 	github.com/opensearch-project/opensearch-go/v2 v2.3.0 // indirect
@@ -136,15 +136,17 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	k8s.io/apiextensions-apiserver v0.30.2 // indirect
+	k8s.io/apiserver v0.30.2 // indirect
 	k8s.io/kube-aggregator v0.30.2 // indirect
-	k8s.io/kube-openapi v0.0.0-20240703190633-0aa61b46e8c2 // indirect
+	k8s.io/kube-openapi v0.0.0-20240726031636-6f6746feab9c // indirect
 	k8s.io/metrics v0.30.2 // indirect
-	k8s.io/utils v0.0.0-20240502163921-fe8a2dddb1d0 // indirect
+	k8s.io/utils v0.0.0-20240711033017-18e509b52bc8 // indirect
 	kmodules.xyz/apiversion v0.2.0 // indirect
 	kmodules.xyz/objectstore-api v0.29.1 // indirect
 	kmodules.xyz/offshoot-api v0.30.1 // indirect
 	kmodules.xyz/prober v0.29.0 // indirect
-	kmodules.xyz/resource-metadata v0.20.0 // indirect
+	kmodules.xyz/resource-metadata v0.22.5 // indirect
+	kubeops.dev/csi-driver-cacerts v0.1.0 // indirect
 	kubeops.dev/petset v0.0.7 // indirect
 	kubeops.dev/sidekick v0.0.8 // indirect
 	kubestash.dev/apimachinery v0.13.0 // indirect

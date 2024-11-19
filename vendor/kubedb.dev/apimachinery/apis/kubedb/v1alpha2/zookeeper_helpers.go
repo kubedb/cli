@@ -188,18 +188,18 @@ func (z *ZooKeeper) SetHealthCheckerDefaults() {
 
 func (z *ZooKeeper) SetDefaults() {
 	if z.Spec.DeletionPolicy == "" {
-		z.Spec.DeletionPolicy = TerminationPolicyDelete
+		z.Spec.DeletionPolicy = DeletionPolicyDelete
 	}
 	if z.Spec.Replicas == nil {
 		z.Spec.Replicas = pointer.Int32P(1)
 	}
 
 	if z.Spec.Halted {
-		if z.Spec.DeletionPolicy == TerminationPolicyDoNotTerminate {
+		if z.Spec.DeletionPolicy == DeletionPolicyDoNotTerminate {
 			klog.Errorf(`Can't halt, since termination policy is 'DoNotTerminate'`)
 			return
 		}
-		z.Spec.DeletionPolicy = TerminationPolicyHalt
+		z.Spec.DeletionPolicy = DeletionPolicyHalt
 	}
 
 	var zkVersion catalog.ZooKeeperVersion

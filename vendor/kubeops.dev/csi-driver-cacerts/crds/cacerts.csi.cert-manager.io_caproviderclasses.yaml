@@ -1,0 +1,86 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  labels:
+    app.kubernetes.io/name: cert-manager
+  name: caproviderclasses.cacerts.csi.cert-manager.io
+spec:
+  group: cacerts.csi.cert-manager.io
+  names:
+    categories:
+    - appscode
+    - all
+    kind: CAProviderClass
+    listKind: CAProviderClassList
+    plural: caproviderclasses
+    shortNames:
+    - cap
+    singular: caproviderclass
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            properties:
+              name:
+                maxLength: 63
+                pattern: ^[a-z]([-a-z0-9]*[a-z0-9])?$
+                type: string
+            type: object
+          spec:
+            description: CAProviderClassSpec defines the desired state of CAProviderClass
+            properties:
+              refs:
+                description: Selects secrets, issuers, cluster issuers, certificates
+                  or external issuers
+                items:
+                  description: TypedObjectReference contains enough information to
+                    let you locate the typed referenced object.
+                  properties:
+                    apiGroup:
+                      description: APIGroup is the group for the resource being referenced.
+                        If APIGroup is not specified, the specified Kind must be in
+                        the core API group. For any other third-party types, APIGroup
+                        is required.
+                      type: string
+                    key:
+                      description: The key of the secret to select from.  Must be
+                        a valid secret key.
+                      type: string
+                    kind:
+                      description: Kind is the type of resource being referenced
+                      type: string
+                    name:
+                      description: Name is the name of resource being referenced
+                      type: string
+                    namespace:
+                      description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                      type: string
+                  required:
+                  - kind
+                  - name
+                  type: object
+                  x-kubernetes-map-type: atomic
+                type: array
+            type: object
+          status:
+            description: CAProviderClassStatus defines the observed state of CAProviderClass
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

@@ -410,6 +410,8 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kmodules.xyz/client-go/api/v1.CAPIClusterInfo":                                              schema_kmodulesxyz_client_go_api_v1_CAPIClusterInfo(ref),
 		"kmodules.xyz/client-go/api/v1.CertificatePrivateKey":                                        schema_kmodulesxyz_client_go_api_v1_CertificatePrivateKey(ref),
 		"kmodules.xyz/client-go/api/v1.CertificateSpec":                                              schema_kmodulesxyz_client_go_api_v1_CertificateSpec(ref),
+		"kmodules.xyz/client-go/api/v1.ClusterClaimFeatures":                                         schema_kmodulesxyz_client_go_api_v1_ClusterClaimFeatures(ref),
+		"kmodules.xyz/client-go/api/v1.ClusterClaimInfo":                                             schema_kmodulesxyz_client_go_api_v1_ClusterClaimInfo(ref),
 		"kmodules.xyz/client-go/api/v1.ClusterInfo":                                                  schema_kmodulesxyz_client_go_api_v1_ClusterInfo(ref),
 		"kmodules.xyz/client-go/api/v1.ClusterMetadata":                                              schema_kmodulesxyz_client_go_api_v1_ClusterMetadata(ref),
 		"kmodules.xyz/client-go/api/v1.Condition":                                                    schema_kmodulesxyz_client_go_api_v1_Condition(ref),
@@ -552,6 +554,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerOpsRequestList":                        schema_apimachinery_apis_ops_v1alpha1_MSSQLServerOpsRequestList(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerOpsRequestSpec":                        schema_apimachinery_apis_ops_v1alpha1_MSSQLServerOpsRequestSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerReplicaReadinessCriteria":              schema_apimachinery_apis_ops_v1alpha1_MSSQLServerReplicaReadinessCriteria(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerTLSSpec":                               schema_apimachinery_apis_ops_v1alpha1_MSSQLServerTLSSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerUpdateVersionSpec":                     schema_apimachinery_apis_ops_v1alpha1_MSSQLServerUpdateVersionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerVerticalScalingSpec":                   schema_apimachinery_apis_ops_v1alpha1_MSSQLServerVerticalScalingSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerVolumeExpansionSpec":                   schema_apimachinery_apis_ops_v1alpha1_MSSQLServerVolumeExpansionSpec(ref),
@@ -21366,6 +21369,81 @@ func schema_kmodulesxyz_client_go_api_v1_CertificateSpec(ref common.ReferenceCal
 	}
 }
 
+func schema_kmodulesxyz_client_go_api_v1_ClusterClaimFeatures(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"enabledFeatures": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"externallyManagedFeatures": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"disabledFeatures": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
+func schema_kmodulesxyz_client_go_api_v1_ClusterClaimInfo(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"clusterMetadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kmodules.xyz/client-go/api/v1.ClusterInfo"),
+						},
+					},
+				},
+				Required: []string{"clusterMetadata"},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/client-go/api/v1.ClusterInfo"},
+	}
+}
+
 func schema_kmodulesxyz_client_go_api_v1_ClusterInfo(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -27992,7 +28070,7 @@ func schema_apimachinery_apis_ops_v1alpha1_MSSQLServerOpsRequestSpec(ref common.
 					"tls": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Specifies information necessary for configuring TLS",
-							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.TLSSpec"),
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerTLSSpec"),
 						},
 					},
 					"authentication": {
@@ -28025,7 +28103,7 @@ func schema_apimachinery_apis_ops_v1alpha1_MSSQLServerOpsRequestSpec(ref common.
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.AuthSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerUpdateVersionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.TLSSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.AuthSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerTLSSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerUpdateVersionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec"},
 	}
 }
 
@@ -28037,6 +28115,60 @@ func schema_apimachinery_apis_ops_v1alpha1_MSSQLServerReplicaReadinessCriteria(r
 				Type:        []string{"object"},
 			},
 		},
+	}
+}
+
+func schema_apimachinery_apis_ops_v1alpha1_MSSQLServerTLSSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"issuerRef": {
+						SchemaProps: spec.SchemaProps{
+							Description: "IssuerRef is a reference to a Certificate Issuer.",
+							Ref:         ref("k8s.io/api/core/v1.TypedLocalObjectReference"),
+						},
+					},
+					"certificates": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Certificate provides server and/or client certificate options used by application pods. These options are passed to a cert-manager Certificate object. xref: https://github.com/jetstack/cert-manager/blob/v0.16.0/pkg/apis/certmanager/v1beta1/types_certificate.go#L82-L162",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kmodules.xyz/client-go/api/v1.CertificateSpec"),
+									},
+								},
+							},
+						},
+					},
+					"clientTLS": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"boolean"},
+							Format: "",
+						},
+					},
+					"rotateCertificates": {
+						SchemaProps: spec.SchemaProps{
+							Description: "RotateCertificates tells operator to initiate certificate rotation",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"remove": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Remove tells operator to remove TLS configuration",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.TypedLocalObjectReference", "kmodules.xyz/client-go/api/v1.CertificateSpec"},
 	}
 }
 

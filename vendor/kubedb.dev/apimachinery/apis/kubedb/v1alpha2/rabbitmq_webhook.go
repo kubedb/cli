@@ -71,8 +71,8 @@ func (r *RabbitMQ) ValidateDelete() (admission.Warnings, error) {
 	rabbitmqlog.Info("validate delete", "name", r.Name)
 
 	var allErr field.ErrorList
-	if r.Spec.DeletionPolicy == TerminationPolicyDoNotTerminate {
-		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("teminationPolicy"),
+	if r.Spec.DeletionPolicy == DeletionPolicyDoNotTerminate {
+		allErr = append(allErr, field.Invalid(field.NewPath("spec").Child("deletionPolicy"),
 			r.Name,
 			"Can not delete as terminationPolicy is set to \"DoNotTerminate\""))
 		return nil, apierrors.NewInvalid(schema.GroupKind{Group: "rabbitmq.kubedb.com", Kind: "RabbitMQ"}, r.Name, allErr)

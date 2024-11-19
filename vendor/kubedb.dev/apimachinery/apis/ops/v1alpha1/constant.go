@@ -103,8 +103,13 @@ const (
 
 // RotateAuth
 const (
-	RotateAuth       = "RotateAuth"
-	UpdateCredential = "UpdateCredential"
+	RotateAuth                     = "RotateAuth"
+	UpdateCredential               = "UpdateCredential"
+	BasicAuthPreviousUsernameKey   = "username.prev"
+	BasicAuthPreviousPasswordKey   = "password.prev"
+	BasicAuthNextUsernameKey       = "username.next"
+	BasicAuthNextPasswordKey       = "password.next"
+	SecretAlreadyUpdatedAnnotation = "secret-already-updated"
 )
 
 // Restart

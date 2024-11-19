@@ -156,7 +156,7 @@ type ElasticsearchSpec struct {
 
 	// TerminationPolicy controls the delete operation for database
 	// +optional
-	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty"`
+	TerminationPolicy DeletionPolicy `json:"terminationPolicy,omitempty"`
 
 	// KernelSettings contains the additional kernel settings.
 	// +optional

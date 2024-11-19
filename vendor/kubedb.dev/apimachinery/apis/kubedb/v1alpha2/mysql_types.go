@@ -41,12 +41,12 @@ const (
 	MySQLModeSemiSync         MySQLMode = "SemiSync"
 )
 
-// +kubebuilder:validation:Enum=Single-Primary
+// +kubebuilder:validation:Enum=Single-Primary;Multi-Primary
 type MySQLGroupMode string
 
 const (
 	MySQLGroupModeSinglePrimary MySQLGroupMode = "Single-Primary"
-	// MySQLGroupModeMultiPrimary  MySQLGroupMode = "Multi-Primary"
+	MySQLGroupModeMultiPrimary  MySQLGroupMode = "Multi-Primary"
 )
 
 // Mysql defines a Mysql database.
@@ -128,7 +128,7 @@ type MySQLSpec struct {
 
 	// TerminationPolicy controls the delete operation for database
 	// +optional
-	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty"`
+	TerminationPolicy DeletionPolicy `json:"terminationPolicy,omitempty"`
 
 	// Indicated whether to use DNS or IP address to address pods in a db cluster.
 	// If IP address is used, HostNetwork will be used. Defaults to DNS.

@@ -370,7 +370,7 @@ func (c *ClickHouse) SetDefaults() {
 			c.Spec.Replicas = pointer.Int32P(1)
 		}
 		if c.Spec.DeletionPolicy == "" {
-			c.Spec.DeletionPolicy = TerminationPolicyDelete
+			c.Spec.DeletionPolicy = DeletionPolicyDelete
 		}
 		if c.Spec.StorageType == "" {
 			c.Spec.StorageType = StorageTypeDurable

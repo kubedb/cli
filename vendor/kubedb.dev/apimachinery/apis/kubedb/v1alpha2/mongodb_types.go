@@ -121,7 +121,7 @@ type MongoDBSpec struct {
 
 	// TerminationPolicy controls the delete operation for database
 	// +optional
-	TerminationPolicy TerminationPolicy `json:"terminationPolicy,omitempty"`
+	TerminationPolicy DeletionPolicy `json:"terminationPolicy,omitempty"`
 
 	// StorageEngine can be wiredTiger (default) or inMemory
 	// See available StorageEngine: https://docs.mongodb.com/manual/core/storage-engines/

@@ -41,12 +41,12 @@ const (
 	MySQLModeSemiSync         MySQLMode = "SemiSync"
 )
 
-// +kubebuilder:validation:Enum=Single-Primary
+// +kubebuilder:validation:Enum=Single-Primary;Multi-Primary
 type MySQLGroupMode string
 
 const (
 	MySQLGroupModeSinglePrimary MySQLGroupMode = "Single-Primary"
-	// MySQLGroupModeMultiPrimary  MySQLGroupMode = "Multi-Primary"
+	MySQLGroupModeMultiPrimary  MySQLGroupMode = "Multi-Primary"
 )
 
 // Mysql defines a Mysql database.

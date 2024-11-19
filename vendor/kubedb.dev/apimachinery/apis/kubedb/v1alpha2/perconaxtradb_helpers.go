@@ -219,7 +219,7 @@ func (p *PerconaXtraDB) SetDefaults(pVersion *v1alpha1.PerconaXtraDBVersion, top
 		p.Spec.StorageType = StorageTypeDurable
 	}
 	if p.Spec.TerminationPolicy == "" {
-		p.Spec.TerminationPolicy = TerminationPolicyDelete
+		p.Spec.TerminationPolicy = DeletionPolicyDelete
 	}
 
 	if p.Spec.PodTemplate.Spec.ServiceAccountName == "" {
