@@ -26921,6 +26921,13 @@ func schema_apimachinery_apis_kubedb_v1_KafkaSpec(ref common.ReferenceCallback) 
 				Description: "KafkaSpec defines the desired state of Kafka",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
+					"autoOps": {
+						SchemaProps: spec.SchemaProps{
+							Description: "AutoOps contains configuration of automatic ops-request-recommendation generation",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1.AutoOpsSpec"),
+						},
+					},
 					"version": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Version of Kafka to be deployed.",
@@ -27052,7 +27059,7 @@ func schema_apimachinery_apis_kubedb_v1_KafkaSpec(ref common.ReferenceCallback) 
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.KafkaClusterTopology", "kubedb.dev/apimachinery/apis/kubedb/v1.KafkaCruiseControl", "kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.KafkaClusterTopology", "kubedb.dev/apimachinery/apis/kubedb/v1.KafkaCruiseControl", "kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"},
 	}
 }
 

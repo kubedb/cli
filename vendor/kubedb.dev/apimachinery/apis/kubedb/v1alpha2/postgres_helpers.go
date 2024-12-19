@@ -189,6 +189,9 @@ func (p *Postgres) SetDefaults(postgresVersion *catalog.PostgresVersion, topolog
 	if p == nil {
 		return
 	}
+	if p.Spec.StandbyMode == nil {
+		p.Spec.StandbyMode = ptr.To(HotPostgresStandbyMode)
+	}
 
 	if p.Spec.StorageType == "" {
 		p.Spec.StorageType = StorageTypeDurable

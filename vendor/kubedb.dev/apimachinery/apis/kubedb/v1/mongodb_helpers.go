@@ -255,6 +255,14 @@ func (m MongoDB) PodControllerLabels(podControllerLabels map[string]string, extr
 	return m.offshootLabels(meta_util.OverwriteKeys(m.OffshootSelectors(), extraLabels...), podControllerLabels)
 }
 
+func (m MongoDB) SidekickLabels(skName string) map[string]string {
+	return meta_util.OverwriteKeys(nil, kubedb.CommonSidekickLabels(), map[string]string{
+		meta_util.InstanceLabelKey: skName,
+		kubedb.SidekickOwnerName:   m.Name,
+		kubedb.SidekickOwnerKind:   m.ResourceFQN(),
+	})
+}
+
 func (m MongoDB) ServiceLabels(alias ServiceAlias, extraLabels ...map[string]string) map[string]string {
 	svcTemplate := GetServiceTemplate(m.Spec.ServiceTemplates, alias)
 	return m.offshootLabels(meta_util.OverwriteKeys(m.OffshootSelectors(), extraLabels...), svcTemplate.Labels)

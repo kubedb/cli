@@ -1068,6 +1068,11 @@ spec:
                 description: AutomountServiceAccountToken indicates whether a service
                   account token should be automatically mounted.
                 type: boolean
+              backoffLimit:
+                description: Specifies the number of retries before marking this job
+                  failed.
+                format: int32
+                type: integer
               containers:
                 description: List of containers belonging to the pod. Containers cannot
                   currently be added or removed. There must be at least one container
@@ -5399,7 +5404,17 @@ spec:
                 type: array
               restartPolicy:
                 description: 'Restart policy for all containers within the pod. One
-                  of Always, OnFailure, Never. Default to Always. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy'
+                  of Always, OnFailure, Never. Default to Always. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy
+                  If your sidekick has restartPolicy = "OnFailure", keep in mind that
+                  your Pod running the Job will be terminated once the job backoff
+                  limit has been reached. This can make debugging the Job''s executable
+                  more difficult. We suggest setting restartPolicy = "Never" when
+                  debugging the Job or using a logging system to ensure output from
+                  failed Jobs is not lost inadvertently.'
+                enum:
+                - Never
+                - Always
+                - OnFailure
                 type: string
               runtimeClassName:
                 description: 'RuntimeClassName refers to a RuntimeClass object in
@@ -7659,12 +7674,22 @@ spec:
                   - type
                   type: object
                 type: array
+              containerRestartCountsPerPod:
+                additionalProperties:
+                  format: int32
+                  type: integer
+                description: ContainerRestartCountsPerPod stores the sum of all container
+                  restart counts of a pod
+                type: object
+              failureCount:
+                additionalProperties:
+                  type: boolean
+                description: FailuerCount tracks the total number of failed pods
+                type: object
               leader:
                 properties:
                   name:
                     type: string
-                required:
-                - name
                 type: object
               observedGeneration:
                 description: observedGeneration is the most recent generation observed
@@ -7674,14 +7699,16 @@ spec:
                 type: integer
               phase:
                 description: Specifies the current phase of the sidekick CR
+                enum:
+                - Pending
+                - Current
+                - Failed
+                - Succeeded
                 type: string
               pod:
                 description: PodPhase is a label for the condition of a pod at the
                   current time.
                 type: string
-            required:
-            - leader
-            - pod
             type: object
         type: object
     served: true

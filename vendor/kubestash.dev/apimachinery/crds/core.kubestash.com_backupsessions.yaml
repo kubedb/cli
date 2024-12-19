@@ -37,46 +37,24 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: BackupSession represent one backup run for the target(s) pointed
-          by the respective BackupConfiguration or BackupBatch
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
             type: string
           metadata:
             type: object
           spec:
-            description: BackupSessionSpec specifies the information related to the
-              respective backup invoker and session.
             properties:
               backupTimeout:
-                description: BackupTimeout specifies the maximum duration of backup.
-                  Backup will be considered Failed if backup tasks do not complete
-                  within this time limit. By default, KubeStash don't set any timeout
-                  for backup.
                 type: string
               invoker:
-                description: Invoker points to the respective BackupConfiguration
-                  or BackupBatch which is responsible for triggering this backup.
                 properties:
                   apiGroup:
-                    description: APIGroup is the group for the resource being referenced.
-                      If APIGroup is not specified, the specified Kind must be in
-                      the core API group. For any other third-party types, APIGroup
-                      is required.
                     type: string
                   kind:
-                    description: Kind is the type of resource being referenced
                     type: string
                   name:
-                    description: Name is the name of resource being referenced
                     type: string
                 required:
                 - kind
@@ -84,69 +62,34 @@ spec:
                 type: object
                 x-kubernetes-map-type: atomic
               retryLeft:
-                description: RetryLeft specifies number of retry attempts left for
-                  the session. If this set to non-zero, KubeStash will create a new
-                  BackupSession if the current one fails.
                 format: int32
                 type: integer
               session:
-                description: Session specifies the name of the session that triggered
-                  this backup
                 type: string
             type: object
           status:
-            description: BackupSessionStatus defines the observed state of BackupSession
             properties:
               backupDeadline:
-                description: BackupDeadline specifies the deadline of backup. Backup
-                  will be considered Failed if it does not complete within this deadline
                 format: date-time
                 type: string
               conditions:
-                description: Conditions represents list of conditions regarding this
-                  BackupSession
                 items:
-                  description: Condition defines an observation of a object operational
-                    state.
                   properties:
                     lastTransitionTime:
-                      description: Last time the condition transitioned from one status
-                        to another. This should be when the underlying condition changed.
-                        If that is not known, then using the time when the API field
-                        changed is acceptable.
                       format: date-time
                       type: string
                     message:
-                      description: A human-readable message indicating details about
-                        the transition. This field may be empty.
                       type: string
                     observedGeneration:
-                      description: If set, this represents the .metadata.generation
-                        that the condition was set based upon. For instance, if .metadata.generation
-                        is currently 12, but the .status.condition[x].observedGeneration
-                        is 9, the condition is out of date with respect to the current
-                        state of the instance.
                       format: int64
                       type: integer
                     reason:
-                      description: The reason for the condition's last transition
-                        in CamelCase. The specific API may choose whether this field
-                        is considered a guaranteed API. This field may not be empty.
                       type: string
                     severity:
-                      description: Severity provides an explicit classification of
-                        Reason code, so the users or machines can immediately understand
-                        the current situation and act accordingly. The Severity field
-                        MUST be set only when Status=False.
                       type: string
                     status:
-                      description: Status of the condition, one of True, False, Unknown.
                       type: string
                     type:
-                      description: Type of condition in CamelCase or in foo.example.com/CamelCase.
-                        Many .condition.type values are consistent across resources
-                        like Available, but because arbitrary util can be useful (see
-                        .node.status.util), the ability to deconflict is important.
                       type: string
                   required:
                   - lastTransitionTime
@@ -155,25 +98,15 @@ spec:
                   type: object
                 type: array
               duration:
-                description: Duration specifies the time required to complete the
-                  backup process
                 type: string
               hooks:
-                description: Hooks represents the hook execution status
                 properties:
                   postHooks:
-                    description: PostHooks represents the post-restore hook execution
-                      status
                     items:
-                      description: HookExecutionStatus represents the state of the
-                        hook execution
                       properties:
                         name:
-                          description: Name indicates the name of the hook whose status
-                            is being shown here.
                           type: string
                         phase:
-                          description: Phase represents the hook execution phase
                           enum:
                           - Succeeded
                           - Failed
@@ -182,18 +115,11 @@ spec:
                       type: object
                     type: array
                   preHooks:
-                    description: PreHooks represents the pre-restore hook execution
-                      status
                     items:
-                      description: HookExecutionStatus represents the state of the
-                        hook execution
                       properties:
                         name:
-                          description: Name indicates the name of the hook whose status
-                            is being shown here.
                           type: string
                         phase:
-                          description: Phase represents the hook execution phase
                           enum:
                           - Succeeded
                           - Failed
@@ -203,13 +129,9 @@ spec:
                     type: array
                 type: object
               nextRetry:
-                description: NextRetry specifies the time when KubeStash should retry
-                  the current failed backup. This field will exist only if the `retryConfig`
-                  has been set in the respective backup invoker.
                 format: date-time
                 type: string
               phase:
-                description: Phase represents the current state of the backup process.
                 enum:
                 - Pending
                 - Running
@@ -218,76 +140,50 @@ spec:
                 - Skipped
                 type: string
               retentionPolicy:
-                description: RetentionPolices specifies whether the retention policies
-                  were properly applied on the repositories or not
                 items:
-                  description: RetentionPolicyApplyStatus represents the state of
-                    the applying retention policy
                   properties:
                     error:
-                      description: Error represents the reason if the retention policy
-                        applying fail
                       type: string
                     phase:
-                      description: Phase specifies the state of retention policy apply
-                        process
                       enum:
                       - Pending
                       - Applied
                       - FailedToApply
                       type: string
                     ref:
-                      description: Ref points to the RetentionPolicy CR that is being
-                        used to cleanup the old Snapshots for this session.
                       properties:
                         name:
-                          description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
                           type: string
                         namespace:
-                          description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
                           type: string
                       required:
                       - name
                       type: object
                     repository:
-                      description: Repository specifies the name of the Repository
-                        on which the RetentionPolicy has been applied.
                       type: string
                   type: object
                 type: array
               retried:
-                description: Retried specifies whether this session was retried or
-                  not. This field will exist only if the `retryConfig` has been set
-                  in the respective backup invoker.
                 type: boolean
               snapshots:
-                description: Snapshots specifies the Snapshots status
                 items:
-                  description: SnapshotStatus represents the current state of respective
-                    the Snapshot
                   properties:
                     appRef:
-                      description: AppRef points to the application that is being
-                        backed up in this Snapshot
                       properties:
                         apiGroup:
                           type: string
                         kind:
                           type: string
                         name:
-                          description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
                           type: string
                         namespace:
-                          description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
                           type: string
                       required:
                       - name
                       type: object
                     name:
-                      description: Name indicates to the name of the Snapshot
                       type: string
                     phase:
-                      description: Phase indicate the phase of the Snapshot
                       enum:
                       - Pending
                       - Running
@@ -295,36 +191,12 @@ spec:
                       - Failed
                       type: string
                     repository:
-                      description: Repository indicates the name of the Repository
-                        where the Snapshot is being stored.
                       type: string
                   type: object
                 type: array
               totalSnapshots:
-                description: TotalSnapshots specifies the total number of snapshots
-                  created for this backupSession.
                 format: int32
                 type: integer
-              verifications:
-                description: Verifications specifies the backup verification status
-                items:
-                  description: VerificationStatus specifies the status of a backup
-                    verification
-                  properties:
-                    name:
-                      description: Name indicates the name of the respective verification
-                        strategy
-                      type: string
-                    phase:
-                      description: Phase represents the state of the verification
-                        process
-                      enum:
-                      - Verified
-                      - NotVerified
-                      - VerificationFailed
-                      type: string
-                  type: object
-                type: array
             type: object
         type: object
     served: true

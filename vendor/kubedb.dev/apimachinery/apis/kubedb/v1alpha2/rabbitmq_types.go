@@ -122,7 +122,7 @@ type RabbitMQSpec struct {
 type RabbitMQStatus struct {
 	// Specifies the current phase of the database
 	// +optional
-	Phase RabbitMQPhase `json:"phase,omitempty"`
+	Phase DatabasePhase `json:"phase,omitempty"`
 	// observedGeneration is the most recent generation observed for this resource. It corresponds to the
 	// resource's generation, which is updated on mutation by the API Server.
 	// +optional
@@ -131,16 +131,6 @@ type RabbitMQStatus struct {
 	// +optional
 	Conditions []kmapi.Condition `json:"conditions,omitempty"`
 }
-
-// +kubebuilder:validation:Enum=Provisioning;Ready;NotReady;Critical
-type RabbitMQPhase string
-
-const (
-	RabbitmqProvisioning RabbitMQPhase = "Provisioning"
-	RabbitmqReady        RabbitMQPhase = "Ready"
-	RabbitmqNotReady     RabbitMQPhase = "NotReady"
-	RabbitmqCritical     RabbitMQPhase = "Critical"
-)
 
 // +kubebuilder:validation:Enum=ca;client;server
 type RabbitMQCertificateAlias string

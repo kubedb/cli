@@ -6,13 +6,13 @@ toolchain go1.22.5
 
 require (
 	github.com/Masterminds/semver/v3 v3.3.0
-	github.com/cert-manager/cert-manager v1.15.2
+	github.com/cert-manager/cert-manager v1.15.4
 	github.com/fatih/camelcase v1.0.0
 	github.com/go-sql-driver/mysql v1.8.1
 	github.com/prometheus/client_golang v1.18.0
 	github.com/prometheus/common v0.46.0
 	github.com/spf13/cobra v1.8.1
-	golang.org/x/text v0.18.0
+	golang.org/x/text v0.21.0
 	gomodules.xyz/go-sh v0.1.0
 	gomodules.xyz/logs v0.0.7
 	gomodules.xyz/pointer v0.1.0
@@ -26,14 +26,14 @@ require (
 	k8s.io/klog/v2 v2.130.1
 	k8s.io/kubectl v0.29.0
 	kmodules.xyz/cert-manager-util v0.29.0
-	kmodules.xyz/client-go v0.30.38
+	kmodules.xyz/client-go v0.30.42
 	kmodules.xyz/custom-resources v0.30.0
 	kmodules.xyz/monitoring-agent-api v0.30.2
-	kubedb.dev/apimachinery v0.49.0
-	kubedb.dev/db-client-go v0.4.0
+	kubedb.dev/apimachinery v0.50.0
+	kubedb.dev/db-client-go v0.5.0
 	sigs.k8s.io/controller-runtime v0.18.4
 	sigs.k8s.io/yaml v1.4.0
-	stash.appscode.dev/apimachinery v0.36.0
+	stash.appscode.dev/apimachinery v0.37.0
 )
 
 require (
@@ -47,7 +47,7 @@ require (
 	github.com/codegangsta/inject v0.0.0-20150114235600-33e0aa1cb7c0 // indirect
 	github.com/coreos/go-semver v0.3.1 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.4 // indirect
-	github.com/cyphar/filepath-securejoin v0.2.4 // indirect
+	github.com/cyphar/filepath-securejoin v0.3.4 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/elastic/elastic-transport-go/v8 v8.1.0 // indirect
@@ -116,11 +116,11 @@ require (
 	github.com/zeebo/xxh3 v1.0.2 // indirect
 	go.starlark.net v0.0.0-20230525235612-a134d8f9ddca // indirect
 	golang.org/x/exp v0.0.0-20240506185415-9bf2ced13842 // indirect
-	golang.org/x/net v0.29.0 // indirect
+	golang.org/x/net v0.33.0 // indirect
 	golang.org/x/oauth2 v0.22.0 // indirect
-	golang.org/x/sync v0.8.0 // indirect
-	golang.org/x/sys v0.25.0 // indirect
-	golang.org/x/term v0.24.0 // indirect
+	golang.org/x/sync v0.10.0 // indirect
+	golang.org/x/sys v0.28.0 // indirect
+	golang.org/x/term v0.27.0 // indirect
 	golang.org/x/time v0.5.0 // indirect
 	gomodules.xyz/clock v0.0.0-20200817085942-06523dba733f // indirect
 	gomodules.xyz/encoding v0.0.8 // indirect
@@ -145,11 +145,11 @@ require (
 	kmodules.xyz/objectstore-api v0.29.1 // indirect
 	kmodules.xyz/offshoot-api v0.30.1 // indirect
 	kmodules.xyz/prober v0.29.0 // indirect
-	kmodules.xyz/resource-metadata v0.22.5 // indirect
+	kmodules.xyz/resource-metadata v0.23.1 // indirect
 	kubeops.dev/csi-driver-cacerts v0.1.0 // indirect
 	kubeops.dev/petset v0.0.7 // indirect
-	kubeops.dev/sidekick v0.0.8 // indirect
-	kubestash.dev/apimachinery v0.13.0 // indirect
+	kubeops.dev/sidekick v0.0.10-0.20241122131943-163e27e5ef71 // indirect
+	kubestash.dev/apimachinery v0.14.0 // indirect
 	sigs.k8s.io/gateway-api v1.1.0 // indirect
 	sigs.k8s.io/json v0.0.0-20221116044647-bc3834ca7abd // indirect
 	sigs.k8s.io/kustomize/api v0.17.2 // indirect

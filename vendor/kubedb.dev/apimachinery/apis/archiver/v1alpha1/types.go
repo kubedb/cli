@@ -71,11 +71,24 @@ type ManifestBackupOptions struct {
 	SessionHistoryLimit int32 `json:"sessionHistoryLimit,omitempty"`
 }
 
-type WalBackupOptions struct {
+type LogBackupOptions struct {
 	// +optional
 	RuntimeSettings *ofst.RuntimeSettings `json:"runtimeSettings,omitempty"`
+
 	// +optional
 	ConfigSecret *GenericSecretReference `json:"configSecret,omitempty"`
+
+	// SuccessfulLogHistoryLimit defines the number of successful Logs backup status that the incremental snapshot will retain
+	// The default value is 5.
+	// +kubebuilder:default=5
+	// +optional
+	SuccessfulLogHistoryLimit int32 `json:"successfulLogHistoryLimit,omitempty"`
+
+	// FailedLogHistoryLimit defines the number of failed Logs backup that the incremental snapshot will retain for debugging purposes.
+	// The default value is 5.
+	// +kubebuilder:default=5
+	// +optional
+	FailedLogHistoryLimit int32 `json:"failedLogHistoryLimit,omitempty"`
 }
 
 type Task struct {

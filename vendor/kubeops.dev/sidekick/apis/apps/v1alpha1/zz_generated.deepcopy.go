@@ -234,6 +234,11 @@ func (in *SidekickSpec) DeepCopyInto(out *SidekickSpec) {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
+	if in.BackoffLimit != nil {
+		in, out := &in.BackoffLimit, &out.BackoffLimit
+		*out = new(int32)
+		**out = **in
+	}
 	if in.TerminationGracePeriodSeconds != nil {
 		in, out := &in.TerminationGracePeriodSeconds, &out.TerminationGracePeriodSeconds
 		*out = new(int64)
@@ -378,6 +383,20 @@ func (in *SidekickStatus) DeepCopyInto(out *SidekickStatus) {
 		*out = make([]apiv1.Condition, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
+		}
+	}
+	if in.ContainerRestartCountsPerPod != nil {
+		in, out := &in.ContainerRestartCountsPerPod, &out.ContainerRestartCountsPerPod
+		*out = make(map[string]int32, len(*in))
+		for key, val := range *in {
+			(*out)[key] = val
+		}
+	}
+	if in.FailureCount != nil {
+		in, out := &in.FailureCount, &out.FailureCount
+		*out = make(map[string]bool, len(*in))
+		for key, val := range *in {
+			(*out)[key] = val
 		}
 	}
 	return

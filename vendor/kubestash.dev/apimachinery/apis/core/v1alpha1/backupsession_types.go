@@ -97,10 +97,6 @@ type BackupSessionStatus struct {
 	// +optional
 	Hooks HookStatus `json:"hooks,omitempty"`
 
-	// Verifications specifies the backup verification status
-	// +optional
-	Verifications []VerificationStatus `json:"verifications,omitempty"`
-
 	// RetentionPolices specifies whether the retention policies were properly applied on the repositories or not
 	// +optional
 	RetentionPolicies []RetentionPolicyApplyStatus `json:"retentionPolicy,omitempty"`
@@ -147,26 +143,6 @@ type SnapshotStatus struct {
 	// Repository indicates the name of the Repository where the Snapshot is being stored.
 	Repository string `json:"repository,omitempty"`
 }
-
-// VerificationStatus specifies the status of a backup verification
-type VerificationStatus struct {
-	// Name indicates the name of the respective verification strategy
-	Name string `json:"name,omitempty"`
-
-	// Phase represents the state of the verification process
-	// +optional
-	Phase BackupVerificationPhase `json:"phase,omitempty"`
-}
-
-// BackupVerificationPhase represents the state of the backup verification process
-// +kubebuilder:validation:Enum=Verified;NotVerified;VerificationFailed
-type BackupVerificationPhase string
-
-const (
-	Verified           BackupVerificationPhase = "Verified"
-	NotVerified        BackupVerificationPhase = "NotVerified"
-	VerificationFailed BackupVerificationPhase = "VerificationFailed"
-)
 
 // RetentionPolicyApplyStatus represents the state of the applying retention policy
 type RetentionPolicyApplyStatus struct {

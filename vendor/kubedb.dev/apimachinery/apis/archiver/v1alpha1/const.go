@@ -29,6 +29,7 @@ const (
 	RestoreSessionName     = "manifest-restorer"
 
 	RestoreJobNameBinlog  = "binlog-restorer"
+	RestoreJobNameLog     = "log-restorer"
 	RestoreJobNameOplog   = "oplog-restorer"
 	RestoreJobNameWal     = "wal-restorer"
 	RestoreCmdBinlogFetch = "binlog-fetch"
@@ -48,6 +49,7 @@ const (
 	WALG_AZ_PREFIX           = "WALG_AZ_PREFIX"
 	AZURE_STORAGE_ACCOUNT    = "AZURE_STORAGE_ACCOUNT"
 	AZURE_STORAGE_ACCESS_KEY = "AZURE_STORAGE_ACCESS_KEY"
+	AZURE_STORAGE_KEY        = "AZURE_STORAGE_KEY"
 	AZURE_ACCOUNT_KEY        = "AZURE_ACCOUNT_KEY"
 )
 

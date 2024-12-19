@@ -1,0 +1,109 @@
+
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  name: resourceoutlinefilters.ui.k8s.appscode.com
+spec:
+  group: ui.k8s.appscode.com
+  names:
+    kind: ResourceOutlineFilter
+    listKind: ResourceOutlineFilterList
+    plural: resourceoutlinefilters
+    singular: resourceoutlinefilter
+  scope: Cluster
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            properties:
+              actions:
+                items:
+                  properties:
+                    items:
+                      additionalProperties:
+                        type: boolean
+                      type: object
+                    name:
+                      type: string
+                  required:
+                  - items
+                  type: object
+                type: array
+              header:
+                type: boolean
+              pages:
+                items:
+                  properties:
+                    name:
+                      type: string
+                    sections:
+                      items:
+                        properties:
+                          blocks:
+                            additionalProperties:
+                              type: boolean
+                            type: object
+                          info:
+                            type: boolean
+                          insight:
+                            type: boolean
+                          name:
+                            type: string
+                        required:
+                        - info
+                        - insight
+                        type: object
+                      type: array
+                  required:
+                  - name
+                  type: object
+                type: array
+              resource:
+                description: ResourceID identifies a resource
+                properties:
+                  group:
+                    type: string
+                  kind:
+                    description: Kind is the serialized kind of the resource.  It
+                      is normally CamelCase and singular.
+                    type: string
+                  name:
+                    description: 'Name is the plural name of the resource to serve.  It
+                      must match the name of the CustomResourceDefinition-registration
+                      too: plural.group and it must be all lowercase.'
+                    type: string
+                  scope:
+                    description: ResourceScope is an enum defining the different scopes
+                      available to a custom resource
+                    type: string
+                  version:
+                    type: string
+                required:
+                - group
+                type: object
+              tabBar:
+                type: boolean
+            required:
+            - header
+            - resource
+            - tabBar
+            type: object
+        type: object
+    served: true
+    storage: true

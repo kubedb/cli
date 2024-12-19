@@ -57,9 +57,9 @@ type MariaDBArchiverSpec struct {
 	// FullBackup defines the session configuration for the full backup
 	// +optional
 	FullBackup *FullBackupOptions `json:"fullBackup"`
-	// WalBackup defines the sidekick configuration for the wal backup
+	// LogBackup defines the sidekick configuration for the log backup
 	// +optional
-	WalBackup *WalBackupOptions `json:"walBackup"`
+	LogBackup *LogBackupOptions `json:"logBackup"`
 	// ManifestBackup defines the session configuration for the manifest backup
 	// This options will eventually go to the manifest-backup job's yaml
 	// +optional

@@ -29,6 +29,7 @@ import (
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
+	"k8s.io/utils/ptr"
 	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	core_util "kmodules.xyz/client-go/core/v1"
@@ -86,6 +87,14 @@ func (m MySQL) PodLabels() map[string]string {
 
 func (m MySQL) PodControllerLabels() map[string]string {
 	return m.offshootLabels(m.OffshootSelectors(), m.Spec.PodTemplate.Controller.Labels)
+}
+
+func (m MySQL) SidekickLabels(skName string) map[string]string {
+	return meta_util.OverwriteKeys(nil, kubedb.CommonSidekickLabels(), map[string]string{
+		meta_util.InstanceLabelKey: skName,
+		kubedb.SidekickOwnerName:   m.Name,
+		kubedb.SidekickOwnerKind:   m.ResourceFQN(),
+	})
 }
 
 func (m MySQL) RouterOffshootLabels() map[string]string {
@@ -307,6 +316,9 @@ func (m *MySQL) SetDefaults(myVersion *v1alpha1.MySQLVersion) {
 		if m.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup == nil {
 			m.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup = myVersion.Spec.SecurityContext.RunAsUser
 		}
+	}
+	if m.Spec.Init != nil && m.Spec.Init.Archiver != nil && m.Spec.Init.Archiver.ReplicationStrategy == nil {
+		m.Spec.Init.Archiver.ReplicationStrategy = ptr.To(ReplicationStrategyNone)
 	}
 }
 

@@ -30,6 +30,7 @@ import (
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
+	"k8s.io/utils/ptr"
 	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	core_util "kmodules.xyz/client-go/core/v1"
@@ -75,6 +76,14 @@ func (m MariaDB) PodLabels() map[string]string {
 
 func (m MariaDB) PodControllerLabels() map[string]string {
 	return m.offshootLabels(m.OffshootSelectors(), m.Spec.PodTemplate.Controller.Labels)
+}
+
+func (m MariaDB) SidekickLabels(skName string) map[string]string {
+	return meta_util.OverwriteKeys(nil, kubedb.CommonSidekickLabels(), map[string]string{
+		meta_util.InstanceLabelKey: skName,
+		kubedb.SidekickOwnerName:   m.Name,
+		kubedb.SidekickOwnerKind:   m.ResourceFQN(),
+	})
 }
 
 func (m MariaDB) offshootLabels(selector, override map[string]string) map[string]string {
@@ -213,7 +222,9 @@ func (m *MariaDB) SetDefaults(mdVersion *v1alpha1.MariaDBVersion) {
 	if m.Spec.PodTemplate.Spec.ServiceAccountName == "" {
 		m.Spec.PodTemplate.Spec.ServiceAccountName = m.OffshootName()
 	}
-
+	if m.Spec.Init != nil && m.Spec.Init.Archiver != nil && m.Spec.Init.Archiver.ReplicationStrategy == nil {
+		m.Spec.Init.Archiver.ReplicationStrategy = ptr.To(ReplicationStrategyNone)
+	}
 	m.setDefaultContainerSecurityContext(mdVersion, &m.Spec.PodTemplate)
 	m.setDefaultContainerResourceLimits(&m.Spec.PodTemplate)
 	m.SetTLSDefaults()
