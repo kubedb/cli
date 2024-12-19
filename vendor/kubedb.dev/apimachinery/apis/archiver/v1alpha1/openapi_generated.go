@@ -497,6 +497,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/archiver/v1alpha1.BackupStorage":                               schema_apimachinery_apis_archiver_v1alpha1_BackupStorage(ref),
 		"kubedb.dev/apimachinery/apis/archiver/v1alpha1.FullBackupOptions":                           schema_apimachinery_apis_archiver_v1alpha1_FullBackupOptions(ref),
 		"kubedb.dev/apimachinery/apis/archiver/v1alpha1.GenericSecretReference":                      schema_apimachinery_apis_archiver_v1alpha1_GenericSecretReference(ref),
+		"kubedb.dev/apimachinery/apis/archiver/v1alpha1.LogBackupOptions":                            schema_apimachinery_apis_archiver_v1alpha1_LogBackupOptions(ref),
 		"kubedb.dev/apimachinery/apis/archiver/v1alpha1.MSSQLServerArchiver":                         schema_apimachinery_apis_archiver_v1alpha1_MSSQLServerArchiver(ref),
 		"kubedb.dev/apimachinery/apis/archiver/v1alpha1.MSSQLServerArchiverList":                     schema_apimachinery_apis_archiver_v1alpha1_MSSQLServerArchiverList(ref),
 		"kubedb.dev/apimachinery/apis/archiver/v1alpha1.MSSQLServerArchiverSpec":                     schema_apimachinery_apis_archiver_v1alpha1_MSSQLServerArchiverSpec(ref),
@@ -520,7 +521,6 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/archiver/v1alpha1.PostgresArchiverStatus":                      schema_apimachinery_apis_archiver_v1alpha1_PostgresArchiverStatus(ref),
 		"kubedb.dev/apimachinery/apis/archiver/v1alpha1.SchedulerOptions":                            schema_apimachinery_apis_archiver_v1alpha1_SchedulerOptions(ref),
 		"kubedb.dev/apimachinery/apis/archiver/v1alpha1.Task":                                        schema_apimachinery_apis_archiver_v1alpha1_Task(ref),
-		"kubedb.dev/apimachinery/apis/archiver/v1alpha1.WalBackupOptions":                            schema_apimachinery_apis_archiver_v1alpha1_WalBackupOptions(ref),
 	}
 }
 
@@ -25556,6 +25556,44 @@ func schema_apimachinery_apis_archiver_v1alpha1_GenericSecretReference(ref commo
 	}
 }
 
+func schema_apimachinery_apis_archiver_v1alpha1_LogBackupOptions(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"runtimeSettings": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kmodules.xyz/offshoot-api/api/v1.RuntimeSettings"),
+						},
+					},
+					"configSecret": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/archiver/v1alpha1.GenericSecretReference"),
+						},
+					},
+					"successfulLogHistoryLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "SuccessfulLogHistoryLimit defines the number of successful Logs backup status that the incremental snapshot will retain The default value is 5.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"failedLogHistoryLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "FailedLogHistoryLimit defines the number of failed Logs backup that the incremental snapshot will retain for debugging purposes. The default value is 5.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/offshoot-api/api/v1.RuntimeSettings", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.GenericSecretReference"},
+	}
+}
+
 func schema_apimachinery_apis_archiver_v1alpha1_MSSQLServerArchiver(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -25682,10 +25720,10 @@ func schema_apimachinery_apis_archiver_v1alpha1_MSSQLServerArchiverSpec(ref comm
 							Ref:         ref("kubedb.dev/apimachinery/apis/archiver/v1alpha1.FullBackupOptions"),
 						},
 					},
-					"walBackup": {
+					"logBackup": {
 						SchemaProps: spec.SchemaProps{
-							Description: "WalBackup defines the sessionConfig of the walBackup This options will eventually go to the sidekick specification",
-							Ref:         ref("kubedb.dev/apimachinery/apis/archiver/v1alpha1.WalBackupOptions"),
+							Description: "LogBackup defines the sidekick configuration for the log backup",
+							Ref:         ref("kubedb.dev/apimachinery/apis/archiver/v1alpha1.LogBackupOptions"),
 						},
 					},
 					"manifestBackup": {
@@ -25717,7 +25755,7 @@ func schema_apimachinery_apis_archiver_v1alpha1_MSSQLServerArchiverSpec(ref comm
 			},
 		},
 		Dependencies: []string{
-			"kmodules.xyz/client-go/api/v1.ObjectReference", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.BackupStorage", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.FullBackupOptions", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.ManifestBackupOptions", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.WalBackupOptions", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.AllowedConsumers"},
+			"kmodules.xyz/client-go/api/v1.ObjectReference", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.BackupStorage", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.FullBackupOptions", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.LogBackupOptions", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.ManifestBackupOptions", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.AllowedConsumers"},
 	}
 }
 
@@ -25921,10 +25959,10 @@ func schema_apimachinery_apis_archiver_v1alpha1_MariaDBArchiverSpec(ref common.R
 							Ref:         ref("kubedb.dev/apimachinery/apis/archiver/v1alpha1.FullBackupOptions"),
 						},
 					},
-					"walBackup": {
+					"logBackup": {
 						SchemaProps: spec.SchemaProps{
-							Description: "WalBackup defines the sidekick configuration for the wal backup",
-							Ref:         ref("kubedb.dev/apimachinery/apis/archiver/v1alpha1.WalBackupOptions"),
+							Description: "LogBackup defines the sidekick configuration for the log backup",
+							Ref:         ref("kubedb.dev/apimachinery/apis/archiver/v1alpha1.LogBackupOptions"),
 						},
 					},
 					"manifestBackup": {
@@ -25957,7 +25995,7 @@ func schema_apimachinery_apis_archiver_v1alpha1_MariaDBArchiverSpec(ref common.R
 			},
 		},
 		Dependencies: []string{
-			"kmodules.xyz/client-go/api/v1.ObjectReference", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.BackupStorage", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.FullBackupOptions", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.ManifestBackupOptions", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.WalBackupOptions", "kubedb.dev/apimachinery/apis/kubedb/v1.AllowedConsumers"},
+			"kmodules.xyz/client-go/api/v1.ObjectReference", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.BackupStorage", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.FullBackupOptions", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.LogBackupOptions", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.ManifestBackupOptions", "kubedb.dev/apimachinery/apis/kubedb/v1.AllowedConsumers"},
 	}
 }
 
@@ -26116,10 +26154,10 @@ func schema_apimachinery_apis_archiver_v1alpha1_MongoDBArchiverSpec(ref common.R
 							Ref:         ref("kubedb.dev/apimachinery/apis/archiver/v1alpha1.FullBackupOptions"),
 						},
 					},
-					"walBackup": {
+					"logBackup": {
 						SchemaProps: spec.SchemaProps{
-							Description: "WalBackup defines the config of the WalBackup",
-							Ref:         ref("kubedb.dev/apimachinery/apis/archiver/v1alpha1.WalBackupOptions"),
+							Description: "LogBackup defines the sidekick configuration for the log backup",
+							Ref:         ref("kubedb.dev/apimachinery/apis/archiver/v1alpha1.LogBackupOptions"),
 						},
 					},
 					"manifestBackup": {
@@ -26151,7 +26189,7 @@ func schema_apimachinery_apis_archiver_v1alpha1_MongoDBArchiverSpec(ref common.R
 			},
 		},
 		Dependencies: []string{
-			"kmodules.xyz/client-go/api/v1.ObjectReference", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.BackupStorage", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.FullBackupOptions", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.ManifestBackupOptions", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.WalBackupOptions", "kubedb.dev/apimachinery/apis/kubedb/v1.AllowedConsumers"},
+			"kmodules.xyz/client-go/api/v1.ObjectReference", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.BackupStorage", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.FullBackupOptions", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.LogBackupOptions", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.ManifestBackupOptions", "kubedb.dev/apimachinery/apis/kubedb/v1.AllowedConsumers"},
 	}
 }
 
@@ -26310,10 +26348,10 @@ func schema_apimachinery_apis_archiver_v1alpha1_MySQLArchiverSpec(ref common.Ref
 							Ref:         ref("kubedb.dev/apimachinery/apis/archiver/v1alpha1.FullBackupOptions"),
 						},
 					},
-					"walBackup": {
+					"logBackup": {
 						SchemaProps: spec.SchemaProps{
-							Description: "WalBackup defines the sessionConfig of the walBackup This options will eventually go to the sidekick specification",
-							Ref:         ref("kubedb.dev/apimachinery/apis/archiver/v1alpha1.WalBackupOptions"),
+							Description: "LogBackup defines the sidekick configuration for the log backup",
+							Ref:         ref("kubedb.dev/apimachinery/apis/archiver/v1alpha1.LogBackupOptions"),
 						},
 					},
 					"manifestBackup": {
@@ -26345,7 +26383,7 @@ func schema_apimachinery_apis_archiver_v1alpha1_MySQLArchiverSpec(ref common.Ref
 			},
 		},
 		Dependencies: []string{
-			"kmodules.xyz/client-go/api/v1.ObjectReference", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.BackupStorage", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.FullBackupOptions", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.ManifestBackupOptions", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.WalBackupOptions", "kubedb.dev/apimachinery/apis/kubedb/v1.AllowedConsumers"},
+			"kmodules.xyz/client-go/api/v1.ObjectReference", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.BackupStorage", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.FullBackupOptions", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.LogBackupOptions", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.ManifestBackupOptions", "kubedb.dev/apimachinery/apis/kubedb/v1.AllowedConsumers"},
 	}
 }
 
@@ -26504,10 +26542,10 @@ func schema_apimachinery_apis_archiver_v1alpha1_PostgresArchiverSpec(ref common.
 							Ref:         ref("kubedb.dev/apimachinery/apis/archiver/v1alpha1.FullBackupOptions"),
 						},
 					},
-					"walBackup": {
+					"logBackup": {
 						SchemaProps: spec.SchemaProps{
-							Description: "WalBackup defines the sessionConfig of the walBackup This options will eventually go to the sidekick specification",
-							Ref:         ref("kubedb.dev/apimachinery/apis/archiver/v1alpha1.WalBackupOptions"),
+							Description: "LogBackup defines the sidekick configuration for the log backup",
+							Ref:         ref("kubedb.dev/apimachinery/apis/archiver/v1alpha1.LogBackupOptions"),
 						},
 					},
 					"manifestBackup": {
@@ -26539,7 +26577,7 @@ func schema_apimachinery_apis_archiver_v1alpha1_PostgresArchiverSpec(ref common.
 			},
 		},
 		Dependencies: []string{
-			"kmodules.xyz/client-go/api/v1.ObjectReference", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.BackupStorage", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.FullBackupOptions", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.ManifestBackupOptions", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.WalBackupOptions", "kubedb.dev/apimachinery/apis/kubedb/v1.AllowedConsumers"},
+			"kmodules.xyz/client-go/api/v1.ObjectReference", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.BackupStorage", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.FullBackupOptions", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.LogBackupOptions", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.ManifestBackupOptions", "kubedb.dev/apimachinery/apis/kubedb/v1.AllowedConsumers"},
 	}
 }
 
@@ -26635,29 +26673,5 @@ func schema_apimachinery_apis_archiver_v1alpha1_Task(ref common.ReferenceCallbac
 		},
 		Dependencies: []string{
 			"k8s.io/apimachinery/pkg/runtime.RawExtension"},
-	}
-}
-
-func schema_apimachinery_apis_archiver_v1alpha1_WalBackupOptions(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Type: []string{"object"},
-				Properties: map[string]spec.Schema{
-					"runtimeSettings": {
-						SchemaProps: spec.SchemaProps{
-							Ref: ref("kmodules.xyz/offshoot-api/api/v1.RuntimeSettings"),
-						},
-					},
-					"configSecret": {
-						SchemaProps: spec.SchemaProps{
-							Ref: ref("kubedb.dev/apimachinery/apis/archiver/v1alpha1.GenericSecretReference"),
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"kmodules.xyz/offshoot-api/api/v1.RuntimeSettings", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.GenericSecretReference"},
 	}
 }

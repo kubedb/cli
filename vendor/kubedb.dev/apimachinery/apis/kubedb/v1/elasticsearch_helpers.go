@@ -705,7 +705,7 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion) {
 		}
 	}
 
-	e.setDefaultInternalUsersAndRoleMappings(esVersion)
+	e.SetDefaultInternalUsersAndRoleMappings(esVersion)
 	e.SetMetricsExporterDefaults(esVersion)
 	e.SetTLSDefaults(esVersion)
 }
@@ -723,7 +723,7 @@ func (e *Elasticsearch) SetMetricsExporterDefaults(esVersion *catalog.Elasticsea
 }
 
 // Set Default internal users settings
-func (e *Elasticsearch) setDefaultInternalUsersAndRoleMappings(esVersion *catalog.ElasticsearchVersion) {
+func (e *Elasticsearch) SetDefaultInternalUsersAndRoleMappings(esVersion *catalog.ElasticsearchVersion) {
 	// If security is disabled (ie. DisableSecurity: true), ignore.
 	if e.Spec.DisableSecurity {
 		return

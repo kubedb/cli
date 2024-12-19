@@ -30,140 +30,68 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: RetentionPolicy specifies how the old Snapshots should be cleaned
-          up. This is a namespaced CRD. However, you can refer it from other namespaces
-          as long as it is permitted via `.spec.usagePolicy`.
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
             type: string
           metadata:
             type: object
           spec:
-            description: RetentionPolicySpec defines the policy of cleaning old Snapshots
             properties:
               default:
-                description: Default specifies whether to use this RetentionPolicy
-                  as a default RetentionPolicy for the current namespace as well as
-                  the permitted namespaces. One namespace can have at most one default
-                  RetentionPolicy configured.
                 type: boolean
               failedSnapshots:
-                description: FailedSnapshots specifies how many failed Snapshots should
-                  be kept.
                 properties:
                   last:
                     default: 1
-                    description: Last specifies how many last failed Snapshots should
-                      be kept. By default, KubeStash will keep only the last 1 failed
-                      Snapshot.
                     format: int32
                     type: integer
                 type: object
               maxRetentionPeriod:
-                description: "MaxRetentionPeriod specifies a duration up to which
-                  the old Snapshots should be kept. KubeStash will remove all the
-                  Snapshots that are older than the MaxRetentionPeriod. For example,
-                  MaxRetentionPeriod of `30d` will keep only the Snapshots of last
-                  30 days. Sample duration format: - years: \t2y - months: \t6mo -
-                  days: \t\t30d - hours: \t12h - minutes: \t30m You can also combine
-                  the above durations. For example: 30d12h30m"
                 type: string
               successfulSnapshots:
-                description: SuccessfulSnapshots specifies how many successful Snapshots
-                  should be kept.
                 properties:
                   daily:
-                    description: Daily specifies how many daily Snapshots should be
-                      kept.
                     format: int32
                     type: integer
                   hourly:
-                    description: Hourly specifies how many hourly Snapshots should
-                      be kept.
                     format: int32
                     type: integer
                   last:
-                    description: Last specifies how many last Snapshots should be
-                      kept.
                     format: int32
                     type: integer
                   monthly:
-                    description: Monthly specifies how many monthly Snapshots should
-                      be kept.
                     format: int32
                     type: integer
                   weekly:
-                    description: Weekly specifies how many weekly Snapshots should
-                      be kept.
                     format: int32
                     type: integer
                   yearly:
-                    description: Yearly specifies how many yearly Snapshots should
-                      be kept.
                     format: int32
                     type: integer
                 type: object
               usagePolicy:
-                description: UsagePolicy specifies a policy of how this RetentionPolicy
-                  will be used. For example, you can use `allowedNamespaces` policy
-                  to restrict the usage of this RetentionPolicy to particular namespaces.
-                  This field is optional. If you don't provide the usagePolicy, then
-                  it can be used only from the current namespace.
                 properties:
                   allowedNamespaces:
-                    description: AllowedNamespaces specifies which namespaces are
-                      allowed to use the resource
                     properties:
                       from:
                         default: Same
-                        description: 'From indicates how to select the namespaces
-                          that are allowed to use this resource. Possible values are:
-                          * All: All namespaces can use this resource. * Selector:
-                          Namespaces that matches the selector can use this resource.
-                          * Same: Only current namespace can use the resource.'
                         enum:
                         - All
                         - Selector
                         - Same
                         type: string
                       selector:
-                        description: Selector must be specified when From is set to
-                          "Selector". In that case, only the selected namespaces are
-                          allowed to use this resource. This field is ignored for
-                          other values of "From".
                         properties:
                           matchExpressions:
-                            description: matchExpressions is a list of label selector
-                              requirements. The requirements are ANDed.
                             items:
-                              description: A label selector requirement is a selector
-                                that contains values, a key, and an operator that
-                                relates the key and values.
                               properties:
                                 key:
-                                  description: key is the label key that the selector
-                                    applies to.
                                   type: string
                                 operator:
-                                  description: operator represents a key's relationship
-                                    to a set of values. Valid operators are In, NotIn,
-                                    Exists and DoesNotExist.
                                   type: string
                                 values:
-                                  description: values is an array of string values.
-                                    If the operator is In or NotIn, the values array
-                                    must be non-empty. If the operator is Exists or
-                                    DoesNotExist, the values array must be empty.
-                                    This array is replaced during a strategic merge
-                                    patch.
                                   items:
                                     type: string
                                   type: array
@@ -177,11 +105,6 @@ spec:
                           matchLabels:
                             additionalProperties:
                               type: string
-                            description: matchLabels is a map of {key,value} pairs.
-                              A single {key,value} in the matchLabels map is equivalent
-                              to an element of matchExpressions, whose key field is
-                              "key", the operator is "In", and the values array contains
-                              only "value". The requirements are ANDed.
                             type: object
                         type: object
                         x-kubernetes-map-type: atomic

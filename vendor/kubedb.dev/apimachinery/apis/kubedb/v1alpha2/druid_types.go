@@ -223,7 +223,7 @@ type ZookeeperRef struct {
 type DruidStatus struct {
 	// Specifies the current phase of the database
 	// +optional
-	Phase DruidPhase `json:"phase,omitempty"`
+	Phase DatabasePhase `json:"phase,omitempty"`
 	// observedGeneration is the most recent generation observed for this resource. It corresponds to the
 	// resource's generation, which is updated on mutation by the API Server.
 	// +optional
@@ -241,16 +241,6 @@ type DruidList struct {
 	metav1.ListMeta `json:"metadata,omitempty"`
 	Items           []Druid `json:"items"`
 }
-
-// +kubebuilder:validation:Enum=Provisioning;Ready;NotReady;Critical
-type DruidPhase string
-
-const (
-	DruidPhaseProvisioning DruidPhase = "Provisioning"
-	DruidPhaseReady        DruidPhase = "Ready"
-	DruidPhaseNotReady     DruidPhase = "NotReady"
-	DruidPhaseCritical     DruidPhase = "Critical"
-)
 
 // +kubebuilder:validation:Enum=coordinators;overlords;brokers;routers;middleManagers;historicals
 type DruidNodeRoleType string

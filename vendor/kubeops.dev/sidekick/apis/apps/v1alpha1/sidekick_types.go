@@ -39,6 +39,16 @@ const (
 	PodSelectionPolicyLast  LeaderSelectionPolicy = "Last"
 )
 
+// +kubebuilder:validation:Enum=Pending;Current;Failed;Succeeded
+type SideKickPhase string
+
+const (
+	SideKickPhaseCurrent   SideKickPhase = "Current"
+	SideKickPhaseFailed    SideKickPhase = "Failed"
+	SidekickPhaseSucceeded SideKickPhase = "Succeeded"
+	SideKickPhasePending   SideKickPhase = "Pending"
+)
+
 type LeaderSpec struct {
 	Name string `json:"name,omitempty"`
 
@@ -100,8 +110,17 @@ type SidekickSpec struct {
 	// One of Always, OnFailure, Never.
 	// Default to Always.
 	// More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy
+	// If your sidekick has restartPolicy = "OnFailure", keep in mind that your Pod running the Job will be
+	// terminated once the job backoff limit has been reached. This can make debugging the Job's executable
+	// more difficult. We suggest setting restartPolicy = "Never" when debugging the Job or using a logging
+	// system to ensure output from failed Jobs is not lost inadvertently.
+	// +kubebuilder:validation:Enum=Never;Always;OnFailure
 	// +optional
 	RestartPolicy core.RestartPolicy `json:"restartPolicy,omitempty"`
+	// Specifies the number of retries before marking this job failed.
+	// +optional
+	BackoffLimit *int32 `json:"backoffLimit,omitempty"`
+
 	// Optional duration in seconds the pod needs to terminate gracefully. May be decreased in delete request.
 	// Value must be non-negative integer. The value zero indicates stop immediately via
 	// the kill signal (no opportunity to shut down).
@@ -519,17 +538,17 @@ type VolumeMount struct {
 }
 
 type LeaderStatus struct {
-	Name string `json:"name"`
+	Name string `json:"name,omitempty"`
 }
 
 // SidekickStatus defines the observed state of Sidekick
 type SidekickStatus struct {
-	Leader LeaderStatus  `json:"leader"`
-	Pod    core.PodPhase `json:"pod"`
+	Leader LeaderStatus  `json:"leader,omitempty"`
+	Pod    core.PodPhase `json:"pod,omitempty"`
 
 	// Specifies the current phase of the sidekick CR
 	// +optional
-	Phase string `json:"phase,omitempty"`
+	Phase SideKickPhase `json:"phase,omitempty"`
 	// observedGeneration is the most recent generation observed for this resource. It corresponds to the
 	// resource's generation, which is updated on mutation by the API Server.
 	// +optional
@@ -537,6 +556,10 @@ type SidekickStatus struct {
 	// Conditions applied to the database, such as approval or denial.
 	// +optional
 	Conditions []kmapi.Condition `json:"conditions,omitempty"`
+	// ContainerRestartCountsPerPod stores the sum of all container restart counts of a pod
+	ContainerRestartCountsPerPod map[string]int32 `json:"containerRestartCountsPerPod,omitempty"`
+	// FailuerCount tracks the total number of failed pods
+	FailureCount map[string]bool `json:"failureCount,omitempty"`
 }
 
 // +genclient

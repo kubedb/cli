@@ -110,6 +110,8 @@ const (
 	BasicAuthNextUsernameKey       = "username.next"
 	BasicAuthNextPasswordKey       = "password.next"
 	SecretAlreadyUpdatedAnnotation = "secret-already-updated"
+	AuthDataPreviousKey            = "authData.prev"
+	PatchDefaultConfig             = "PatchDefaultConfig"
 )
 
 // Restart
@@ -158,9 +160,10 @@ const (
 
 // Elasticsearch Constant
 const (
-	PrepareCustomConfig       = "PrepareCustomConfig"
-	PrepareSecureCustomConfig = "PrepareSecureCustomConfig"
-	ReconfigureSecurityAdmin  = "ReconfigureSecurityAdmin"
+	PrepareCustomConfig               = "PrepareCustomConfig"
+	PrepareSecureCustomConfig         = "PrepareSecureCustomConfig"
+	ReconfigureSecurityAdmin          = "ReconfigureSecurityAdmin"
+	DisabledMasterNodeShardAllocation = "DisabledMasterNodeShardAllocation"
 
 	HorizontalScaleMasterNode       = "HorizontalScaleMasterNode"
 	HorizontalScaleDataNode         = "HorizontalScaleDataNode"
@@ -282,7 +285,11 @@ const (
 
 // MySQL/MariaDB Constants
 const (
-	TempIniFilesPath = "/tmp/kubedb-custom-ini-files"
+	TempIniFilesPath           = "/tmp/kubedb-custom-ini-files"
+	StopRemoteReplica          = "StopRemoteReplica"
+	DBPatch                    = "DBPatch"
+	StopRemoteReplicaSucceeded = "StopRemoteReplicaSucceeded"
+	DBPatchSucceeded           = "DBPatchSucceeded"
 )
 
 // Postgres Constants

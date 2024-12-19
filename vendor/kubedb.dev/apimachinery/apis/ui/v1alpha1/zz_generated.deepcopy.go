@@ -100,6 +100,11 @@ func (in *DatabaseConnectionSpec) DeepCopyInto(out *DatabaseConnectionSpec) {
 		}
 	}
 	in.InCluster.DeepCopyInto(&out.InCluster)
+	if in.Databases != nil {
+		in, out := &in.Databases, &out.Databases
+		*out = make([]string, len(*in))
+		copy(*out, *in)
+	}
 	if in.ConnectOptions != nil {
 		in, out := &in.ConnectOptions, &out.ConnectOptions
 		*out = make(map[string]string, len(*in))

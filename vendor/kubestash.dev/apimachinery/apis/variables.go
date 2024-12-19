@@ -26,9 +26,10 @@ const (
 
 	Snapshot = "snapshot"
 
-	Namespace      = "namespace"
-	BackupSession  = "backupSession"
-	RestoreSession = "restoreSession"
+	Namespace                 = "namespace"
+	BackupSession             = "backupSession"
+	RestoreSession            = "restoreSession"
+	BackupVerificationSession = "backupVerificationSession"
 
 	// EnableCache is false when TmpDir.DisableCaching is true in backupConfig/restoreSession
 	// default is true

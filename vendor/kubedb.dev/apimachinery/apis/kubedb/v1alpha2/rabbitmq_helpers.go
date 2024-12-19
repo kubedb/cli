@@ -21,7 +21,6 @@ import (
 	"fmt"
 	"path/filepath"
 	"slices"
-	"strings"
 
 	"kubedb.dev/apimachinery/apis"
 	catalog "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
@@ -78,7 +77,7 @@ func (r *RabbitMQ) GetAuthSecretName() string {
 	if r.Spec.AuthSecret != nil && r.Spec.AuthSecret.Name != "" {
 		return r.Spec.AuthSecret.Name
 	}
-	return meta_util.NameWithSuffix(r.OffshootName(), "auth")
+	return r.DefaultUserCredSecretName()
 }
 
 func (r *RabbitMQ) GetPersistentSecrets() []string {
@@ -228,8 +227,8 @@ func (r *RabbitMQ) ConfigSecretName() string {
 	return meta_util.NameWithSuffix(r.OffshootName(), "config")
 }
 
-func (r *RabbitMQ) DefaultUserCredSecretName(username string) string {
-	return meta_util.NameWithSuffix(r.Name, strings.ReplaceAll(fmt.Sprintf("%s-cred", username), "_", "-"))
+func (r *RabbitMQ) DefaultUserCredSecretName() string {
+	return meta_util.NameWithSuffix(r.OffshootName(), "auth")
 }
 
 func (r *RabbitMQ) DefaultErlangCookieSecretName() string {
