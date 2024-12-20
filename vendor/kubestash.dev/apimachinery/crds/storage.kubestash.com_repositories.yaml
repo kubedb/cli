@@ -43,154 +43,81 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Repository specifies the information about the targeted application
-          that has been backed up and the BackupStorage where the backed up data is
-          being stored. It also holds a list of recent Snapshots that have been taken
-          in this Repository. Repository is a namespaced object. It must be in the
-          same namespace as the targeted application.
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
             type: string
           metadata:
             type: object
           spec:
-            description: RepositorySpec specifies the application reference and the
-              BackupStorage reference.It also specifies what should be the behavior
-              when a Repository CR is deleted from the cluster.
             properties:
               appRef:
-                description: AppRef refers to the application that is being backed
-                  up in this Repository.
                 properties:
                   apiGroup:
                     type: string
                   kind:
                     type: string
                   name:
-                    description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
                     type: string
                   namespace:
-                    description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
                     type: string
                 required:
                 - name
                 type: object
               deletionPolicy:
                 default: Delete
-                description: 'DeletionPolicy specifies what to do when you delete
-                  a Repository CR. The valid values are: "Delete": This will delete
-                  the respective Snapshot CRs from the cluster but keep the backed
-                  up data in the remote backend. This is the default behavior. "WipeOut":
-                  This will delete the respective Snapshot CRs as well as the backed
-                  up data from the backend.'
                 enum:
                 - Delete
                 - WipeOut
                 type: string
               encryptionSecret:
-                description: EncryptionSecret refers to the Secret containing the
-                  encryption key which will be used to encode/decode the backed up
-                  data. You can refer to a Secret of a different namespace. If you
-                  don't provide the namespace field, KubeStash will look for the Secret
-                  in the same namespace as the BackupConfiguration / BackupBatch.
                 properties:
                   name:
-                    description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
                     type: string
                   namespace:
-                    description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
                     type: string
                 required:
                 - name
                 type: object
               path:
-                description: Path represents the directory inside the BackupStorage
-                  where this Repository is storing its data This path is relative
-                  to the path of BackupStorage.
                 type: string
               paused:
-                description: Paused specifies whether the Repository is paused or
-                  not. If the Repository is paused, KubeStash will not process any
-                  further event for the Repository.
                 type: boolean
               storageRef:
-                description: StorageRef refers to the BackupStorage CR which contain
-                  the backend information where the backed up data will be stored.
-                  The BackupStorage could be in a different namespace. However, the
-                  Repository namespace must be allowed to use the BackupStorage.
                 properties:
                   name:
-                    description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
                     type: string
                   namespace:
-                    description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
                     type: string
                 required:
                 - name
                 type: object
             type: object
           status:
-            description: RepositoryStatus defines the observed state of Repository
             properties:
               componentPaths:
-                description: ComponentPaths represents list of component paths in
-                  this Repository
                 items:
                   type: string
                 type: array
               conditions:
-                description: Conditions represents list of conditions regarding this
-                  Repository
                 items:
-                  description: Condition defines an observation of a object operational
-                    state.
                   properties:
                     lastTransitionTime:
-                      description: Last time the condition transitioned from one status
-                        to another. This should be when the underlying condition changed.
-                        If that is not known, then using the time when the API field
-                        changed is acceptable.
                       format: date-time
                       type: string
                     message:
-                      description: A human-readable message indicating details about
-                        the transition. This field may be empty.
                       type: string
                     observedGeneration:
-                      description: If set, this represents the .metadata.generation
-                        that the condition was set based upon. For instance, if .metadata.generation
-                        is currently 12, but the .status.condition[x].observedGeneration
-                        is 9, the condition is out of date with respect to the current
-                        state of the instance.
                       format: int64
                       type: integer
                     reason:
-                      description: The reason for the condition's last transition
-                        in CamelCase. The specific API may choose whether this field
-                        is considered a guaranteed API. This field may not be empty.
                       type: string
                     severity:
-                      description: Severity provides an explicit classification of
-                        Reason code, so the users or machines can immediately understand
-                        the current situation and act accordingly. The Severity field
-                        MUST be set only when Status=False.
                       type: string
                     status:
-                      description: Status of the condition, one of True, False, Unknown.
                       type: string
                     type:
-                      description: Type of condition in CamelCase or in foo.example.com/CamelCase.
-                        Many .condition.type values are consistent across resources
-                        like Available, but because arbitrary util can be useful (see
-                        .node.status.util), the ability to deconflict is important.
                       type: string
                   required:
                   - lastTransitionTime
@@ -199,32 +126,21 @@ spec:
                   type: object
                 type: array
               integrity:
-                description: Integrity specifies whether the backed up data of this
-                  Repository has been corrupted or not
                 type: boolean
               lastBackupTime:
-                description: LastBackupTime specifies the timestamp when the last
-                  successful backup has been taken
                 format: date-time
                 type: string
               phase:
-                description: Phase represents the current state of the Repository.
                 enum:
                 - NotReady
                 - Ready
                 type: string
               recentSnapshots:
-                description: RecentSnapshots holds a list of recent Snapshot information
-                  that has been taken in this Repository
                 items:
-                  description: SnapshotInfo specifies some basic information about
-                    the Snapshots stored in this Repository
                   properties:
                     name:
-                      description: Name represents the name of the Snapshot
                       type: string
                     phase:
-                      description: Phase represents the phase of the Snapshot
                       enum:
                       - Pending
                       - Running
@@ -232,26 +148,17 @@ spec:
                       - Failed
                       type: string
                     session:
-                      description: Session represents the name of the session that
-                        is responsible for this Snapshot
                       type: string
                     size:
-                      description: Size represents the size of the Snapshot
                       type: string
                     snapshotTime:
-                      description: SnapshotTime represents the time when this Snapshot
-                        was taken
                       format: date-time
                       type: string
                   type: object
                 type: array
               size:
-                description: Size specifies the amount of backed up data stored in
-                  the Repository
                 type: string
               snapshotCount:
-                description: SnapshotCount specifies the number of current Snapshots
-                  stored in this Repository
                 format: int32
                 type: integer
             type: object

@@ -598,6 +598,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLOpsRequestSpec":                              schema_apimachinery_apis_ops_v1alpha1_MySQLOpsRequestSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLQueryRules":                                  schema_apimachinery_apis_ops_v1alpha1_MySQLQueryRules(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLReplicaReadinessCriteria":                    schema_apimachinery_apis_ops_v1alpha1_MySQLReplicaReadinessCriteria(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLReplicationModeTransformSpec":                schema_apimachinery_apis_ops_v1alpha1_MySQLReplicationModeTransformSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLTLSSpec":                                     schema_apimachinery_apis_ops_v1alpha1_MySQLTLSSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLUpdateVersionSpec":                           schema_apimachinery_apis_ops_v1alpha1_MySQLUpdateVersionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLUsers":                                       schema_apimachinery_apis_ops_v1alpha1_MySQLUsers(ref),
@@ -29803,6 +29804,12 @@ func schema_apimachinery_apis_ops_v1alpha1_MySQLOpsRequestSpec(ref common.Refere
 							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.AuthSpec"),
 						},
 					},
+					"replicationModeTransformation": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies information transform Remote Replica to GroupReplication",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLReplicationModeTransformSpec"),
+						},
+					},
 					"restart": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Specifies information necessary for restarting database",
@@ -29827,7 +29834,7 @@ func schema_apimachinery_apis_ops_v1alpha1_MySQLOpsRequestSpec(ref common.Refere
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.AuthSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLTLSSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLUpdateVersionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.AuthSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLReplicationModeTransformSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLTLSSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLUpdateVersionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec"},
 	}
 }
 
@@ -29873,6 +29880,55 @@ func schema_apimachinery_apis_ops_v1alpha1_MySQLReplicaReadinessCriteria(ref com
 				Type:        []string{"object"},
 			},
 		},
+	}
+}
+
+func schema_apimachinery_apis_ops_v1alpha1_MySQLReplicationModeTransformSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Group Replication can be deployed in either \"Single-Primary\" or \"Multi-Primary\" mode",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"issuerRef": {
+						SchemaProps: spec.SchemaProps{
+							Description: "IssuerRef is a reference to a Certificate Issuer.",
+							Ref:         ref("k8s.io/api/core/v1.TypedLocalObjectReference"),
+						},
+					},
+					"certificates": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Certificate provides server and/or client certificate options used by application pods. These options are passed to a cert-manager Certificate object. xref: https://github.com/jetstack/cert-manager/blob/v0.16.0/pkg/apis/certmanager/v1beta1/types_certificate.go#L82-L162",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kmodules.xyz/client-go/api/v1.CertificateSpec"),
+									},
+								},
+							},
+						},
+					},
+					"requireSSL": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Indicates that the database server need to be encrypted connections(ssl)",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"mode"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.TypedLocalObjectReference", "kmodules.xyz/client-go/api/v1.CertificateSpec"},
 	}
 }
 

@@ -25639,6 +25639,21 @@ func schema_apimachinery_apis_ui_v1alpha1_DatabaseConnectionSpec(ref common.Refe
 							Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.InClusterConnection"),
 						},
 					},
+					"databases": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Databases already present on the referred database server",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
 					"connectOptions": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Parameters: `username = <username>\n password = <password>\n host = <host>\n database = <database>\n sslmode = REQUIRED`\n\nURI: `mongodb+srv://<username>:<password>@<host>:<port>/<database>?authSource=<authSource>&tls=true&replicaSet=arnob`\n\nFlags: `mongo \"mongodb+srv://<username>:<password>@<host>:<port>/<database>?authSource=<authsource>&replicaSet=arnob\" --tls`\n\nAnd some language specific template strings. Like: Java, C#, Go, Python, Javascript, Ruby etc.",

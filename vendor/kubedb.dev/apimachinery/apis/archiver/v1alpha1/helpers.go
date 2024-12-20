@@ -45,3 +45,13 @@ func (_ MariaDBArchiver) CustomResourceDefinition() *apiextensions.CustomResourc
 func (_ MSSQLServerArchiver) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralMSSQLServerArchiver))
 }
+
+func SetDefaultLogBackupOptions(log *LogBackupOptions) *LogBackupOptions {
+	if log == nil {
+		log = &LogBackupOptions{
+			SuccessfulLogHistoryLimit: 5,
+			FailedLogHistoryLimit:     5,
+		}
+	}
+	return log
+}

@@ -51,16 +51,18 @@ const (
 	PrefixRetentionPolicy = "retentionpolicy"
 	PrefixPopulate        = "populate"
 	PrefixPrime           = "prime"
+	PrefixTriggerVerifier = "trigger-verifier"
 )
 
 const (
-	KubeStashBackupComponent      = "kubestash-backup"
-	KubeStashRestoreComponent     = "kubestash-restore"
-	KubeStashInitializerComponent = "kubestash-initializer"
-	KubeStashUploaderComponent    = "kubestash-uploader"
-	KubeStashCleanerComponent     = "kubestash-cleaner"
-	KubeStashHookComponent        = "kubestash-hook"
-	KubeStashPopulatorComponent   = "kubestash-populator"
+	KubeStashBackupComponent         = "kubestash-backup"
+	KubeStashRestoreComponent        = "kubestash-restore"
+	KubeStashInitializerComponent    = "kubestash-initializer"
+	KubeStashUploaderComponent       = "kubestash-uploader"
+	KubeStashCleanerComponent        = "kubestash-cleaner"
+	KubeStashHookComponent           = "kubestash-hook"
+	KubeStashPopulatorComponent      = "kubestash-populator"
+	KubeStashBackupVerifierComponent = "kubestash-backup-verifier"
 )
 
 // Keys for offshoot labels
@@ -107,6 +109,7 @@ const (
 	KubeStashStorageInitializerClusterRole = "kubestash-storage-initializer-job"
 	KubeStashPopulatorJobClusterRole       = "kubestash-populator-job"
 	KubeStashRetentionPolicyJobClusterRole = "kubestash-retention-policy-job"
+	KubeStashBackupVerifierJobClusterRole  = "kubestash-backup-verifier-job"
 )
 
 // Reconciliation related
@@ -140,6 +143,7 @@ const (
 	ComponentManifest       = "manifest"
 	ComponentVolumeSnapshot = "volumesnapshot"
 	ComponentDashboard      = "dashboard"
+	ComponentPhysical       = "physical"
 )
 
 const (

@@ -66,11 +66,13 @@ func NewUncachedClient(cfg *rest.Config, funcs ...func(*runtime.Scheme) error) (
 }
 
 type (
-	TransformFunc       func(obj client.Object, createOp bool) client.Object
-	TransformStatusFunc func(obj client.Object) client.Object
+	TransformFunc  func(obj client.Object, createOp bool) client.Object
+	TransformFuncE func(obj client.Object, createOp bool) (client.Object, error)
+	PatchFunc      func(obj client.Object) client.Object
+	PatchFuncE     func(obj client.Object) (client.Object, error)
 )
 
-func CreateOrPatch(ctx context.Context, c client.Client, obj client.Object, transform TransformFunc, opts ...client.PatchOption) (kutil.VerbType, error) {
+func CreateOrPatchE(ctx context.Context, c client.Client, obj client.Object, transform TransformFuncE, opts ...client.PatchOption) (kutil.VerbType, error) {
 	gvk, err := apiutil.GVKForObject(obj, c.Scheme())
 	if err != nil {
 		return kutil.VerbUnchanged, errors.Wrapf(err, "failed to get GVK for object %T", obj)
@@ -91,8 +93,12 @@ func CreateOrPatch(ctx context.Context, c client.Client, obj client.Object, tran
 				createOpts = append(createOpts, opt)
 			}
 		}
-		mod := transform(obj.DeepCopyObject().(client.Object), true)
-		err := c.Create(ctx, mod, createOpts...)
+		mod, err := transform(obj.DeepCopyObject().(client.Object), true)
+		if err != nil {
+			return kutil.VerbUnchanged, err
+		}
+		mod.SetResourceVersion("")
+		err = c.Create(ctx, mod, createOpts...)
 		if err != nil {
 			return kutil.VerbUnchanged, err
 		}
@@ -111,7 +117,10 @@ func CreateOrPatch(ctx context.Context, c client.Client, obj client.Object, tran
 	} else {
 		patch = client.MergeFrom(cur)
 	}
-	mod := transform(cur.DeepCopyObject().(client.Object), false)
+	mod, err := transform(cur.DeepCopyObject().(client.Object), false)
+	if err != nil {
+		return kutil.VerbUnchanged, err
+	}
 	err = c.Patch(ctx, mod, patch, opts...)
 	if err != nil {
 		return kutil.VerbUnchanged, err
@@ -132,6 +141,58 @@ func CreateOrPatch(ctx context.Context, c client.Client, obj client.Object, tran
 	return vt, nil
 }
 
+func CreateOrPatch(ctx context.Context, c client.Client, obj client.Object, transform TransformFunc, opts ...client.PatchOption) (kutil.VerbType, error) {
+	return CreateOrPatchE(ctx, c, obj, func(obj client.Object, createOp bool) (client.Object, error) {
+		transform(obj, createOp)
+		return obj, nil
+	}, opts...)
+}
+
+func PatchE(ctx context.Context, c client.Client, obj client.Object, transform PatchFuncE, opts ...client.PatchOption) (kutil.VerbType, error) {
+	gvk, err := apiutil.GVKForObject(obj, c.Scheme())
+	if err != nil {
+		return kutil.VerbUnchanged, errors.Wrapf(err, "failed to get GVK for object %T", obj)
+	}
+
+	_, unstructuredObj := obj.(*unstructured.Unstructured)
+
+	var patch client.Patch
+	if isOfficialTypes(gvk.Group) && !unstructuredObj {
+		patch = client.StrategicMergeFrom(obj)
+	} else {
+		patch = client.MergeFrom(obj)
+	}
+	mod, err := transform(obj.DeepCopyObject().(client.Object))
+	if err != nil {
+		return kutil.VerbUnchanged, err
+	}
+	err = c.Patch(ctx, mod, patch, opts...)
+	if err != nil {
+		return kutil.VerbUnchanged, err
+	}
+
+	vt := kutil.VerbUnchanged
+	if mod.GetGeneration() > 0 {
+		if obj.GetGeneration() != mod.GetGeneration() {
+			vt = kutil.VerbPatched
+		}
+	} else {
+		// Secret, ServiceAccount etc resources do not use metadata.generation
+		if meta.ObjectHash(obj) != meta.ObjectHash(mod) {
+			vt = kutil.VerbPatched
+		}
+	}
+	assign(obj, mod)
+	return vt, nil
+}
+
+func Patch(ctx context.Context, c client.Client, obj client.Object, transform PatchFunc, opts ...client.PatchOption) (kutil.VerbType, error) {
+	return PatchE(ctx, c, obj, func(obj client.Object) (client.Object, error) {
+		transform(obj)
+		return obj, nil
+	}, opts...)
+}
+
 func assign(target, src any) {
 	srcValue := reflect.ValueOf(src)
 	if srcValue.Kind() == reflect.Pointer {
@@ -140,7 +201,7 @@ func assign(target, src any) {
 	reflect.ValueOf(target).Elem().Set(srcValue)
 }
 
-func PatchStatus(ctx context.Context, c client.Client, obj client.Object, transform TransformStatusFunc, opts ...client.SubResourcePatchOption) (kutil.VerbType, error) {
+func PatchStatusE(ctx context.Context, c client.Client, obj client.Object, transform PatchFuncE, opts ...client.SubResourcePatchOption) (kutil.VerbType, error) {
 	cur := obj.DeepCopyObject().(client.Object)
 	key := types.NamespacedName{
 		Namespace: cur.GetNamespace(),
@@ -157,13 +218,23 @@ func PatchStatus(ctx context.Context, c client.Client, obj client.Object, transf
 	//   - application/merge-patch+json,
 	//   - application/apply-patch+yaml
 	patch := client.MergeFrom(cur)
-	mod := transform(cur.DeepCopyObject().(client.Object))
+	mod, err := transform(cur.DeepCopyObject().(client.Object))
+	if err != nil {
+		return kutil.VerbUnchanged, err
+	}
 	err = c.Status().Patch(ctx, mod, patch, opts...)
 	if err != nil {
 		return kutil.VerbUnchanged, err
 	}
 	assign(obj, mod)
 	return kutil.VerbPatched, nil
+}
+
+func PatchStatus(ctx context.Context, c client.Client, obj client.Object, transform PatchFunc, opts ...client.SubResourcePatchOption) (kutil.VerbType, error) {
+	return PatchStatusE(ctx, c, obj, func(obj client.Object) (client.Object, error) {
+		transform(obj)
+		return obj, nil
+	}, opts...)
 }
 
 func isOfficialTypes(group string) bool {

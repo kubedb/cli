@@ -31,6 +31,7 @@ import (
 	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/klog/v2"
 	"kmodules.xyz/client-go/apiextensions"
@@ -40,6 +41,7 @@ import (
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v2"
+	pslister "kubeops.dev/petset/client/listers/apps/v1"
 )
 
 type CassandraApp struct {
@@ -418,4 +420,13 @@ func (r *Cassandra) GetSeed() string {
 		}
 	}
 	return seed
+}
+
+func (c *Cassandra) ReplicasAreReady(lister pslister.PetSetLister) (bool, string, error) {
+	// Desire number of petSets
+	expectedItems := 1
+	if c.Spec.Topology != nil {
+		expectedItems = len(c.Spec.Topology.Rack)
+	}
+	return checkReplicasOfPetSet(lister.PetSets(c.Namespace), labels.SelectorFromSet(c.OffshootLabels()), expectedItems)
 }

@@ -19,6 +19,7 @@ package v1
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"kubedb.dev/apimachinery/apis/kubedb"
 
@@ -166,4 +167,15 @@ func GetSelectorForNetworkPolicy() map[string]string {
 		meta_util.ComponentLabelKey: kubedb.ComponentDatabase,
 		meta_util.ManagedByLabelKey: kubedb.GroupName,
 	}
+}
+
+func GetActivationTimeFromSecret(secretName *core.Secret) (*metav1.Time, error) {
+	if val, exists := secretName.Annotations[kubedb.AuthActiveFromAnnotation]; exists {
+		t, err := time.Parse(time.RFC3339, val)
+		if err != nil {
+			return nil, err
+		}
+		return &metav1.Time{Time: t}, nil
+	}
+	return nil, nil
 }

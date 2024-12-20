@@ -46,6 +46,9 @@ type DatabaseConnectionSpec struct {
 	Gateway   []GatewayConnection `json:"gateway,omitempty"`
 	InCluster InClusterConnection `json:"inCluster,omitempty"`
 
+	// Databases already present on the referred database server
+	Databases []string `json:"databases,omitempty"`
+
 	// Parameters: `username = <username>\n
 	// password = <password>\n
 	// host = <host>\n
