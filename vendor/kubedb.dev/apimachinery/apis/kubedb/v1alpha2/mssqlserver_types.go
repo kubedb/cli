@@ -153,7 +153,7 @@ type MSSQLServerTopology struct {
 type MSSQLServerAvailabilityGroupSpec struct {
 	// AvailabilityDatabases is an array of databases to be included in the availability group
 	// +optional
-	Databases []string `json:"databases"`
+	Databases []string `json:"databases,omitempty"`
 
 	// Leader election configuration
 	// +optional
