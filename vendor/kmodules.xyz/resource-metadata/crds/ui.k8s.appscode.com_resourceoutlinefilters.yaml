@@ -41,8 +41,11 @@ spec:
                       type: object
                     name:
                       type: string
+                    show:
+                      type: boolean
                   required:
-                  - items
+                  - name
+                  - show
                   type: object
                 type: array
               header:
@@ -60,18 +63,26 @@ spec:
                               type: boolean
                             type: object
                           info:
-                            type: boolean
+                            additionalProperties:
+                              type: boolean
+                            type: object
                           insight:
                             type: boolean
                           name:
                             type: string
+                          show:
+                            type: boolean
                         required:
                         - info
                         - insight
+                        - show
                         type: object
                       type: array
+                    show:
+                      type: boolean
                   required:
                   - name
+                  - show
                   type: object
                 type: array
               resource:
