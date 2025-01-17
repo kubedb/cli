@@ -31,6 +31,7 @@ require (
 	kmodules.xyz/monitoring-agent-api v0.30.2
 	kubedb.dev/apimachinery v0.51.0
 	kubedb.dev/db-client-go v0.6.0
+	kubeops.dev/petset v0.0.7
 	sigs.k8s.io/controller-runtime v0.18.4
 	sigs.k8s.io/yaml v1.4.0
 	stash.appscode.dev/apimachinery v0.38.0
@@ -147,7 +148,6 @@ require (
 	kmodules.xyz/prober v0.29.0 // indirect
 	kmodules.xyz/resource-metadata v0.24.1 // indirect
 	kubeops.dev/csi-driver-cacerts v0.1.0 // indirect
-	kubeops.dev/petset v0.0.7 // indirect
 	kubeops.dev/sidekick v0.0.10 // indirect
 	kubestash.dev/apimachinery v0.15.0 // indirect
 	sigs.k8s.io/gateway-api v1.1.0 // indirect
