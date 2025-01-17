@@ -34,11 +34,13 @@ import (
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
 	"k8s.io/klog/v2"
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
+	ps "kubeops.dev/petset/client/clientset/versioned"
 )
 
 type elasticsearchOpts struct {
 	db        *dbapi.Elasticsearch
 	dbClient  *cs.Clientset
+	psClient  *ps.Clientset
 	podClient *kubernetes.Clientset
 
 	operatorNamespace string
@@ -80,6 +82,11 @@ func ElasticsearchDebugCMD(f cmdutil.Factory) *cobra.Command {
 				log.Fatal(err)
 			}
 
+			err = opts.collectForAllDBPetSets()
+			if err != nil {
+				log.Fatal(err)
+			}
+
 			err = opts.collectForAllDBPods()
 			if err != nil {
 				log.Fatal(err)
@@ -103,6 +110,11 @@ func newElasticsearchOpts(f cmdutil.Factory, dbName, namespace, operatorNS strin
 	}
 
 	dbClient, err := cs.NewForConfig(config)
+	if err != nil {
+		return nil, err
+	}
+
+	psClient, err := ps.NewForConfig(config)
 	if err != nil {
 		return nil, err
 	}
@@ -131,6 +143,7 @@ func newElasticsearchOpts(f cmdutil.Factory, dbName, namespace, operatorNS strin
 	opts := &elasticsearchOpts{
 		db:                db,
 		dbClient:          dbClient,
+		psClient:          psClient,
 		podClient:         podClient,
 		operatorNamespace: operatorNS,
 		dir:               dir,
@@ -157,6 +170,31 @@ func (opts *elasticsearchOpts) collectOperatorLogs() error {
 				return err
 			}
 		}
+	}
+	return nil
+}
+
+func (opts *elasticsearchOpts) collectForAllDBPetSets() error {
+	psLabels := labels.SelectorFromSet(opts.db.OffshootLabels()).String()
+	petsets, err := opts.psClient.AppsV1().PetSets(opts.db.Namespace).List(context.TODO(), metav1.ListOptions{
+		LabelSelector: psLabels,
+	})
+	if err != nil {
+		return err
+	}
+
+	psYamlDir := path.Join(opts.dir, yamlsDir, "petsets")
+	err = os.MkdirAll(psYamlDir, dirPerm)
+	if err != nil {
+		return err
+	}
+
+	for _, p := range petsets.Items {
+		err = writeYaml(&p, psYamlDir)
+		if err != nil {
+			return err
+		}
+
 	}
 	return nil
 }
