@@ -24,6 +24,8 @@ import (
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
+	"github.com/Masterminds/semver/v3"
+	"github.com/pkg/errors"
 	promapi "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1"
 	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
@@ -181,16 +183,34 @@ func (rs RedisSentinel) StatsServiceLabels() map[string]string {
 	return rs.ServiceLabels(StatsServiceAlias, map[string]string{kubedb.LabelRole: kubedb.RoleStats})
 }
 
-func (rs *RedisSentinel) SetDefaults(rdVersion *catalog.RedisVersion) {
+func (rs *RedisSentinel) SetDefaults(rdVersion *catalog.RedisVersion) error {
 	if rs == nil {
-		return
+		return nil
+	}
+
+	curVersion, err := semver.NewVersion(rdVersion.Spec.Version)
+	if err != nil {
+		return fmt.Errorf("can't get the semvar version from RedisVersion spec. err: %v", err)
+	}
+	if curVersion.Major() <= 4 {
+		rs.Spec.DisableAuth = true
+	}
+	if rs.Spec.Halted {
+		if rs.Spec.DeletionPolicy == DeletionPolicyDoNotTerminate {
+			return errors.New(`Can't halt, since termination policy is 'DoNotTerminate'`)
+		}
+		rs.Spec.DeletionPolicy = DeletionPolicyHalt
+	}
+	if rs.Spec.DeletionPolicy == "" {
+		rs.Spec.DeletionPolicy = DeletionPolicyDelete
+	}
+
+	if rs.Spec.Replicas == nil {
+		rs.Spec.Replicas = pointer.Int32P(1)
 	}
 
 	if rs.Spec.StorageType == "" {
 		rs.Spec.StorageType = StorageTypeDurable
-	}
-	if rs.Spec.DeletionPolicy == "" {
-		rs.Spec.DeletionPolicy = DeletionPolicyDelete
 	}
 
 	rs.setDefaultContainerSecurityContext(rdVersion, &rs.Spec.PodTemplate)
@@ -211,6 +231,8 @@ func (rs *RedisSentinel) SetDefaults(rdVersion *catalog.RedisVersion) {
 			rs.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup = rdVersion.Spec.SecurityContext.RunAsUser
 		}
 	}
+
+	return nil
 }
 
 func (rs *RedisSentinel) SetHealthCheckerDefaults() {

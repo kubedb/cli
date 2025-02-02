@@ -523,10 +523,13 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1.KafkaSpec":                                           schema_apimachinery_apis_kubedb_v1_KafkaSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.KafkaStatus":                                         schema_apimachinery_apis_kubedb_v1_KafkaStatus(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.KernelSettings":                                      schema_apimachinery_apis_kubedb_v1_KernelSettings(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1.ManifestOptions":                                     schema_apimachinery_apis_kubedb_v1_ManifestOptions(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.MariaDB":                                             schema_apimachinery_apis_kubedb_v1_MariaDB(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.MariaDBList":                                         schema_apimachinery_apis_kubedb_v1_MariaDBList(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.MariaDBSpec":                                         schema_apimachinery_apis_kubedb_v1_MariaDBSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.MariaDBStatus":                                       schema_apimachinery_apis_kubedb_v1_MariaDBStatus(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1.MariaDBTopology":                                     schema_apimachinery_apis_kubedb_v1_MariaDBTopology(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1.MaxScaleSpec":                                        schema_apimachinery_apis_kubedb_v1_MaxScaleSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.Memcached":                                           schema_apimachinery_apis_kubedb_v1_Memcached(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.MemcachedList":                                       schema_apimachinery_apis_kubedb_v1_MemcachedList(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.MemcachedSpec":                                       schema_apimachinery_apis_kubedb_v1_MemcachedSpec(ref),
@@ -25693,12 +25696,18 @@ func schema_apimachinery_apis_kubedb_v1_ArchiverRecovery(ref common.ReferenceCal
 							Format: "",
 						},
 					},
+					"manifestOptions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ManifestOptions provide options to select particular manifest object to restore",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1.ManifestOptions"),
+						},
+					},
 				},
 				Required: []string{"recoveryTimestamp"},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.Time", "kmodules.xyz/client-go/api/v1.ObjectReference"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.Time", "kmodules.xyz/client-go/api/v1.ObjectReference", "kubedb.dev/apimachinery/apis/kubedb/v1.ManifestOptions"},
 	}
 }
 
@@ -27174,6 +27183,40 @@ func schema_apimachinery_apis_kubedb_v1_KernelSettings(ref common.ReferenceCallb
 	}
 }
 
+func schema_apimachinery_apis_kubedb_v1_ManifestOptions(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"archiver": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Archiver specifies whether to restore the Archiver manifest or not",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"archiverRef": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ArchiverRef specifies the new name and namespace of the Archiver yaml after restore",
+							Ref:         ref("kmodules.xyz/client-go/api/v1.ObjectReference"),
+						},
+					},
+					"initScript": {
+						SchemaProps: spec.SchemaProps{
+							Description: "InitScript specifies whether to restore the InitScript or not",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/client-go/api/v1.ObjectReference"},
+	}
+}
+
 func schema_apimachinery_apis_kubedb_v1_MariaDB(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -27296,6 +27339,12 @@ func schema_apimachinery_apis_kubedb_v1_MariaDBSpec(ref common.ReferenceCallback
 							Format:      "int32",
 						},
 					},
+					"topology": {
+						SchemaProps: spec.SchemaProps{
+							Description: "MariaDB cluster topology",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1.MariaDBTopology"),
+						},
+					},
 					"storageType": {
 						SchemaProps: spec.SchemaProps{
 							Description: "StorageType can be durable (default) or ephemeral",
@@ -27412,7 +27461,7 @@ func schema_apimachinery_apis_kubedb_v1_MariaDBSpec(ref common.ReferenceCallback
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.AllowedConsumers", "kubedb.dev/apimachinery/apis/kubedb/v1.Archiver", "kubedb.dev/apimachinery/apis/kubedb/v1.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.AllowedConsumers", "kubedb.dev/apimachinery/apis/kubedb/v1.Archiver", "kubedb.dev/apimachinery/apis/kubedb/v1.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.MariaDBTopology", "kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"},
 	}
 }
 
@@ -27460,6 +27509,81 @@ func schema_apimachinery_apis_kubedb_v1_MariaDBStatus(ref common.ReferenceCallba
 		},
 		Dependencies: []string{
 			"kmodules.xyz/client-go/api/v1.Condition", "kubedb.dev/apimachinery/apis/kubedb/v1.Age"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1_MariaDBTopology(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "If set to - mode of the topology, possible values MariaDBReplication,GaleraCluster. Must be set for topology set up",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"maxscale": {
+						SchemaProps: spec.SchemaProps{
+							Description: "must set for MariaDBReplication mode",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1.MaxScaleSpec"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/kubedb/v1.MaxScaleSpec"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1_MaxScaleSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"replicas": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Number of instances to deploy for a MariaDB database.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"podTemplate": {
+						SchemaProps: spec.SchemaProps{
+							Description: "PodTemplate is an optional configuration for pods used to expose database",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec"),
+						},
+					},
+					"storage": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Storage spec to specify how storage shall be used.",
+							Ref:         ref("k8s.io/api/core/v1.PersistentVolumeClaimSpec"),
+						},
+					},
+					"storageType": {
+						SchemaProps: spec.SchemaProps{
+							Description: "StorageType can be durable (default) or ephemeral",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"enableUI": {
+						SchemaProps: spec.SchemaProps{
+							Description: "enable/disable MaxscaleUI",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec"},
 	}
 }
 

@@ -254,4 +254,46 @@ type ArchiverRecovery struct {
 	// FullDBRepository means db restore + manifest restore
 	FullDBRepository    *kmapi.ObjectReference   `json:"fullDBRepository,omitempty"`
 	ReplicationStrategy *PITRReplicationStrategy `json:"replicationStrategy,omitempty"`
+
+	// ManifestOptions provide options to select particular manifest object to restore
+	// +optional
+	ManifestOptions *ManifestOptions `json:"manifestOptions,omitempty"`
+}
+
+type ManifestOptions struct {
+	// Archiver specifies whether to restore the Archiver manifest or not
+	// +kubebuilder:default=false
+	// +optional
+	Archiver *bool `json:"archiver,omitempty"`
+
+	// ArchiverRef specifies the new name and namespace of the Archiver yaml after restore
+	// +optional
+	ArchiverRef *kmapi.ObjectReference `json:"archiverRef,omitempty"`
+
+	// InitScript specifies whether to restore the InitScript or not
+	// +kubebuilder:default=false
+	// +optional
+	InitScript *bool `json:"initScript,omitempty"`
+}
+
+type ArbiterSpec struct {
+	// Compute Resources required by the sidecar container.
+	// +optional
+	Resources core.ResourceRequirements `json:"resources,omitempty"`
+	// NodeSelector is a selector which must be true for the pod to fit on a node.
+	// Selector which must match a node's labels for the pod to be scheduled on that node.
+	// More info: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
+	// +optional
+	// +mapType=atomic
+	NodeSelector map[string]string `json:"nodeSelector,omitempty"`
+	// If specified, the pod's tolerations.
+	// +optional
+	Tolerations []core.Toleration `json:"tolerations,omitempty"`
+}
+
+type DBBindInterface interface {
+	ServiceNames() (string, string) // (DBServiceName, UIServiceName)
+	Ports() (int, int)              // (DBPort, UIPort)
+	SecretName() string
+	CertSecretName() string
 }

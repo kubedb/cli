@@ -285,7 +285,7 @@ type RepositoryInfo struct {
 
 	// DeletionPolicy specifies what to do when you delete a Repository CR.
 	// +optional
-	DeletionPolicy v1alpha1.DeletionPolicy `json:"deletionPolicy,omitempty"`
+	DeletionPolicy v1alpha1.BackupConfigDeletionPolicy `json:"deletionPolicy,omitempty"`
 }
 
 // BackupHooks specifies the hooks that will be executed before and/or after backup

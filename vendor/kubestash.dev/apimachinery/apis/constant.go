@@ -178,17 +178,3 @@ const (
 
 	VolumeClone = "volume-clone"
 )
-
-// KubeDB managed databases Kind
-const (
-	KindMySQL         = "MySQL"
-	KindPostgres      = "Postgres"
-	KindMongoDB       = "MongoDB"
-	KindMariaDB       = "MariaDB"
-	KindRedis         = "Redis"
-	KindMSSQLServer   = "MSSQLServer"
-	KindDruid         = "Druid"
-	KindZooKeeper     = "ZooKeeper"
-	KindSinglestore   = "Singlestore"
-	KindElasticsearch = "Elasticsearch"
-)

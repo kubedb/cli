@@ -566,6 +566,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionExporter":                       schema_apimachinery_apis_catalog_v1alpha1_MariaDBVersionExporter(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionInitContainer":                  schema_apimachinery_apis_catalog_v1alpha1_MariaDBVersionInitContainer(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionList":                           schema_apimachinery_apis_catalog_v1alpha1_MariaDBVersionList(ref),
+		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionMaxscale":                       schema_apimachinery_apis_catalog_v1alpha1_MariaDBVersionMaxscale(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionPodSecurityPolicy":              schema_apimachinery_apis_catalog_v1alpha1_MariaDBVersionPodSecurityPolicy(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionSpec":                           schema_apimachinery_apis_catalog_v1alpha1_MariaDBVersionSpec(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.MemcachedVersion":                             schema_apimachinery_apis_catalog_v1alpha1_MemcachedVersion(ref),
@@ -28138,6 +28139,36 @@ func schema_apimachinery_apis_catalog_v1alpha1_MariaDBVersionList(ref common.Ref
 	}
 }
 
+func schema_apimachinery_apis_catalog_v1alpha1_MariaDBVersionMaxscale(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "MariaDBVersionMaxscale is the mariadb maxscale image",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"image": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"securityContext": {
+						SchemaProps: spec.SchemaProps{
+							Description: "SecurityContext is for the additional config for the maxscale container",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.SecurityContext"),
+						},
+					},
+				},
+				Required: []string{"image"},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/catalog/v1alpha1.SecurityContext"},
+	}
+}
+
 func schema_apimachinery_apis_catalog_v1alpha1_MariaDBVersionPodSecurityPolicy(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -28179,6 +28210,13 @@ func schema_apimachinery_apis_catalog_v1alpha1_MariaDBVersionSpec(ref common.Ref
 							Description: "Database Image",
 							Default:     map[string]interface{}{},
 							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionDatabase"),
+						},
+					},
+					"maxscale": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Maxscale Image",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionMaxscale"),
 						},
 					},
 					"exporter": {
@@ -28268,7 +28306,7 @@ func schema_apimachinery_apis_catalog_v1alpha1_MariaDBVersionSpec(ref common.Ref
 			},
 		},
 		Dependencies: []string{
-			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ArchiverSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ChartInfo", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.GitSyncer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionCoordinator", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionPodSecurityPolicy", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.SecurityContext", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints"},
+			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ArchiverSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ChartInfo", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.GitSyncer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionCoordinator", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionMaxscale", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MariaDBVersionPodSecurityPolicy", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.SecurityContext", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints"},
 	}
 }
 

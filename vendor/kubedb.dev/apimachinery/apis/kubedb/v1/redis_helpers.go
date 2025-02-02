@@ -24,6 +24,8 @@ import (
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
+	"github.com/Masterminds/semver/v3"
+	"github.com/pkg/errors"
 	promapi "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1"
 	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
@@ -206,9 +208,31 @@ func (r Redis) StatsServiceLabels() map[string]string {
 	return r.ServiceLabels(StatsServiceAlias, map[string]string{kubedb.LabelRole: kubedb.RoleStats})
 }
 
-func (r *Redis) SetDefaults(rdVersion *catalog.RedisVersion) {
+func (r *Redis) SetDefaults(rdVersion *catalog.RedisVersion) error {
 	if r == nil {
-		return
+		return nil
+	}
+
+	curVersion, err := semver.NewVersion(rdVersion.Spec.Version)
+	if err != nil {
+		return fmt.Errorf("can't get the semvar version from RedisVersion spec. err: %v", err)
+	}
+	if curVersion.Major() <= 4 {
+		r.Spec.DisableAuth = true
+	}
+
+	if r.Spec.Halted {
+		if r.Spec.DeletionPolicy == DeletionPolicyDoNotTerminate {
+			return errors.New(`Can't halt, since termination policy is 'DoNotTerminate'`)
+		}
+		r.Spec.DeletionPolicy = DeletionPolicyHalt
+	}
+	if r.Spec.DeletionPolicy == "" {
+		r.Spec.DeletionPolicy = DeletionPolicyDelete
+	}
+
+	if r.Spec.Replicas == nil && r.Spec.Mode != RedisModeCluster {
+		r.Spec.Replicas = pointer.Int32P(1)
 	}
 
 	// perform defaulting
@@ -224,13 +248,16 @@ func (r *Redis) SetDefaults(rdVersion *catalog.RedisVersion) {
 		if r.Spec.Cluster.Replicas == nil {
 			r.Spec.Cluster.Replicas = pointer.Int32P(2)
 		}
+	} else if r.Spec.Mode == RedisModeSentinel {
+		if r.Spec.SentinelRef != nil && r.Spec.SentinelRef.Namespace == "" {
+			r.Spec.SentinelRef.Namespace = r.Namespace
+		}
 	}
+
 	if r.Spec.StorageType == "" {
 		r.Spec.StorageType = StorageTypeDurable
 	}
-	if r.Spec.DeletionPolicy == "" {
-		r.Spec.DeletionPolicy = DeletionPolicyDelete
-	}
+
 	r.setDefaultContainerSecurityContext(rdVersion, &r.Spec.PodTemplate)
 	r.setDefaultContainerResourceLimits(&r.Spec.PodTemplate)
 
@@ -245,6 +272,7 @@ func (r *Redis) SetDefaults(rdVersion *catalog.RedisVersion) {
 
 	r.SetTLSDefaults()
 	r.SetHealthCheckerDefaults()
+
 	r.Spec.Monitor.SetDefaults()
 	if r.Spec.Monitor != nil && r.Spec.Monitor.Prometheus != nil {
 		if r.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser == nil {
@@ -254,6 +282,8 @@ func (r *Redis) SetDefaults(rdVersion *catalog.RedisVersion) {
 			r.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup = rdVersion.Spec.SecurityContext.RunAsUser
 		}
 	}
+
+	return nil
 }
 
 func (r *Redis) SetHealthCheckerDefaults() {

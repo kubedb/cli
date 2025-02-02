@@ -29,6 +29,15 @@ const (
 	DeletionPolicyWipeOut DeletionPolicy = "WipeOut"
 )
 
+// +kubebuilder:validation:Enum=Delete;WipeOut;Retain
+type BackupConfigDeletionPolicy string
+
+const (
+	BackupConfigDeletionPolicyDelete  BackupConfigDeletionPolicy = "Delete"
+	BackupConfigDeletionPolicyWipeOut BackupConfigDeletionPolicy = "WipeOut"
+	BackupConfigDeletionPolicyRetain  BackupConfigDeletionPolicy = "Retain"
+)
+
 type StorageProvider string
 
 const (

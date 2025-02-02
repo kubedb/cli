@@ -43,10 +43,10 @@ func SetDefaultResourceLimits(req *core.ResourceRequirements, defaultResources c
 	//		- return limit
 	// else
 	//		- return default
+
 	calLimit := func(name core.ResourceName, defaultValue resource.Quantity) resource.Quantity {
 		if r, ok := req.Requests[name]; ok {
-			// l is greater than r == 1.
-			if l, exist := req.Limits[name]; exist && l.Cmp(r) == 1 {
+			if l, exist := req.Limits[name]; exist && l.Cmp(r) > 0 {
 				return l
 			}
 			return r
@@ -56,6 +56,7 @@ func SetDefaultResourceLimits(req *core.ResourceRequirements, defaultResources c
 		}
 		return defaultValue
 	}
+
 	// if request is not set,
 	//		- if limit exists:
 	//				- copy limit
@@ -64,15 +65,15 @@ func SetDefaultResourceLimits(req *core.ResourceRequirements, defaultResources c
 	// else
 	// 		- return request
 	// endif
-	calRequest := func(name core.ResourceName, defaultValue resource.Quantity) resource.Quantity {
-		if r, ok := req.Requests[name]; !ok {
-			if l, exist := req.Limits[name]; exist {
-				return l
-			}
-			return defaultValue
-		} else {
+	calRequest := func(name core.ResourceName, defaultValue resource.Quantity, originalLimit resource.Quantity) resource.Quantity {
+		if r, ok := req.Requests[name]; ok {
 			return r
 		}
+		if originalLimit.Value() > 0 {
+			// If original Limits existed, use them for Requests
+			return originalLimit
+		}
+		return defaultValue
 	}
 
 	if req.Limits == nil {
@@ -82,13 +83,19 @@ func SetDefaultResourceLimits(req *core.ResourceRequirements, defaultResources c
 		req.Requests = core.ResourceList{}
 	}
 
-	// Calculate the limits first
+	// Store the original Limits to differentiate between newly set and existing values
+	originalLimits := make(map[core.ResourceName]resource.Quantity)
+	for l := range req.Limits {
+		originalLimits[l] = req.Limits[l]
+	}
+
+	// Calculate limits first
 	for l := range defaultResources.Limits {
 		req.Limits[l] = calLimit(l, defaultResources.Limits[l])
 	}
 
-	// Once the limit is calculated, Calculate requests
+	// Calculate requests after limits
 	for r := range defaultResources.Requests {
-		req.Requests[r] = calRequest(r, defaultResources.Requests[r])
+		req.Requests[r] = calRequest(r, defaultResources.Requests[r], originalLimits[r])
 	}
 }

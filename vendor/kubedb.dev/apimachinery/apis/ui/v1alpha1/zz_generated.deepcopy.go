@@ -112,11 +112,6 @@ func (in *DatabaseConnectionSpec) DeepCopyInto(out *DatabaseConnectionSpec) {
 			(*out)[key] = val
 		}
 	}
-	if in.CACert != nil {
-		in, out := &in.CACert, &out.CACert
-		*out = make([]byte, len(*in))
-		copy(*out, *in)
-	}
 	return
 }
 
@@ -546,6 +541,11 @@ func (in *GatewayConnection) DeepCopyInto(out *GatewayConnection) {
 		*out = new(apiv1.ObjectReference)
 		**out = **in
 	}
+	if in.CACert != nil {
+		in, out := &in.CACert, &out.CACert
+		*out = make([]byte, len(*in))
+		copy(*out, *in)
+	}
 	return
 }
 
@@ -620,6 +620,11 @@ func (in *InClusterConnection) DeepCopyInto(out *InClusterConnection) {
 		in, out := &in.SecretRef, &out.SecretRef
 		*out = new(apiv1.ObjectReference)
 		**out = **in
+	}
+	if in.CACert != nil {
+		in, out := &in.CACert, &out.CACert
+		*out = make([]byte, len(*in))
+		copy(*out, *in)
 	}
 	return
 }

@@ -497,6 +497,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/config/v1alpha1.GaleraArbitratorConfiguration":                 schema_apimachinery_apis_config_v1alpha1_GaleraArbitratorConfiguration(ref),
 		"kubedb.dev/apimachinery/apis/config/v1alpha1.MongoDBConfiguration":                          schema_apimachinery_apis_config_v1alpha1_MongoDBConfiguration(ref),
 		"kubedb.dev/apimachinery/apis/config/v1alpha1.RedisConfiguration":                            schema_apimachinery_apis_config_v1alpha1_RedisConfiguration(ref),
+		"kubedb.dev/apimachinery/apis/config/v1alpha1.Restriction":                                   schema_apimachinery_apis_config_v1alpha1_Restriction(ref),
 		"kubedb.dev/apimachinery/apis/config/v1alpha1.SinglestoreConfiguration":                      schema_apimachinery_apis_config_v1alpha1_SinglestoreConfiguration(ref),
 	}
 }
@@ -25570,6 +25571,40 @@ func schema_apimachinery_apis_config_v1alpha1_RedisConfiguration(ref common.Refe
 		},
 		Dependencies: []string{
 			"k8s.io/api/core/v1.LocalObjectReference", "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec"},
+	}
+}
+
+func schema_apimachinery_apis_config_v1alpha1_Restriction(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"versionConstraint": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"distributions": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"versionConstraint"},
+			},
+		},
 	}
 }
 

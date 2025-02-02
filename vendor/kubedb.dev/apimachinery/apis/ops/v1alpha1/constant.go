@@ -220,7 +220,8 @@ const (
 
 // RabbitMQ Constants
 const (
-	UpdateNodePVCs = "UpdateNodePVCs"
+	UpdateNodePVCs        = "UpdateNodePVCs"
+	EnableAllFeatureFlags = "EnableAllFeatureFlags"
 )
 
 // MongoDB Constants
@@ -357,4 +358,9 @@ const (
 const (
 	UpdatePgBouncerBackendSecret = "UpdateBackendSecret"
 	ConfigSecretDelete           = "ConfigSecretDeleted"
+)
+
+// Pgpool Constants
+const (
+	UpdateConfigSecret = "UpdateConfigSecret"
 )

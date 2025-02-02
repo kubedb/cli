@@ -803,3 +803,26 @@ func (d *Druid) CertSecretVolumeName(alias DruidCertificateAlias) string {
 func (d *Druid) CertSecretVolumeMountPath(configDir string, cert string) string {
 	return filepath.Join(configDir, cert)
 }
+
+type DruidBind struct {
+	*Druid
+}
+
+var _ DBBindInterface = &DruidBind{}
+
+func (d *DruidBind) ServiceNames() (string, string) {
+	return d.ServiceName(), d.ServiceName()
+}
+
+func (d *DruidBind) Ports() (int, int) {
+	p := int(d.DruidNodeContainerPort(DruidNodeRoleRouters))
+	return p, p
+}
+
+func (d *DruidBind) SecretName() string {
+	return d.GetAuthSecretName()
+}
+
+func (d *DruidBind) CertSecretName() string {
+	return d.GetCertSecretName(DruidClientCert)
+}

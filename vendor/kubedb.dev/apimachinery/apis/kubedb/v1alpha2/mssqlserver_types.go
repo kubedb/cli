@@ -130,6 +130,10 @@ type MSSQLServerSpec struct {
 	// Archiver controls database backup using Archiver CR
 	// +optional
 	Archiver *Archiver `json:"archiver,omitempty"`
+
+	// Arbiter controls spec for arbiter pods
+	// +optional
+	Arbiter *ArbiterSpec `json:"arbiter,omitempty"`
 }
 
 type MSSQLServerTLSConfig struct {

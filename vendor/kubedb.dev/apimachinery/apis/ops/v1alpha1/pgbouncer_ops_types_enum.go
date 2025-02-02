@@ -24,6 +24,8 @@ const (
 	PgBouncerOpsRequestTypeRotateAuth PgBouncerOpsRequestType = "RotateAuth"
 	// PgBouncerOpsRequestTypeRestart is a PgBouncerOpsRequestType of type Restart.
 	PgBouncerOpsRequestTypeRestart PgBouncerOpsRequestType = "Restart"
+	// PgBouncerOpsRequestTypeReconfigureTLS is a PgBouncerOpsRequestType of type ReconfigureTLS.
+	PgBouncerOpsRequestTypeReconfigureTLS PgBouncerOpsRequestType = "ReconfigureTLS"
 )
 
 var ErrInvalidPgBouncerOpsRequestType = fmt.Errorf("not a valid PgBouncerOpsRequestType, try [%s]", strings.Join(_PgBouncerOpsRequestTypeNames, ", "))
@@ -35,6 +37,7 @@ var _PgBouncerOpsRequestTypeNames = []string{
 	string(PgBouncerOpsRequestTypeReconfigure),
 	string(PgBouncerOpsRequestTypeRotateAuth),
 	string(PgBouncerOpsRequestTypeRestart),
+	string(PgBouncerOpsRequestTypeReconfigureTLS),
 }
 
 // PgBouncerOpsRequestTypeNames returns a list of possible string values of PgBouncerOpsRequestType.
@@ -53,6 +56,7 @@ func PgBouncerOpsRequestTypeValues() []PgBouncerOpsRequestType {
 		PgBouncerOpsRequestTypeReconfigure,
 		PgBouncerOpsRequestTypeRotateAuth,
 		PgBouncerOpsRequestTypeRestart,
+		PgBouncerOpsRequestTypeReconfigureTLS,
 	}
 }
 
@@ -75,6 +79,7 @@ var _PgBouncerOpsRequestTypeValue = map[string]PgBouncerOpsRequestType{
 	"Reconfigure":       PgBouncerOpsRequestTypeReconfigure,
 	"RotateAuth":        PgBouncerOpsRequestTypeRotateAuth,
 	"Restart":           PgBouncerOpsRequestTypeRestart,
+	"ReconfigureTLS":    PgBouncerOpsRequestTypeReconfigureTLS,
 }
 
 // ParsePgBouncerOpsRequestType attempts to convert a string to a PgBouncerOpsRequestType.

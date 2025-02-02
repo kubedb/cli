@@ -61,7 +61,6 @@ type DatabaseConnectionSpec struct {
 	//
 	// And some language specific template strings. Like: Java, C#, Go, Python, Javascript, Ruby etc.
 	ConnectOptions map[string]string `json:"connectOptions,omitempty"`
-	CACert         []byte            `json:"caCert,omitempty"`
 }
 
 //type ConnectOption struct {
@@ -84,6 +83,7 @@ type DatabaseConnectionSpec struct {
 type GatewayConnection struct {
 	*ofst.Gateway `json:",inline"`
 	SecretRef     *kmapi.ObjectReference `json:"secretRef,omitempty"`
+	CACert        []byte                 `json:"caCert,omitempty"`
 }
 
 type InClusterConnection struct {
@@ -93,6 +93,7 @@ type InClusterConnection struct {
 	// Example: kubectl exec -it -n default service/mongo-test1  -c mongodb -- bash -c '<the actual command>'
 	Exec      string                 `json:"exec,omitempty"`
 	SecretRef *kmapi.ObjectReference `json:"secretRef,omitempty"`
+	CACert    []byte                 `json:"caCert,omitempty"`
 }
 
 // DatabaseConnectionList contains a list of DatabaseConnection

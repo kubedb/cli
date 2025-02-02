@@ -511,6 +511,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kafka/v1alpha1.SchemaRegistry":                                 schema_apimachinery_apis_kafka_v1alpha1_SchemaRegistry(ref),
 		"kubedb.dev/apimachinery/apis/kafka/v1alpha1.SchemaRegistryApp":                              schema_apimachinery_apis_kafka_v1alpha1_SchemaRegistryApp(ref),
 		"kubedb.dev/apimachinery/apis/kafka/v1alpha1.SchemaRegistryList":                             schema_apimachinery_apis_kafka_v1alpha1_SchemaRegistryList(ref),
+		"kubedb.dev/apimachinery/apis/kafka/v1alpha1.SchemaRegistryRef":                              schema_apimachinery_apis_kafka_v1alpha1_SchemaRegistryRef(ref),
 		"kubedb.dev/apimachinery/apis/kafka/v1alpha1.SchemaRegistrySpec":                             schema_apimachinery_apis_kafka_v1alpha1_SchemaRegistrySpec(ref),
 		"kubedb.dev/apimachinery/apis/kafka/v1alpha1.SchemaRegistryStatus":                           schema_apimachinery_apis_kafka_v1alpha1_SchemaRegistryStatus(ref),
 		"kubedb.dev/apimachinery/apis/kafka/v1alpha1.connectClusterStatsService":                     schema_apimachinery_apis_kafka_v1alpha1_connectClusterStatsService(ref),
@@ -26043,6 +26044,12 @@ func schema_apimachinery_apis_kafka_v1alpha1_RestProxySpec(ref common.ReferenceC
 							Ref:         ref("kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec"),
 						},
 					},
+					"schemaRegistryRef": {
+						SchemaProps: spec.SchemaProps{
+							Description: "SchemaRegistryRef provides a reference to the Schema Registry configuration. the REST Proxy will connect to the Schema Registry if SchemaRegistryRef is provided.",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kafka/v1alpha1.SchemaRegistryRef"),
+						},
+					},
 					"serviceTemplates": {
 						SchemaProps: spec.SchemaProps{
 							Description: "ServiceTemplates is an optional configuration for services used to expose database",
@@ -26076,7 +26083,7 @@ func schema_apimachinery_apis_kafka_v1alpha1_RestProxySpec(ref common.ReferenceC
 			},
 		},
 		Dependencies: []string{
-			"kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.ObjectReference", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec"},
+			"kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.ObjectReference", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kafka/v1alpha1.SchemaRegistryRef", "kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec"},
 	}
 }
 
@@ -26235,6 +26242,26 @@ func schema_apimachinery_apis_kafka_v1alpha1_SchemaRegistryList(ref common.Refer
 		},
 		Dependencies: []string{
 			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "kubedb.dev/apimachinery/apis/kafka/v1alpha1.SchemaRegistry"},
+	}
+}
+
+func schema_apimachinery_apis_kafka_v1alpha1_SchemaRegistryRef(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "SchemaRegistryRef provides a reference to the Schema Registry configuration.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"internallyManaged": {
+						SchemaProps: spec.SchemaProps{
+							Description: "InternallyManaged true specifies if the schema registry runs internally along with the rest proxy",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
 	}
 }
 

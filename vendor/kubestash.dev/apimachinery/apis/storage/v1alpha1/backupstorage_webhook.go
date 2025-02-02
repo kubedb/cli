@@ -27,6 +27,7 @@ import (
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
+	"strings"
 )
 
 // log is for logging in this package.
@@ -50,6 +51,22 @@ func (r *BackupStorage) Default() {
 
 	if r.Spec.UsagePolicy == nil {
 		r.setDefaultUsagePolicy()
+	}
+	r.removeTrailingSlash()
+}
+
+func (r *BackupStorage) removeTrailingSlash() {
+	if r.Spec.Storage.S3 != nil {
+		r.Spec.Storage.S3.Bucket = strings.TrimSuffix(r.Spec.Storage.S3.Bucket, "/")
+		r.Spec.Storage.S3.Endpoint = strings.TrimSuffix(r.Spec.Storage.S3.Endpoint, "/")
+		r.Spec.Storage.S3.Prefix = strings.TrimSuffix(r.Spec.Storage.S3.Prefix, "/")
+	}
+	if r.Spec.Storage.GCS != nil {
+		r.Spec.Storage.GCS.Bucket = strings.TrimSuffix(r.Spec.Storage.GCS.Bucket, "/")
+		r.Spec.Storage.GCS.Prefix = strings.TrimSuffix(r.Spec.Storage.GCS.Prefix, "/")
+	}
+	if r.Spec.Storage.Azure != nil {
+		r.Spec.Storage.Azure.Prefix = strings.TrimSuffix(r.Spec.Storage.Azure.Prefix, "/")
 	}
 }
 

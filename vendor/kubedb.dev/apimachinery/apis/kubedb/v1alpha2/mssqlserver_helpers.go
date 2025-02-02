@@ -35,6 +35,7 @@ import (
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/klog/v2"
+	"k8s.io/utils/ptr"
 	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	coreutil "kmodules.xyz/client-go/core/v1"
@@ -383,6 +384,8 @@ func (m *MSSQLServer) SetDefaults() {
 		return
 	}
 
+	m.SetArbiterDefault()
+
 	m.setDefaultContainerSecurityContext(&mssqlVersion, m.Spec.PodTemplate)
 
 	m.SetTLSDefaults()
@@ -506,6 +509,15 @@ func (m *MSSQLServer) setDefaultContainerResourceLimits(podTemplate *ofst.PodTem
 		if coordinatorContainer != nil && (coordinatorContainer.Resources.Requests == nil && coordinatorContainer.Resources.Limits == nil) {
 			apis.SetDefaultResourceLimits(&coordinatorContainer.Resources, kubedb.CoordinatorDefaultResources)
 		}
+	}
+}
+
+func (m *MSSQLServer) SetArbiterDefault() {
+	if m.IsAvailabilityGroup() && ptr.Deref(m.Spec.Replicas, 0)%2 == 0 && m.Spec.Arbiter == nil {
+		m.Spec.Arbiter = &ArbiterSpec{
+			Resources: core.ResourceRequirements{},
+		}
+		apis.SetDefaultResourceLimits(&m.Spec.Arbiter.Resources, kubedb.DefaultArbiter(false))
 	}
 }
 
