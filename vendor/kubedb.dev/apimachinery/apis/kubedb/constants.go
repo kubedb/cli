@@ -358,6 +358,23 @@ const (
 	MariaDBMetricsExporterTLSVolumeName  = "metrics-exporter-config"
 	MariaDBMetricsExporterConfigPath     = "/etc/mysql/config/exporter"
 	MariaDBDataVolumeName                = "data"
+	DatabasePodPrimaryComponent          = "Primary"
+	DatabasePodMasterComponent           = "Master"
+	DatabasePodSlaveComponent            = "Slave"
+
+	// Maxscale
+	MaxscaleCommonName        = "mx"
+	MaxscaleContainerName     = "maxscale"
+	MaxscaleInitContainerName = "maxscale-init"
+	MaxscaleServerName        = "server"
+	MaxscaleConfigName        = "config"
+	MaxscaleConfigPath        = "/etc/maxscale.cnf.d"
+	MaxscaleDefaultConfigName = "default-config"
+	MaxscaleDefaultConfigPath = "/etc/maxscale"
+	MaxscaleDataVolumeName    = "data"
+	MaxscaleDataVolumePath    = "/var/lib/maxscale"
+	MaxscaleUIPort            = 8989
+	MaxscaleUIPortName        = "ui"
 
 	// =========================== SingleStore Constants ============================
 	SinglestoreDatabasePortName       = "db"
@@ -416,9 +433,12 @@ const (
 	MSSQLDatabasePortName              = "db"
 	MSSQLPrimaryServicePortName        = "primary"
 	MSSQLSecondaryServicePortName      = "secondary"
+	MSSQLCoordinatorPortName           = "coordinator"
+	MSSQLCoordinatorClientPortName     = "coordinatclient"
 	MSSQLDatabasePort                  = 1433
 	MSSQLDatabaseMirroringEndpointPort = 5022
-	MSSQLCoordinatorPort               = 2381
+	MSSQLCoordinatorPort               = 2380
+	MSSQLCoordinatorClientPort         = 2379
 	MSSQLMonitoringDefaultServicePort  = 9399
 
 	// environment variables
@@ -626,6 +646,7 @@ const (
 	EnvSkipPasswdEncryption            = "PGPOOL_SKIP_PASSWORD_ENCRYPTION"
 	PgpoolConfigSecretMountPath        = "/config"
 	PgpoolConfigVolumeName             = "pgpool-config"
+	PgpoolPcpConfigVolumeName          = "pgpool-pcp-config"
 	PgpoolContainerName                = "pgpool"
 	PgpoolDefaultServicePort           = 9999
 	PgpoolMonitoringDefaultServicePort = 9719
@@ -649,6 +670,9 @@ const (
 	PgpoolDatabasePortName             = "db"
 	PgpoolPcpPortName                  = "pcp"
 	PgpoolCustomConfigFile             = "pgpool.conf"
+	PgpoolCustomHBAConfigFile          = "pool_hba.conf"
+	PgpoolCustomPCPFile                = "pcp.conf"
+	PGPOOL_INSTALL_DIR                 = "/opt/pgpool-II"
 	// ========================================== ZooKeeper Constants =================================================//
 
 	KubeDBZooKeeperRoleName         = "kubedb:zookeeper-version-reader"
@@ -1691,7 +1715,7 @@ var (
 			core.ResourceMemory: resource.MustParse("1.5Gi"),
 		},
 		Limits: core.ResourceList{
-			core.ResourceMemory: resource.MustParse("4Gi"),
+			core.ResourceMemory: resource.MustParse("2Gi"),
 		},
 	}
 

@@ -28,6 +28,7 @@ Why I love golang so much, because the usage of golang is simple, but the power 
 package sh
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"os"
@@ -42,21 +43,28 @@ import (
 type Dir string
 
 type Session struct {
-	inj     inject.Injector
-	alias   map[string][]string
-	cmds    []*exec.Cmd
-	dir     Dir
-	started bool
-	Env     map[string]string
-	Stdin   io.Reader
-	Stdout  io.Writer
-	Stderr  io.Writer
-	ShowCMD bool // enable for debug
-	timeout time.Duration
+	inj         inject.Injector
+	alias       map[string][]string
+	cmds        []*exec.Cmd
+	dir         Dir
+	started     bool
+	Env         map[string]string
+	Stdin       io.Reader
+	Stdout      io.Writer
+	Stderr      io.Writer
+	ShowCMD     bool // enable for debug
+	timeout     time.Duration
+	pipeWriters []*io.PipeWriter // List of all pipe writers
 
 	// additional pipe options
 	PipeFail      bool // returns error of rightmost no-zero command
 	PipeStdErrors bool // combine std errors of all pipe commands
+
+	// Options related to leaf commands
+	leafCmds           []*exec.Cmd     // List of commands
+	leafOutputBuffer   []*bytes.Buffer // Buffers to store the output of each command
+	enableOutputBuffer bool            // If true, collect all command outputs in buffers
+	enableErrsBuffer   bool            // If true, collect all command errors in buffers
 }
 
 func (s *Session) writePrompt(args ...interface{}) {
@@ -185,6 +193,9 @@ func (s *Session) appendCmd(cmd string, args []string, cwd Dir, env map[string]s
 	if s.started {
 		s.started = false
 		s.cmds = make([]*exec.Cmd, 0)
+		s.leafCmds = make([]*exec.Cmd, 0)
+		s.pipeWriters = make([]*io.PipeWriter, 0)
+		s.leafOutputBuffer = make([]*bytes.Buffer, 0)
 	}
 	for k, v := range s.Env {
 		if _, ok := env[k]; !ok {
@@ -201,4 +212,50 @@ func (s *Session) appendCmd(cmd string, args []string, cwd Dir, env map[string]s
 	c.Env = environ
 	c.Dir = string(cwd)
 	s.cmds = append(s.cmds, c)
+}
+
+func (s *Session) LeafCommand(name string, a ...interface{}) *Session {
+	var args = make([]string, 0)
+	var sType = reflect.TypeOf("")
+
+	// init cmd, args, dir, envs
+	// if not init, program may panic
+	s.inj.Map(name).Map(args).Map(s.dir).Map(map[string]string{})
+
+	for _, v := range a {
+		switch reflect.TypeOf(v) {
+		case sType:
+			args = append(args, v.(string))
+		default:
+			s.inj.Map(v)
+		}
+	}
+	if len(args) != 0 {
+		s.inj.Map(args)
+	}
+	s.inj.Invoke(s.appendLeafCmd)
+	return s
+}
+
+func (s *Session) appendLeafCmd(cmd string, args []string, cwd Dir, env map[string]string) {
+	if s.started {
+		s.started = false
+		s.leafCmds = make([]*exec.Cmd, 0)
+		s.pipeWriters = make([]*io.PipeWriter, 0)
+	}
+	for k, v := range s.Env {
+		if _, ok := env[k]; !ok {
+			env[k] = v
+		}
+	}
+	environ := newEnviron(env, true) // true: inherit sys-env
+	v, ok := s.alias[cmd]
+	if ok {
+		cmd = v[0]
+		args = append(v[1:], args...)
+	}
+	c := exec.Command(cmd, args...)
+	c.Env = environ
+	c.Dir = string(cwd)
+	s.leafCmds = append(s.leafCmds, c)
 }

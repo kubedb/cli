@@ -1292,6 +1292,16 @@ func (in *KubeDBManifestOptions) DeepCopyInto(out *KubeDBManifestOptions) {
 		*out = new(bool)
 		**out = **in
 	}
+	if in.Archiver != nil {
+		in, out := &in.Archiver, &out.Archiver
+		*out = new(bool)
+		**out = **in
+	}
+	if in.ArchiverRef != nil {
+		in, out := &in.ArchiverRef, &out.ArchiverRef
+		*out = new(v1.ObjectReference)
+		**out = **in
+	}
 	if in.ConfigSecret != nil {
 		in, out := &in.ConfigSecret, &out.ConfigSecret
 		*out = new(bool)
@@ -1330,6 +1340,16 @@ func (in *MSSQLServerManifestOptions) DeepCopyInto(out *MSSQLServerManifestOptio
 	if in.AuthSecret != nil {
 		in, out := &in.AuthSecret, &out.AuthSecret
 		*out = new(bool)
+		**out = **in
+	}
+	if in.Archiver != nil {
+		in, out := &in.Archiver, &out.Archiver
+		*out = new(bool)
+		**out = **in
+	}
+	if in.ArchiverRef != nil {
+		in, out := &in.ArchiverRef, &out.ArchiverRef
+		*out = new(v1.ObjectReference)
 		**out = **in
 	}
 	if in.TLSIssuerRef != nil {

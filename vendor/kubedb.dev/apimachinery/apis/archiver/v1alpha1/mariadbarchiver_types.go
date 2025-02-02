@@ -21,6 +21,7 @@ import (
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
+	storageapi "kubestash.dev/apimachinery/apis/storage/v1alpha1"
 )
 
 const (
@@ -72,7 +73,7 @@ type MariaDBArchiverSpec struct {
 	BackupStorage *BackupStorage `json:"backupStorage"`
 	// DeletionPolicy defines the DeletionPolicy for the backup repository
 	// +optional
-	DeletionPolicy *DeletionPolicy `json:"deletionPolicy"`
+	DeletionPolicy *storageapi.BackupConfigDeletionPolicy `json:"deletionPolicy"`
 }
 
 // MariaDBArchiverStatus defines the observed state of MariaDBArchiver

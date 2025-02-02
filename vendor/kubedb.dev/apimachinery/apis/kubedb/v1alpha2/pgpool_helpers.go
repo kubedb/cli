@@ -160,6 +160,10 @@ func (p *Pgpool) GetAuthSecretName() string {
 	return meta_util.NameWithSuffix(p.OffshootName(), "auth")
 }
 
+func (p *Pgpool) GetPcpConfigSecretName() string {
+	return meta_util.NameWithSuffix(p.OffshootName(), "pcp-config")
+}
+
 func (p *Pgpool) SetHealthCheckerDefaults() {
 	if p.Spec.HealthChecker.PeriodSeconds == nil {
 		p.Spec.HealthChecker.PeriodSeconds = pointer.Int32P(10)
