@@ -188,21 +188,6 @@ type PostgresReplication struct {
 	MaxSlotWALKeepSizeInMegaBytes *int32 `json:"maxSlotWALKeepSize,omitempty"`
 }
 
-type ArbiterSpec struct {
-	// Compute Resources required by the sidecar container.
-	// +optional
-	Resources core.ResourceRequirements `json:"resources,omitempty"`
-	// NodeSelector is a selector which must be true for the pod to fit on a node.
-	// Selector which must match a node's labels for the pod to be scheduled on that node.
-	// More info: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
-	// +optional
-	// +mapType=atomic
-	NodeSelector map[string]string `json:"nodeSelector,omitempty"`
-	// If specified, the pod's tolerations.
-	// +optional
-	Tolerations []core.Toleration `json:"tolerations,omitempty"`
-}
-
 // PostgreLeaderElectionConfig contains essential attributes of leader election.
 type PostgreLeaderElectionConfig struct {
 	// LeaseDuration is the duration in second that non-leader candidates will

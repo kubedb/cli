@@ -95,7 +95,6 @@ func TryUpdatePgBouncer(ctx context.Context, c cs.KubedbV1Interface, meta metav1
 		klog.Errorf("Attempt %d failed to update PgBouncer %s/%s due to %v.", attempt, cur.Namespace, cur.Name, e2)
 		return false, nil
 	})
-
 	if err != nil {
 		err = fmt.Errorf("failed to update PgBouncer %s/%s after %d attempts due to %v", meta.Namespace, meta.Name, attempt, err)
 	}
@@ -148,7 +147,6 @@ func UpdatePgBouncerStatus(
 		}
 		return e2 == nil, nil
 	})
-
 	if err != nil {
 		err = fmt.Errorf("failed to update status of PgBouncer %s/%s after %d attempts due to %v", meta.Namespace, meta.Name, attempt, err)
 	}

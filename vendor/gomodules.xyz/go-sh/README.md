@@ -25,6 +25,7 @@ These are some of its features:
 * pipe command
 * shell build-in commands echo & test
 * timeout support
+* run multiple concurrent leaf commands using a single pipe input
 
 Examples are important:
 
@@ -79,6 +80,48 @@ By default, pipeline returns error only if the last command exit with a non-zero
 	session.Command("cat", "unknown-file").Command("echo").Run()
 
 By default, pipelines's std-error is set to last command's std-error. However, you can also combine std-errors of all commands into pipeline's std-error using `session.PipeStdErrors = true`.
+
+By default, pipeline returns error only if the last command exit with a non-zero status. However, you can also enable `pipefail` option like `bash`. In that case, pipeline returns error if any of the commands fail and for multiple failed commands, it returns the error of rightmost failed command.
+
+	session := sh.NewSession()
+	session.PipeFail = true
+	session.Command("cat", "unknown-file").Command("echo").Run()
+
+
+Designing a Command Chain to Run Multiple Concurrent Leaf Commands Using a Single Pipe Input. 
+
+Features be like:
+* **Input Sharing**: All leaf commands take the same input from a pipe.
+* **Separate Environments**: Each leaf command runs with its own environment variables.
+* **Output Aggregation**: Outputs from all commands are combined into a single result.
+* **Error Handling**: Errors are collected and included in the output (e.g., shell or variable).
+* **Timeouts**: Each command has same timeout and will apply simultaneously.
+
+Below is an example of multiple concurrent leaf commands using a single pipe input
+
+	s := sh.NewSession()
+	s.ShowCMD = true
+	s.Command("echo", "hello world").LeafCommand("xargs").LeafCommand("xargs")
+	s.Run()
+
+Below is an example of each leaf command runs with its own environment variables
+    
+    s := sh.NewSession()
+	s.ShowCMD = true
+	var args1,args2 []interface{}
+	
+	mp := make(map[string]string)
+	mp["COMPANY_NAME"] = "APPSCODE"
+	args1 = append(args1, "COMPANY_NAME")
+	args1 = append(args1, mp)
+	s.LeafCommand("printenv", args1...)
+
+	mp["COMPANY_NAME"] = "GOOGLE"
+	args2 = append(args2, "COMPANY_NAME")
+	args2 = append(args2, mp)
+	s.LeafCommand("printenv", args2...)
+	
+	s.Run()
 
 for more information, it better to see docs.
 [![Go Walker](http://gowalker.org/api/v1/badge)](http://gowalker.org/gomodules.xyz/go-sh)

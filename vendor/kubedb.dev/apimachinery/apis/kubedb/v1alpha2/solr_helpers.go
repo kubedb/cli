@@ -518,3 +518,25 @@ func (s *Solr) CertSecretVolumeName(alias SolrCertificateAlias) string {
 func (s *Solr) CertSecretVolumeMountPath(configDir string, cert string) string {
 	return filepath.Join(configDir, cert)
 }
+
+type SolrBind struct {
+	*Solr
+}
+
+var _ DBBindInterface = &SolrBind{}
+
+func (d *SolrBind) ServiceNames() (string, string) {
+	return d.ServiceName(), d.ServiceName()
+}
+
+func (d *SolrBind) Ports() (int, int) {
+	return kubedb.SolrRestPort, kubedb.SolrRestPort
+}
+
+func (d *SolrBind) SecretName() string {
+	return d.GetAuthSecretName()
+}
+
+func (d *SolrBind) CertSecretName() string {
+	return d.GetCertSecretName(SolrClientCert)
+}

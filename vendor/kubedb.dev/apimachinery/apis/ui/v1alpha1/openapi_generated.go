@@ -25696,12 +25696,6 @@ func schema_apimachinery_apis_ui_v1alpha1_DatabaseConnectionSpec(ref common.Refe
 							},
 						},
 					},
-					"caCert": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "byte",
-						},
-					},
 				},
 			},
 		},
@@ -26445,6 +26439,12 @@ func schema_apimachinery_apis_ui_v1alpha1_GatewayConnection(ref common.Reference
 							Ref: ref("kmodules.xyz/client-go/api/v1.ObjectReference"),
 						},
 					},
+					"caCert": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "byte",
+						},
+					},
 				},
 				Required: []string{"name", "namespace"},
 			},
@@ -26540,6 +26540,12 @@ func schema_apimachinery_apis_ui_v1alpha1_InClusterConnection(ref common.Referen
 					"secretRef": {
 						SchemaProps: spec.SchemaProps{
 							Ref: ref("kmodules.xyz/client-go/api/v1.ObjectReference"),
+						},
+					},
+					"caCert": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "byte",
 						},
 					},
 				},
