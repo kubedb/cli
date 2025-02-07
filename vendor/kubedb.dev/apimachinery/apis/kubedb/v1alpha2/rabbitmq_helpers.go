@@ -422,3 +422,31 @@ func (r *RabbitMQ) ReplicasAreReady(lister pslister.PetSetLister) (bool, string,
 	expectedItems := 1
 	return checkReplicasOfPetSet(lister.PetSets(r.Namespace), labels.SelectorFromSet(r.OffshootLabels()), expectedItems)
 }
+
+type RabbitMQBind struct {
+	*RabbitMQ
+}
+
+var _ DBBindInterface = &RabbitMQBind{}
+
+func (d *RabbitMQBind) ServiceNames() (string, string) {
+	return d.ServiceName(), d.DashboardServiceName()
+}
+
+func (d *RabbitMQBind) Ports() (int, int) {
+	dbPort := kubedb.RabbitMQAMQPPort
+	uiPort := kubedb.RabbitMQManagementUIPort
+	if d.Spec.TLS != nil {
+		dbPort = kubedb.RabbitMQAMQPSPort
+		uiPort = kubedb.RabbitMQManagementUIPortWithSSL
+	}
+	return dbPort, uiPort
+}
+
+func (d *RabbitMQBind) SecretName() string {
+	return d.GetAuthSecretName()
+}
+
+func (d *RabbitMQBind) CertSecretName() string {
+	return d.GetCertSecretName(RabbitmqClientCert)
+}

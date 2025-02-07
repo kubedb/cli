@@ -95,7 +95,6 @@ func TryUpdateRedisSentinel(ctx context.Context, c cs.KubedbV1Interface, meta me
 		klog.Errorf("Attempt %d failed to update Redis Sentinel %s/%s due to %v.", attempt, cur.Namespace, cur.Name, e2)
 		return false, nil
 	})
-
 	if err != nil {
 		err = fmt.Errorf("failed to update Redis Sentinel %s/%s after %d attempts due to %v", meta.Namespace, meta.Name, attempt, err)
 	}
@@ -148,7 +147,6 @@ func UpdateRedisSentinelStatus(
 		}
 		return e2 == nil, nil
 	})
-
 	if err != nil {
 		err = fmt.Errorf("failed to update status of Redis Sentinel %s/%s after %d attempts due to %v", meta.Namespace, meta.Name, attempt, err)
 	}

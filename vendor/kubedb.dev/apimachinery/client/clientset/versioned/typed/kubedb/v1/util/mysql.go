@@ -95,7 +95,6 @@ func TryUpdateMySQL(ctx context.Context, c cs.KubedbV1Interface, meta metav1.Obj
 		klog.Errorf("Attempt %d failed to update MySQL %s/%s due to %v.", attempt, cur.Namespace, cur.Name, e2)
 		return false, nil
 	})
-
 	if err != nil {
 		err = fmt.Errorf("failed to update MySQL %s/%s after %d attempts due to %v", meta.Namespace, meta.Name, attempt, err)
 	}
@@ -148,7 +147,6 @@ func UpdateMySQLStatus(
 		}
 		return e2 == nil, nil
 	})
-
 	if err != nil {
 		err = fmt.Errorf("failed to update status of MySQL %s/%s after %d attempts due to %v", meta.Namespace, meta.Name, attempt, err)
 	}

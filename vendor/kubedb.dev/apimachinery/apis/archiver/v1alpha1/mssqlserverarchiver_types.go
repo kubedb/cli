@@ -17,10 +17,11 @@ limitations under the License.
 package v1alpha1
 
 import (
-	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
+	storageapi "kubestash.dev/apimachinery/apis/storage/v1alpha1"
 )
 
 const (
@@ -72,7 +73,7 @@ type MSSQLServerArchiverSpec struct {
 	BackupStorage *BackupStorage `json:"backupStorage"`
 	// DeletionPolicy defines the created repository's deletionPolicy
 	// +optional
-	DeletionPolicy *DeletionPolicy `json:"deletionPolicy"`
+	DeletionPolicy *storageapi.BackupConfigDeletionPolicy `json:"deletionPolicy"`
 }
 
 // MSSQLServerArchiverStatus defines the observed state of MSSQLServerArchiver

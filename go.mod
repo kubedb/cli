@@ -13,7 +13,7 @@ require (
 	github.com/prometheus/common v0.46.0
 	github.com/spf13/cobra v1.8.1
 	golang.org/x/text v0.21.0
-	gomodules.xyz/go-sh v0.1.0
+	gomodules.xyz/go-sh v0.1.1-0.20250117070215-e08594acad2a
 	gomodules.xyz/logs v0.0.7
 	gomodules.xyz/pointer v0.1.0
 	gomodules.xyz/runtime v0.3.0
@@ -29,8 +29,8 @@ require (
 	kmodules.xyz/client-go v0.30.44
 	kmodules.xyz/custom-resources v0.30.0
 	kmodules.xyz/monitoring-agent-api v0.30.2
-	kubedb.dev/apimachinery v0.51.0
-	kubedb.dev/db-client-go v0.6.0
+	kubedb.dev/apimachinery v0.52.0-rc.0
+	kubedb.dev/db-client-go v0.7.0-rc.0
 	kubeops.dev/petset v0.0.7
 	sigs.k8s.io/controller-runtime v0.18.4
 	sigs.k8s.io/yaml v1.4.0
@@ -122,7 +122,7 @@ require (
 	golang.org/x/sync v0.10.0 // indirect
 	golang.org/x/sys v0.28.0 // indirect
 	golang.org/x/term v0.27.0 // indirect
-	golang.org/x/time v0.5.0 // indirect
+	golang.org/x/time v0.6.0 // indirect
 	gomodules.xyz/clock v0.0.0-20200817085942-06523dba733f // indirect
 	gomodules.xyz/encoding v0.0.8 // indirect
 	gomodules.xyz/flags v0.1.3 // indirect
@@ -146,10 +146,10 @@ require (
 	kmodules.xyz/objectstore-api v0.29.1 // indirect
 	kmodules.xyz/offshoot-api v0.30.1 // indirect
 	kmodules.xyz/prober v0.29.0 // indirect
-	kmodules.xyz/resource-metadata v0.24.1 // indirect
+	kmodules.xyz/resource-metadata v0.24.3 // indirect
 	kubeops.dev/csi-driver-cacerts v0.1.0 // indirect
 	kubeops.dev/sidekick v0.0.10 // indirect
-	kubestash.dev/apimachinery v0.15.0 // indirect
+	kubestash.dev/apimachinery v0.16.0-rc.0 // indirect
 	sigs.k8s.io/gateway-api v1.1.0 // indirect
 	sigs.k8s.io/json v0.0.0-20221116044647-bc3834ca7abd // indirect
 	sigs.k8s.io/kustomize/api v0.17.2 // indirect

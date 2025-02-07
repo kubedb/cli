@@ -985,7 +985,7 @@ golang.org/x/text/secure/bidirule
 golang.org/x/text/transform
 golang.org/x/text/unicode/bidi
 golang.org/x/text/unicode/norm
-# golang.org/x/time v0.5.0
+# golang.org/x/time v0.6.0
 ## explicit; go 1.18
 golang.org/x/time/rate
 # gomodules.xyz/clock v0.0.0-20200817085942-06523dba733f
@@ -998,7 +998,7 @@ gomodules.xyz/encoding/json/types
 # gomodules.xyz/flags v0.1.3
 ## explicit; go 1.16
 gomodules.xyz/flags
-# gomodules.xyz/go-sh v0.1.0
+# gomodules.xyz/go-sh v0.1.1-0.20250117070215-e08594acad2a
 ## explicit; go 1.15
 gomodules.xyz/go-sh
 # gomodules.xyz/jsonpatch/v2 v2.4.0
@@ -1509,12 +1509,12 @@ kmodules.xyz/offshoot-api/util
 # kmodules.xyz/prober v0.29.0
 ## explicit; go 1.21.5
 kmodules.xyz/prober/api/v1
-# kmodules.xyz/resource-metadata v0.24.1
+# kmodules.xyz/resource-metadata v0.24.3
 ## explicit; go 1.22.1
 kmodules.xyz/resource-metadata/apis/node
 kmodules.xyz/resource-metadata/apis/node/v1alpha1
 kmodules.xyz/resource-metadata/crds
-# kubedb.dev/apimachinery v0.51.0
+# kubedb.dev/apimachinery v0.52.0-rc.0
 ## explicit; go 1.22.1
 kubedb.dev/apimachinery/apis
 kubedb.dev/apimachinery/apis/archiver/v1alpha1
@@ -1558,7 +1558,7 @@ kubedb.dev/apimachinery/crds
 kubedb.dev/apimachinery/pkg/double_optin
 kubedb.dev/apimachinery/pkg/factory
 kubedb.dev/apimachinery/pkg/validator
-# kubedb.dev/db-client-go v0.6.0
+# kubedb.dev/db-client-go v0.7.0-rc.0
 ## explicit; go 1.22.1
 kubedb.dev/db-client-go/elasticsearch
 kubedb.dev/db-client-go/redis
@@ -1581,8 +1581,8 @@ kubeops.dev/petset/pkg/features
 kubeops.dev/sidekick/apis/apps
 kubeops.dev/sidekick/apis/apps/v1alpha1
 kubeops.dev/sidekick/crds
-# kubestash.dev/apimachinery v0.15.0
-## explicit; go 1.22.0
+# kubestash.dev/apimachinery v0.16.0-rc.0
+## explicit; go 1.22.1
 kubestash.dev/apimachinery/apis
 kubestash.dev/apimachinery/apis/core/v1alpha1
 kubestash.dev/apimachinery/apis/storage/v1alpha1

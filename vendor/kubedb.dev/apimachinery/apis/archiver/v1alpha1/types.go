@@ -101,16 +101,6 @@ type BackupStorage struct {
 	SubDir string `json:"subDir,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=Delete;WipeOut;DoNotDelete
-type DeletionPolicy string
-
-const (
-	// Deletes archiver, removes the backup jobs and walg sidecar containers, but keeps the backup data
-	DeletionPolicyDelete DeletionPolicy = "Delete"
-	// Deletes everything including the backup data
-	DeletionPolicyWipeOut DeletionPolicy = "WipeOut"
-)
-
 type SchedulerOptions struct {
 	Schedule string `json:"schedule"`
 	// +optional

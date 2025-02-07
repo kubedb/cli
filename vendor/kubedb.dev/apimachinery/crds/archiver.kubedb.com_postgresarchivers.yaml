@@ -117,7 +117,7 @@ spec:
                 enum:
                 - Delete
                 - WipeOut
-                - DoNotDelete
+                - Retain
                 type: string
               encryptionSecret:
                 properties:

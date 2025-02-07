@@ -80,7 +80,6 @@ spec:
                     enum:
                     - md5
                     - scram-sha-256
-                    - cert
                     type: string
                   defaultPoolSize:
                     format: int64
