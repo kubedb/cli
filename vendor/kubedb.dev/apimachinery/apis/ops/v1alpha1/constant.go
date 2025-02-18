@@ -309,6 +309,42 @@ const (
 
 	RestartPrimary   = "RestartPrimary"
 	RestartSecondary = "RestartSecondary"
+
+	StartRunScript                          = "StartRunScriptWithRestart"
+	KillRunScript                           = "KillRunScript"
+	StickyLeader                            = "STICKYLEADER" // We want a id(sticky id) to be always leader in raft
+	UpdateDataDirectory                     = "UpdateDataDirectory"
+	PausePgCoordinatorBeforeUpgrade         = "PausePgCoordinatorBeforeUpdate"
+	RunningLeaderSticky                     = "RunningLeaderSticky"
+	EnsureStickyId                          = "EnsureStickyId"
+	SetPrimaryPodNameInStatus               = "SetPrimaryPodNameInStatus"
+	NonTransferableResumeAfterUpgrade       = "NonTransferableResumeAfterUpgrade"
+	PausePgCoordinatorBeforeCustomRestart   = "PausePgCoordinatorBeforeCustomRestart"
+	NonTransferableResumeAfterCustomRestart = "NonTransferableResumeAfterCustomRestart"
+	ReadyPrimaryCheck                       = "ReadyPrimaryCheck"
+	PrimaryPodName                          = "PrimaryPodName"
+	OpsRequestProgressing                   = "OpsRequestProgressing"
+	SetRaftKeyOpsRequestProgressing         = "SetRaftKeyOpsRequestProgressing"
+	UnsetRaftKeyOpsRequestProgressing       = "UnsetRaftKeyOpsRequestProgressing"
+	NotReadyReplicas                        = "NotReadyReplicas"
+	RestartNotReadyStandby                  = "RestartNotReadyStandby"
+	StandbyReadyCheck                       = "StandbyReadyCheck"
+	PrimaryRunningCheck                     = "PrimaryRunningCheck"
+	StopPostgresServer                      = "StopPostgresServer"
+	SetupRecoverySettings                   = "SetupRecoverySettings"
+	RunPostgresBaseBackup                   = "RunPostgresBaseBackup"
+	StartPostgresRecovery                   = "StartPostgresRecovery"
+	RestartNotReadyStandbyAfterBaseBackup   = "RestartNotReadyStandbyAfterBaseBackup"
+	StandbyReadyCheckAfterBaseBackup        = "StandbyReadyCheckAfterBaseBackup"
+	ReconnectStandbyWithRestart             = "ReconnectStandbyWithRestart"
+	ReconnectStandbyWithBaseBackup          = "ReconnectStandbyWithBaseBackup"
+	UpdateRaftKVStore                       = "UpdateRaftKVStore"
+	CreateFailOverFile                      = "CreateFailOverFile"
+	TransitionCandidateToLeader             = "TransitionCandidateToLeader"
+	ForceFailOverFileName                   = "force-failover-with-lsn"
+	// need reveiw about this two
+	StringFalse = "false"
+	StringTrue  = "true"
 )
 
 // Redis Constants

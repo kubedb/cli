@@ -43,42 +43,17 @@ type DatabaseConnection struct {
 
 // DatabaseConnectionSpec defines the desired state of DatabaseConnection
 type DatabaseConnectionSpec struct {
-	Gateway   []GatewayConnection `json:"gateway,omitempty"`
+	Public    []PublicInfo        `json:"public,omitempty"`
 	InCluster InClusterConnection `json:"inCluster,omitempty"`
 
 	// Databases already present on the referred database server
 	Databases []string `json:"databases,omitempty"`
-
-	// Parameters: `username = <username>\n
-	// password = <password>\n
-	// host = <host>\n
-	// database = <database>\n
-	// sslmode = REQUIRED`
-	//
-	// URI: `mongodb+srv://<username>:<password>@<host>:<port>/<database>?authSource=<authSource>&tls=true&replicaSet=arnob`
-	//
-	// Flags: `mongo "mongodb+srv://<username>:<password>@<host>:<port>/<database>?authSource=<authsource>&replicaSet=arnob" --tls`
-	//
-	// And some language specific template strings. Like: Java, C#, Go, Python, Javascript, Ruby etc.
-	ConnectOptions map[string]string `json:"connectOptions,omitempty"`
 }
 
-//type ConnectOption struct {
-//	// username = <username>
-//	// password = <password>
-//	// host = <host>
-//	// database = <database>
-//	// sslmode = REQUIRED
-//	Parameters []string `json:"parameters,omitempty"`
-//
-//	// Actual: mongodb+srv://doadmin:show-password@arnob-a013a268.mongo.ondigitalocean.com/admin?authSource=admin&tls=true&replicaSet=arnob
-//	// Template: `mongodb+srv://<username>:<password>@<host>:<port>/<database>?authSource=<authSource>&tls=true&replicaSet=arnob`
-//	ConnectionString string `json:"connectionString,omitempty"`
-//
-//	// Actual: mongo "mongodb+srv://doadmin:show-password@private-arnob-aa409eb4.mongo.ondigitalocean.com/admin?authSource=admin&replicaSet=arnob" --tls
-//	// Template: `mongo "mongodb+srv://<username>:<password>@<host>:<port>/<database>?authSource=<authsource>&replicaSet=arnob" --tls`
-//	Flags string `json:"flags,omitempty"`
-//}
+type PublicInfo struct {
+	Gateway        []GatewayConnection `json:"gateway,omitempty"`
+	ConnectOptions map[string]string   `json:"connectOptions,omitempty"`
+}
 
 type GatewayConnection struct {
 	*ofst.Gateway `json:",inline"`
@@ -94,6 +69,19 @@ type InClusterConnection struct {
 	Exec      string                 `json:"exec,omitempty"`
 	SecretRef *kmapi.ObjectReference `json:"secretRef,omitempty"`
 	CACert    []byte                 `json:"caCert,omitempty"`
+
+	// Parameters: `username = <username>\n
+	// password = <password>\n
+	// host = <host>\n
+	// database = <database>\n
+	// sslmode = REQUIRED`
+	//
+	// URI: `mongodb+srv://<username>:<password>@<host>:<port>/<database>?authSource=<authSource>&tls=true&replicaSet=arnob`
+	//
+	// Flags: `mongo "mongodb+srv://<username>:<password>@<host>:<port>/<database>?authSource=<authsource>&replicaSet=arnob" --tls`
+	//
+	// And some language specific template strings. Like: Java, C#, Go, Python, Javascript, Ruby etc.
+	ConnectOptions map[string]string `json:"connectOptions,omitempty"`
 }
 
 // DatabaseConnectionList contains a list of DatabaseConnection

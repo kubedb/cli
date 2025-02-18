@@ -286,6 +286,18 @@ func (m *MariaDB) SetDefaults(mdVersion *v1alpha1.MariaDBVersion) {
 	if m.IsCluster() && m.IsMariaDBReplication() {
 		m.SetDefaultsMaxscale(mdVersion, m.Spec.Topology.MaxScale)
 	}
+
+	if m.Spec.Init != nil && m.Spec.Init.Archiver != nil {
+		if m.Spec.Init.Archiver.EncryptionSecret != nil && m.Spec.Init.Archiver.EncryptionSecret.Namespace == "" {
+			m.Spec.Init.Archiver.EncryptionSecret.Namespace = m.GetNamespace()
+		}
+		if m.Spec.Init.Archiver.FullDBRepository != nil && m.Spec.Init.Archiver.FullDBRepository.Namespace == "" {
+			m.Spec.Init.Archiver.FullDBRepository.Namespace = m.GetNamespace()
+		}
+		if m.Spec.Init.Archiver.ManifestRepository != nil && m.Spec.Init.Archiver.ManifestRepository.Namespace == "" {
+			m.Spec.Init.Archiver.ManifestRepository.Namespace = m.GetNamespace()
+		}
+	}
 }
 
 func (m *MariaDB) SetDefaultsMaxscale(mdVersion *v1alpha1.MariaDBVersion, maxscale *MaxScaleSpec) {

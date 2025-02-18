@@ -117,7 +117,7 @@ func (f *FerretDB) GetAuthSecretName() string {
 func (f *FerretDB) GetPersistentSecrets() []string {
 	var secrets []string
 	if f.Spec.AuthSecret != nil {
-		secrets = append(secrets, f.Spec.AuthSecret.Name)
+		secrets = append(secrets, f.GetAuthSecretName())
 	}
 	return secrets
 }
@@ -244,7 +244,7 @@ func (f *FerretDB) SetDefaults() {
 		}
 	}
 
-	defaultVersion := "13.13"
+	defaultVersion := "16.4-bookworm"
 	if !f.Spec.Backend.ExternallyManaged {
 		if f.Spec.Backend.Version == nil {
 			f.Spec.Backend.Version = &defaultVersion

@@ -681,6 +681,18 @@ func (m *MongoDB) SetDefaults(mgVersion *v1alpha1.MongoDBVersion) {
 			m.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup = mgVersion.Spec.SecurityContext.RunAsGroup
 		}
 	}
+
+	if m.Spec.Init != nil && m.Spec.Init.Archiver != nil {
+		if m.Spec.Init.Archiver.EncryptionSecret != nil && m.Spec.Init.Archiver.EncryptionSecret.Namespace == "" {
+			m.Spec.Init.Archiver.EncryptionSecret.Namespace = m.GetNamespace()
+		}
+		if m.Spec.Init.Archiver.FullDBRepository != nil && m.Spec.Init.Archiver.FullDBRepository.Namespace == "" {
+			m.Spec.Init.Archiver.FullDBRepository.Namespace = m.GetNamespace()
+		}
+		if m.Spec.Init.Archiver.ManifestRepository != nil && m.Spec.Init.Archiver.ManifestRepository.Namespace == "" {
+			m.Spec.Init.Archiver.ManifestRepository.Namespace = m.GetNamespace()
+		}
+	}
 }
 
 func (m *MongoDB) initializePodTemplates() {

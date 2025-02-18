@@ -20,6 +20,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"strings"
 
@@ -58,6 +59,34 @@ func (es *ESClientV6) ClusterHealthInfo() (map[string]interface{}, error) {
 func (es *ESClientV6) NodesStats() (map[string]interface{}, error) {
 	// todo: need to implement for version 6
 	return nil, nil
+}
+
+func (es *ESClientV6) ShardStats() ([]ShardInfo, error) {
+	req := esapi.CatShardsRequest{
+		Bytes:  "b",
+		Format: "json",
+		Pretty: true,
+		Human:  true,
+		H:      []string{"index", "shard", "prirep", "state", "unassigned.reason"},
+	}
+
+	resp, err := req.Do(context.Background(), es.client)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println("Error reading body:", err)
+	}
+
+	var shardStats []ShardInfo
+	err = json.Unmarshal(body, &shardStats)
+	if err != nil {
+		return nil, err
+	}
+	return shardStats, nil
 }
 
 // GetIndicesInfo will return the indices info of an Elasticsearch database

@@ -42,6 +42,10 @@ func (es *ESClientV5) NodesStats() (map[string]interface{}, error) {
 	return nil, nil
 }
 
+func (es *ESClientV5) ShardStats() ([]ShardInfo, error) {
+	return nil, nil
+}
+
 // GetIndicesInfo will return the indices info of an Elasticsearch database
 func (es *ESClientV5) GetIndicesInfo() ([]interface{}, error) {
 	return nil, nil

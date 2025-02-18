@@ -5692,8 +5692,8 @@ func (in *SolrSpec) DeepCopyInto(out *SolrSpec) {
 	}
 	if in.ZookeeperRef != nil {
 		in, out := &in.ZookeeperRef, &out.ZookeeperRef
-		*out = new(apiv1.ObjectReference)
-		**out = **in
+		*out = new(ZookeeperRef)
+		(*in).DeepCopyInto(*out)
 	}
 	if in.SolrModules != nil {
 		in, out := &in.SolrModules, &out.SolrModules

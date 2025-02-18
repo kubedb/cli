@@ -255,10 +255,10 @@ func (p *Postgres) SetDefaults(postgresVersion *catalog.PostgresVersion) {
 		}
 	}
 
-	p.setDefaultPodSecurityContext(&p.Spec.PodTemplate, postgresVersion)
-	p.setPostgresContainerDefaults(&p.Spec.PodTemplate, postgresVersion)
-	p.setCoordinatorContainerDefaults(&p.Spec.PodTemplate, postgresVersion)
-	p.setInitContainerDefaults(&p.Spec.PodTemplate, postgresVersion)
+	p.SetDefaultPodSecurityContext(&p.Spec.PodTemplate, postgresVersion)
+	p.SetPostgresContainerDefaults(&p.Spec.PodTemplate, postgresVersion)
+	p.SetCoordinatorContainerDefaults(&p.Spec.PodTemplate, postgresVersion)
+	p.SetInitContainerDefaults(&p.Spec.PodTemplate, postgresVersion)
 
 	// Need to set FSGroup equal to  p.Spec.PodTemplate.Spec.ContainerSecurityContext.RunAsGroup.
 	// So that /var/pv directory have the group permission for the RunAsGroup user GID.
@@ -279,6 +279,18 @@ func (p *Postgres) SetDefaults(postgresVersion *catalog.PostgresVersion) {
 	}
 	if p.Spec.Init != nil && p.Spec.Init.Archiver != nil && p.Spec.Init.Archiver.ReplicationStrategy == nil {
 		p.Spec.Init.Archiver.ReplicationStrategy = ptr.To(ReplicationStrategyNone)
+	}
+
+	if p.Spec.Init != nil && p.Spec.Init.Archiver != nil {
+		if p.Spec.Init.Archiver.EncryptionSecret != nil && p.Spec.Init.Archiver.EncryptionSecret.Namespace == "" {
+			p.Spec.Init.Archiver.EncryptionSecret.Namespace = p.GetNamespace()
+		}
+		if p.Spec.Init.Archiver.FullDBRepository != nil && p.Spec.Init.Archiver.FullDBRepository.Namespace == "" {
+			p.Spec.Init.Archiver.FullDBRepository.Namespace = p.GetNamespace()
+		}
+		if p.Spec.Init.Archiver.ManifestRepository != nil && p.Spec.Init.Archiver.ManifestRepository.Namespace == "" {
+			p.Spec.Init.Archiver.ManifestRepository.Namespace = p.GetNamespace()
+		}
 	}
 }
 
@@ -324,7 +336,7 @@ func (p *Postgres) SetArbiterDefault() {
 	}
 }
 
-func (p *Postgres) setDefaultPodSecurityContext(podTemplate *ofstv2.PodTemplateSpec, pgVersion *catalog.PostgresVersion) {
+func (p *Postgres) SetDefaultPodSecurityContext(podTemplate *ofstv2.PodTemplateSpec, pgVersion *catalog.PostgresVersion) {
 	if podTemplate == nil {
 		return
 	}
@@ -343,7 +355,7 @@ func (p *Postgres) setDefaultPodSecurityContext(podTemplate *ofstv2.PodTemplateS
 	}
 }
 
-func (p *Postgres) setInitContainerDefaults(podTemplate *ofstv2.PodTemplateSpec, pgVersion *catalog.PostgresVersion) {
+func (p *Postgres) SetInitContainerDefaults(podTemplate *ofstv2.PodTemplateSpec, pgVersion *catalog.PostgresVersion) {
 	if podTemplate == nil {
 		return
 	}
@@ -352,7 +364,7 @@ func (p *Postgres) setInitContainerDefaults(podTemplate *ofstv2.PodTemplateSpec,
 	p.setContainerDefaultResources(container, *kubedb.DefaultInitContainerResource.DeepCopy())
 }
 
-func (p *Postgres) setPostgresContainerDefaults(podTemplate *ofstv2.PodTemplateSpec, pgVersion *catalog.PostgresVersion) {
+func (p *Postgres) SetPostgresContainerDefaults(podTemplate *ofstv2.PodTemplateSpec, pgVersion *catalog.PostgresVersion) {
 	if podTemplate == nil {
 		return
 	}
@@ -361,7 +373,7 @@ func (p *Postgres) setPostgresContainerDefaults(podTemplate *ofstv2.PodTemplateS
 	p.setContainerDefaultResources(container, *kubedb.DefaultResources.DeepCopy())
 }
 
-func (p *Postgres) setCoordinatorContainerDefaults(podTemplate *ofstv2.PodTemplateSpec, pgVersion *catalog.PostgresVersion) {
+func (p *Postgres) SetCoordinatorContainerDefaults(podTemplate *ofstv2.PodTemplateSpec, pgVersion *catalog.PostgresVersion) {
 	if podTemplate == nil {
 		return
 	}
