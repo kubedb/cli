@@ -77,6 +77,34 @@ func (os *OSClientV2) NodesStats() (map[string]interface{}, error) {
 	return nodesStats, nil
 }
 
+func (es *OSClientV2) ShardStats() ([]ShardInfo, error) {
+	req := osv2api.CatShardsRequest{
+		Bytes:  "b",
+		Format: "json",
+		Pretty: true,
+		Human:  true,
+		H:      []string{"index", "shard", "prirep", "state", "unassigned.reason"},
+	}
+
+	resp, err := req.Do(context.Background(), es.client)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println("Error reading body:", err)
+	}
+
+	var shardStats []ShardInfo
+	err = json.Unmarshal(body, &shardStats)
+	if err != nil {
+		return nil, err
+	}
+	return shardStats, nil
+}
+
 // GetIndicesInfo will return the indices' info of an Elasticsearch database
 func (os *OSClientV2) GetIndicesInfo() ([]interface{}, error) {
 	req := osv2api.CatIndicesRequest{

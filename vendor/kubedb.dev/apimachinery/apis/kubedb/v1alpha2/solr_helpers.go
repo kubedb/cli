@@ -272,6 +272,34 @@ func (s Solr) CoordinatorSelectors() map[string]string {
 	return s.OffshootSelectors(map[string]string{string(SolrNodeRoleCoordinator): SolrNodeRoleSet})
 }
 
+func (s *Solr) SetDefaultsToZooKeeperRef() {
+	if s.Spec.ZookeeperRef == nil {
+		s.Spec.ZookeeperRef = &ZookeeperRef{}
+	}
+	s.SetZooKeeperObjectRef()
+	if s.Spec.ZookeeperRef.Version == nil {
+		defaultVersion := "3.7.2"
+		s.Spec.ZookeeperRef.Version = &defaultVersion
+	}
+}
+
+func (s *Solr) GetZooKeeperName() string {
+	return s.OffshootName() + "-zk"
+}
+
+func (s *Solr) SetZooKeeperObjectRef() {
+	if s.Spec.ZookeeperRef.ObjectReference == nil {
+		s.Spec.ZookeeperRef.ObjectReference = &kmapi.ObjectReference{}
+	}
+	if s.Spec.ZookeeperRef.Name == "" {
+		s.Spec.ZookeeperRef.ExternallyManaged = false
+		s.Spec.ZookeeperRef.Name = s.GetZooKeeperName()
+	}
+	if s.Spec.ZookeeperRef.Namespace == "" {
+		s.Spec.ZookeeperRef.Namespace = s.Namespace
+	}
+}
+
 func (s *Solr) SetDefaults() {
 	if s.Spec.DeletionPolicy == "" {
 		s.Spec.DeletionPolicy = DeletionPolicyDelete
@@ -284,6 +312,9 @@ func (s *Solr) SetDefaults() {
 	if s.Spec.StorageType == "" {
 		s.Spec.StorageType = StorageTypeDurable
 	}
+
+	s.SetDefaultsToZooKeeperRef()
+	s.SetZooKeeperObjectRef()
 
 	if s.Spec.ZookeeperDigestSecret == nil {
 		s.Spec.ZookeeperDigestSecret = &v1.LocalObjectReference{
@@ -320,10 +351,6 @@ func (s *Solr) SetDefaults() {
 			if s.Spec.Topology.Data.Replicas == nil {
 				s.Spec.Topology.Data.Replicas = pointer.Int32P(1)
 			}
-			if s.Spec.Topology.Data.PodTemplate.Spec.SecurityContext == nil {
-				s.Spec.Topology.Data.PodTemplate.Spec.SecurityContext = &v1.PodSecurityContext{}
-			}
-			s.Spec.Topology.Data.PodTemplate.Spec.SecurityContext.FSGroup = slVersion.Spec.SecurityContext.RunAsUser
 			s.setDefaultContainerSecurityContext(&slVersion, &s.Spec.Topology.Data.PodTemplate)
 			s.setDefaultContainerResourceLimits(&s.Spec.Topology.Data.PodTemplate)
 
@@ -336,10 +363,6 @@ func (s *Solr) SetDefaults() {
 			if s.Spec.Topology.Overseer.Replicas == nil {
 				s.Spec.Topology.Overseer.Replicas = pointer.Int32P(1)
 			}
-			if s.Spec.Topology.Overseer.PodTemplate.Spec.SecurityContext == nil {
-				s.Spec.Topology.Overseer.PodTemplate.Spec.SecurityContext = &v1.PodSecurityContext{}
-			}
-			s.Spec.Topology.Overseer.PodTemplate.Spec.SecurityContext.FSGroup = slVersion.Spec.SecurityContext.RunAsUser
 			s.setDefaultContainerSecurityContext(&slVersion, &s.Spec.Topology.Overseer.PodTemplate)
 			s.setDefaultContainerResourceLimits(&s.Spec.Topology.Overseer.PodTemplate)
 		}
@@ -351,10 +374,6 @@ func (s *Solr) SetDefaults() {
 			if s.Spec.Topology.Coordinator.Replicas == nil {
 				s.Spec.Topology.Coordinator.Replicas = pointer.Int32P(1)
 			}
-			if s.Spec.Topology.Coordinator.PodTemplate.Spec.SecurityContext == nil {
-				s.Spec.Topology.Coordinator.PodTemplate.Spec.SecurityContext = &v1.PodSecurityContext{}
-			}
-			s.Spec.Topology.Coordinator.PodTemplate.Spec.SecurityContext.FSGroup = slVersion.Spec.SecurityContext.RunAsUser
 			s.setDefaultContainerSecurityContext(&slVersion, &s.Spec.Topology.Coordinator.PodTemplate)
 			s.setDefaultContainerResourceLimits(&s.Spec.Topology.Coordinator.PodTemplate)
 		}
@@ -362,10 +381,6 @@ func (s *Solr) SetDefaults() {
 		if s.Spec.Replicas == nil {
 			s.Spec.Replicas = pointer.Int32P(1)
 		}
-		if s.Spec.PodTemplate.Spec.SecurityContext == nil {
-			s.Spec.PodTemplate.Spec.SecurityContext = &v1.PodSecurityContext{}
-		}
-		s.Spec.PodTemplate.Spec.SecurityContext.FSGroup = slVersion.Spec.SecurityContext.RunAsUser
 		s.setDefaultContainerSecurityContext(&slVersion, &s.Spec.PodTemplate)
 		s.setDefaultContainerResourceLimits(&s.Spec.PodTemplate)
 	}
@@ -384,6 +399,15 @@ func (s *Solr) SetDefaults() {
 }
 
 func (s *Solr) setDefaultContainerSecurityContext(slVersion *catalog.SolrVersion, podTemplate *ofst.PodTemplateSpec) {
+	if podTemplate == nil {
+		return
+	}
+	if podTemplate.Spec.SecurityContext == nil {
+		podTemplate.Spec.SecurityContext = &v1.PodSecurityContext{}
+	}
+	if podTemplate.Spec.SecurityContext.FSGroup == nil {
+		podTemplate.Spec.SecurityContext.FSGroup = slVersion.Spec.SecurityContext.RunAsUser
+	}
 	initContainer := coreutil.GetContainerByName(podTemplate.Spec.InitContainers, kubedb.SolrInitContainerName)
 	if initContainer == nil {
 		initContainer = &v1.Container{

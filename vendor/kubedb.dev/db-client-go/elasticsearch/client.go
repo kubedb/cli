@@ -26,3 +26,11 @@ type ESRestyClient struct {
 	Client *resty.Client
 	Config *Config
 }
+
+type ShardInfo struct {
+	Index            string `json:"index,omitempty"`
+	Shard            string `json:"shard,omitempty"`
+	Prirep           string `json:"prirep,omitempty"`
+	State            string `json:"state,omitempty"`
+	UnassignedReason string `json:"unassigned.reason,omitempty"`
+}

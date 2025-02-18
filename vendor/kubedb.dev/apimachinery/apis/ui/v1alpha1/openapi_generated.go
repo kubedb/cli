@@ -615,6 +615,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.ProxySQLSettingsList":                              schema_apimachinery_apis_ui_v1alpha1_ProxySQLSettingsList(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.ProxySQLSettingsSpec":                              schema_apimachinery_apis_ui_v1alpha1_ProxySQLSettingsSpec(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.ProxySQLSlowQuerySpec":                             schema_apimachinery_apis_ui_v1alpha1_ProxySQLSlowQuerySpec(ref),
+		"kubedb.dev/apimachinery/apis/ui/v1alpha1.PublicInfo":                                        schema_apimachinery_apis_ui_v1alpha1_PublicInfo(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.RedisDatabaseSpec":                                 schema_apimachinery_apis_ui_v1alpha1_RedisDatabaseSpec(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.RedisInsight":                                      schema_apimachinery_apis_ui_v1alpha1_RedisInsight(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.RedisInsightList":                                  schema_apimachinery_apis_ui_v1alpha1_RedisInsightList(ref),
@@ -25646,14 +25647,14 @@ func schema_apimachinery_apis_ui_v1alpha1_DatabaseConnectionSpec(ref common.Refe
 				Description: "DatabaseConnectionSpec defines the desired state of DatabaseConnection",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
-					"gateway": {
+					"public": {
 						SchemaProps: spec.SchemaProps{
 							Type: []string{"array"},
 							Items: &spec.SchemaOrArray{
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.GatewayConnection"),
+										Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.PublicInfo"),
 									},
 								},
 							},
@@ -25680,27 +25681,11 @@ func schema_apimachinery_apis_ui_v1alpha1_DatabaseConnectionSpec(ref common.Refe
 							},
 						},
 					},
-					"connectOptions": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Parameters: `username = <username>\n password = <password>\n host = <host>\n database = <database>\n sslmode = REQUIRED`\n\nURI: `mongodb+srv://<username>:<password>@<host>:<port>/<database>?authSource=<authSource>&tls=true&replicaSet=arnob`\n\nFlags: `mongo \"mongodb+srv://<username>:<password>@<host>:<port>/<database>?authSource=<authsource>&replicaSet=arnob\" --tls`\n\nAnd some language specific template strings. Like: Java, C#, Go, Python, Javascript, Ruby etc.",
-							Type:        []string{"object"},
-							AdditionalProperties: &spec.SchemaOrBool{
-								Allows: true,
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: "",
-										Type:    []string{"string"},
-										Format:  "",
-									},
-								},
-							},
-						},
-					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/ui/v1alpha1.GatewayConnection", "kubedb.dev/apimachinery/apis/ui/v1alpha1.InClusterConnection"},
+			"kubedb.dev/apimachinery/apis/ui/v1alpha1.InClusterConnection", "kubedb.dev/apimachinery/apis/ui/v1alpha1.PublicInfo"},
 	}
 }
 
@@ -26546,6 +26531,22 @@ func schema_apimachinery_apis_ui_v1alpha1_InClusterConnection(ref common.Referen
 						SchemaProps: spec.SchemaProps{
 							Type:   []string{"string"},
 							Format: "byte",
+						},
+					},
+					"connectOptions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Parameters: `username = <username>\n password = <password>\n host = <host>\n database = <database>\n sslmode = REQUIRED`\n\nURI: `mongodb+srv://<username>:<password>@<host>:<port>/<database>?authSource=<authSource>&tls=true&replicaSet=arnob`\n\nFlags: `mongo \"mongodb+srv://<username>:<password>@<host>:<port>/<database>?authSource=<authsource>&replicaSet=arnob\" --tls`\n\nAnd some language specific template strings. Like: Java, C#, Go, Python, Javascript, Ruby etc.",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
 						},
 					},
 				},
@@ -31894,6 +31895,48 @@ func schema_apimachinery_apis_ui_v1alpha1_ProxySQLSlowQuerySpec(ref common.Refer
 		},
 		Dependencies: []string{
 			"k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
+	}
+}
+
+func schema_apimachinery_apis_ui_v1alpha1_PublicInfo(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"gateway": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.GatewayConnection"),
+									},
+								},
+							},
+						},
+					},
+					"connectOptions": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/ui/v1alpha1.GatewayConnection"},
 	}
 }
 

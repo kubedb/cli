@@ -1696,7 +1696,7 @@ var (
 		},
 	}
 
-	// DefaultResourcesMemoryIntensive must be used for elasticsearch
+	// DefaultResourcesMemoryIntensive must be used for elasticsearch or kafka
 	// to avoid OOMKILLED while deploying ES V8
 	DefaultResourcesMemoryIntensive = core.ResourceRequirements{
 		Requests: core.ResourceList{
