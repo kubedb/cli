@@ -21,7 +21,7 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"k8s.io/apimachinery/pkg/runtime"
+	runtime "k8s.io/apimachinery/pkg/runtime"
 	"kmodules.xyz/client-go/api/v1"
 	"kubestash.dev/apimachinery/apis"
 )

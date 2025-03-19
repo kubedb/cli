@@ -43,6 +43,7 @@ import (
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v2"
 	pslister "kubeops.dev/petset/client/listers/apps/v1"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 func (s *Singlestore) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
@@ -319,7 +320,7 @@ func (s *Singlestore) GetPersistentSecrets() []string {
 	return secrets
 }
 
-func (s *Singlestore) SetDefaults() {
+func (s *Singlestore) SetDefaults(kc client.Client) {
 	if s == nil {
 		return
 	}
@@ -351,7 +352,7 @@ func (s *Singlestore) SetDefaults() {
 	}
 
 	var sdbVersion catalog.SinglestoreVersion
-	err := DefaultClient.Get(context.TODO(), types.NamespacedName{
+	err := kc.Get(context.TODO(), types.NamespacedName{
 		Name: s.Spec.Version,
 	}, &sdbVersion)
 	if err != nil {
@@ -377,6 +378,14 @@ func (s *Singlestore) SetDefaults() {
 			s.Spec.Monitor.Prometheus.Exporter.Port = kubedb.SinglestoreExporterPort
 		}
 		s.Spec.Monitor.SetDefaults()
+		if s.Spec.Monitor.Prometheus != nil {
+			if s.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser == nil {
+				s.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser = sdbVersion.Spec.SecurityContext.RunAsUser
+			}
+			if s.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup == nil {
+				s.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup = sdbVersion.Spec.SecurityContext.RunAsGroup
+			}
+		}
 	}
 
 	if s.IsClustering() {

@@ -15,6 +15,7 @@
 package v1alpha1
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -60,12 +61,15 @@ type AlertmanagerConfigList struct {
 	// More info: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#metadata
 	metav1.ListMeta `json:"metadata,omitempty"`
 	// List of AlertmanagerConfig
-	Items []*AlertmanagerConfig `json:"items"`
+	Items []AlertmanagerConfig `json:"items"`
 }
 
-// AlertmanagerConfigSpec is a specification of the desired behavior of the Alertmanager configuration.
-// By definition, the Alertmanager configuration only applies to alerts for which
-// the `namespace` label is equal to the namespace of the AlertmanagerConfig resource.
+// AlertmanagerConfigSpec is a specification of the desired behavior of the
+// Alertmanager configuration.
+// By default, the Alertmanager configuration only applies to alerts for which
+// the `namespace` label is equal to the namespace of the AlertmanagerConfig
+// resource (see the `.spec.alertmanagerConfigMatcherStrategy` field of the
+// Alertmanager CRD).
 type AlertmanagerConfigSpec struct {
 	// The Alertmanager route definition for alerts matching the resource's
 	// namespace. If present, it will be added to the generated Alertmanager
@@ -143,7 +147,9 @@ func (r *Route) ChildRoutes() ([]Route, error) {
 	out := make([]Route, len(r.Routes))
 
 	for i, v := range r.Routes {
-		if err := json.Unmarshal(v.Raw, &out[i]); err != nil {
+		dec := json.NewDecoder(bytes.NewBuffer(v.Raw))
+		dec.DisallowUnknownFields()
+		if err := dec.Decode(&out[i]); err != nil {
 			return nil, fmt.Errorf("route[%d]: %w", i, err)
 		}
 	}
@@ -616,9 +622,16 @@ type HTTPConfig struct {
 	// TLS configuration for the client.
 	// +optional
 	TLSConfig *monitoringv1.SafeTLSConfig `json:"tlsConfig,omitempty"`
+
 	// Optional proxy URL.
+	//
+	// If defined, this field takes precedence over `proxyUrl`.
+	//
 	// +optional
-	ProxyURL string `json:"proxyURL,omitempty"`
+	ProxyURLOriginal *string `json:"proxyURL,omitempty"`
+
+	monitoringv1.ProxyConfig `json:",inline"`
+
 	// FollowRedirects specifies whether the client should follow HTTP 3xx redirects.
 	// +optional
 	FollowRedirects *bool `json:"followRedirects,omitempty"`
@@ -908,6 +921,10 @@ type TelegramConfig struct {
 	// The Telegram chat ID.
 	// +required
 	ChatID int64 `json:"chatID,omitempty"`
+	// The Telegram Group Topic ID.
+	// It requires Alertmanager >= 0.26.0.
+	// +optional
+	MessageThreadID *int64 `json:"messageThreadID,omitempty"`
 	// Message template
 	// +optional
 	Message string `json:"message,omitempty"`

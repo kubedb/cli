@@ -86,14 +86,17 @@ func Exec(config *rest.Config, pod types.NamespacedName, options ...func(*Option
 	return execIntoPod(ctx, config, kc, p, options...)
 }
 
-func ExecIntoPod(config *rest.Config, pod *core.Pod, options ...func(*Options)) (string, error) {
-	ctx := context.Background()
-
+func ExecIntoPodWithContext(ctx context.Context, config *rest.Config, pod *core.Pod, options ...func(*Options)) (string, error) {
 	kc, err := kubernetes.NewForConfig(config)
 	if err != nil {
 		return "", err
 	}
 	return execIntoPod(ctx, config, kc, pod, options...)
+}
+
+func ExecIntoPod(config *rest.Config, pod *core.Pod, options ...func(*Options)) (string, error) {
+	ctx := context.Background()
+	return ExecIntoPodWithContext(ctx, config, pod, options...)
 }
 
 func execIntoPod(ctx context.Context, config *rest.Config, kc kubernetes.Interface, pod *core.Pod, options ...func(*Options)) (string, error) {

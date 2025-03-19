@@ -52,6 +52,8 @@ type RedisVersion struct {
 type RedisVersionSpec struct {
 	// Version
 	Version string `json:"version"`
+	// Distribution determines the type of the database(Valkey or Redis)
+	Distribution RedisDistro `json:"distribution,omitempty"`
 	// init container image
 	InitContainer RedisVersionInitContainer `json:"initContainer,omitempty"`
 	// Database Image
@@ -113,3 +115,11 @@ type RedisVersionList struct {
 	// Items is a list of RedisVersion CRD objects
 	Items []RedisVersion `json:"items,omitempty"`
 }
+
+// +kubebuilder:validation:Enum=Redis;Valkey
+type RedisDistro string
+
+const (
+	RedisDistroRedis  RedisDistro = "Redis"
+	RedisDistroValkey RedisDistro = "Valkey"
+)

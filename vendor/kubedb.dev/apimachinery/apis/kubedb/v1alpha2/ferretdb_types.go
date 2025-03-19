@@ -54,8 +54,8 @@ type FerretDBSpec struct {
 	// Version of FerretDB to be deployed.
 	Version string `json:"version"`
 
-	// Number of instances to deploy for a FerretDB database.
-	Replicas *int32 `json:"replicas,omitempty"`
+	// FerretDB primary and secondary server configuration
+	Server *FerretDBServer `json:"server,omitempty"`
 
 	// Database authentication secret.
 	// Use this only when backend is internally managed.
@@ -66,10 +66,6 @@ type FerretDBSpec struct {
 	// See more options: https://docs.ferretdb.io/security/tls-connections/
 	// +optional
 	SSLMode SSLMode `json:"sslMode,omitempty"`
-
-	// PodTemplate is an optional configuration for pods used to expose database
-	// +optional
-	PodTemplate *ofst.PodTemplateSpec `json:"podTemplate,omitempty"`
 
 	// ServiceTemplates is an optional configuration for services used to expose database
 	// +optional
@@ -130,6 +126,18 @@ type FerretDBBackend struct {
 	// +optional
 	LinkedDB          string `json:"linkedDB,omitempty"`
 	ExternallyManaged bool   `json:"externallyManaged"`
+}
+
+type FerretDBServer struct {
+	Primary   *FerretDBServerSpec `json:"primary,omitempty"`
+	Secondary *FerretDBServerSpec `json:"secondary,omitempty"`
+}
+
+type FerretDBServerSpec struct {
+	Replicas *int32 `json:"replicas,omitempty"`
+	// PodTemplate is an optional configuration for pods used to expose database
+	// +optional
+	PodTemplate *ofst.PodTemplateSpec `json:"podTemplate,omitempty"`
 }
 
 // +kubebuilder:validation:Enum=server;client

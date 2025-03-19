@@ -32,14 +32,19 @@ spec:
       openAPIV3Schema:
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
             type: string
           metadata:
             type: object
@@ -66,20 +71,24 @@ spec:
                       kind:
                         type: string
                       name:
-                        description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                        description: |-
+                          Name of the referent.
+                          More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
                         type: string
                       namespace:
-                        description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                        description: |-
+                          Namespace of the referent.
+                          More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/
                         type: string
                     required:
                     - name
                     type: object
                   valuesFiles:
-                    description: Alternative list of values files to use as the chart
-                      values (values.yaml is not included by default), expected to
-                      be a relative path in the SourceRef. Values files are merged
-                      in the order of this list with the last file overriding the
-                      first. Ignored when omitted.
+                    description: |-
+                      Alternative list of values files to use as the chart values (values.yaml
+                      is not included by default), expected to be a relative path in the SourceRef.
+                      Values files are merged in the order of this list with the last file overriding
+                      the first. Ignored when omitted.
                     items:
                       type: string
                     type: array
@@ -101,18 +110,18 @@ spec:
                 description: FeatureBlock specifies the ui block name of this feature.
                 type: string
               featureExclusionGroup:
-                description: FeatureExclusionGroup specifies the name of the exclusion
-                  group for features Only one feature in a feature exclusion group
-                  can be installed
+                description: |-
+                  FeatureExclusionGroup specifies the name of the exclusion group for features
+                  Only one feature in a feature exclusion group can be installed
                 type: string
               featureSet:
                 description: FeatureSet specifies the name of the FeatureSet where
                   this feature belong to.
                 type: string
               icons:
-                description: Icons is an optional list of icons for an application.
-                  Icon information includes the source, size, and mime type. These
-                  icons will be used in UI.
+                description: |-
+                  Icons is an optional list of icons for an application. Icon information includes the source, size,
+                  and mime type. These icons will be used in UI.
                 items:
                   description: ImageSpec contains information about an image used
                     as an icon.
@@ -122,9 +131,9 @@ spec:
                         25x25).
                       type: string
                     src:
-                      description: The source for image represented as either an absolute
-                        URL to the image or a Data URL containing the image. Data
-                        URLs are defined in RFC 2397.
+                      description: |-
+                        The source for image represented as either an absolute URL to the image or a Data URL containing
+                        the image. Data URLs are defined in RFC 2397.
                       type: string
                     type:
                       description: (optional) The mine type of the image (e.g., "image/png").
@@ -141,9 +150,9 @@ spec:
                     description: Resources specifies the resources that should be
                       registered to consider this feature as enabled.
                     items:
-                      description: GroupVersionKind unambiguously identifies a kind.  It
-                        doesn't anonymously include GroupVersion to avoid automatic
-                        coercion.  It doesn't use a GroupVersion to avoid custom marshalling
+                      description: |-
+                        GroupVersionKind unambiguously identifies a kind.  It doesn't anonymously include GroupVersion
+                        to avoid automatic coercion.  It doesn't use a GroupVersion to avoid custom marshalling
                       properties:
                         group:
                           type: string
@@ -206,13 +215,14 @@ spec:
                 description: Values holds the values for this Helm release.
                 x-kubernetes-preserve-unknown-fields: true
               valuesFrom:
-                description: ValuesFrom holds references to resources containing Helm
-                  values for this HelmRelease, and information about how they should
-                  be merged.
+                description: |-
+                  ValuesFrom holds references to resources containing Helm values for this HelmRelease,
+                  and information about how they should be merged.
                 items:
-                  description: 'copied from: https://github.com/fluxcd/helm-controller/blob/v0.37.4/api/v2beta2/reference_types.go#L45-L80
-                    ValuesReference contains a reference to a resource containing
-                    Helm values, and optionally the key they can be found at.'
+                  description: |-
+                    copied from: https://github.com/fluxcd/helm-controller/blob/v0.37.4/api/v2beta2/reference_types.go#L45-L80
+                    ValuesReference contains a reference to a resource containing Helm values,
+                    and optionally the key they can be found at.
                   properties:
                     kind:
                       description: Kind of the values referent, valid values are ('Secret',
@@ -222,28 +232,30 @@ spec:
                       - ConfigMap
                       type: string
                     name:
-                      description: Name of the values referent. Should reside in the
-                        same namespace as the referring resource.
+                      description: |-
+                        Name of the values referent. Should reside in the same namespace as the
+                        referring resource.
                       maxLength: 253
                       minLength: 1
                       type: string
                     optional:
-                      description: Optional marks this ValuesReference as optional.
-                        When set, a not found error for the values reference is ignored,
-                        but any ValuesKey, TargetPath or transient error will still
-                        result in a reconciliation failure.
+                      description: |-
+                        Optional marks this ValuesReference as optional. When set, a not found error
+                        for the values reference is ignored, but any ValuesKey, TargetPath or
+                        transient error will still result in a reconciliation failure.
                       type: boolean
                     targetPath:
-                      description: TargetPath is the YAML dot notation path the value
-                        should be merged at. When set, the ValuesKey is expected to
-                        be a single flat value. Defaults to 'None', which results
-                        in the values getting merged at the root.
+                      description: |-
+                        TargetPath is the YAML dot notation path the value should be merged at. When
+                        set, the ValuesKey is expected to be a single flat value. Defaults to 'None',
+                        which results in the values getting merged at the root.
                       maxLength: 250
                       pattern: ^([a-zA-Z0-9_\-.\\\/]|\[[0-9]{1,5}\])+$
                       type: string
                     valuesKey:
-                      description: ValuesKey is the data key where the values.yaml
-                        or a specific value can be found at. Defaults to 'values.yaml'.
+                      description: |-
+                        ValuesKey is the data key where the values.yaml or a specific value can be
+                        found at. Defaults to 'values.yaml'.
                       maxLength: 253
                       pattern: ^[\-._a-zA-Z0-9]+$
                       type: string
@@ -272,9 +284,9 @@ spec:
                   not meet the requirements or is not ready.
                 type: string
               ready:
-                description: Ready specifies whether this feature is ready to user
-                  or not. This field will be present only for the features that are
-                  managed by AppsCode Inc.
+                description: |-
+                  Ready specifies whether this feature is ready to user or not. This field will be present only for the
+                  features that are managed by AppsCode Inc.
                 type: boolean
             type: object
         type: object

@@ -27,6 +27,7 @@ import (
 	catalogv1alpha1 "kubedb.dev/apimachinery/client/clientset/versioned/typed/catalog/v1alpha1"
 	configv1alpha1 "kubedb.dev/apimachinery/client/clientset/versioned/typed/config/v1alpha1"
 	elasticsearchv1alpha1 "kubedb.dev/apimachinery/client/clientset/versioned/typed/elasticsearch/v1alpha1"
+	gitopsv1alpha1 "kubedb.dev/apimachinery/client/clientset/versioned/typed/gitops/v1alpha1"
 	kafkav1alpha1 "kubedb.dev/apimachinery/client/clientset/versioned/typed/kafka/v1alpha1"
 	kubedbv1 "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1"
 	kubedbv1alpha1 "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha1"
@@ -48,6 +49,7 @@ type Interface interface {
 	CatalogV1alpha1() catalogv1alpha1.CatalogV1alpha1Interface
 	ConfigV1alpha1() configv1alpha1.ConfigV1alpha1Interface
 	ElasticsearchV1alpha1() elasticsearchv1alpha1.ElasticsearchV1alpha1Interface
+	GitopsV1alpha1() gitopsv1alpha1.GitopsV1alpha1Interface
 	KafkaV1alpha1() kafkav1alpha1.KafkaV1alpha1Interface
 	KubedbV1alpha1() kubedbv1alpha1.KubedbV1alpha1Interface
 	KubedbV1alpha2() kubedbv1alpha2.KubedbV1alpha2Interface
@@ -66,6 +68,7 @@ type Clientset struct {
 	catalogV1alpha1       *catalogv1alpha1.CatalogV1alpha1Client
 	configV1alpha1        *configv1alpha1.ConfigV1alpha1Client
 	elasticsearchV1alpha1 *elasticsearchv1alpha1.ElasticsearchV1alpha1Client
+	gitopsV1alpha1        *gitopsv1alpha1.GitopsV1alpha1Client
 	kafkaV1alpha1         *kafkav1alpha1.KafkaV1alpha1Client
 	kubedbV1alpha1        *kubedbv1alpha1.KubedbV1alpha1Client
 	kubedbV1alpha2        *kubedbv1alpha2.KubedbV1alpha2Client
@@ -99,6 +102,11 @@ func (c *Clientset) ConfigV1alpha1() configv1alpha1.ConfigV1alpha1Interface {
 // ElasticsearchV1alpha1 retrieves the ElasticsearchV1alpha1Client
 func (c *Clientset) ElasticsearchV1alpha1() elasticsearchv1alpha1.ElasticsearchV1alpha1Interface {
 	return c.elasticsearchV1alpha1
+}
+
+// GitopsV1alpha1 retrieves the GitopsV1alpha1Client
+func (c *Clientset) GitopsV1alpha1() gitopsv1alpha1.GitopsV1alpha1Interface {
+	return c.gitopsV1alpha1
 }
 
 // KafkaV1alpha1 retrieves the KafkaV1alpha1Client
@@ -205,6 +213,10 @@ func NewForConfigAndClient(c *rest.Config, httpClient *http.Client) (*Clientset,
 	if err != nil {
 		return nil, err
 	}
+	cs.gitopsV1alpha1, err = gitopsv1alpha1.NewForConfigAndClient(&configShallowCopy, httpClient)
+	if err != nil {
+		return nil, err
+	}
 	cs.kafkaV1alpha1, err = kafkav1alpha1.NewForConfigAndClient(&configShallowCopy, httpClient)
 	if err != nil {
 		return nil, err
@@ -263,6 +275,7 @@ func New(c rest.Interface) *Clientset {
 	cs.catalogV1alpha1 = catalogv1alpha1.New(c)
 	cs.configV1alpha1 = configv1alpha1.New(c)
 	cs.elasticsearchV1alpha1 = elasticsearchv1alpha1.New(c)
+	cs.gitopsV1alpha1 = gitopsv1alpha1.New(c)
 	cs.kafkaV1alpha1 = kafkav1alpha1.New(c)
 	cs.kubedbV1alpha1 = kubedbv1alpha1.New(c)
 	cs.kubedbV1alpha2 = kubedbv1alpha2.New(c)

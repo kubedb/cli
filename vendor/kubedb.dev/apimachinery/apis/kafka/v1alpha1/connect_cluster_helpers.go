@@ -44,6 +44,7 @@ import (
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v1"
 	ofstv2 "kmodules.xyz/offshoot-api/api/v2"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 func (k *ConnectCluster) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
@@ -246,7 +247,7 @@ func (k *ConnectCluster) SetHealthCheckerDefaults() {
 	}
 }
 
-func (k *ConnectCluster) SetDefaults() {
+func (k *ConnectCluster) SetDefaults(kc client.Client) {
 	if k.Spec.DeletionPolicy == "" {
 		k.Spec.DeletionPolicy = dbapi.DeletionPolicyDelete
 	}
@@ -256,14 +257,14 @@ func (k *ConnectCluster) SetDefaults() {
 	}
 
 	var kfVersion catalog.KafkaVersion
-	err := DefaultClient.Get(context.TODO(), types.NamespacedName{Name: k.Spec.Version}, &kfVersion)
+	err := kc.Get(context.TODO(), types.NamespacedName{Name: k.Spec.Version}, &kfVersion)
 	if err != nil {
 		klog.Errorf("can't get the kafka version object %s for %s \n", err.Error(), k.Spec.Version)
 		return
 	}
 
 	k.setDefaultContainerSecurityContext(&kfVersion, &k.Spec.PodTemplate)
-	k.setDefaultInitContainerSecurityContext(&k.Spec.PodTemplate)
+	k.setDefaultInitContainerSecurityContext(kc, &k.Spec.PodTemplate)
 
 	dbContainer := coreutil.GetContainerByName(k.Spec.PodTemplate.Spec.Containers, ConnectClusterContainerName)
 	if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
@@ -303,13 +304,13 @@ func (k *ConnectCluster) SetDefaultEnvs() {
 	}
 }
 
-func (k *ConnectCluster) setDefaultInitContainerSecurityContext(podTemplate *ofstv2.PodTemplateSpec) {
+func (k *ConnectCluster) setDefaultInitContainerSecurityContext(kc client.Client, podTemplate *ofstv2.PodTemplateSpec) {
 	if podTemplate == nil {
 		return
 	}
 	for _, name := range k.Spec.ConnectorPlugins {
 		connectorVersion := &catalog.KafkaConnectorVersion{}
-		err := DefaultClient.Get(context.TODO(), types.NamespacedName{Name: name}, connectorVersion)
+		err := kc.Get(context.TODO(), types.NamespacedName{Name: name}, connectorVersion)
 		if err != nil {
 			klog.Errorf("can't get the kafka connector version object %s for %s \n", err.Error(), name)
 			return

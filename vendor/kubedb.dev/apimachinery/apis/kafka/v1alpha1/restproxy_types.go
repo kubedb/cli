@@ -95,7 +95,7 @@ type SchemaRegistryRef struct {
 	// If this is provided, the REST Proxy will connect to the Schema Registry
 	// InternallyManaged must be set to false in this case
 	// +optional
-	*kmapi.ObjectReference `json:",omitempty"`
+	*ObjectReference `json:",omitempty"`
 
 	// InternallyManaged true specifies if the schema registry runs internally along with the rest proxy
 	// +optional

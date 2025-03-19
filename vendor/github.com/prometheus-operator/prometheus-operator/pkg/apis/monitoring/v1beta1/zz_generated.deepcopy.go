@@ -48,13 +48,9 @@ func (in *AlertmanagerConfigList) DeepCopyInto(out *AlertmanagerConfigList) {
 	in.ListMeta.DeepCopyInto(&out.ListMeta)
 	if in.Items != nil {
 		in, out := &in.Items, &out.Items
-		*out = make([]*AlertmanagerConfig, len(*in))
+		*out = make([]AlertmanagerConfig, len(*in))
 		for i := range *in {
-			if (*in)[i] != nil {
-				in, out := &(*in)[i], &(*out)[i]
-				*out = new(AlertmanagerConfig)
-				(*in).DeepCopyInto(*out)
-			}
+			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
 }
@@ -244,6 +240,12 @@ func (in *HTTPConfig) DeepCopyInto(out *HTTPConfig) {
 		*out = new(monitoringv1.SafeTLSConfig)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.ProxyURLOriginal != nil {
+		in, out := &in.ProxyURLOriginal, &out.ProxyURLOriginal
+		*out = new(string)
+		**out = **in
+	}
+	in.ProxyConfig.DeepCopyInto(&out.ProxyConfig)
 	if in.FollowRedirects != nil {
 		in, out := &in.FollowRedirects, &out.FollowRedirects
 		*out = new(bool)
@@ -877,6 +879,11 @@ func (in *TelegramConfig) DeepCopyInto(out *TelegramConfig) {
 	if in.BotTokenFile != nil {
 		in, out := &in.BotTokenFile, &out.BotTokenFile
 		*out = new(string)
+		**out = **in
+	}
+	if in.MessageThreadID != nil {
+		in, out := &in.MessageThreadID, &out.MessageThreadID
+		*out = new(int64)
 		**out = **in
 	}
 	if in.DisableNotifications != nil {

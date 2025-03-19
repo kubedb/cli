@@ -71,7 +71,8 @@ type FerretDBComputeAutoscalerSpec struct {
 	// +optional
 	NodeTopology *NodeTopology `json:"nodeTopology,omitempty"`
 
-	FerretDB *ComputeAutoscalerSpec `json:"ferretdb,omitempty"`
+	Primary   *ComputeAutoscalerSpec `json:"primary,omitempty"`
+	Secondary *ComputeAutoscalerSpec `json:"secondary,omitempty"`
 }
 
 type FerretDBStorageAutoscalerSpec struct {

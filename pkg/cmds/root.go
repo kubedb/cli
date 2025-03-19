@@ -24,6 +24,7 @@ import (
 	"github.com/spf13/cobra"
 	v "gomodules.xyz/x/version"
 	"k8s.io/cli-runtime/pkg/genericclioptions"
+	"k8s.io/cli-runtime/pkg/genericiooptions"
 	cliflag "k8s.io/component-base/cli/flag"
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
 	"k8s.io/kubectl/pkg/util/templates"
@@ -57,7 +58,7 @@ func NewKubeDBCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 
 	f := cmdutil.NewFactory(matchVersionKubeConfigFlags)
 
-	ioStreams := genericclioptions.IOStreams{In: in, Out: out, ErrOut: err}
+	ioStreams := genericiooptions.IOStreams{In: in, Out: out, ErrOut: err}
 
 	groups := templates.CommandGroups{
 		{
@@ -119,7 +120,7 @@ func NewKubeDBCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 	groups.Add(rootCmd)
 	templates.ActsAsRootCommand(rootCmd, filters, groups...)
 
-	rootCmd.AddCommand(NewCmdOptions(ioStreams.Out))
+	rootCmd.AddCommand(NewCmdOptions(ioStreams.Out, ioStreams.ErrOut))
 
 	return rootCmd
 }

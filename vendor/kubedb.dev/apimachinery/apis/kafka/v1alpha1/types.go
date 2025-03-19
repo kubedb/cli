@@ -16,19 +16,11 @@ limitations under the License.
 
 package v1alpha1
 
-import (
-	"sync"
-
-	"sigs.k8s.io/controller-runtime/pkg/client"
-)
-
-var (
-	once          sync.Once
-	DefaultClient client.Client
-)
-
-func SetDefaultClient(kc client.Client) {
-	once.Do(func() {
-		DefaultClient = kc
-	})
+type ObjectReference struct {
+	// Namespace of the referent.
+	// +optional
+	Namespace string `json:"namespace,omitempty"`
+	// Name of the referent.
+	// +optional
+	Name string `json:"name,omitempty"`
 }

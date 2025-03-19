@@ -99,12 +99,21 @@ type FerretDBUpdateVersionSpec struct {
 
 // FerretDBHorizontalScalingSpec contains the horizontal scaling information of a FerretDB cluster
 type FerretDBHorizontalScalingSpec struct {
-	// Number of node
-	Node *int32 `json:"node,omitempty"`
+	Primary   *FerretDBHorizontalScalingReplicas `json:"primary,omitempty"`
+	Secondary *FerretDBHorizontalScalingReplicas `json:"secondary,omitempty"`
+}
+
+type FerretDBHorizontalScalingReplicas struct {
+	Replicas *int32 `json:"replicas,omitempty"`
 }
 
 // FerretDBVerticalScalingSpec contains the vertical scaling information of a FerretDB cluster
 type FerretDBVerticalScalingSpec struct {
+	Primary   *FerretDBVerticalScalingResource `json:"primary,omitempty"`
+	Secondary *FerretDBVerticalScalingResource `json:"secondary,omitempty"`
+}
+
+type FerretDBVerticalScalingResource struct {
 	// Resource spec for nodes
 	Node *PodResources `json:"node,omitempty"`
 }

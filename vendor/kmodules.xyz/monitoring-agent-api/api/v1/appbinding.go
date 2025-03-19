@@ -61,10 +61,12 @@ type TLSConfig struct {
 }
 
 type PrometheusContext struct {
-	HubUID     string `json:"hubUID,omitempty"`
-	ClusterUID string `json:"clusterUID"`
-	ProjectId  string `json:"projectId,omitempty"`
-	Default    bool   `json:"default"`
+	HubUID      string `json:"hubUID,omitempty"`
+	ClusterUID  string `json:"clusterUID"`
+	ProjectId   string `json:"projectId,omitempty"`
+	Default     bool   `json:"default"`
+	IssueToken  bool   `json:"issueToken,omitempty"`
+	ClientOrgID string `json:"clientOrgID,omitempty"`
 }
 
 type GrafanaContext struct {

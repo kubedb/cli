@@ -24,6 +24,7 @@ import (
 	"kubedb.dev/apimachinery/apis/kubedb"
 
 	cm_api "github.com/cert-manager/cert-manager/pkg/apis/certmanager/v1"
+	vsecretapi "go.virtual-secrets.dev/apimachinery/apis/virtual/v1alpha1"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -178,4 +179,8 @@ func GetActivationTimeFromSecret(secretName *core.Secret) (*metav1.Time, error) 
 		return &metav1.Time{Time: t}, nil
 	}
 	return nil, nil
+}
+
+func IsVirtualAuthSecretReferred(authSecret *SecretReference) bool {
+	return authSecret != nil && authSecret.ApiGroup == vsecretapi.GroupName
 }

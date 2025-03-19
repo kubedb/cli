@@ -42,6 +42,7 @@ import (
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v2"
 	pslister "kubeops.dev/petset/client/listers/apps/v1"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 type CassandraApp struct {
@@ -269,13 +270,13 @@ func (r *Cassandra) ResourceSingular() string {
 	return ResourceSingularCassandra
 }
 
-func (r *Cassandra) SetDefaults() {
+func (r *Cassandra) SetDefaults(kc client.Client) {
 	if r.Spec.DeletionPolicy == "" {
 		r.Spec.DeletionPolicy = DeletionPolicyDelete
 	}
 
 	var casVersion catalog.CassandraVersion
-	err := DefaultClient.Get(context.TODO(), types.NamespacedName{
+	err := kc.Get(context.TODO(), types.NamespacedName{
 		Name: r.Spec.Version,
 	}, &casVersion)
 	if err != nil {

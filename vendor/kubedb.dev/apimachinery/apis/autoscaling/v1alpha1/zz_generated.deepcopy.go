@@ -1283,8 +1283,13 @@ func (in *FerretDBComputeAutoscalerSpec) DeepCopyInto(out *FerretDBComputeAutosc
 		*out = new(NodeTopology)
 		(*in).DeepCopyInto(*out)
 	}
-	if in.FerretDB != nil {
-		in, out := &in.FerretDB, &out.FerretDB
+	if in.Primary != nil {
+		in, out := &in.Primary, &out.Primary
+		*out = new(ComputeAutoscalerSpec)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.Secondary != nil {
+		in, out := &in.Secondary, &out.Secondary
 		*out = new(ComputeAutoscalerSpec)
 		(*in).DeepCopyInto(*out)
 	}

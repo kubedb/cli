@@ -42,6 +42,7 @@ import (
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v2"
 	pslister "kubeops.dev/petset/client/listers/apps/v1"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 func (z *ZooKeeper) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
@@ -186,7 +187,7 @@ func (z *ZooKeeper) SetHealthCheckerDefaults() {
 	}
 }
 
-func (z *ZooKeeper) SetDefaults() {
+func (z *ZooKeeper) SetDefaults(kc client.Client) {
 	if z.Spec.DeletionPolicy == "" {
 		z.Spec.DeletionPolicy = DeletionPolicyDelete
 	}
@@ -203,7 +204,7 @@ func (z *ZooKeeper) SetDefaults() {
 	}
 
 	var zkVersion catalog.ZooKeeperVersion
-	err := DefaultClient.Get(context.TODO(), types.NamespacedName{Name: z.Spec.Version}, &zkVersion)
+	err := kc.Get(context.TODO(), types.NamespacedName{Name: z.Spec.Version}, &zkVersion)
 	if err != nil {
 		klog.Errorf("can't get the zookeeper version object %s for %s \n", err.Error(), z.Spec.Version)
 		return
@@ -234,6 +235,14 @@ func (z *ZooKeeper) SetDefaults() {
 			z.Spec.Monitor.Prometheus.Exporter.Port = kubedb.ZooKeeperMetricsPort
 		}
 		z.Spec.Monitor.SetDefaults()
+		if z.Spec.Monitor.Prometheus != nil {
+			if z.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser == nil {
+				z.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser = zkVersion.Spec.SecurityContext.RunAsUser
+			}
+			if z.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup == nil {
+				z.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup = zkVersion.Spec.SecurityContext.RunAsUser
+			}
+		}
 	}
 }
 
