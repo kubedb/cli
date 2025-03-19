@@ -29,7 +29,7 @@ var optionsExample = templates.Examples(i18n.T(`
 		kubectl dba options`))
 
 // NewCmdOptions implements the options command
-func NewCmdOptions(out io.Writer) *cobra.Command {
+func NewCmdOptions(out, err io.Writer) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "options",
 		Short:   i18n.T("Print the list of flags inherited by all commands"),
@@ -45,7 +45,8 @@ func NewCmdOptions(out io.Writer) *cobra.Command {
 	// function call will fall back to stderr.
 	//
 	// See https://github.com/kubernetes/kubernetes/pull/46394 for details.
-	cmd.SetOutput(out)
+	cmd.SetOut(out)
+	cmd.SetErr(err)
 
 	templates.UseOptionsTemplates(cmd)
 	return cmd

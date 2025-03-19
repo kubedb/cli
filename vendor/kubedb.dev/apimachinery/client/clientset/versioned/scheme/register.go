@@ -24,6 +24,7 @@ import (
 	catalogv1alpha1 "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
 	configv1alpha1 "kubedb.dev/apimachinery/apis/config/v1alpha1"
 	elasticsearchv1alpha1 "kubedb.dev/apimachinery/apis/elasticsearch/v1alpha1"
+	gitopsv1alpha1 "kubedb.dev/apimachinery/apis/gitops/v1alpha1"
 	kafkav1alpha1 "kubedb.dev/apimachinery/apis/kafka/v1alpha1"
 	kubedbv1 "kubedb.dev/apimachinery/apis/kubedb/v1"
 	kubedbv1alpha1 "kubedb.dev/apimachinery/apis/kubedb/v1alpha1"
@@ -49,6 +50,7 @@ var localSchemeBuilder = runtime.SchemeBuilder{
 	catalogv1alpha1.AddToScheme,
 	configv1alpha1.AddToScheme,
 	elasticsearchv1alpha1.AddToScheme,
+	gitopsv1alpha1.AddToScheme,
 	kafkav1alpha1.AddToScheme,
 	kubedbv1alpha1.AddToScheme,
 	kubedbv1alpha2.AddToScheme,

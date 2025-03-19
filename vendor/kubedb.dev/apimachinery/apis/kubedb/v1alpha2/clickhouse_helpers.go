@@ -42,6 +42,7 @@ import (
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v2"
 	pslister "kubeops.dev/petset/client/listers/apps/v1"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 type ClickhouseApp struct {
@@ -299,9 +300,9 @@ func (c *ClickHouse) StatsServiceLabels() map[string]string {
 	return c.ServiceLabels(StatsServiceAlias, map[string]string{kubedb.LabelRole: kubedb.RoleStats})
 }
 
-func (c *ClickHouse) SetDefaults() {
+func (c *ClickHouse) SetDefaults(kc client.Client) {
 	var chVersion catalog.ClickHouseVersion
-	err := DefaultClient.Get(context.TODO(), types.NamespacedName{
+	err := kc.Get(context.TODO(), types.NamespacedName{
 		Name: c.Spec.Version,
 	}, &chVersion)
 	if err != nil {

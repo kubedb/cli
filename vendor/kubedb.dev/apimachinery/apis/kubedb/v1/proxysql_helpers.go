@@ -193,6 +193,15 @@ func (p *ProxySQL) SetDefaults(psVersion *v1alpha1.ProxySQLVersion, usesAcme boo
 	p.setDefaultContainerSecurityContext(psVersion, &p.Spec.PodTemplate)
 
 	p.Spec.Monitor.SetDefaults()
+	if p.Spec.Monitor != nil && p.Spec.Monitor.Prometheus != nil {
+		if p.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser == nil {
+			p.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser = psVersion.Spec.SecurityContext.RunAsUser
+		}
+		if p.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup == nil {
+			p.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup = psVersion.Spec.SecurityContext.RunAsUser
+		}
+	}
+
 	p.SetTLSDefaults(usesAcme)
 	p.SetHealthCheckerDefaults()
 	dbContainer := core_util.GetContainerByName(p.Spec.PodTemplate.Spec.Containers, kubedb.ProxySQLContainerName)

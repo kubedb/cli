@@ -19,14 +19,19 @@ spec:
       openAPIV3Schema:
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
             type: string
           metadata:
             type: object
@@ -56,21 +61,122 @@ spec:
                   description: ResourceAttributes includes the authorization attributes
                     available for resource requests to the Authorizer interface
                   properties:
+                    fieldSelector:
+                      description: |-
+                        fieldSelector describes the limitation on access based on field.  It can only limit access, not broaden it.
+
+                        This field  is alpha-level. To use this field, you must enable the
+                        `AuthorizeWithSelectors` feature gate (disabled by default).
+                      properties:
+                        rawSelector:
+                          description: |-
+                            rawSelector is the serialization of a field selector that would be included in a query parameter.
+                            Webhook implementations are encouraged to ignore rawSelector.
+                            The kube-apiserver's *SubjectAccessReview will parse the rawSelector as long as the requirements are not present.
+                          type: string
+                        requirements:
+                          description: |-
+                            requirements is the parsed interpretation of a field selector.
+                            All requirements must be met for a resource instance to match the selector.
+                            Webhook implementations should handle requirements, but how to handle them is up to the webhook.
+                            Since requirements can only limit the request, it is safe to authorize as unlimited request if the requirements
+                            are not understood.
+                          items:
+                            description: |-
+                              FieldSelectorRequirement is a selector that contains values, a key, and an operator that
+                              relates the key and values.
+                            properties:
+                              key:
+                                description: key is the field selector key that the
+                                  requirement applies to.
+                                type: string
+                              operator:
+                                description: |-
+                                  operator represents a key's relationship to a set of values.
+                                  Valid operators are In, NotIn, Exists, DoesNotExist.
+                                  The list of operators may grow in the future.
+                                type: string
+                              values:
+                                description: |-
+                                  values is an array of string values.
+                                  If the operator is In or NotIn, the values array must be non-empty.
+                                  If the operator is Exists or DoesNotExist, the values array must be empty.
+                                items:
+                                  type: string
+                                type: array
+                                x-kubernetes-list-type: atomic
+                            required:
+                            - key
+                            - operator
+                            type: object
+                          type: array
+                          x-kubernetes-list-type: atomic
+                      type: object
                     group:
                       description: Group is the API Group of the Resource.  "*" means
                         all.
                       type: string
+                    labelSelector:
+                      description: |-
+                        labelSelector describes the limitation on access based on labels.  It can only limit access, not broaden it.
+
+                        This field  is alpha-level. To use this field, you must enable the
+                        `AuthorizeWithSelectors` feature gate (disabled by default).
+                      properties:
+                        rawSelector:
+                          description: |-
+                            rawSelector is the serialization of a field selector that would be included in a query parameter.
+                            Webhook implementations are encouraged to ignore rawSelector.
+                            The kube-apiserver's *SubjectAccessReview will parse the rawSelector as long as the requirements are not present.
+                          type: string
+                        requirements:
+                          description: |-
+                            requirements is the parsed interpretation of a label selector.
+                            All requirements must be met for a resource instance to match the selector.
+                            Webhook implementations should handle requirements, but how to handle them is up to the webhook.
+                            Since requirements can only limit the request, it is safe to authorize as unlimited request if the requirements
+                            are not understood.
+                          items:
+                            description: |-
+                              A label selector requirement is a selector that contains values, a key, and an operator that
+                              relates the key and values.
+                            properties:
+                              key:
+                                description: key is the label key that the selector
+                                  applies to.
+                                type: string
+                              operator:
+                                description: |-
+                                  operator represents a key's relationship to a set of values.
+                                  Valid operators are In, NotIn, Exists and DoesNotExist.
+                                type: string
+                              values:
+                                description: |-
+                                  values is an array of string values. If the operator is In or NotIn,
+                                  the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                                  the values array must be empty. This array is replaced during a strategic
+                                  merge patch.
+                                items:
+                                  type: string
+                                type: array
+                                x-kubernetes-list-type: atomic
+                            required:
+                            - key
+                            - operator
+                            type: object
+                          type: array
+                          x-kubernetes-list-type: atomic
+                      type: object
                     name:
                       description: Name is the name of the resource being requested
                         for a "get" or deleted for a "delete". "" (empty) means all.
                       type: string
                     namespace:
-                      description: Namespace is the namespace of the action being
-                        requested.  Currently, there is no distinction between no
-                        namespace and all namespaces "" (empty) is defaulted for LocalSubjectAccessReviews
-                        "" (empty) is empty for cluster-scoped resources "" (empty)
-                        means "all" for namespace scoped resources from a SubjectAccessReview
-                        or SelfSubjectAccessReview
+                      description: |-
+                        Namespace is the namespace of the action being requested.  Currently, there is no distinction between no namespace and all namespaces
+                        "" (empty) is defaulted for LocalSubjectAccessReviews
+                        "" (empty) is empty for cluster-scoped resources
+                        "" (empty) means "all" for namespace scoped resources from a SubjectAccessReview or SelfSubjectAccessReview
                       type: string
                     resource:
                       description: Resource is one of the existing resource types.  "*"

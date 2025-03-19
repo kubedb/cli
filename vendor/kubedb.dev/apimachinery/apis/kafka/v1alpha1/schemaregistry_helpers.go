@@ -39,6 +39,7 @@ import (
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	ofst "kmodules.xyz/offshoot-api/api/v1"
 	ofstv2 "kmodules.xyz/offshoot-api/api/v2"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 func (k *SchemaRegistry) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
@@ -197,7 +198,7 @@ func (k *SchemaRegistry) SetHealthCheckerDefaults() {
 	}
 }
 
-func (k *SchemaRegistry) SetDefaults() {
+func (k *SchemaRegistry) SetDefaults(kc client.Client) {
 	if k.Spec.DeletionPolicy == "" {
 		k.Spec.DeletionPolicy = dbapi.DeletionPolicyDelete
 	}
@@ -207,7 +208,7 @@ func (k *SchemaRegistry) SetDefaults() {
 	}
 
 	var ksrVersion catalog.SchemaRegistryVersion
-	err := DefaultClient.Get(context.TODO(), types.NamespacedName{Name: k.Spec.Version}, &ksrVersion)
+	err := kc.Get(context.TODO(), types.NamespacedName{Name: k.Spec.Version}, &ksrVersion)
 	if err != nil {
 		klog.Errorf("can't get the schema-registry version object %s for %s \n", err.Error(), k.Spec.Version)
 		return

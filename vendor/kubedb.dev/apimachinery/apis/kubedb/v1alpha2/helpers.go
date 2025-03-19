@@ -23,6 +23,7 @@ import (
 	"kubedb.dev/apimachinery/apis/kubedb"
 
 	cm_api "github.com/cert-manager/cert-manager/pkg/apis/certmanager/v1"
+	vsecretapi "go.virtual-secrets.dev/apimachinery/apis/virtual/v1alpha1"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -174,4 +175,8 @@ func UsesAcmeIssuer(kc client.Client, ns string, issuerRef core.TypedLocalObject
 	default:
 		return false, fmt.Errorf("invalid issuer %+v", issuerRef)
 	}
+}
+
+func IsVirtualAuthSecretReferred(authSecret *SecretReference) bool {
+	return authSecret != nil && authSecret.ApiGroup == vsecretapi.GroupName
 }

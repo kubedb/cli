@@ -43,6 +43,7 @@ import (
 	ofstv2 "kmodules.xyz/offshoot-api/api/v2"
 	ofst_util "kmodules.xyz/offshoot-api/util"
 	pslister "kubeops.dev/petset/client/listers/apps/v1"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 func (*PgBouncer) Hub() {}
@@ -132,14 +133,14 @@ func (p PgBouncer) GetBackendSecretName() string {
 	return meta_util.NameWithSuffix(p.OffshootName(), "backend")
 }
 
-func (p PgBouncer) IsPgBouncerFinalConfigSecretExist() bool {
-	secret, err := p.GetPgBouncerFinalConfigSecret()
+func (p PgBouncer) IsPgBouncerFinalConfigSecretExist(kc client.Client) bool {
+	secret, err := p.GetPgBouncerFinalConfigSecret(kc)
 	return (secret != nil && err == nil)
 }
 
-func (p PgBouncer) GetPgBouncerFinalConfigSecret() (*core.Secret, error) {
+func (p PgBouncer) GetPgBouncerFinalConfigSecret(kc client.Client) (*core.Secret, error) {
 	var secret core.Secret
-	err := DefaultClient.Get(context.TODO(), types.NamespacedName{Name: p.PgBouncerFinalConfigSecretName(), Namespace: p.GetNamespace()}, &secret)
+	err := kc.Get(context.TODO(), types.NamespacedName{Name: p.PgBouncerFinalConfigSecretName(), Namespace: p.GetNamespace()}, &secret)
 	return &secret, err
 }
 

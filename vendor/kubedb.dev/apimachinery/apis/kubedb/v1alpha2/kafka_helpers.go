@@ -43,6 +43,7 @@ import (
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v2"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 func (k *Kafka) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
@@ -298,7 +299,7 @@ func (k *Kafka) SetHealthCheckerDefaults() {
 	}
 }
 
-func (k *Kafka) SetDefaults() {
+func (k *Kafka) SetDefaults(kc client.Client) {
 	if k.Spec.Halted {
 		if k.Spec.DeletionPolicy == DeletionPolicyDoNotTerminate {
 			klog.Errorf(`Can't halt, since deletion policy is 'DoNotTerminate'`)
@@ -316,7 +317,7 @@ func (k *Kafka) SetDefaults() {
 	}
 
 	var kfVersion catalog.KafkaVersion
-	err := DefaultClient.Get(context.TODO(), types.NamespacedName{Name: k.Spec.Version}, &kfVersion)
+	err := kc.Get(context.TODO(), types.NamespacedName{Name: k.Spec.Version}, &kfVersion)
 	if err != nil {
 		klog.Errorf("can't get the kafka version object %s for %s \n", err.Error(), k.Spec.Version)
 		return

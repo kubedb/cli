@@ -20,6 +20,7 @@ import (
 	"fmt"
 
 	"kubedb.dev/apimachinery/apis/kafka"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 	"kubedb.dev/apimachinery/crds"
 
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -32,6 +33,12 @@ func (_ *Connector) CustomResourceDefinition() *apiextensions.CustomResourceDefi
 
 func (k *Connector) AsOwner() *meta.OwnerReference {
 	return meta.NewControllerRef(k, SchemeGroupVersion.WithKind(ResourceKindConnector))
+}
+
+func (k *Connector) Default() {
+	if k.Spec.DeletionPolicy == "" {
+		k.Spec.DeletionPolicy = dbapi.DeletionPolicyDelete
+	}
 }
 
 func (k *Connector) ResourceShortCode() string {

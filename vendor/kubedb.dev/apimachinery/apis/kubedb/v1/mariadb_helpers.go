@@ -144,18 +144,24 @@ func (m MariaDB) ServiceName() string {
 	return m.OffshootName()
 }
 
+func (m MariaDB) StandbyServiceName() string {
+	return meta_util.NameWithPrefix(m.OffshootName(), "standby")
+}
+
 func (m MariaDB) IsCluster() bool {
 	return pointer.Int32(m.Spec.Replicas) > 1
 }
 
 func (m MariaDB) IsGaleraCluster() bool {
 	return m.Spec.Topology != nil &&
+		m.IsCluster() &&
 		m.Spec.Topology.Mode != nil &&
 		*m.Spec.Topology.Mode == MariaDBModeGaleraCluster
 }
 
 func (m MariaDB) IsMariaDBReplication() bool {
 	return m.Spec.Topology != nil &&
+		m.IsCluster() &&
 		m.Spec.Topology.Mode != nil &&
 		*m.Spec.Topology.Mode == MariaDBModeReplication
 }

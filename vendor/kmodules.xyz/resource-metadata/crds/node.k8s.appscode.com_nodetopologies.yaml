@@ -26,14 +26,19 @@ spec:
       openAPIV3Schema:
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
             type: string
           metadata:
             type: object
@@ -51,9 +56,10 @@ spec:
                         - type: string
                         pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
                         x-kubernetes-int-or-string: true
-                      description: 'Allocatable represents the total resources of
-                        a node. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#capacity
-                        Deprecated: Use resources instead.'
+                      description: |-
+                        Allocatable represents the total resources of a node.
+                        More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#capacity
+                        Deprecated: Use resources instead.
                       type: object
                     cost:
                       description: Cost is the cost of the running an ondeamd machine
@@ -72,19 +78,28 @@ spec:
                         resources of a machine type.
                       properties:
                         claims:
-                          description: "Claims lists the names of resources, defined
-                            in spec.resourceClaims, that are used by this container.
-                            \n This is an alpha field and requires enabling the DynamicResourceAllocation
-                            feature gate. \n This field is immutable. It can only
-                            be set for containers."
+                          description: |-
+                            Claims lists the names of resources, defined in spec.resourceClaims,
+                            that are used by this container.
+
+                            This is an alpha field and requires enabling the
+                            DynamicResourceAllocation feature gate.
+
+                            This field is immutable. It can only be set for containers.
                           items:
                             description: ResourceClaim references one entry in PodSpec.ResourceClaims.
                             properties:
                               name:
-                                description: Name must match the name of one entry
-                                  in pod.spec.resourceClaims of the Pod where this
-                                  field is used. It makes that resource available
+                                description: |-
+                                  Name must match the name of one entry in pod.spec.resourceClaims of
+                                  the Pod where this field is used. It makes that resource available
                                   inside a container.
+                                type: string
+                              request:
+                                description: |-
+                                  Request is the name chosen for a request in the referenced claim.
+                                  If empty, everything from the claim is made available, otherwise
+                                  only the result of this request.
                                 type: string
                             required:
                             - name
@@ -100,8 +115,9 @@ spec:
                             - type: string
                             pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
                             x-kubernetes-int-or-string: true
-                          description: 'Limits describes the maximum amount of compute
-                            resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                          description: |-
+                            Limits describes the maximum amount of compute resources allowed.
+                            More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
                           type: object
                         requests:
                           additionalProperties:
@@ -110,11 +126,11 @@ spec:
                             - type: string
                             pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
                             x-kubernetes-int-or-string: true
-                          description: 'Requests describes the minimum amount of compute
-                            resources required. If Requests is omitted for a container,
-                            it defaults to Limits if that is explicitly specified,
-                            otherwise to an implementation-defined value. Requests
-                            cannot exceed Limits. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                          description: |-
+                            Requests describes the minimum amount of compute resources required.
+                            If Requests is omitted for a container, it defaults to Limits if that is explicitly specified,
+                            otherwise to an implementation-defined value. Requests cannot exceed Limits.
+                            More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
                           type: object
                       type: object
                     topologyValue:
@@ -129,24 +145,25 @@ spec:
                 description: Requirements are layered with GetLabels and applied to
                   every node.
                 items:
-                  description: A node selector requirement is a selector that contains
-                    values, a key, and an operator that relates the key and values.
+                  description: |-
+                    A node selector requirement is a selector that contains values, a key, and an operator
+                    that relates the key and values.
                   properties:
                     key:
                       description: The label key that the selector applies to.
                       type: string
                     operator:
-                      description: Represents a key's relationship to a set of values.
-                        Valid operators are In, NotIn, Exists, DoesNotExist. Gt, and
-                        Lt.
+                      description: |-
+                        Represents a key's relationship to a set of values.
+                        Valid operators are In, NotIn, Exists, DoesNotExist. Gt, and Lt.
                       type: string
                     values:
-                      description: An array of string values. If the operator is In
-                        or NotIn, the values array must be non-empty. If the operator
-                        is Exists or DoesNotExist, the values array must be empty.
-                        If the operator is Gt or Lt, the values array must have a
-                        single element, which will be interpreted as an integer. This
-                        array is replaced during a strategic merge patch.
+                      description: |-
+                        An array of string values. If the operator is In or NotIn,
+                        the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                        the values array must be empty. If the operator is Gt or Lt, the values
+                        array must have a single element, which will be interpreted as an integer.
+                        This array is replaced during a strategic merge patch.
                       items:
                         type: string
                       type: array

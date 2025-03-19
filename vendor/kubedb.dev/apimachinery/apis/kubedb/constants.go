@@ -608,6 +608,13 @@ const (
 	EnvRedisMode              = "REDIS_MODE"
 	EnvRedisMajorRedisVersion = "MAJOR_REDIS_VERSION"
 
+	// =========================== Valkey Constants ============================
+	ValkeyConfigKey = "valkey.conf" // ValkeyConfigKey is going to create for the customize valkey configuration
+	// DefaultConfigKey is going to create for the default valkey configuration
+
+	EnvValkeyPassword          = "VALKEYCLI_AUTH"
+	EnvValkeyMajorRedisVersion = "MAJOR_VALKEY_VERSION"
+
 	// =========================== PgBouncer Constants ============================
 	PgBouncerUpstreamServerCA               = "upstream-server-ca.crt"
 	PgBouncerUpstreamServerClientCert       = "upstream-server-client.crt"
@@ -1430,6 +1437,9 @@ const (
 	EnvFerretDBKeyPath   = "FERRETDB_LISTEN_TLS_KEY_FILE"
 	EnvFerretDBDebugAddr = "FERRETDB_DEBUG_ADDR"
 
+	FerretDBDatabasePortName       = "db"
+	FerretDBPrimaryServicePortName = "primary"
+
 	FerretDBContainerName = "ferretdb"
 	FerretDBMainImage     = "ghcr.io/ferretdb/ferretdb"
 	FerretDBUser          = "postgres"
@@ -1444,6 +1454,16 @@ const (
 
 	FerretDBMetricsPath     = "/debug/metrics"
 	FerretDBMetricsPortName = "metrics"
+
+	FerretDBServerTypePrimary   = "primary"
+	FerretDBServerTypeSecondary = "secondary"
+
+	FerretDBPrimaryLabelKey   = "ferretdb.kubedb.com/server.primary"
+	FerretDBSecondaryLabelKey = "ferretdb.kubedb.com/server.secondary"
+
+	FerretDBBackendInitShellFile = "data.sh"
+	FerretDBBackendInitSqlFile   = "data.sql"
+	FerretDBBackendConfigFile    = "user.conf"
 )
 
 // =========================== ClickHouse Constants ============================
@@ -1595,6 +1615,18 @@ const (
 	EnvNameCassandraPassword         = "CASSANDRA_PASSWORD"
 )
 
+// =========================== Virtual Secrets Constants ============================
+
+const (
+	VirtualSecretsVolume          = "virtual-secrets"
+	VirtualSecretsVolumeMountPath = "/var/run/secrets/virtual-secrets"
+	VirtualSecretsKeyUsername     = "vs:///var/run/secrets/virtual-secrets/" + core.BasicAuthUsernameKey
+	VirtualSecretsKeyPassword     = "vs:///var/run/secrets/virtual-secrets/" + core.BasicAuthPasswordKey
+	VirtualSecretsVENV            = "/var/run/secrets/virtual-secrets/bin/venv"
+	SecretProviderClass           = "secretProviderClass"
+	SecretStoreCSIDriver          = "secrets-store.csi.k8s.io"
+)
+
 // Resource kind related constants
 const (
 	ResourceKindStatefulSet = "StatefulSet"
@@ -1711,7 +1743,7 @@ var (
 	// DefaultResourcesMemoryIntensiveMSSQLServer must be used for Microsoft SQL Server
 	DefaultResourcesMemoryIntensiveMSSQLServer = core.ResourceRequirements{
 		Requests: core.ResourceList{
-			core.ResourceCPU:    resource.MustParse(".500"),
+			core.ResourceCPU:    resource.MustParse("1"),
 			core.ResourceMemory: resource.MustParse("1.5Gi"),
 		},
 		Limits: core.ResourceList{

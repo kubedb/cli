@@ -52,15 +52,17 @@ func (h HostingProvider) ConvertToPreferredProvider() HostingProvider {
 
 const (
 	AceInfoConfigMapName = "ace-info"
+	AceMachineProfileKey = "kubernetes.io/instance-type"
 
 	ClusterNameKey         string = "cluster.appscode.com/name"
 	ClusterDisplayNameKey  string = "cluster.appscode.com/display-name"
 	ClusterProviderNameKey string = "cluster.appscode.com/provider"
 	ClusterProfileLabel    string = "cluster.appscode.com/profile"
 
-	AceOrgIDKey     string = "ace.appscode.com/org-id"
-	ClientOrgKey    string = "ace.appscode.com/client-org"
-	ClientKeyPrefix string = "client.ace.appscode.com/"
+	AceOrgIDKey            string = "ace.appscode.com/org-id"
+	ClientOrgKey           string = "ace.appscode.com/client-org"
+	ClientOrgMonitoringKey string = "ace.appscode.com/client-org-monitoring"
+	ClientKeyPrefix        string = "client.ace.appscode.com/"
 
 	ClusterClaimKeyID       string = "id.k8s.io"
 	ClusterClaimKeyInfo     string = "cluster.ace.info"

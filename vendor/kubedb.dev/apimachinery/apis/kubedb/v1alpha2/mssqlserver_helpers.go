@@ -46,6 +46,7 @@ import (
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v2"
 	pslister "kubeops.dev/petset/client/listers/apps/v1"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 type MSSQLServerApp struct {
@@ -328,7 +329,7 @@ func (m *MSSQLServer) PrimaryServiceDNS() string {
 	return fmt.Sprintf("%s.%s.svc", m.ServiceName(), m.Namespace)
 }
 
-func (m *MSSQLServer) SetDefaults() {
+func (m *MSSQLServer) SetDefaults(kc client.Client) {
 	if m == nil {
 		return
 	}
@@ -376,7 +377,7 @@ func (m *MSSQLServer) SetDefaults() {
 	}
 
 	var mssqlVersion catalog.MSSQLServerVersion
-	err := DefaultClient.Get(context.TODO(), types.NamespacedName{
+	err := kc.Get(context.TODO(), types.NamespacedName{
 		Name: m.Spec.Version,
 	}, &mssqlVersion)
 	if err != nil {
