@@ -109,13 +109,8 @@ type FerretDBHorizontalScalingReplicas struct {
 
 // FerretDBVerticalScalingSpec contains the vertical scaling information of a FerretDB cluster
 type FerretDBVerticalScalingSpec struct {
-	Primary   *FerretDBVerticalScalingResource `json:"primary,omitempty"`
-	Secondary *FerretDBVerticalScalingResource `json:"secondary,omitempty"`
-}
-
-type FerretDBVerticalScalingResource struct {
-	// Resource spec for nodes
-	Node *PodResources `json:"node,omitempty"`
+	Primary   *PodResources `json:"primary,omitempty"`
+	Secondary *PodResources `json:"secondary,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
