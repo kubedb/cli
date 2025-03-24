@@ -1540,7 +1540,7 @@ k8s.io/kube-aggregator/pkg/apis/apiregistration
 k8s.io/kube-aggregator/pkg/apis/apiregistration/v1
 k8s.io/kube-aggregator/pkg/apis/apiregistration/v1beta1
 k8s.io/kube-aggregator/pkg/client/clientset_generated/clientset/scheme
-# k8s.io/kube-openapi v0.0.0-20250318172550-b98be4ee1595
+# k8s.io/kube-openapi v0.0.0-20250318190949-c8a335a9a2ff
 ## explicit; go 1.21
 k8s.io/kube-openapi/pkg/cached
 k8s.io/kube-openapi/pkg/common
@@ -1644,7 +1644,7 @@ kmodules.xyz/prober/api/v1
 kmodules.xyz/resource-metadata/apis/node
 kmodules.xyz/resource-metadata/apis/node/v1alpha1
 kmodules.xyz/resource-metadata/crds
-# kubedb.dev/apimachinery v0.53.0-rc.1
+# kubedb.dev/apimachinery v0.53.0
 ## explicit; go 1.23.0
 kubedb.dev/apimachinery/apis
 kubedb.dev/apimachinery/apis/archiver/v1alpha1
@@ -1689,7 +1689,7 @@ kubedb.dev/apimachinery/client/clientset/versioned/typed/ui/v1alpha1
 kubedb.dev/apimachinery/crds
 kubedb.dev/apimachinery/pkg/double_optin
 kubedb.dev/apimachinery/pkg/factory
-# kubedb.dev/db-client-go v0.8.0-rc.1
+# kubedb.dev/db-client-go v0.8.0
 ## explicit; go 1.23.0
 kubedb.dev/db-client-go/elasticsearch
 kubedb.dev/db-client-go/redis
@@ -1698,7 +1698,7 @@ kubedb.dev/db-client-go/redis
 kubeops.dev/csi-driver-cacerts/apis/cacerts
 kubeops.dev/csi-driver-cacerts/apis/cacerts/v1alpha1
 kubeops.dev/csi-driver-cacerts/crds
-# kubeops.dev/petset v0.0.9
+# kubeops.dev/petset v0.0.10
 ## explicit; go 1.23.0
 kubeops.dev/petset/apis/apps/v1
 kubeops.dev/petset/client/clientset/versioned
@@ -1706,12 +1706,12 @@ kubeops.dev/petset/client/clientset/versioned/scheme
 kubeops.dev/petset/client/clientset/versioned/typed/apps/v1
 kubeops.dev/petset/client/listers/apps/v1
 kubeops.dev/petset/crds
-# kubeops.dev/sidekick v0.0.10
-## explicit; go 1.22.1
+# kubeops.dev/sidekick v0.0.11
+## explicit; go 1.23.0
 kubeops.dev/sidekick/apis/apps
 kubeops.dev/sidekick/apis/apps/v1alpha1
 kubeops.dev/sidekick/crds
-# kubestash.dev/apimachinery v0.17.0-rc.0
+# kubestash.dev/apimachinery v0.17.0
 ## explicit; go 1.23.0
 kubestash.dev/apimachinery/apis
 kubestash.dev/apimachinery/apis/core/v1alpha1

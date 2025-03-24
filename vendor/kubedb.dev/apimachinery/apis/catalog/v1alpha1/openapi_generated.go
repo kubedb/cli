@@ -546,6 +546,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.FerretDBVersion":                              schema_apimachinery_apis_catalog_v1alpha1_FerretDBVersion(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.FerretDBVersionDatabase":                      schema_apimachinery_apis_catalog_v1alpha1_FerretDBVersionDatabase(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.FerretDBVersionList":                          schema_apimachinery_apis_catalog_v1alpha1_FerretDBVersionList(ref),
+		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.FerretDBVersionPostgres":                      schema_apimachinery_apis_catalog_v1alpha1_FerretDBVersionPostgres(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.FerretDBVersionSpec":                          schema_apimachinery_apis_catalog_v1alpha1_FerretDBVersionSpec(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.FullBackup":                                   schema_apimachinery_apis_catalog_v1alpha1_FullBackup(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.FullBackupRestore":                            schema_apimachinery_apis_catalog_v1alpha1_FullBackupRestore(ref),
@@ -27535,6 +27536,27 @@ func schema_apimachinery_apis_catalog_v1alpha1_FerretDBVersionList(ref common.Re
 	}
 }
 
+func schema_apimachinery_apis_catalog_v1alpha1_FerretDBVersionPostgres(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"version": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Which versions pg will be used as backend of ferretdb. default 13.13 when backend internally managed",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"version"},
+			},
+		},
+	}
+}
+
 func schema_apimachinery_apis_catalog_v1alpha1_FerretDBVersionSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -27555,6 +27577,13 @@ func schema_apimachinery_apis_catalog_v1alpha1_FerretDBVersionSpec(ref common.Re
 							Description: "Database Image",
 							Default:     map[string]interface{}{},
 							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.FerretDBVersionDatabase"),
+						},
+					},
+					"postgres": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Postgres version",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.FerretDBVersionPostgres"),
 						},
 					},
 					"deprecated": {
@@ -27592,11 +27621,11 @@ func schema_apimachinery_apis_catalog_v1alpha1_FerretDBVersionSpec(ref common.Re
 						},
 					},
 				},
-				Required: []string{"version", "db"},
+				Required: []string{"version", "db", "postgres"},
 			},
 		},
 		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/catalog/v1alpha1.ChartInfo", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.FerretDBVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.SecurityContext", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints"},
+			"kubedb.dev/apimachinery/apis/catalog/v1alpha1.ChartInfo", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.FerretDBVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.FerretDBVersionPostgres", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.SecurityContext", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints"},
 	}
 }
 

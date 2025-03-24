@@ -147,16 +147,18 @@ const (
 )
 
 const (
-	EnvComponentName = "COMPONENT_NAME"
-	KeyPodOrdinal    = "POD_ORDINAL"
-	KeyPVCName       = "PVC_NAME"
-	KeyDBVersion     = "DB_VERSION"
-	KeyInterimVolume = "INTERIM_VOLUME"
+	EnvComponentName     = "COMPONENT_NAME"
+	KeyPodOrdinal        = "POD_ORDINAL"
+	KeyPVCName           = "PVC_NAME"
+	KeyDBVersion         = "DB_VERSION"
+	KeyInterimVolume     = "INTERIM_VOLUME"
+	KeyResticCacheVolume = "RESTIC_CACHE_VOLUME"
 
-	InterimVolumeName = "kubestash-interim-volume"
-	OwnerKey          = ".metadata.controller"
-	SnapshotVersionV1 = "v1"
-	DirRepository     = "repository"
+	ResticCacheVolumeName = TempDirVolumeName
+	InterimVolumeName     = "kubestash-interim-volume"
+	OwnerKey              = ".metadata.controller"
+	SnapshotVersionV1     = "v1"
+	DirRepository         = "repository"
 )
 
 // Annotations

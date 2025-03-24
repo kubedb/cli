@@ -142,7 +142,7 @@ type PostgresSecurityContext struct {
 	RunAsAnyNonRoot bool `json:"runAsAnyNonRoot,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=Official;TimescaleDB;PostGIS;KubeDB;PostgreSQL
+// +kubebuilder:validation:Enum=Official;TimescaleDB;PostGIS;KubeDB;DocumentDB;PostgreSQL
 type PostgresDistro string
 
 const (
@@ -150,4 +150,5 @@ const (
 	PostgresDistroTimescaleDB PostgresDistro = "TimescaleDB"
 	PostgresDistroPostGIS     PostgresDistro = "PostGIS"
 	PostgresDistroKubeDB      PostgresDistro = "KubeDB"
+	PostgresDistroDocumentDB  PostgresDistro = "DocumentDB"
 )

@@ -98,8 +98,6 @@ type FerretDBSpec struct {
 	// Monitor is used monitor database instance and KubeDB Backend
 	// +optional
 	Monitor *mona.AgentSpec `json:"monitor,omitempty"`
-
-	Backend *FerretDBBackend `json:"backend"`
 }
 
 type FerretDBStatus struct {
@@ -113,19 +111,6 @@ type FerretDBStatus struct {
 	// Conditions applied to the database, such as approval or denial.
 	// +optional
 	Conditions []kmapi.Condition `json:"conditions,omitempty"`
-}
-
-type FerretDBBackend struct {
-	// PostgresRef refers to the AppBinding of the backend Postgres server
-	// +optional
-	PostgresRef *kmapi.ObjectReference `json:"postgresRef,omitempty"`
-	// Which versions pg will be used as backend of ferretdb. default 13.13 when backend internally managed
-	// +optional
-	Version *string `json:"version,omitempty"`
-	// A DB inside backend specifically made for ferretdb
-	// +optional
-	LinkedDB          string `json:"linkedDB,omitempty"`
-	ExternallyManaged bool   `json:"externallyManaged"`
 }
 
 type FerretDBServer struct {

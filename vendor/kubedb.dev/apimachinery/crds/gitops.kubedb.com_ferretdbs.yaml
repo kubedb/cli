@@ -44,26 +44,6 @@ spec:
                     type: string
                 type: object
                 x-kubernetes-map-type: atomic
-              backend:
-                properties:
-                  externallyManaged:
-                    type: boolean
-                  linkedDB:
-                    type: string
-                  postgresRef:
-                    properties:
-                      name:
-                        type: string
-                      namespace:
-                        type: string
-                    required:
-                    - name
-                    type: object
-                  version:
-                    type: string
-                required:
-                - externallyManaged
-                type: object
               deletionPolicy:
                 enum:
                 - Halt
@@ -6770,7 +6750,6 @@ spec:
               version:
                 type: string
             required:
-            - backend
             - version
             type: object
           status:
