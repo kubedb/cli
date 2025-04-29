@@ -614,6 +614,8 @@ const (
 
 	EnvValkeyPassword          = "VALKEYCLI_AUTH"
 	EnvValkeyMajorRedisVersion = "MAJOR_VALKEY_VERSION"
+	ValkeyConfigVolumePath     = "/usr/local/etc/valkey/"
+	ValkeyConfigVolumeName     = "valkey-config"
 
 	// =========================== PgBouncer Constants ============================
 	PgBouncerUpstreamServerCA               = "upstream-server-ca.crt"
@@ -1469,6 +1471,35 @@ const (
 	FerretDBBackendConfigFile    = "user.conf"
 )
 
+// =========================== Ignite Constants ============================
+const (
+	IgniteCustomConfigVolName = "custom-config"
+	IgniteCustomConfigDir     = "/tmp/config/custom_config"
+	IgniteTempConfigVolName   = "temp-config"
+	IgniteTempConfigDir       = "/tmp/config"
+	IgniteInitContainerName   = "ignite-init"
+	IgniteInitScriptVolName   = "init-scripts"
+	IgniteInitScriptDir       = "/scripts"
+	IgniteConfigVolName       = "ignite-config"
+	IgniteWorkVolName         = "ignite-work"
+	IgniteConfigFileName      = "node-configuration.xml"
+	IgniteDataVolName         = "data"
+	IgniteDataDir             = "/ignite/data"
+	IgniteContainerName       = "ignite"
+	IgniteConfigDir           = "/ignite/config"
+	IgniteRestPortName        = "rest"
+	IgniteRestPort            = 8080
+	IgniteThinPortName        = "thin"
+	IgniteThinPort            = 10800
+	IgniteSPIPortName         = "spi"
+	IgniteSPIPort             = 47100
+	IgniteTCPPortName         = "tcp"
+	IgniteTCPPort             = 47500
+	IgniteJMXPortName         = "jmx"
+	IgniteJMXPort             = 49112
+	IgniteUserName            = "ignite"
+)
+
 // =========================== ClickHouse Constants ============================
 
 const (
@@ -1564,7 +1595,7 @@ const (
 
 	CassandraUserAdmin = "admin"
 
-	CassandraAuthCommand       = "/tmp/sc/cassandra-auth.sh"
+	CassandraAuthCommand       = "/tmp/sc/cassandra-start-and-auth.sh"
 	CassandraMetadataName      = "metadata.name"
 	CassandraMetadataNamespace = "metadata.namespace"
 	CassandraStatusPodIP       = "status.podIP"
@@ -1584,16 +1615,18 @@ const (
 	CassandraVolumeCustomConfig   = "custom-config"
 	CassandraVolumeScript         = "script-volume"
 
-	CassandraVolumeData        = "data"
-	CassandraDataDir           = "/var/lib/cassandra"
-	CassandraServerLogDir      = "var/log/cassandra-server/cassandra-server.log"
-	CassandraServerErrorLogDir = "var/log/cassandra-server/cassandra-server.err.log"
-	CassandraContainerName     = "cassandra"
-	CassandraInitContainerName = "cassandra-init"
-	CassandraMainConfigFile    = "cassandra.yaml"
-	CassandraRackConfigFile    = "rack-config.yaml"
-	CassandraStandalone        = "standalone"
-	CassandraServerConfigFile  = "server-config.yaml"
+	CassandraVolumeData                  = "data"
+	CassandraDataDir                     = "/var/lib/cassandra"
+	CassandraServerLogFile               = "var/log/cassandra-server/cassandra-server.log"
+	CassandraServerErrorLogFile          = "var/log/cassandra-server/cassandra-server.err.log"
+	CassandraContainerName               = "cassandra"
+	CassandraMedusaInitContainerName     = "medusa-init"
+	CassandraMetricExporterContainerName = "exporter"
+	CassandraInitContainerName           = "cassandra-init"
+	CassandraMainConfigFile              = "cassandra.yaml"
+	CassandraRackConfigFile              = "rack-config.yaml"
+	CassandraStandalone                  = "standalone"
+	CassandraServerConfigFile            = "server-config.yaml"
 
 	EnvNameCassandraEndpointSnitch = "CASSANDRA_ENDPOINT_SNITCH"
 	EnvValCassandraEndpointSnitch  = "GossipingPropertyFileSnitch"
@@ -1616,6 +1649,15 @@ const (
 	EnvNameCassandraPodName          = "CASSANDRA_POD_NAME"
 	EnvNameCassandraUser             = "CASSANDRA_USER"
 	EnvNameCassandraPassword         = "CASSANDRA_PASSWORD"
+
+	EnvNameMgmtApiListenTcpPort = "MGMT_API_LISTEN_TCP_PORT"
+	EnvValMgmtApiListenTcpPort  = "8081"
+	EnvNameMedusaMode           = "MEDUSA_MODE"
+	EnvValMedusaModeRestore     = "RESTORE"
+	EnvNameMedusaDebugSleep     = "DEBUG_SLEEP"
+	EnvValMedusaDebugSleep      = "0s"
+	CassandraNodetoolDir        = "/opt/cassandra/temp/bin"
+	CassandraBackupBinary       = "nodetool"
 )
 
 // =========================== Virtual Secrets Constants ============================
@@ -1678,6 +1720,7 @@ var (
 			core.ResourceMemory: resource.MustParse("4Gi"),
 		},
 	}
+
 	// CoordinatorDefaultResources must be used for raft backed coordinators to avoid unintended leader switches
 	CoordinatorDefaultResources = core.ResourceRequirements{
 		Requests: core.ResourceList{

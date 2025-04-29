@@ -35,6 +35,7 @@ type CatalogV1alpha1Interface interface {
 	ElasticsearchVersionsGetter
 	EtcdVersionsGetter
 	FerretDBVersionsGetter
+	IgniteVersionsGetter
 	KafkaConnectorVersionsGetter
 	KafkaVersionsGetter
 	MSSQLServerVersionsGetter
@@ -82,6 +83,10 @@ func (c *CatalogV1alpha1Client) EtcdVersions() EtcdVersionInterface {
 
 func (c *CatalogV1alpha1Client) FerretDBVersions() FerretDBVersionInterface {
 	return newFerretDBVersions(c)
+}
+
+func (c *CatalogV1alpha1Client) IgniteVersions() IgniteVersionInterface {
+	return newIgniteVersions(c)
 }
 
 func (c *CatalogV1alpha1Client) KafkaConnectorVersions() KafkaConnectorVersionInterface {

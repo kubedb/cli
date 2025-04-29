@@ -48,6 +48,18 @@ const (
 	MSSQLServerEndpointCert MSSQLServerCertificateAlias = "endpoint"
 )
 
+// +kubebuilder:validation:Enum=Passive;ReadOnly;All
+type SecondaryAccessMode string
+
+const (
+	// Passive  = secondary is passive, no connections allowed
+	SecondaryAccessModePassive SecondaryAccessMode = "Passive"
+	// ReadOnly = secondary allows read-intent only
+	SecondaryAccessModeReadOnly SecondaryAccessMode = "ReadOnly"
+	// All = secondary allows any connections
+	SecondaryAccessModeAll SecondaryAccessMode = "All"
+)
+
 // MSSQLServer defines a MSSQLServer database.
 
 // +genclient
@@ -90,12 +102,12 @@ type MSSQLServerSpec struct {
 	// +optional
 	AuthSecret *SecretReference `json:"authSecret,omitempty"`
 
-	// ConfigSecret is an optional field to provide custom configuration file for database (i.e mssql.conf).
-	// If specified, this file will be used as configuration file otherwise default configuration file will be used.
+	// ConfigSecret is an optional field to provide a custom configuration file for the database (i.e., mssql.conf).
+	// If specified, this file will be used as a configuration file, otherwise a default configuration file will be used.
 	// +optional
 	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty"`
 
-	// Init is used to initialize database
+	// Init is used to initialize a database
 	// +optional
 	Init *InitSpec `json:"init,omitempty"`
 
@@ -162,6 +174,12 @@ type MSSQLServerAvailabilityGroupSpec struct {
 	// Leader election configuration
 	// +optional
 	LeaderElection *MSSQLServerLeaderElectionConfig `json:"leaderElection,omitempty"`
+
+	// SecondaryAccessMode controls which connections are allowed to secondary replicas.
+	// https://learn.microsoft.com/en-us/sql/t-sql/statements/create-availability-group-transact-sql?view=sql-server-ver16#secondary_role---
+	// +optional
+	// +kubebuilder:default=Passive
+	SecondaryAccessMode SecondaryAccessMode `json:"secondaryAccessMode,omitempty"`
 }
 
 // MSSQLServerStatus defines the observed state of MSSQLServer

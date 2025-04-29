@@ -772,12 +772,13 @@ github.com/josharian/intern
 # github.com/json-iterator/go v1.1.12
 ## explicit; go 1.12
 github.com/json-iterator/go
-# github.com/klauspost/compress v1.17.11
-## explicit; go 1.21
+# github.com/klauspost/compress v1.18.0
+## explicit; go 1.22
 github.com/klauspost/compress
 github.com/klauspost/compress/fse
 github.com/klauspost/compress/huff0
 github.com/klauspost/compress/internal/cpuinfo
+github.com/klauspost/compress/internal/le
 github.com/klauspost/compress/internal/snapref
 github.com/klauspost/compress/zstd
 github.com/klauspost/compress/zstd/internal/xxhash
@@ -934,7 +935,7 @@ github.com/zeebo/xxh3
 ## explicit; go 1.23.0
 go.virtual-secrets.dev/apimachinery/apis/virtual/v1alpha1
 go.virtual-secrets.dev/apimachinery/crds
-# golang.org/x/net v0.37.0
+# golang.org/x/net v0.38.0
 ## explicit; go 1.23.0
 golang.org/x/net/html
 golang.org/x/net/html/atom
@@ -952,18 +953,18 @@ golang.org/x/net/websocket
 ## explicit; go 1.23.0
 golang.org/x/oauth2
 golang.org/x/oauth2/internal
-# golang.org/x/sync v0.12.0
+# golang.org/x/sync v0.13.0
 ## explicit; go 1.23.0
 golang.org/x/sync/errgroup
-# golang.org/x/sys v0.31.0
+# golang.org/x/sys v0.32.0
 ## explicit; go 1.23.0
 golang.org/x/sys/plan9
 golang.org/x/sys/unix
 golang.org/x/sys/windows
-# golang.org/x/term v0.30.0
+# golang.org/x/term v0.31.0
 ## explicit; go 1.23.0
 golang.org/x/term
-# golang.org/x/text v0.23.0
+# golang.org/x/text v0.24.0
 ## explicit; go 1.23.0
 golang.org/x/text/cases
 golang.org/x/text/encoding
@@ -1644,7 +1645,7 @@ kmodules.xyz/prober/api/v1
 kmodules.xyz/resource-metadata/apis/node
 kmodules.xyz/resource-metadata/apis/node/v1alpha1
 kmodules.xyz/resource-metadata/crds
-# kubedb.dev/apimachinery v0.53.0
+# kubedb.dev/apimachinery v0.54.0
 ## explicit; go 1.23.0
 kubedb.dev/apimachinery/apis
 kubedb.dev/apimachinery/apis/archiver/v1alpha1
@@ -1689,7 +1690,7 @@ kubedb.dev/apimachinery/client/clientset/versioned/typed/ui/v1alpha1
 kubedb.dev/apimachinery/crds
 kubedb.dev/apimachinery/pkg/double_optin
 kubedb.dev/apimachinery/pkg/factory
-# kubedb.dev/db-client-go v0.8.0
+# kubedb.dev/db-client-go v0.9.0
 ## explicit; go 1.23.0
 kubedb.dev/db-client-go/elasticsearch
 kubedb.dev/db-client-go/redis
@@ -1711,7 +1712,7 @@ kubeops.dev/petset/crds
 kubeops.dev/sidekick/apis/apps
 kubeops.dev/sidekick/apis/apps/v1alpha1
 kubeops.dev/sidekick/crds
-# kubestash.dev/apimachinery v0.17.0
+# kubestash.dev/apimachinery v0.18.0
 ## explicit; go 1.23.0
 kubestash.dev/apimachinery/apis
 kubestash.dev/apimachinery/apis/core/v1alpha1

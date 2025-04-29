@@ -12,7 +12,7 @@ require (
 	github.com/prometheus/client_golang v1.20.5
 	github.com/prometheus/common v0.61.0
 	github.com/spf13/cobra v1.9.1
-	golang.org/x/text v0.23.0
+	golang.org/x/text v0.24.0
 	gomodules.xyz/go-sh v0.2.0
 	gomodules.xyz/logs v0.0.7
 	gomodules.xyz/pointer v0.1.0
@@ -29,8 +29,8 @@ require (
 	kmodules.xyz/client-go v0.32.1
 	kmodules.xyz/custom-resources v0.32.0
 	kmodules.xyz/monitoring-agent-api v0.32.0
-	kubedb.dev/apimachinery v0.53.0
-	kubedb.dev/db-client-go v0.8.0
+	kubedb.dev/apimachinery v0.54.0
+	kubedb.dev/db-client-go v0.9.0
 	kubeops.dev/petset v0.0.10
 	sigs.k8s.io/controller-runtime v0.20.3
 	sigs.k8s.io/yaml v1.4.0
@@ -83,7 +83,7 @@ require (
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
-	github.com/klauspost/compress v1.17.11 // indirect
+	github.com/klauspost/compress v1.18.0 // indirect
 	github.com/klauspost/cpuid/v2 v2.0.9 // indirect
 	github.com/kubernetes-csi/external-snapshotter/client/v7 v7.0.0 // indirect
 	github.com/liggitt/tabwriter v0.0.0-20181228230101-89fcab3d43de // indirect
@@ -117,11 +117,11 @@ require (
 	github.com/yudai/golcs v0.0.0-20170316035057-ecda9a501e82 // indirect
 	github.com/zeebo/xxh3 v1.0.2 // indirect
 	go.virtual-secrets.dev/apimachinery v0.0.1 // indirect
-	golang.org/x/net v0.37.0 // indirect
+	golang.org/x/net v0.38.0 // indirect
 	golang.org/x/oauth2 v0.27.0 // indirect
-	golang.org/x/sync v0.12.0 // indirect
-	golang.org/x/sys v0.31.0 // indirect
-	golang.org/x/term v0.30.0 // indirect
+	golang.org/x/sync v0.13.0 // indirect
+	golang.org/x/sys v0.32.0 // indirect
+	golang.org/x/term v0.31.0 // indirect
 	golang.org/x/time v0.10.0 // indirect
 	gomodules.xyz/clock v0.0.0-20200817085942-06523dba733f // indirect
 	gomodules.xyz/encoding v0.0.8 // indirect
@@ -148,7 +148,7 @@ require (
 	kmodules.xyz/resource-metadata v0.26.1 // indirect
 	kubeops.dev/csi-driver-cacerts v0.1.0 // indirect
 	kubeops.dev/sidekick v0.0.11 // indirect
-	kubestash.dev/apimachinery v0.17.0 // indirect
+	kubestash.dev/apimachinery v0.18.0 // indirect
 	sigs.k8s.io/gateway-api v1.1.0 // indirect
 	sigs.k8s.io/json v0.0.0-20241014173422-cfa47c3a1cc8 // indirect
 	sigs.k8s.io/kustomize/api v0.18.0 // indirect

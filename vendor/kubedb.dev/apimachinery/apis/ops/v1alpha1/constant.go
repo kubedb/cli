@@ -282,6 +282,9 @@ const (
 	RestartShard        = "RestartShard"
 	RestartArbiter      = "RestartArbiter"
 	RestartHidden       = "RestartHidden"
+
+	SetHorizons    = "SetHorizons"
+	RemoveHorizons = "RemoveHorizons"
 )
 
 // MySQL/MariaDB Constants

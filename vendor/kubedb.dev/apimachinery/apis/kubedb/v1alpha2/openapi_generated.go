@@ -560,6 +560,11 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.FerretDBStatsService":                          schema_apimachinery_apis_kubedb_v1alpha2_FerretDBStatsService(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.FerretDBStatus":                                schema_apimachinery_apis_kubedb_v1alpha2_FerretDBStatus(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.GitRepo":                                       schema_apimachinery_apis_kubedb_v1alpha2_GitRepo(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Ignite":                                        schema_apimachinery_apis_kubedb_v1alpha2_Ignite(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.IgniteApp":                                     schema_apimachinery_apis_kubedb_v1alpha2_IgniteApp(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.IgniteList":                                    schema_apimachinery_apis_kubedb_v1alpha2_IgniteList(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.IgniteSpec":                                    schema_apimachinery_apis_kubedb_v1alpha2_IgniteSpec(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.IgniteStatus":                                  schema_apimachinery_apis_kubedb_v1alpha2_IgniteStatus(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec":                                      schema_apimachinery_apis_kubedb_v1alpha2_InitSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Kafka":                                         schema_apimachinery_apis_kubedb_v1alpha2_Kafka(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.KafkaApp":                                      schema_apimachinery_apis_kubedb_v1alpha2_KafkaApp(ref),
@@ -29011,6 +29016,269 @@ func schema_apimachinery_apis_kubedb_v1alpha2_GitRepo(ref common.ReferenceCallba
 	}
 }
 
+func schema_apimachinery_apis_kubedb_v1alpha2_Ignite(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
+						},
+					},
+					"spec": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.IgniteSpec"),
+						},
+					},
+					"status": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.IgniteStatus"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.IgniteSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.IgniteStatus"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1alpha2_IgniteApp(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"Ignite": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Ignite"),
+						},
+					},
+				},
+				Required: []string{"Ignite"},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Ignite"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1alpha2_IgniteList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "IgniteList contains a list of Ignite.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+						},
+					},
+					"items": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Ignite"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"items"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Ignite"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1alpha2_IgniteSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "IgniteSpec defines the desired state of Ignite.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"version": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Version of Ignite to be deployed.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"replicas": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Number of instances to deploy for an Ignite database.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"storageType": {
+						SchemaProps: spec.SchemaProps{
+							Description: "StorageType can be durable (default) or ephemeral",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"storage": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Storage to specify how storage shall be used.",
+							Ref:         ref("k8s.io/api/core/v1.PersistentVolumeClaimSpec"),
+						},
+					},
+					"disableSecurity": {
+						SchemaProps: spec.SchemaProps{
+							Description: "disable security. It disables authentication security of user. If unset, default is false",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"authSecret": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Database authentication secret",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"),
+						},
+					},
+					"configSecret": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ConfigSecret is an optional field to provide custom configuration file for database (i.e node-configuration.xml). If specified, this file will be used as configuration file otherwise default configuration file will be used.",
+							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
+						},
+					},
+					"podTemplate": {
+						SchemaProps: spec.SchemaProps{
+							Description: "PodTemplate is an optional configuration for pods used to expose database",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec"),
+						},
+					},
+					"serviceTemplates": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ServiceTemplates is an optional configuration for services used to expose database",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec"),
+									},
+								},
+							},
+						},
+					},
+					"halted": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"deletionPolicy": {
+						SchemaProps: spec.SchemaProps{
+							Description: "DeletionPolicy controls the delete operation for database",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"healthChecker": {
+						SchemaProps: spec.SchemaProps{
+							Description: "HealthChecker defines attributes of the health checker",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kmodules.xyz/client-go/api/v1.HealthCheckSpec"),
+						},
+					},
+				},
+				Required: []string{"version"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1alpha2_IgniteStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "IgniteStatus defines the observed state of Ignite.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"phase": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies the current phase of the database",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"observedGeneration": {
+						SchemaProps: spec.SchemaProps{
+							Description: "observedGeneration is the most recent generation observed for this resource. It corresponds to the resource's generation, which is updated on mutation by the API Server.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"conditions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Conditions applied to the database, such as approval or denial.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kmodules.xyz/client-go/api/v1.Condition"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/client-go/api/v1.Condition"},
+	}
+}
+
 func schema_apimachinery_apis_kubedb_v1alpha2_InitSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -29664,6 +29932,13 @@ func schema_apimachinery_apis_kubedb_v1alpha2_MSSQLServerAvailabilityGroupSpec(r
 							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MSSQLServerLeaderElectionConfig"),
 						},
 					},
+					"secondaryAccessMode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "SecondaryAccessMode controls which connections are allowed to secondary replicas. https://learn.microsoft.com/en-us/sql/t-sql/statements/create-availability-group-transact-sql?view=sql-server-ver16#secondary_role---",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 				},
 			},
 		},
@@ -29819,13 +30094,13 @@ func schema_apimachinery_apis_kubedb_v1alpha2_MSSQLServerSpec(ref common.Referen
 					},
 					"configSecret": {
 						SchemaProps: spec.SchemaProps{
-							Description: "ConfigSecret is an optional field to provide custom configuration file for database (i.e mssql.conf). If specified, this file will be used as configuration file otherwise default configuration file will be used.",
+							Description: "ConfigSecret is an optional field to provide a custom configuration file for the database (i.e., mssql.conf). If specified, this file will be used as a configuration file, otherwise a default configuration file will be used.",
 							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
 						},
 					},
 					"init": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Init is used to initialize database",
+							Description: "Init is used to initialize a database",
 							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec"),
 						},
 					},

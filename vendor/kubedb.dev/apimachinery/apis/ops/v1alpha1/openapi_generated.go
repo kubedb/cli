@@ -547,6 +547,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.FerretDBUpdateVersionSpec":                        schema_apimachinery_apis_ops_v1alpha1_FerretDBUpdateVersionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.FerretDBVerticalScalingSpec":                      schema_apimachinery_apis_ops_v1alpha1_FerretDBVerticalScalingSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.HiddenNode":                                       schema_apimachinery_apis_ops_v1alpha1_HiddenNode(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.Horizons":                                         schema_apimachinery_apis_ops_v1alpha1_Horizons(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaCustomConfigurationSpec":                     schema_apimachinery_apis_ops_v1alpha1_KafkaCustomConfigurationSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaHorizontalScalingSpec":                       schema_apimachinery_apis_ops_v1alpha1_KafkaHorizontalScalingSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.KafkaHorizontalScalingTopologySpec":               schema_apimachinery_apis_ops_v1alpha1_KafkaHorizontalScalingTopologySpec(ref),
@@ -27900,6 +27901,41 @@ func schema_apimachinery_apis_ops_v1alpha1_HiddenNode(ref common.ReferenceCallba
 	}
 }
 
+func schema_apimachinery_apis_ops_v1alpha1_Horizons(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"dns": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"pods": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Pods contain the host:port for all the replicas. Its length will be same as db.spec.replicas",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"dns"},
+			},
+		},
+	}
+}
+
 func schema_apimachinery_apis_ops_v1alpha1_KafkaCustomConfigurationSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -29793,6 +29829,12 @@ func schema_apimachinery_apis_ops_v1alpha1_MongoDBOpsRequestSpec(ref common.Refe
 							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ArchiverOptions"),
 						},
 					},
+					"horizons": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Horizons specifies the information for setting up replicaset horizons.",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.Horizons"),
+						},
+					},
 					"readinessCriteria": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Specifies the Readiness Criteria",
@@ -29817,7 +29859,7 @@ func schema_apimachinery_apis_ops_v1alpha1_MongoDBOpsRequestSpec(ref common.Refe
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ArchiverOptions", "kubedb.dev/apimachinery/apis/ops/v1alpha1.AuthSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBReplicaReadinessCriteria", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBUpdateVersionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.Reprovision", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.TLSSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ArchiverOptions", "kubedb.dev/apimachinery/apis/ops/v1alpha1.AuthSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.Horizons", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBReplicaReadinessCriteria", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBUpdateVersionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.Reprovision", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.TLSSpec"},
 	}
 }
 
@@ -33556,11 +33598,6 @@ func schema_apimachinery_apis_ops_v1alpha1_RedisSentinelVerticalScalingSpec(ref 
 						},
 					},
 					"exporter": {
-						SchemaProps: spec.SchemaProps{
-							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources"),
-						},
-					},
-					"coordinator": {
 						SchemaProps: spec.SchemaProps{
 							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources"),
 						},

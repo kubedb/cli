@@ -226,6 +226,18 @@ const (
 type MongoDBReplicaSet struct {
 	// Name of replicaset
 	Name string `json:"name"`
+
+	// Horizons specifies the information about replicaset horizons.
+	// rs.conf().members[*].horizons field will be populated using this
+	// +optional
+	Horizons *Horizons `json:"horizons,omitempty"`
+}
+
+type Horizons struct {
+	DNS string `json:"dns"`
+	// Pods contain the host:port for all the replicas. Its length will be same as db.spec.replicas
+	// +optional
+	Pods []string `json:"pods,omitempty"`
 }
 
 type MongoDBShardingTopology struct {

@@ -16,10 +16,48 @@ limitations under the License.
 
 package v1alpha1
 
-type LicenseRestrictions map[string]Restriction
+import (
+	"encoding/json"
+)
 
 type Restriction struct {
 	VersionConstraint string `json:"versionConstraint"`
 	// +optional
 	Distributions []string `json:"distributions,omitempty"`
+}
+
+type Restrictions []Restriction
+
+type LicenseRestrictions map[string]Restrictions
+
+// LicenseRestrictionsV1 Deprecated, use LicenseRestrictions
+type LicenseRestrictionsV1 map[string]Restriction
+
+func (lr *LicenseRestrictions) UnmarshalJSON(data []byte) error {
+	// First, try to unmarshal directly into the target type.
+	if err := json.Unmarshal(data, (*map[string]Restrictions)(lr)); err == nil {
+		return nil
+	}
+
+	// If direct unmarshaling fails, try unmarshaling to v1 type.
+	var temp LicenseRestrictionsV1
+	if err := json.Unmarshal(data, &temp); err != nil {
+		return err
+	}
+
+	*lr = make(map[string]Restrictions, len(temp))
+	for key, restriction := range temp {
+		(*lr)[key] = Restrictions{restriction}
+	}
+	return nil
+}
+
+func (lr LicenseRestrictions) ToV1() LicenseRestrictionsV1 {
+	out := make(LicenseRestrictionsV1, len(lr))
+	for key, restrictions := range lr {
+		if len(restrictions) > 0 {
+			out[key] = restrictions[0]
+		}
+	}
+	return out
 }

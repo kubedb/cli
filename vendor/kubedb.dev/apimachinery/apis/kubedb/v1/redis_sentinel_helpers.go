@@ -192,7 +192,7 @@ func (rs *RedisSentinel) SetDefaults(rdVersion *catalog.RedisVersion) error {
 	if err != nil {
 		return fmt.Errorf("can't get the semvar version from RedisVersion spec. err: %v", err)
 	}
-	if curVersion.Major() <= 4 {
+	if rdVersion.Spec.Distribution == catalog.RedisDistroOfficial && curVersion.Major() <= 4 {
 		rs.Spec.DisableAuth = true
 	}
 	if rs.Spec.Halted {

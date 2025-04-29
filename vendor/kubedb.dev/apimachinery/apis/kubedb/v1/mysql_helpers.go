@@ -17,13 +17,16 @@ limitations under the License.
 package v1
 
 import (
+	"errors"
 	"fmt"
+	"time"
 
 	"kubedb.dev/apimachinery/apis"
 	"kubedb.dev/apimachinery/apis/catalog/v1alpha1"
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
+	"github.com/google/uuid"
 	promapi "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1"
 	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
@@ -266,9 +269,9 @@ func (m *MySQL) IsSemiSync() bool {
 		*m.Spec.Topology.Mode == MySQLModeSemiSync
 }
 
-func (m *MySQL) SetDefaults(myVersion *v1alpha1.MySQLVersion) {
+func (m *MySQL) SetDefaults(myVersion *v1alpha1.MySQLVersion) error {
 	if m == nil {
-		return
+		return nil
 	}
 	if m.Spec.StorageType == "" {
 		m.Spec.StorageType = StorageTypeDurable
@@ -284,6 +287,42 @@ func (m *MySQL) SetDefaults(myVersion *v1alpha1.MySQLVersion) {
 	} else {
 		if m.Spec.Replicas == nil {
 			m.Spec.Replicas = pointer.Int32P(1)
+		}
+	}
+
+	if m.UsesGroupReplication() {
+		if m.Spec.Topology.Group == nil {
+			m.Spec.Topology.Group = &MySQLGroupSpec{}
+		}
+
+		if m.Spec.Topology.Group.Name == "" {
+			grName, err := uuid.NewRandom()
+			if err != nil {
+				return errors.New("failed to generate a new group name")
+			}
+			m.Spec.Topology.Group.Name = grName.String()
+		}
+	}
+
+	if m.IsSemiSync() {
+		if m.Spec.Topology.SemiSync == nil {
+			m.Spec.Topology.SemiSync = &SemiSyncSpec{
+				SourceWaitForReplicaCount: 1,
+				SourceTimeout:             metav1.Duration{Duration: 24 * time.Hour},
+				ErrantTransactionRecoveryPolicy: func() *ErrantTransactionRecoveryPolicy {
+					pseudoTransaction := ErrantTransactionRecoveryPolicyPseudoTransaction
+					return &pseudoTransaction
+				}(),
+			}
+		}
+	}
+	if m.IsInnoDBCluster() {
+		if m.Spec.Topology.InnoDBCluster == nil {
+			// avoid needing to check for m.Spec.Topology.InnoDBCluster != nil later
+			m.Spec.Topology.InnoDBCluster = &MySQLInnoDBClusterSpec{}
+		}
+		if m.Spec.Topology.InnoDBCluster.Router.PodTemplate == nil {
+			m.Spec.Topology.InnoDBCluster.Router.PodTemplate = &ofstv2.PodTemplateSpec{}
 		}
 	}
 
@@ -332,6 +371,8 @@ func (m *MySQL) SetDefaults(myVersion *v1alpha1.MySQLVersion) {
 			m.Spec.Init.Archiver.ManifestRepository.Namespace = m.GetNamespace()
 		}
 	}
+
+	return nil
 }
 
 func (m *MySQL) SetTLSDefaults() {
