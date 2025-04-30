@@ -617,3 +617,18 @@ func (m *MSSQLServer) ReplicasAreReady(lister pslister.PetSetLister) (bool, stri
 	expectedItems := 1
 	return checkReplicasOfPetSet(lister.PetSets(m.Namespace), labels.SelectorFromSet(m.OffshootLabels()), expectedItems)
 }
+
+// Map SecondaryAccessMode to SQL string values
+func SecondaryAccessSQL(mode SecondaryAccessMode) string {
+	switch mode {
+	case SecondaryAccessModePassive:
+		return "NO"
+	case SecondaryAccessModeReadOnly:
+		return "READ_ONLY"
+	case SecondaryAccessModeAll:
+		return "ALL"
+	default:
+		// Fallback to NO if unset or unknown
+		return "NO"
+	}
+}

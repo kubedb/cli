@@ -30,6 +30,8 @@ type EtcdVersionExpansion interface{}
 
 type FerretDBVersionExpansion interface{}
 
+type IgniteVersionExpansion interface{}
+
 type KafkaConnectorVersionExpansion interface{}
 
 type KafkaVersionExpansion interface{}

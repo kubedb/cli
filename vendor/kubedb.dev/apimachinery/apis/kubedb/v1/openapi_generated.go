@@ -519,6 +519,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1.ElasticsearchStatus":                                 schema_apimachinery_apis_kubedb_v1_ElasticsearchStatus(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.ElasticsearchUserSpec":                               schema_apimachinery_apis_kubedb_v1_ElasticsearchUserSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.GitRepo":                                             schema_apimachinery_apis_kubedb_v1_GitRepo(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1.Horizons":                                            schema_apimachinery_apis_kubedb_v1_Horizons(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.InitSpec":                                            schema_apimachinery_apis_kubedb_v1_InitSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.Kafka":                                               schema_apimachinery_apis_kubedb_v1_Kafka(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.KafkaApp":                                            schema_apimachinery_apis_kubedb_v1_KafkaApp(ref),
@@ -27025,6 +27026,41 @@ func schema_apimachinery_apis_kubedb_v1_GitRepo(ref common.ReferenceCallback) co
 	}
 }
 
+func schema_apimachinery_apis_kubedb_v1_Horizons(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"dns": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"pods": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Pods contain the host:port for all the replicas. Its length will be same as db.spec.replicas",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"dns"},
+			},
+		},
+	}
+}
+
 func schema_apimachinery_apis_kubedb_v1_InitSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -28477,10 +28513,18 @@ func schema_apimachinery_apis_kubedb_v1_MongoDBReplicaSet(ref common.ReferenceCa
 							Format:      "",
 						},
 					},
+					"horizons": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Horizons specifies the information about replicaset horizons. rs.conf().members[*].horizons field will be populated using this",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1.Horizons"),
+						},
+					},
 				},
 				Required: []string{"name"},
 			},
 		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/kubedb/v1.Horizons"},
 	}
 }
 

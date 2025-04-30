@@ -65,6 +65,14 @@ func (r CassandraApp) Type() appcat.AppType {
 	return appcat.AppType(fmt.Sprintf("%s/%s", kubedb.GroupName, ResourceSingularCassandra))
 }
 
+func (c Cassandra) SidekickLabels(skName string) map[string]string {
+	return meta_util.OverwriteKeys(nil, kubedb.CommonSidekickLabels(), map[string]string{
+		meta_util.InstanceLabelKey: skName,
+		kubedb.SidekickOwnerName:   c.Name,
+		kubedb.SidekickOwnerKind:   c.ResourceFQN(),
+	})
+}
+
 // Owner returns owner reference to resources
 func (r *Cassandra) Owner() *meta.OwnerReference {
 	return meta.NewControllerRef(r, SchemeGroupVersion.WithKind(r.ResourceKind()))

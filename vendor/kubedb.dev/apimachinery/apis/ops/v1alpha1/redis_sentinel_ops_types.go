@@ -99,7 +99,6 @@ type RedisSentinelHorizontalScalingSpec struct {
 type RedisSentinelVerticalScalingSpec struct {
 	RedisSentinel *PodResources       `json:"redissentinel,omitempty"`
 	Exporter      *ContainerResources `json:"exporter,omitempty"`
-	Coordinator   *ContainerResources `json:"coordinator,omitempty"`
 }
 
 // RedisSentinelVolumeExpansionSpec is the spec for RedisSentinel volume expansion

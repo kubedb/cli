@@ -157,6 +157,10 @@ func (p proxysqlStatsService) ServiceMonitorAdditionalLabels() map[string]string
 	return p.OffshootLabels()
 }
 
+func GetConfigurationSecretName(psName string) string {
+	return meta_util.NameWithSuffix(psName, "configuration")
+}
+
 func (p proxysqlStatsService) Path() string {
 	return kubedb.DefaultStatsPath
 }

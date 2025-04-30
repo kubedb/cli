@@ -45,8 +45,7 @@ type CassandraVersion struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   CassandraVersionSpec   `json:"spec,omitempty"`
-	Status CassandraVersionStatus `json:"status,omitempty"`
+	Spec CassandraVersionSpec `json:"spec,omitempty"`
 }
 
 // CassandraVersionSpec defines the desired state of CassandraVersion
@@ -62,6 +61,9 @@ type CassandraVersionSpec struct {
 
 	// Exporter Image
 	Exporter CassandraVersionExporter `json:"exporter"`
+
+	// Cassandra-medusa image
+	Medusa CassandraVersionMedusa `json:"medusa"`
 
 	// Database Image
 	InitContainer CassandraInitContainer `json:"initContainer"`
@@ -84,15 +86,19 @@ type CassandraVersionDatabase struct {
 	Image string `json:"image"`
 }
 
-// CassandraInitContainer is the Cassandra init Container image
-type CassandraInitContainer struct {
+// CassandraVersionMedusa is the Cassandra-Medusa image
+type CassandraVersionMedusa struct {
+	Image string                     `json:"image"`
+	Init  CassandraVersionMedusaInit `json:"init"`
+}
+
+type CassandraVersionMedusaInit struct {
 	Image string `json:"image"`
 }
 
-// CassandraVersionStatus defines the observed state of CassandraVersion
-type CassandraVersionStatus struct {
-	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
+// CassandraInitContainer is the Cassandra init Container image
+type CassandraInitContainer struct {
+	Image string `json:"image"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

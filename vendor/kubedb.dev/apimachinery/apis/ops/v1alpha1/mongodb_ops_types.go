@@ -75,6 +75,8 @@ type MongoDBOpsRequestSpec struct {
 	Reprovision *Reprovision `json:"reprovision,omitempty"`
 	// Specifies information necessary for setting up Archiver for database
 	Archiver *ArchiverOptions `json:"archiver,omitempty"`
+	// Horizons specifies the information for setting up replicaset horizons.
+	Horizons *Horizons `json:"horizons,omitempty"`
 
 	// Specifies the Readiness Criteria
 	ReadinessCriteria *MongoDBReplicaReadinessCriteria `json:"readinessCriteria,omitempty"`
@@ -85,8 +87,8 @@ type MongoDBOpsRequestSpec struct {
 	Apply ApplyOption `json:"apply,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=Upgrade;UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS;Reprovision;RotateAuth
-// ENUM(UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Restart, Reconfigure, ReconfigureTLS, Reprovision, RotateAuth)
+// +kubebuilder:validation:Enum=Upgrade;UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS;Reprovision;RotateAuth;Horizons
+// ENUM(UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Restart, Reconfigure, ReconfigureTLS, Reprovision, RotateAuth, Horizons)
 type MongoDBOpsRequestType string
 
 // MongoDBReplicaReadinessCriteria is the criteria for checking readiness of a MongoDB pod
@@ -170,6 +172,13 @@ type MongoDBCustomConfiguration struct {
 	ConfigSecret       *core.LocalObjectReference `json:"configSecret,omitempty"`
 	ApplyConfig        map[string]string          `json:"applyConfig,omitempty"`
 	RemoveCustomConfig bool                       `json:"removeCustomConfig,omitempty"`
+}
+
+type Horizons struct {
+	DNS string `json:"dns"`
+	// Pods contain the host:port for all the replicas. Its length will be same as db.spec.replicas
+	// +optional
+	Pods []string `json:"pods,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

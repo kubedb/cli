@@ -66,6 +66,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&EtcdList{},
 		&FerretDB{},
 		&FerretDBList{},
+		&Ignite{},
+		&IgniteList{},
 		&Kafka{},
 		&KafkaList{},
 		&MariaDB{},
