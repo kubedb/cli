@@ -470,13 +470,27 @@ func initializeMongoDBReplicationModeDetectorContainer(in *CoordinatorSpec, podT
 	return nil
 }
 
+func Convert_v1_MongoDBReplicaSet_To_v1alpha2_MongoDBReplicaSet(newRepl *v1.MongoDBReplicaSet, oldRepl *MongoDBReplicaSet, s conversion.Scope) error {
+	oldRepl.Name = newRepl.Name
+	return nil
+}
+
 func Convert_v1alpha2_MongoDBSpec_To_v1_MongoDBSpec(in *MongoDBSpec, out *v1.MongoDBSpec, s conversion.Scope) error {
 	if err := Convert_v1alpha2_AutoOpsSpec_To_v1_AutoOpsSpec(&in.AutoOps, &out.AutoOps, s); err != nil {
 		return err
 	}
 	out.Version = in.Version
 	out.Replicas = (*int32)(unsafe.Pointer(in.Replicas))
-	out.ReplicaSet = (*v1.MongoDBReplicaSet)(unsafe.Pointer(in.ReplicaSet))
+	if in.ReplicaSet != nil {
+		i, o := in.ReplicaSet, out.ReplicaSet
+		if o == nil {
+			o = new(v1.MongoDBReplicaSet)
+		}
+		if err := Convert_v1alpha2_MongoDBReplicaSet_To_v1_MongoDBReplicaSet(i, o, s); err != nil {
+			return err
+		}
+		out.ReplicaSet = o
+	}
 	out.StorageType = v1.StorageType(in.StorageType)
 	out.Storage = (*corev1.PersistentVolumeClaimSpec)(unsafe.Pointer(in.Storage))
 	out.EphemeralStorage = (*corev1.EmptyDirVolumeSource)(unsafe.Pointer(in.EphemeralStorage))
@@ -571,7 +585,16 @@ func Convert_v1_MongoDBSpec_To_v1alpha2_MongoDBSpec(in *v1.MongoDBSpec, out *Mon
 	}
 	out.Version = in.Version
 	out.Replicas = (*int32)(unsafe.Pointer(in.Replicas))
-	out.ReplicaSet = (*MongoDBReplicaSet)(unsafe.Pointer(in.ReplicaSet))
+	if in.ReplicaSet != nil {
+		i, o := in.ReplicaSet, out.ReplicaSet
+		if o == nil {
+			o = new(MongoDBReplicaSet)
+		}
+		if err := Convert_v1_MongoDBReplicaSet_To_v1alpha2_MongoDBReplicaSet(i, o, s); err != nil {
+			return err
+		}
+		out.ReplicaSet = o
+	}
 	if in.ShardTopology != nil {
 		inSt, outSt := &in.ShardTopology, &out.ShardTopology
 		*outSt = new(MongoDBShardingTopology)

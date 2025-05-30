@@ -46,11 +46,11 @@ type NodeTopology struct {
 
 type NodeTopologySpec struct {
 	// +optional
-	Description string `json:"description"`
+	Description         string              `json:"description"`
+	NodeSelectionPolicy NodeSelectionPolicy `json:"nodeSelectionPolicy"`
 	// +optional
-	NodeSelectionPolicy NodeSelectionPolicy `json:"nodeSelectionPolicy,omitempty"`
-	TopologyKey         string              `json:"topologyKey"`
-	NodeGroups          []NodeGroup         `json:"nodeGroups,omitempty"`
+	TopologyKey string      `json:"topologyKey,omitempty"`
+	NodeGroups  []NodeGroup `json:"nodeGroups,omitempty"`
 
 	// Requirements are layered with GetLabels and applied to every node.
 	// +kubebuilder:validation:XValidation:message="requirements with operator 'In' must have a value defined",rule="self.all(x, x.operator == 'In' ? x.values.size() != 0 : true)"
@@ -61,7 +61,8 @@ type NodeTopologySpec struct {
 }
 
 type NodeGroup struct {
-	TopologyValue string `json:"topologyValue"`
+	// +optional
+	TopologyValue string `json:"topologyValue,omitempty"`
 	// Allocatable represents the total resources of a node.
 	// More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#capacity
 	// Deprecated: Use resources instead.
@@ -85,6 +86,7 @@ type NodeSelectionPolicy string
 const (
 	NodeSelectionPolicyLabelSelector NodeSelectionPolicy = "LabelSelector"
 	NodeSelectionPolicyTaint         NodeSelectionPolicy = "Taint"
+	NodeSelectionPolicyNone          NodeSelectionPolicy = "None"
 )
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

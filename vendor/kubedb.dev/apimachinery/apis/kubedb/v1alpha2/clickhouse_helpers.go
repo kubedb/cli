@@ -34,6 +34,7 @@ import (
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/klog/v2"
+	"k8s.io/utils/ptr"
 	"kmodules.xyz/client-go/apiextensions"
 	coreutil "kmodules.xyz/client-go/core/v1"
 	meta_util "kmodules.xyz/client-go/meta"
@@ -308,6 +309,17 @@ func (c *ClickHouse) SetDefaults(kc client.Client) {
 	if err != nil {
 		klog.Errorf("can't get the clickhouse version object %s for %s \n", err.Error(), c.Spec.Version)
 		return
+	}
+
+	if c.Spec.TLS != nil && c.Spec.TLS.ClientCACertificateRefs != nil {
+		for i, secret := range c.Spec.TLS.ClientCACertificateRefs {
+			if secret.Key == "" {
+				c.Spec.TLS.ClientCACertificateRefs[i].Key = kubedb.CACert
+			}
+			if secret.Optional == nil {
+				c.Spec.TLS.ClientCACertificateRefs[i].Optional = ptr.To(false)
+			}
+		}
 	}
 
 	if c.Spec.ClusterTopology != nil {

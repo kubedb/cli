@@ -437,9 +437,9 @@ func (r *Redis) GetCertSecretName(alias RedisCertificateAlias) string {
 }
 
 func (r *Redis) ReplicasAreReady(lister pslister.PetSetLister) (bool, string, error) {
-	// Desire number of statefulSets
+	// Desire number of PetSets
 	expectedItems := 1
-	if r.Spec.Cluster != nil {
+	if r.Spec.Mode == RedisModeCluster {
 		expectedItems = int(pointer.Int32(r.Spec.Cluster.Shards))
 	}
 	return checkReplicas(lister.PetSets(r.Namespace), labels.SelectorFromSet(r.OffshootLabels()), expectedItems)

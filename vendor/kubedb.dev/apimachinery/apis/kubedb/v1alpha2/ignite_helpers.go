@@ -25,6 +25,7 @@ import (
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
+	promapi "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1"
 	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -34,6 +35,7 @@ import (
 	meta_util "kmodules.xyz/client-go/meta"
 	"kmodules.xyz/client-go/policy/secomp"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
+	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v2"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
@@ -129,15 +131,7 @@ func (i *Ignite) SetDefaults(kc client.Client) {
 
 	i.SetHealthCheckerDefaults()
 
-	/*	if i.Spec.Monitor != nil {
-		if i.Spec.Monitor.Prometheus == nil {
-			i.Spec.Monitor.Prometheus = &mona.PrometheusSpec{}
-		}
-		if i.Spec.Monitor.Prometheus != nil && i.Spec.Monitor.Prometheus.Exporter.Port == 0 {
-			// i.Spec.Monitor.Prometheus.Exporter.Port =
-		}
-		i.Spec.Monitor.SetDefaults()
-	}*/
+	i.Spec.Monitor.SetDefaults()
 }
 
 func (i *Ignite) SetHealthCheckerDefaults() {
@@ -279,4 +273,49 @@ func (i *Ignite) PVCName(alias string) string {
 
 func (i *Ignite) Address() string {
 	return fmt.Sprintf("%v.%v.svc.cluster.local", i.Name, i.Namespace)
+}
+
+type igniteStatsService struct {
+	*Ignite
+}
+
+func (i igniteStatsService) GetNamespace() string {
+	return i.Ignite.GetNamespace()
+}
+
+func (i igniteStatsService) ServiceName() string {
+	return i.OffshootName() + "-stats"
+}
+
+func (i igniteStatsService) ServiceMonitorName() string {
+	return i.ServiceName()
+}
+
+func (i igniteStatsService) ServiceMonitorAdditionalLabels() map[string]string {
+	return i.OffshootLabels()
+}
+
+func (i igniteStatsService) Path() string {
+	return kubedb.DefaultStatsPath
+}
+
+func (i igniteStatsService) Scheme() string {
+	return ""
+}
+
+func (i igniteStatsService) TLSConfig() *promapi.TLSConfig {
+	return nil
+}
+
+func (i Ignite) StatsService() mona.StatsAccessor {
+	return &igniteStatsService{&i}
+}
+
+func (i Ignite) StatsServiceLabels() map[string]string {
+	return i.ServiceLabels(StatsServiceAlias, map[string]string{kubedb.LabelRole: kubedb.RoleStats})
+}
+
+func (i Ignite) ServiceLabels(alias ServiceAlias, extraLabels ...map[string]string) map[string]string {
+	svcTemplate := GetServiceTemplate(i.Spec.ServiceTemplates, alias)
+	return i.offshootLabels(meta_util.OverwriteKeys(i.OffshootSelectors(), extraLabels...), svcTemplate.Labels)
 }

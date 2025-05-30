@@ -58,6 +58,8 @@ type ClickHouseOpsRequestSpec struct {
 	Authentication *AuthSpec `json:"authentication,omitempty"`
 	// Specifies information necessary for restarting database
 	Restart *RestartSpec `json:"restart,omitempty"`
+	// Specifies information necessary for vertical scaling
+	VerticalScaling *ClickHouseVerticalScalingSpec `json:"verticalScaling,omitempty"`
 	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
 	Timeout *metav1.Duration `json:"timeout,omitempty"`
 	// ApplyOption is to control the execution of OpsRequest depending on the database state.
@@ -65,9 +67,24 @@ type ClickHouseOpsRequestSpec struct {
 	Apply ApplyOption `json:"apply,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=Restart;RotateAuth
-// ENUM(Restart, RotateAuth)
+// +kubebuilder:validation:Enum=Restart;VerticalScaling
+// ENUM(Restart, VerticalScaling)
 type ClickHouseOpsRequestType string
+
+// ClickHouseVerticalScalingSpec contains the vertical scaling information of a clickhouse cluster
+type ClickHouseVerticalScalingSpec struct {
+	// Resource spec for Standalone node
+	Standalone *PodResources `json:"standalone,omitempty"`
+	// List of cluster configurations for ClickHouse when running in cluster mode.
+	Cluster []*ClickHouseClusterVerticalScalingSpec `json:"cluster,omitempty"`
+}
+
+type ClickHouseClusterVerticalScalingSpec struct {
+	// Name of the ClickHouse cluster to which the vertical scaling configuration applies.
+	ClusterName string `json:"clusterName,omitempty"`
+	// Resource specifications for the nodes in this ClickHouse cluster.
+	Node *PodResources `json:"node,omitempty"`
+}
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 

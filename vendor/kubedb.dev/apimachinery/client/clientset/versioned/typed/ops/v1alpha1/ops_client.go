@@ -29,6 +29,7 @@ import (
 
 type OpsV1alpha1Interface interface {
 	RESTClient() rest.Interface
+	CassandraOpsRequestsGetter
 	ClickHouseOpsRequestsGetter
 	DruidOpsRequestsGetter
 	ElasticsearchOpsRequestsGetter
@@ -56,6 +57,10 @@ type OpsV1alpha1Interface interface {
 // OpsV1alpha1Client is used to interact with features provided by the ops.kubedb.com group.
 type OpsV1alpha1Client struct {
 	restClient rest.Interface
+}
+
+func (c *OpsV1alpha1Client) CassandraOpsRequests(namespace string) CassandraOpsRequestInterface {
+	return newCassandraOpsRequests(c, namespace)
 }
 
 func (c *OpsV1alpha1Client) ClickHouseOpsRequests(namespace string) ClickHouseOpsRequestInterface {

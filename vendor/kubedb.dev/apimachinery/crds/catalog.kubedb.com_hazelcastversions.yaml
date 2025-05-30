@@ -1,0 +1,91 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  labels:
+    app.kubernetes.io/name: kubedb
+  name: hazelcastversions.catalog.kubedb.com
+spec:
+  group: catalog.kubedb.com
+  names:
+    categories:
+    - catalog
+    - kubedb
+    - appscode
+    kind: HazelcastVersion
+    listKind: HazelcastVersionList
+    plural: hazelcastversions
+    shortNames:
+    - hzversion
+    singular: hazelcastversion
+  scope: Cluster
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .spec.version
+      name: Version
+      type: string
+    - jsonPath: .spec.db.image
+      name: DB_IMAGE
+      type: string
+    - jsonPath: .spec.deprecated
+      name: Deprecated
+      type: boolean
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        properties:
+          apiVersion:
+            type: string
+          kind:
+            type: string
+          metadata:
+            type: object
+          spec:
+            properties:
+              db:
+                properties:
+                  image:
+                    type: string
+                required:
+                - image
+                type: object
+              deprecated:
+                type: boolean
+              initContainer:
+                properties:
+                  image:
+                    type: string
+                required:
+                - image
+                type: object
+              securityContext:
+                properties:
+                  runAsUser:
+                    format: int64
+                    type: integer
+                type: object
+              updateConstraints:
+                properties:
+                  allowlist:
+                    items:
+                      type: string
+                    type: array
+                  denylist:
+                    items:
+                      type: string
+                    type: array
+                type: object
+              version:
+                type: string
+            required:
+            - db
+            - initContainer
+            - version
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources: {}
