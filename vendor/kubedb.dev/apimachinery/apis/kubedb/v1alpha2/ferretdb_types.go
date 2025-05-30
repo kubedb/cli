@@ -57,6 +57,9 @@ type FerretDBSpec struct {
 	// FerretDB primary and secondary server configuration
 	Server *FerretDBServer `json:"server,omitempty"`
 
+	// FerretDB backend configuration
+	Backend *FerretDBBackendSpec `json:"backend,omitempty"`
+
 	// Database authentication secret.
 	// Use this only when backend is internally managed.
 	// For externally managed backend, we will get the authSecret from AppBinding
@@ -78,13 +81,6 @@ type FerretDBSpec struct {
 	// Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
 	// +optional
 	Halted bool `json:"halted,omitempty"`
-
-	// StorageType can be durable (default) or ephemeral for KubeDB Backend
-	// +optional
-	StorageType StorageType `json:"storageType,omitempty"`
-
-	// Storage to specify how storage shall be used for KubeDB Backend.
-	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty"`
 
 	// DeletionPolicy controls the delete operation for database
 	// +optional
@@ -123,6 +119,19 @@ type FerretDBServerSpec struct {
 	// PodTemplate is an optional configuration for pods used to expose database
 	// +optional
 	PodTemplate *ofst.PodTemplateSpec `json:"podTemplate,omitempty"`
+}
+
+type FerretDBBackendSpec struct {
+	Replicas *int32 `json:"replicas,omitempty"`
+	// PodTemplate is an optional configuration for pods used to expose database
+	// +optional
+	PodTemplate *ofst.PodTemplateSpec `json:"podTemplate,omitempty"`
+	// StorageType can be durable (default) or ephemeral for KubeDB Backend
+	// +optional
+	StorageType StorageType `json:"storageType,omitempty"`
+
+	// Storage to specify how storage shall be used for KubeDB Backend.
+	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty"`
 }
 
 // +kubebuilder:validation:Enum=server;client

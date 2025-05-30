@@ -30,6 +30,8 @@ type EtcdExpansion interface{}
 
 type FerretDBExpansion interface{}
 
+type HazelcastExpansion interface{}
+
 type IgniteExpansion interface{}
 
 type KafkaExpansion interface{}
@@ -43,6 +45,8 @@ type MemcachedExpansion interface{}
 type MongoDBExpansion interface{}
 
 type MySQLExpansion interface{}
+
+type OracleExpansion interface{}
 
 type PerconaXtraDBExpansion interface{}
 

@@ -54,6 +54,10 @@ type Kafka struct {
 
 // KafkaSpec defines the desired state of Kafka
 type KafkaSpec struct {
+	// AutoOps contains configuration of automatic ops-request-recommendation generation
+	// +optional
+	AutoOps AutoOpsSpec `json:"autoOps,omitempty"`
+
 	// Version of Kafka to be deployed.
 	Version string `json:"version"`
 

@@ -1598,7 +1598,7 @@ kmodules.xyz/apiversion
 # kmodules.xyz/cert-manager-util v0.29.0
 ## explicit; go 1.21.5
 kmodules.xyz/cert-manager-util/certmanager/v1
-# kmodules.xyz/client-go v0.32.1
+# kmodules.xyz/client-go v0.32.6
 ## explicit; go 1.23.0
 kmodules.xyz/client-go
 kmodules.xyz/client-go/api/v1
@@ -1640,12 +1640,12 @@ kmodules.xyz/offshoot-api/util
 # kmodules.xyz/prober v0.32.0
 ## explicit; go 1.23.0
 kmodules.xyz/prober/api/v1
-# kmodules.xyz/resource-metadata v0.26.1
+# kmodules.xyz/resource-metadata v0.30.1
 ## explicit; go 1.23.0
 kmodules.xyz/resource-metadata/apis/node
 kmodules.xyz/resource-metadata/apis/node/v1alpha1
 kmodules.xyz/resource-metadata/crds
-# kubedb.dev/apimachinery v0.54.0
+# kubedb.dev/apimachinery v0.55.0
 ## explicit; go 1.23.0
 kubedb.dev/apimachinery/apis
 kubedb.dev/apimachinery/apis/archiver/v1alpha1
@@ -1690,7 +1690,7 @@ kubedb.dev/apimachinery/client/clientset/versioned/typed/ui/v1alpha1
 kubedb.dev/apimachinery/crds
 kubedb.dev/apimachinery/pkg/double_optin
 kubedb.dev/apimachinery/pkg/factory
-# kubedb.dev/db-client-go v0.9.0
+# kubedb.dev/db-client-go v0.10.0
 ## explicit; go 1.23.0
 kubedb.dev/db-client-go/elasticsearch
 kubedb.dev/db-client-go/redis
@@ -1718,7 +1718,7 @@ kubestash.dev/apimachinery/apis
 kubestash.dev/apimachinery/apis/core/v1alpha1
 kubestash.dev/apimachinery/apis/storage/v1alpha1
 kubestash.dev/apimachinery/crds
-# sigs.k8s.io/controller-runtime v0.20.3 => github.com/kmodules/controller-runtime v0.20.3-0.20250221050548-8eabe54e7dda
+# sigs.k8s.io/controller-runtime v0.20.4 => github.com/kmodules/controller-runtime v0.20.3-0.20250221050548-8eabe54e7dda
 ## explicit; go 1.23.0
 sigs.k8s.io/controller-runtime
 sigs.k8s.io/controller-runtime/pkg/builder

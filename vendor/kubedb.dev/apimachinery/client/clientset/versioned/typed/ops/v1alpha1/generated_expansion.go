@@ -18,6 +18,8 @@ limitations under the License.
 
 package v1alpha1
 
+type CassandraOpsRequestExpansion interface{}
+
 type ClickHouseOpsRequestExpansion interface{}
 
 type DruidOpsRequestExpansion interface{}

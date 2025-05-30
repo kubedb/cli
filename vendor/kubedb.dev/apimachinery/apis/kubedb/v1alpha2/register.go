@@ -78,6 +78,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&MongoDBList{},
 		&MySQL{},
 		&MySQLList{},
+		&Oracle{},
+		&OracleList{},
 		&PerconaXtraDB{},
 		&PerconaXtraDBList{},
 		&PgBouncer{},
@@ -102,6 +104,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&SolrList{},
 		&MSSQLServer{},
 		&MSSQLServerList{},
+		&Hazelcast{},
+		&HazelcastList{},
 	)
 
 	scheme.AddKnownTypes(SchemeGroupVersion,

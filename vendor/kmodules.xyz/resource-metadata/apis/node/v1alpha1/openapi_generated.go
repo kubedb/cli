@@ -16843,6 +16843,18 @@ func schema_kmodulesxyz_client_go_api_v1_ClusterMetadata(ref common.ReferenceCal
 							Format: "",
 						},
 					},
+					"cloudServiceAuthMode": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
 				},
 				Required: []string{"uid"},
 			},
@@ -19211,9 +19223,8 @@ func schema_resource_metadata_apis_node_v1alpha1_NodeGroup(ref common.ReferenceC
 				Properties: map[string]spec.Schema{
 					"topologyValue": {
 						SchemaProps: spec.SchemaProps{
-							Default: "",
-							Type:    []string{"string"},
-							Format:  "",
+							Type:   []string{"string"},
+							Format: "",
 						},
 					},
 					"allocatable": {
@@ -19244,7 +19255,6 @@ func schema_resource_metadata_apis_node_v1alpha1_NodeGroup(ref common.ReferenceC
 						},
 					},
 				},
-				Required: []string{"topologyValue"},
 			},
 		},
 		Dependencies: []string{
@@ -19354,15 +19364,15 @@ func schema_resource_metadata_apis_node_v1alpha1_NodeTopologySpec(ref common.Ref
 					},
 					"nodeSelectionPolicy": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
 						},
 					},
 					"topologyKey": {
 						SchemaProps: spec.SchemaProps{
-							Default: "",
-							Type:    []string{"string"},
-							Format:  "",
+							Type:   []string{"string"},
+							Format: "",
 						},
 					},
 					"nodeGroups": {
@@ -19393,7 +19403,7 @@ func schema_resource_metadata_apis_node_v1alpha1_NodeTopologySpec(ref common.Ref
 						},
 					},
 				},
-				Required: []string{"topologyKey"},
+				Required: []string{"nodeSelectionPolicy"},
 			},
 		},
 		Dependencies: []string{

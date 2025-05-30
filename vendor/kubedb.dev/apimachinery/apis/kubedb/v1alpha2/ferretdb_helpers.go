@@ -205,8 +205,21 @@ func (f *FerretDB) SetDefaults(kc client.Client) {
 	if f == nil {
 		return
 	}
-	if f.Spec.StorageType == "" {
-		f.Spec.StorageType = StorageTypeDurable
+
+	if f.Spec.Backend == nil {
+		f.Spec.Backend = &FerretDBBackendSpec{}
+	}
+
+	if f.Spec.Backend.Replicas == nil {
+		f.Spec.Backend.Replicas = pointer.Int32P(3)
+	}
+
+	if f.Spec.Backend.PodTemplate == nil {
+		f.Spec.Backend.PodTemplate = &ofst.PodTemplateSpec{}
+	}
+
+	if f.Spec.Backend.StorageType == "" {
+		f.Spec.Backend.StorageType = StorageTypeDurable
 	}
 
 	if f.Spec.DeletionPolicy == "" {

@@ -35,6 +35,7 @@ type CatalogV1alpha1Interface interface {
 	ElasticsearchVersionsGetter
 	EtcdVersionsGetter
 	FerretDBVersionsGetter
+	HazelcastVersionsGetter
 	IgniteVersionsGetter
 	KafkaConnectorVersionsGetter
 	KafkaVersionsGetter
@@ -43,6 +44,7 @@ type CatalogV1alpha1Interface interface {
 	MemcachedVersionsGetter
 	MongoDBVersionsGetter
 	MySQLVersionsGetter
+	OracleVersionsGetter
 	PerconaXtraDBVersionsGetter
 	PgBouncerVersionsGetter
 	PgpoolVersionsGetter
@@ -85,6 +87,10 @@ func (c *CatalogV1alpha1Client) FerretDBVersions() FerretDBVersionInterface {
 	return newFerretDBVersions(c)
 }
 
+func (c *CatalogV1alpha1Client) HazelcastVersions() HazelcastVersionInterface {
+	return newHazelcastVersions(c)
+}
+
 func (c *CatalogV1alpha1Client) IgniteVersions() IgniteVersionInterface {
 	return newIgniteVersions(c)
 }
@@ -115,6 +121,10 @@ func (c *CatalogV1alpha1Client) MongoDBVersions() MongoDBVersionInterface {
 
 func (c *CatalogV1alpha1Client) MySQLVersions() MySQLVersionInterface {
 	return newMySQLVersions(c)
+}
+
+func (c *CatalogV1alpha1Client) OracleVersions() OracleVersionInterface {
+	return newOracleVersions(c)
 }
 
 func (c *CatalogV1alpha1Client) PerconaXtraDBVersions() PerconaXtraDBVersionInterface {

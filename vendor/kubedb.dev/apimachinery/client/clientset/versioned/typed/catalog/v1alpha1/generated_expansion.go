@@ -30,6 +30,8 @@ type EtcdVersionExpansion interface{}
 
 type FerretDBVersionExpansion interface{}
 
+type HazelcastVersionExpansion interface{}
+
 type IgniteVersionExpansion interface{}
 
 type KafkaConnectorVersionExpansion interface{}
@@ -45,6 +47,8 @@ type MemcachedVersionExpansion interface{}
 type MongoDBVersionExpansion interface{}
 
 type MySQLVersionExpansion interface{}
+
+type OracleVersionExpansion interface{}
 
 type PerconaXtraDBVersionExpansion interface{}
 
