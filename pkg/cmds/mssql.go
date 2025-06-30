@@ -19,14 +19,15 @@ package cmds
 import (
 	"context"
 	"fmt"
-	"kubedb.dev/cli/pkg/common"
 	"os"
+
+	_ "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	"kubedb.dev/cli/pkg/common"
 
 	"github.com/spf13/cobra"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
-	_ "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 	"sigs.k8s.io/yaml"
 )
 
@@ -89,12 +90,12 @@ func runDAGConfig(ctx context.Context, f cmdutil.Factory, namespace, outputDir, 
 	}
 
 	// Write the buffer to a file
-	if err := os.MkdirAll(outputDir, 0755); err != nil {
+	if err := os.MkdirAll(outputDir, 0o755); err != nil {
 		return fmt.Errorf("failed to create output directory '%s': %w", outputDir, err)
 	}
 
 	outputFile := fmt.Sprintf("%s/%s-dag-config.yaml", outputDir, mssqlServerName)
-	if err := os.WriteFile(outputFile, yamlBuffer, 0644); err != nil {
+	if err := os.WriteFile(outputFile, yamlBuffer, 0o644); err != nil {
 		return fmt.Errorf("failed to write DAG config to file '%s': %w", outputFile, err)
 	}
 
