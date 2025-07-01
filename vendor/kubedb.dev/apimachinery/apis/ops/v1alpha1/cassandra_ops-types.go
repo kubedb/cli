@@ -18,7 +18,10 @@ limitations under the License.
 package v1alpha1
 
 import (
+	kubedbApiV1Alpha2 "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+
 	core "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -50,26 +53,46 @@ type CassandraOpsRequest struct {
 
 // CassandraOpsRequestSpec is the spec for CassandraOpsRequest
 type CassandraOpsRequestSpec struct {
+	// Specifies information necessary for custom configuration of Cassandra
+	Configuration *CassandraCustomConfigurationSpec `json:"configuration,omitempty"`
 	// Specifies the Cassandra reference
 	DatabaseRef core.LocalObjectReference `json:"databaseRef"`
 	// Specifies the ops request type: UpdateVersion, HorizontalScaling, VerticalScaling etc.
 	Type CassandraOpsRequestType `json:"type"`
+	// Specifies information necessary for horizontal scaling
+	HorizontalScaling *CassandraHorizontalScalingSpec `json:"horizontalScaling,omitempty"`
 	// Specifies information necessary for upgrading cassandra
 	UpdateVersion *CassandraUpdateVersionSpec `json:"updateVersion,omitempty"`
 	// Specifies information necessary for vertical scaling
 	VerticalScaling *CassandraVerticalScalingSpec `json:"verticalScaling,omitempty"`
+	// Specifies information necessary for volume expansion
+	VolumeExpansion *CassandraVolumeExpansionSpec `json:"volumeExpansion,omitempty"`
 	// Specifies information necessary for restarting database
 	Restart *RestartSpec `json:"restart,omitempty"`
 	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
 	Timeout *metav1.Duration `json:"timeout,omitempty"`
+
+	// Specifies information necessary for configuring TLS
+	TLS *TLSSpec `json:"tls,omitempty"`
+
+	// Keystore encryption secret
+	// +optional
+	KeystoreCredSecret *kubedbApiV1Alpha2.SecretReference `json:"keystoreCredSecret,omitempty"`
+
 	// ApplyOption is to control the execution of OpsRequest depending on the database state.
 	// +kubebuilder:default="IfReady"
 	Apply ApplyOption `json:"apply,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=UpdateVersion;VerticalScaling;Restart
-// ENUM(UpdateVersion, VerticalScaling, Restart)
+// +kubebuilder:validation:Enum=UpdateVersion;VerticalScaling;Restart;VolumeExpansion;HorizontalScaling;Reconfigure;ReconfigureTLS
+// ENUM(UpdateVersion, VerticalScaling, Restart, VolumeExpansion, HorizontalScaling, Reconfigure, ReconfigureTLS)
 type CassandraOpsRequestType string
+
+// CassandraHorizontalScalingSpec contains the horizontal scaling information of a Cassandra cluster
+type CassandraHorizontalScalingSpec struct {
+	// Number of node
+	Node *int32 `json:"node,omitempty"`
+}
 
 // CassandraUpdateVersionSpec contains the update version information of a cassandra cluster
 type CassandraUpdateVersionSpec struct {
@@ -81,6 +104,13 @@ type CassandraUpdateVersionSpec struct {
 type CassandraVerticalScalingSpec struct {
 	// Resource spec for nodes
 	Node *PodResources `json:"node,omitempty"`
+}
+
+// CassandraVolumeExpansionSpec is the spec for Cassandra volume expansion
+type CassandraVolumeExpansionSpec struct {
+	Mode VolumeExpansionMode `json:"mode"`
+	// volume specification for nodes
+	Node *resource.Quantity `json:"node,omitempty"`
 }
 
 // CassandraCustomConfigurationSpec is the spec for Reconfiguring the cassandra Settings

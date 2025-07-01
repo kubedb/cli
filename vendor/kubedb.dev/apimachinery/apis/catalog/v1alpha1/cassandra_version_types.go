@@ -74,6 +74,9 @@ type CassandraVersionSpec struct {
 
 	// +optional
 	UI []ChartInfo `json:"ui,omitempty"`
+
+	// update constraints
+	UpdateConstraints UpdateConstraints `json:"updateConstraints,omitempty"`
 }
 
 // CassandraVersionExporter is the image for the Cassandra exporter

@@ -51,6 +51,10 @@ type Memcached struct {
 }
 
 type MemcachedSpec struct {
+	// AutoOps contains configuration of automatic ops-request-recommendation generation
+	// +optional
+	AutoOps AutoOpsSpec `json:"autoOps,omitempty"`
+
 	// Version of Memcached to be deployed.
 	Version string `json:"version"`
 

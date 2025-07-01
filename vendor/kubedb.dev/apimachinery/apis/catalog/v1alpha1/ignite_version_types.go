@@ -63,6 +63,9 @@ type IgniteVersionSpec struct {
 	SecurityContext IgniteSecurityContext `json:"securityContext"`
 	// +optional
 	UI []ChartInfo `json:"ui,omitempty"`
+
+	// update constraints
+	UpdateConstraints UpdateConstraints `json:"updateConstraints,omitempty"`
 }
 
 // IgniteSecurityContext is for the additional config for the DB container

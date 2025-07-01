@@ -143,6 +143,24 @@ spec:
                 type: object
               cluster:
                 properties:
+                  announce:
+                    properties:
+                      shards:
+                        items:
+                          properties:
+                            endpoints:
+                              items:
+                                type: string
+                              type: array
+                          type: object
+                        type: array
+                      type:
+                        default: hostname
+                        enum:
+                        - ip
+                        - hostname
+                        type: string
+                    type: object
                   replicas:
                     format: int32
                     type: integer
@@ -4985,6 +5003,24 @@ spec:
                 type: object
               cluster:
                 properties:
+                  announce:
+                    properties:
+                      shards:
+                        items:
+                          properties:
+                            endpoints:
+                              items:
+                                type: string
+                              type: array
+                          type: object
+                        type: array
+                      type:
+                        default: hostname
+                        enum:
+                        - ip
+                        - hostname
+                        type: string
+                    type: object
                   master:
                     format: int32
                     type: integer

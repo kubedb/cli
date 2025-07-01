@@ -48,6 +48,11 @@ spec:
                     type: string
                 type: object
                 x-kubernetes-map-type: atomic
+              autoOps:
+                properties:
+                  disabled:
+                    type: boolean
+                type: object
               clientSecurePort:
                 default: 2182
                 format: int32

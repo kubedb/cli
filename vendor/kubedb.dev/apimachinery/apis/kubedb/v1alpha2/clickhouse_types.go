@@ -29,6 +29,10 @@ const (
 	ResourceSingularClickHouse = "clickhouse"
 	ResourcePluralClickHouse   = "clickhouses"
 	ResourceCodeClickHouse     = "ch"
+
+	ClickHouseCACert     ClickHouseCertificateAlias = "ca"
+	ClickHouseClientCert ClickHouseCertificateAlias = "client"
+	ClickHouseServerCert ClickHouseCertificateAlias = "server"
 )
 
 // +genclient
@@ -52,6 +56,10 @@ type ClickHouse struct {
 
 // ClickHouseSpec defines the desired state of ClickHouse
 type ClickHouseSpec struct {
+	// AutoOps contains configuration of automatic ops-request-recommendation generation
+	// +optional
+	AutoOps AutoOpsSpec `json:"autoOps,omitempty"`
+
 	// Version of ClickHouse to be deployed.
 	Version string `json:"version"`
 
@@ -86,6 +94,10 @@ type ClickHouseSpec struct {
 	// PodTemplate is an optional configuration for pods used to expose database
 	// +optional
 	PodTemplate *ofst.PodTemplateSpec `json:"podTemplate,omitempty"`
+
+	// Indicates how SSL/TLS certificate verification will be handled for both the server and client sides.
+	// +optional
+	SSLVerificationMode SSLVerificationMode `json:"sslVerificationMode,omitempty"`
 
 	// TLS contains tls configurations for client and server.
 	// +optional
@@ -207,3 +219,13 @@ type ClickHouseTLSConfig struct {
 	// +optional
 	ClientCACertificateRefs []core.SecretKeySelector `json:"clientCaCertificateRefs,omitempty"`
 }
+
+// +kubebuilder:validation:Enum=none;relaxed;strict;once
+type SSLVerificationMode string
+
+const (
+	SSLVerificationModeNone    SSLVerificationMode = "none"
+	SSLVerificationModeRelaxed SSLVerificationMode = "relaxed"
+	SSLVerificationModeStrict  SSLVerificationMode = "strict"
+	SSLVerificationModeOnce    SSLVerificationMode = "once"
+)

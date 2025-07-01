@@ -63,6 +63,8 @@ type RabbitMQVersionSpec struct {
 	SecurityContext SecurityContext `json:"securityContext"`
 	// +optional
 	UI []ChartInfo `json:"ui,omitempty"`
+	// update constraints
+	UpdateConstraints UpdateConstraints `json:"updateConstraints,omitempty"`
 }
 
 // RabbitMQVersionDatabase is the RabbitMQ Database image

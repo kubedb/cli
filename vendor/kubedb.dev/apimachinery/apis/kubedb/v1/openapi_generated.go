@@ -503,6 +503,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kmodules.xyz/offshoot-api/api/v1.VolumeSource":                                              schema_kmodulesxyz_offshoot_api_api_v1_VolumeSource(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.Age":                                                 schema_apimachinery_apis_kubedb_v1_Age(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.AllowedConsumers":                                    schema_apimachinery_apis_kubedb_v1_AllowedConsumers(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1.Announce":                                            schema_apimachinery_apis_kubedb_v1_Announce(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.ArbiterSpec":                                         schema_apimachinery_apis_kubedb_v1_ArbiterSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.Archiver":                                            schema_apimachinery_apis_kubedb_v1_Archiver(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.ArchiverRecovery":                                    schema_apimachinery_apis_kubedb_v1_ArchiverRecovery(ref),
@@ -598,6 +599,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1.ScriptSourceSpec":                                    schema_apimachinery_apis_kubedb_v1_ScriptSourceSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference":                                     schema_apimachinery_apis_kubedb_v1_SecretReference(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.SemiSyncSpec":                                        schema_apimachinery_apis_kubedb_v1_SemiSyncSpec(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1.Shards":                                              schema_apimachinery_apis_kubedb_v1_Shards(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.SystemUserSecretsSpec":                               schema_apimachinery_apis_kubedb_v1_SystemUserSecretsSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.elasticsearchApp":                                    schema_apimachinery_apis_kubedb_v1_elasticsearchApp(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.elasticsearchStatsService":                           schema_apimachinery_apis_kubedb_v1_elasticsearchStatsService(ref),
@@ -21820,6 +21822,18 @@ func schema_kmodulesxyz_client_go_api_v1_ClusterMetadata(ref common.ReferenceCal
 							Format: "",
 						},
 					},
+					"cloudServiceAuthMode": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
 				},
 				Required: []string{"uid"},
 			},
@@ -25949,6 +25963,40 @@ func schema_apimachinery_apis_kubedb_v1_AllowedConsumers(ref common.ReferenceCal
 		},
 		Dependencies: []string{
 			"k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector", "kubedb.dev/apimachinery/apis/kubedb/v1.ConsumerNamespaces"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1_Announce(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"type": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"shards": {
+						SchemaProps: spec.SchemaProps{
+							Description: "This field is used to set cluster-announce information for redis cluster of each shard.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1.Shards"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/kubedb/v1.Shards"},
 	}
 }
 
@@ -30872,9 +30920,17 @@ func schema_apimachinery_apis_kubedb_v1_RedisClusterSpec(ref common.ReferenceCal
 							Format:      "int32",
 						},
 					},
+					"announce": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Announce is used to announce the redis cluster endpoints. It is used to set cluster-announce-ip, cluster-announce-port, cluster-announce-bus-port, cluster-announce-tls-port",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1.Announce"),
+						},
+					},
 				},
 			},
 		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/kubedb/v1.Announce"},
 	}
 }
 
@@ -31722,6 +31778,33 @@ func schema_apimachinery_apis_kubedb_v1_SemiSyncSpec(ref common.ReferenceCallbac
 		},
 		Dependencies: []string{
 			"k8s.io/apimachinery/pkg/apis/meta/v1.Duration"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1_Shards(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"endpoints": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Endpoints contains the cluster-announce information for all the replicas in a shard. This will be used to set cluster-announce-ip/hostname, cluster-announce-port/cluster-announce-tls-port and cluster-announce-bus-port format cluster-announce (host:port@busport)",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
 	}
 }
 

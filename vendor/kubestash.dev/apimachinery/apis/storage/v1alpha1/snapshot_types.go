@@ -202,6 +202,10 @@ type Component struct {
 	// +optional
 	WalGStats *WalGStats `json:"walGStats,omitempty"`
 
+	// MedusaStats specifies the "Medusa" driver specific information
+	// +optional
+	MedusaStats *MedusaStats `json:"medusaStats,omitempty"`
+
 	// VolumeSnapshotterStats specifies the "VolumeSnapshotter" driver specific information
 	// +optional
 	VolumeSnapshotterStats []VolumeSnapshotterStats `json:"volumeSnapshotterStats,omitempty"`
@@ -305,6 +309,25 @@ type WalGStats struct {
 	// StopTime represents the WalG backup stop time.
 	// +optional
 	StopTime *metav1.Time `json:"stopTime,omitempty"`
+}
+
+// MedusaStats specifies the information specific to the "Medusa" driver.
+type MedusaStats struct {
+	// BackupName represents the name of the backup
+	BackupName string `json:"backupName,omitempty"`
+
+	// BackupNodes represents the list of target backup nodes.
+	// +optional
+	BackupNodes []string `json:"backupNodes,omitempty"`
+
+	// StatusType represents the status of Backup. This can be "IN_PROGRESS","SUCCESS","FAILED" or "UNKNOWN"
+	StatusType string `json:"status,omitempty"`
+
+	// Starting time of the backup
+	StartTime string `json:"startTime,omitempty"`
+
+	// Finishing time of the backup
+	FinishTime string `json:"finishTime,omitempty"`
 }
 
 const (

@@ -857,6 +857,7 @@ const (
 	KafkaCCDefaultOutNetwork           = 500000
 
 	KafkaContainerName          = "kafka"
+	KafkaInitContainerName      = "kafka-init"
 	KafkaUserAdmin              = "admin"
 	KafkaNodeRoleSet            = "set"
 	KafkaNodeRolesCombined      = "controller,broker"
@@ -871,6 +872,7 @@ const (
 	KafkaDataDir                              = "/var/log/kafka"
 	KafkaMetaDataDir                          = "/var/log/kafka/metadata"
 	KafkaCertDir                              = "/var/private/ssl"
+	KafkaInitScriptsDir                       = "/opt/kafka/init-scripts"
 	KafkaConfigDir                            = "/opt/kafka/config/kafkaconfig"
 	KafkaTempConfigDir                        = "/opt/kafka/config/temp-config"
 	KafkaCustomConfigDir                      = "/opt/kafka/config/custom-config"
@@ -972,6 +974,7 @@ const (
 	KafkaVolumeConfig       = "kafkaconfig"
 	KafkaVolumeTempConfig   = "temp-config"
 	KafkaVolumeCustomConfig = "custom-config"
+	KafkaVolumeInitScripts  = "init-scripts"
 
 	EnvKafkaUser      = "KAFKA_USER"
 	EnvKafkaPassword  = "KAFKA_PASSWORD"
@@ -1500,36 +1503,45 @@ const (
 
 // =========================== Ignite Constants ============================
 const (
-	IgniteCustomConfigVolName = "custom-config"
-	IgniteCustomConfigDir     = "/tmp/config/custom_config"
-	IgniteTempConfigVolName   = "temp-config"
-	IgniteTempConfigDir       = "/tmp/config"
-	IgniteInitContainerName   = "ignite-init"
-	IgniteInitScriptVolName   = "init-scripts"
-	IgniteInitScriptDir       = "/scripts"
-	IgniteConfigVolName       = "ignite-config"
-	IgniteWorkVolName         = "ignite-work"
-	IgniteConfigFileName      = "node-configuration.xml"
-	IgniteDataVolName         = "data"
-	IgniteDataDir             = "/ignite/data"
-	IgniteContainerName       = "ignite"
-	IgniteConfigDir           = "/ignite/config"
-	IgniteRestPortName        = "rest"
-	IgniteRestPort            = 8080
-	IgniteThinPortName        = "thin"
-	IgniteThinPort            = 10800
-	IgniteSPIPortName         = "spi"
-	IgniteSPIPort             = 47100
-	IgniteTCPPortName         = "tcp"
-	IgniteTCPPort             = 47500
-	IgniteJMXPortName         = "jmx"
-	IgniteJMXPort             = 49112
-	IgniteUserName            = "ignite"
-	OPTION_LIBS               = "OPTION_LIBS"
-	CONFIG_URI                = "CONFIG_URI"
-	CONTROL_JVM_OPTS          = "CONTROL_JVM_OPTS"
-	IGNITE_PASSWORD           = "IGNITE_PASSWORD"
-	DISABLE_SECURITY          = "DISABLE_SECURITY"
+	IgniteCustomConfigVolName  = "custom-config"
+	IgniteCustomConfigDir      = "/tmp/config/custom_config"
+	IgniteTempConfigVolName    = "temp-config"
+	IgniteTempConfigDir        = "/tmp/config"
+	IgniteInitContainerName    = "ignite-init"
+	IgniteInitScriptVolName    = "init-scripts"
+	IgniteInitScriptDir        = "/scripts"
+	IgniteConfigVolName        = "ignite-config"
+	IgniteWorkVolName          = "ignite-work"
+	IgniteConfigFileName       = "node-configuration.xml"
+	IgniteDataVolName          = "data"
+	IgniteDataDir              = "/ignite/data"
+	IgniteContainerName        = "ignite"
+	IgniteConfigDir            = "/ignite/config"
+	IgniteRestPortName         = "rest"
+	IgniteRestPort             = 8080
+	IgniteThinPortName         = "thin"
+	IgniteThinPort             = 10800
+	IgniteSPIPortName          = "spi"
+	IgniteSPIPort              = 47100
+	IgniteTCPPortName          = "tcp"
+	IgniteTCPPort              = 47500
+	IgniteJMXPortName          = "jmx"
+	IgniteJMXPort              = 49112
+	IgniteUserName             = "ignite"
+	OPTION_LIBS                = "OPTION_LIBS"
+	CONFIG_URI                 = "CONFIG_URI"
+	CONTROL_JVM_OPTS           = "CONTROL_JVM_OPTS"
+	IGNITE_PASSWORD            = "IGNITE_PASSWORD"
+	DISABLE_SECURITY           = "DISABLE_SECURITY"
+	ENABLE_SSL                 = "ENABLE_SSL"
+	IGNITE_KEYSTORE_PASSWORD   = "IGNITE_KEYSTORE_PASSWORD"
+	IgniteKeystorePassKey      = "keystore-secret"
+	IgniteServerKeystoreFile   = "/ignite/certs/server/keystore.jks"
+	IgniteServerTruststoreFile = "/ignite/certs/server/truststore.jks"
+	IgniteClientKeystoreFile   = "/ignite/certs/client/keystore.jks"
+	IgniteClientTruststoreFile = "/ignite/certs/client/truststore.jks"
+	IgniteTLSServerMountPath   = "/ignite/certs/server"
+	IgniteTLSClientMountPath   = "/ignite/certs/client"
 )
 
 // =========================== ClickHouse Constants ============================
@@ -1562,6 +1574,16 @@ const (
 	ClickHouseTempClientCertVolumeName = "certs-tmp"
 	ClickHouseTempClientCertMountPath  = "/certs-tmp"
 	ClickHouseTempConfigDir            = "/config-tmp"
+	ClickHouseCACertKey                = "ca.crt"
+	ClickHouseCACertPath               = "ca.crt"
+	ClickHouseServerCertKey            = "tls.crt"
+	ClickHouseServerCertPath           = "server.crt"
+	ClickHouseServerKey                = "tls.key"
+	ClickHouseServerKeyPath            = "server.key"
+	ClickHouseClientCertKey            = "tls.crt"
+	ClickHouseClientCertPath           = "client.crt"
+	ClickHouseClientKey                = "tls.key"
+	ClickHouseClientPath               = "client.key"
 
 	// keeper
 	ClickHouseKeeperDataPath     = "/var/lib/clickhouse_keeper"
@@ -1685,6 +1707,8 @@ const (
 	EnvNameCassandraPodName          = "CASSANDRA_POD_NAME"
 	EnvNameCassandraUser             = "CASSANDRA_USER"
 	EnvNameCassandraPassword         = "CASSANDRA_PASSWORD"
+	EnvNameCassandraSslCertFile      = "SSL_CERTFILE"
+	EnvValCassandraSslCertFile       = CassandraCertDir + "/ca.crt"
 
 	EnvNameMgmtApiListenTcpPort = "MGMT_API_LISTEN_TCP_PORT"
 	EnvValMgmtApiListenTcpPort  = "8081"
@@ -1694,6 +1718,33 @@ const (
 	EnvValMedusaDebugSleep      = "0s"
 	CassandraNodetoolDir        = "/opt/cassandra/temp/bin"
 	CassandraBackupBinary       = "nodetool"
+
+	CassandraKeystoreSecretKey     = "keystore-cred"
+	CassandraCertDir               = "/opt/cassandra/ssl"
+	CassandraKeystoreFile          = CassandraCertDir + "/keystore.jks"
+	CassandraTruststoreFile        = CassandraCertDir + "/truststore.jks"
+	CassandraKeystorePasswordKey   = "keystore_password"
+	CassandraTrustStorePasswordKey = "truststore_password"
+
+	CassandraServerEncryptionOptions = "server_encryption_options"
+	CassandraClientEnctyptionOptions = "client_encryption_options"
+	CassandraTLSStoreTypeJKS         = "JKS"
+
+	CassandraAuthenticatorKey = "authenticator"
+
+	CassandraTLSEncryptionEnabledKey       = "enabled"
+	CassandraTLSInternodeEncryptionModeKey = "internode_encryption"
+	CassandraTLSKeystorePathKey            = "keystore"
+	CassandraTLSTruststorePathKey          = "truststore"
+	CassandraTLSRequireClientAuthKey       = "require_client_auth"
+	CassandraTLSProtocolKey                = "protocol"
+	CassandraTLSAlgorithmKey               = "algorithm"
+	CassandraTLSStoreTypeKey               = "store_type"
+	CassandraClientEncryptionOptionalKey   = "optional"
+	CassandraTLSEncryptionAllValue         = "all"
+	CassandraTLSProtocolTLSValue           = "TLS"
+	CassandraTLSDefaultAlgorithmValue      = "SunX509"
+	CassandraTLSStoreTypeJKSValue          = "JKS"
 )
 
 // =========================== Virtual Secrets Constants ============================

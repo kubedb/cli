@@ -53,6 +53,10 @@ type Pgpool struct {
 
 // PgpoolSpec defines the desired state of Pgpool
 type PgpoolSpec struct {
+	// AutoOps contains configuration of automatic ops-request-recommendation generation
+	// +optional
+	AutoOps AutoOpsSpec `json:"autoOps,omitempty"`
+
 	// SyncUsers is a boolean type and when enabled, operator fetches all users created in the backend server to the
 	// Pgpool server . Password changes are also synced in pgpool when it is enabled.
 	// +optional

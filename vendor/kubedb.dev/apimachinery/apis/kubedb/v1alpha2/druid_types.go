@@ -54,6 +54,10 @@ type Druid struct {
 
 // DruidSpec defines the desired state of Druid
 type DruidSpec struct {
+	// AutoOps contains configuration of automatic ops-request-recommendation generation
+	// +optional
+	AutoOps AutoOpsSpec `json:"autoOps,omitempty"`
+
 	// Version of Druid to be deployed.
 	Version string `json:"version"`
 
