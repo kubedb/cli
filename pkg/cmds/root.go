@@ -109,6 +109,12 @@ func NewKubeDBCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 			},
 		},
 		{
+			Message: "MSSQLServer specific commands",
+			Commands: []*cobra.Command{
+				NewCmdMSSQL(f),
+			},
+		},
+		{
 			Message: "Metric related CMDs",
 			Commands: []*cobra.Command{
 				NewCmdMonitor(f),
