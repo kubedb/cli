@@ -20,19 +20,21 @@ import (
 	"context"
 	"fmt"
 
-	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	"kubedb.dev/apimachinery/apis/kubedb"
+	dboldapi "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
+	cutil "kmodules.xyz/client-go/conditions"
 	as "kmodules.xyz/custom-resources/client/clientset/versioned"
 )
 
 // MSSQLOpts holds clients and the fetched MSSQLServer object for a command.
 type MSSQLOpts struct {
-	DB           *dbapi.MSSQLServer
+	DB           *dboldapi.MSSQLServer
 	Config       *rest.Config
 	Client       *kubernetes.Clientset
 	DBClient     *cs.Clientset
@@ -69,8 +71,8 @@ func NewMSSQLOpts(f cmdutil.Factory, dbName, namespace string) (*MSSQLOpts, erro
 
 	// IMPORTANT VALIDATION: Check if the database is in a state
 	// where it has generated the necessary DAG secrets.
-	if mssql.Status.Phase != dbapi.DatabasePhaseReady {
-		return nil, fmt.Errorf("source MSSQLServer %s/%s is not ready (current phase: %s)", namespace, dbName, mssql.Status.Phase)
+	if !cutil.IsConditionTrue(mssql.Status.Conditions, kubedb.DatabaseProvisioned) {
+		return nil, fmt.Errorf("source MSSQLServer %s/%s has not been successfully provisioned yet. Please wait for the 'Provisioned' condition to be 'True'", namespace, dbName)
 	}
 
 	return &MSSQLOpts{
