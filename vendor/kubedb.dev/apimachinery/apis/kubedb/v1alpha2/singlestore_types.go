@@ -54,6 +54,10 @@ type Singlestore struct {
 // SinglestoreSpec defines the desired state of Singlestore
 
 type SinglestoreSpec struct {
+	// AutoOps contains configuration of automatic ops-request-recommendation generation
+	// +optional
+	AutoOps AutoOpsSpec `json:"autoOps,omitempty"`
+
 	// Version of Singlestore to be deployed.
 	// +optional
 	Version string `json:"version"`

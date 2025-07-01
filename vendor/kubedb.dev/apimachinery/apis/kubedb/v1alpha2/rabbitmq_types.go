@@ -54,6 +54,10 @@ type RabbitMQ struct {
 
 // RabbitMQSpec defines the desired state of RabbitMQ
 type RabbitMQSpec struct {
+	// AutoOps contains configuration of automatic ops-request-recommendation generation
+	// +optional
+	AutoOps AutoOpsSpec `json:"autoOps,omitempty"`
+
 	// Version of RabbitMQ to be deployed.
 	Version string `json:"version"`
 

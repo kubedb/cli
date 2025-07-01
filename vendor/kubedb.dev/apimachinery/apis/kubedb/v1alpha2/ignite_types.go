@@ -54,6 +54,10 @@ type Ignite struct {
 
 // IgniteSpec defines the desired state of Ignite.
 type IgniteSpec struct {
+	// AutoOps contains configuration of automatic ops-request-recommendation generation
+	// +optional
+	AutoOps AutoOpsSpec `json:"autoOps,omitempty"`
+
 	// Version of Ignite to be deployed.
 	Version string `json:"version"`
 
@@ -102,6 +106,14 @@ type IgniteSpec struct {
 	// +kubebuilder:default={periodSeconds: 10, timeoutSeconds: 10, failureThreshold: 3}
 	HealthChecker kmapi.HealthCheckSpec `json:"healthChecker"`
 
+	// TLS contains tls configurations for client and server.
+	// +optional
+	TLS *kmapi.TLSConfig `json:"tls,omitempty"`
+
+	// Keystore encryption secret
+	// +optional
+	KeystoreCredSecret *SecretReference `json:"keystoreCredSecret,omitempty"`
+
 	// Monitor is used to monitor database instance
 	// +optional
 	Monitor *mona.AgentSpec `json:"monitor,omitempty"`
@@ -129,3 +141,12 @@ type IgniteList struct {
 	meta.ListMeta `json:"metadata,omitempty"`
 	Items         []Ignite `json:"items"`
 }
+
+// +kubebuilder:validation:Enum=ca;transport;http;client;server
+type IgniteCertificateAlias string
+
+const (
+	IgniteCACert     IgniteCertificateAlias = "ca"
+	IgniteClientCert IgniteCertificateAlias = "client"
+	IgniteServerCert IgniteCertificateAlias = "server"
+)

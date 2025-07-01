@@ -72,6 +72,9 @@ type ClickHouseVersionSpec struct {
 
 	// +optional
 	UI []ChartInfo `json:"ui,omitempty"`
+
+	// update constraints
+	UpdateConstraints UpdateConstraints `json:"updateConstraints,omitempty"`
 }
 
 // ClickHouseVersionDatabase is the ClickHouse Database image

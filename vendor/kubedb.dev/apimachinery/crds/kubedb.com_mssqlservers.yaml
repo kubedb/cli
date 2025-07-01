@@ -139,6 +139,11 @@ spec:
                     type: string
                 type: object
                 x-kubernetes-map-type: atomic
+              autoOps:
+                properties:
+                  disabled:
+                    type: boolean
+                type: object
               configSecret:
                 properties:
                   name:
@@ -4797,6 +4802,8 @@ spec:
                         items:
                           type: string
                         type: array
+                      endpointCertSecretName:
+                        type: string
                       leaderElection:
                         properties:
                           electionTick:
@@ -4817,6 +4824,10 @@ spec:
                             default: 60s
                             type: string
                         type: object
+                      loginSecretName:
+                        type: string
+                      masterKeySecretName:
+                        type: string
                       secondaryAccessMode:
                         default: Passive
                         enum:
@@ -4825,10 +4836,39 @@ spec:
                         - All
                         type: string
                     type: object
+                  distributedAG:
+                    properties:
+                      remote:
+                        properties:
+                          name:
+                            type: string
+                          url:
+                            type: string
+                        required:
+                        - name
+                        - url
+                        type: object
+                      self:
+                        properties:
+                          role:
+                            enum:
+                            - Primary
+                            - Secondary
+                            type: string
+                          url:
+                            type: string
+                        required:
+                        - role
+                        - url
+                        type: object
+                    required:
+                    - remote
+                    - self
+                    type: object
                   mode:
                     enum:
                     - AvailabilityGroup
-                    - RemoteReplica
+                    - DistributedAG
                     type: string
                 type: object
               version:

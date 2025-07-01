@@ -54,6 +54,10 @@ type ZooKeeper struct {
 
 // ZooKeeperSpec defines the desired state of ZooKeeper
 type ZooKeeperSpec struct {
+	// AutoOps contains configuration of automatic ops-request-recommendation generation
+	// +optional
+	AutoOps AutoOpsSpec `json:"autoOps,omitempty"`
+
 	// ZooKeeper Version to be deployed
 	Version string `json:"version"`
 

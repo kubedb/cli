@@ -287,13 +287,15 @@ const (
 	RemoveHorizons = "RemoveHorizons"
 )
 
-// MySQL/MariaDB Constants
+// MySQL/MariaDB/Maxscale Constants
 const (
-	TempIniFilesPath           = "/tmp/kubedb-custom-ini-files"
-	StopRemoteReplica          = "StopRemoteReplica"
-	DBPatch                    = "DBPatch"
-	StopRemoteReplicaSucceeded = "StopRemoteReplicaSucceeded"
-	DBPatchSucceeded           = "DBPatchSucceeded"
+	TempIniFilesPath             = "/tmp/kubedb-custom-ini-files"
+	StopRemoteReplica            = "StopRemoteReplica"
+	DBPatch                      = "DBPatch"
+	StopRemoteReplicaSucceeded   = "StopRemoteReplicaSucceeded"
+	DBPatchSucceeded             = "DBPatchSucceeded"
+	RestartMaxscale              = "RestartMaxscale"
+	RestartMaxscalePodsSucceeded = "RestartMaxscalePodsSucceeded"
 )
 
 // Postgres Constants

@@ -52,6 +52,10 @@ type KafkaVersion struct {
 type KafkaVersionSpec struct {
 	// Version
 	Version string `json:"version"`
+	// Init Container Image
+	// From kafka version 4.0.0, we have introduced an init container to handle the database initialization.
+	// +optional
+	InitContainer KafkaInitContainer `json:"initContainer,omitempty"`
 	// Database Image
 	DB KafkaVersionDatabase `json:"db"`
 	// Connect Image
@@ -78,6 +82,11 @@ type KafkaVersionSpec struct {
 
 // KafkaVersionDatabase is the Kafka Database image
 type KafkaVersionDatabase struct {
+	Image string `json:"image"`
+}
+
+// KafkaInitContainer is the Kafka Init Container image
+type KafkaInitContainer struct {
 	Image string `json:"image"`
 }
 

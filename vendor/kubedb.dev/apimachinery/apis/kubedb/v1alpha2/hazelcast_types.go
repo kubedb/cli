@@ -52,6 +52,10 @@ type Hazelcast struct {
 	Status HazelcastStatus `json:"status,omitempty"`
 }
 type HazelcastSpec struct {
+	// AutoOps contains configuration of automatic ops-request-recommendation generation
+	// +optional
+	AutoOps AutoOpsSpec `json:"autoOps,omitempty"`
+
 	// Version of Hazelcast to be deployed
 	Version string `json:"version"`
 

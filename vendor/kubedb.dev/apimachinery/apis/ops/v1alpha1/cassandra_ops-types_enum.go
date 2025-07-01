@@ -18,6 +18,14 @@ const (
 	CassandraOpsRequestTypeVerticalScaling CassandraOpsRequestType = "VerticalScaling"
 	// CassandraOpsRequestTypeRestart is a CassandraOpsRequestType of type Restart.
 	CassandraOpsRequestTypeRestart CassandraOpsRequestType = "Restart"
+	// CassandraOpsRequestTypeVolumeExpansion is a CassandraOpsRequestType of type VolumeExpansion.
+	CassandraOpsRequestTypeVolumeExpansion CassandraOpsRequestType = "VolumeExpansion"
+	// CassandraOpsRequestTypeHorizontalScaling is a CassandraOpsRequestType of type HorizontalScaling.
+	CassandraOpsRequestTypeHorizontalScaling CassandraOpsRequestType = "HorizontalScaling"
+	// CassandraOpsRequestTypeReconfigure is a CassandraOpsRequestType of type Reconfigure.
+	CassandraOpsRequestTypeReconfigure CassandraOpsRequestType = "Reconfigure"
+	// CassandraOpsRequestTypeReconfigureTLS is a CassandraOpsRequestType of type ReconfigureTLS.
+	CassandraOpsRequestTypeReconfigureTLS CassandraOpsRequestType = "ReconfigureTLS"
 )
 
 var ErrInvalidCassandraOpsRequestType = fmt.Errorf("not a valid CassandraOpsRequestType, try [%s]", strings.Join(_CassandraOpsRequestTypeNames, ", "))
@@ -26,6 +34,10 @@ var _CassandraOpsRequestTypeNames = []string{
 	string(CassandraOpsRequestTypeUpdateVersion),
 	string(CassandraOpsRequestTypeVerticalScaling),
 	string(CassandraOpsRequestTypeRestart),
+	string(CassandraOpsRequestTypeVolumeExpansion),
+	string(CassandraOpsRequestTypeHorizontalScaling),
+	string(CassandraOpsRequestTypeReconfigure),
+	string(CassandraOpsRequestTypeReconfigureTLS),
 }
 
 // CassandraOpsRequestTypeNames returns a list of possible string values of CassandraOpsRequestType.
@@ -41,6 +53,10 @@ func CassandraOpsRequestTypeValues() []CassandraOpsRequestType {
 		CassandraOpsRequestTypeUpdateVersion,
 		CassandraOpsRequestTypeVerticalScaling,
 		CassandraOpsRequestTypeRestart,
+		CassandraOpsRequestTypeVolumeExpansion,
+		CassandraOpsRequestTypeHorizontalScaling,
+		CassandraOpsRequestTypeReconfigure,
+		CassandraOpsRequestTypeReconfigureTLS,
 	}
 }
 
@@ -57,9 +73,13 @@ func (x CassandraOpsRequestType) IsValid() bool {
 }
 
 var _CassandraOpsRequestTypeValue = map[string]CassandraOpsRequestType{
-	"UpdateVersion":   CassandraOpsRequestTypeUpdateVersion,
-	"VerticalScaling": CassandraOpsRequestTypeVerticalScaling,
-	"Restart":         CassandraOpsRequestTypeRestart,
+	"UpdateVersion":     CassandraOpsRequestTypeUpdateVersion,
+	"VerticalScaling":   CassandraOpsRequestTypeVerticalScaling,
+	"Restart":           CassandraOpsRequestTypeRestart,
+	"VolumeExpansion":   CassandraOpsRequestTypeVolumeExpansion,
+	"HorizontalScaling": CassandraOpsRequestTypeHorizontalScaling,
+	"Reconfigure":       CassandraOpsRequestTypeReconfigure,
+	"ReconfigureTLS":    CassandraOpsRequestTypeReconfigureTLS,
 }
 
 // ParseCassandraOpsRequestType attempts to convert a string to a CassandraOpsRequestType.

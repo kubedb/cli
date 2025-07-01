@@ -95,6 +95,10 @@ const (
 
 // OracleSpec defines the desired state of Oracle.
 type OracleSpec struct {
+	// AutoOps contains configuration of automatic ops-request-recommendation generation
+	// +optional
+	AutoOps AutoOpsSpec `json:"autoOps,omitempty"`
+
 	// Version of Oracle to be deployed.
 	// +optional
 	Version string `json:"version"`

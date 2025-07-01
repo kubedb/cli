@@ -91,6 +91,9 @@ type MariaDBUpdateVersionSpec struct {
 }
 
 type MariaDBHorizontalScalingSpec struct {
+	// Specifies whether horizontal scaling is applied to the MaxScale Server.
+	// When set to true, it enables horizontal scaling for the MaxScale Server.
+	MaxScale bool `json:"maxscale,omitempty"`
 	// Number of nodes/members of the group
 	Member *int32 `json:"member,omitempty"`
 	// specifies the weight of the current member/PodResources
@@ -99,14 +102,16 @@ type MariaDBHorizontalScalingSpec struct {
 
 type MariaDBVerticalScalingSpec struct {
 	MariaDB     *PodResources       `json:"mariadb,omitempty"`
+	MaxScale    *PodResources       `json:"maxscale,omitempty"`
 	Exporter    *ContainerResources `json:"exporter,omitempty"`
 	Coordinator *ContainerResources `json:"coordinator,omitempty"`
 }
 
 // MariaDBVolumeExpansionSpec is the spec for MariaDB volume expansion
 type MariaDBVolumeExpansionSpec struct {
-	MariaDB *resource.Quantity  `json:"mariadb,omitempty"`
-	Mode    VolumeExpansionMode `json:"mode"`
+	MariaDB  *resource.Quantity  `json:"mariadb,omitempty"`
+	MaxScale *resource.Quantity  `json:"maxscale,omitempty"`
+	Mode     VolumeExpansionMode `json:"mode"`
 }
 
 type MariaDBCustomConfigurationSpec struct {

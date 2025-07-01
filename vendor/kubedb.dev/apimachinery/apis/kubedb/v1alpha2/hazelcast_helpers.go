@@ -232,6 +232,14 @@ func (h *Hazelcast) setDefaultProbes(podTemplate *ofst.PodTemplateSpec) {
 	podTemplate.Spec.Containers = coreutil.UpsertContainer(podTemplate.Spec.Containers, *container)
 }
 
+func (h *Hazelcast) SetTLSDefaults() {
+	if h.Spec.TLS == nil || h.Spec.TLS.IssuerRef == nil {
+		return
+	}
+	h.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(h.Spec.TLS.Certificates, string(HazelcastServerCert), h.CertificateName(HazelcastServerCert))
+	h.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(h.Spec.TLS.Certificates, string(HazelcastClientCert), h.CertificateName(HazelcastClientCert))
+}
+
 func (h *Hazelcast) setDefaultContainerSecurityContext(hzVersion *catalog.HazelcastVersion, podTemplate *ofst.PodTemplateSpec) {
 	initContainer := coreutil.GetContainerByName(podTemplate.Spec.InitContainers, "hazelcast-init")
 	if initContainer == nil {
