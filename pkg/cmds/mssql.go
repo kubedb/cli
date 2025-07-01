@@ -75,9 +75,8 @@ func NewCmdDAGConfig(f cmdutil.Factory) *cobra.Command {
 
 // runDAGConfig is now much simpler. It just orchestrates the steps.
 func runDAGConfig(ctx context.Context, f cmdutil.Factory, namespace, outputDir, mssqlServerName string) error {
-	fmt.Printf("🔎 Generating DAG configuration for MSSQLServer '%s' in namespace '%s'...\n", mssqlServerName, namespace)
+	fmt.Printf("Generating DAG configuration for MSSQLServer '%s' in namespace '%s'...\n", mssqlServerName, namespace)
 
-	// Use the new common constructor to get a validated options object
 	opts, err := common.NewMSSQLOpts(f, mssqlServerName, namespace)
 	if err != nil {
 		return err // The error from NewMSSQLOpts will be very informative
@@ -105,9 +104,7 @@ func runDAGConfig(ctx context.Context, f cmdutil.Factory, namespace, outputDir, 
 	return nil
 }
 
-// generateMSSQLDAGConfig now takes the opts object and is much more robust.
 func generateMSSQLDAGConfig(ctx context.Context, opts *common.MSSQLOpts) ([]byte, error) {
-	// IMPROVEMENT: Get secret names directly from the CR status, not by guessing.
 	secretNames := []string{
 		opts.DB.DbmLoginSecretName(),
 		opts.DB.MasterKeySecretName(),
@@ -117,10 +114,9 @@ func generateMSSQLDAGConfig(ctx context.Context, opts *common.MSSQLOpts) ([]byte
 	var finalYAML []byte
 	for _, secretName := range secretNames {
 		fmt.Printf("  - Fetching secret '%s'...\n", secretName)
-		// Use the client from the opts object to fetch the secret
+
 		secret, err := opts.Client.CoreV1().Secrets(opts.DB.Namespace).Get(ctx, secretName, metav1.GetOptions{})
 		if err != nil {
-			// No special error handling needed; if it's not found, something is wrong.
 			return nil, fmt.Errorf("failed to get required secret '%s': %w", secretName, err)
 		}
 

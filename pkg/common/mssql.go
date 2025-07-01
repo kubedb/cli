@@ -20,8 +20,6 @@ import (
 	"context"
 	"fmt"
 
-	// Import the correct MSSQLServer API version
-
 	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 	cs "kubedb.dev/apimachinery/client/clientset/versioned"
 
@@ -57,7 +55,6 @@ func NewMSSQLOpts(f cmdutil.Factory, dbName, namespace string) (*MSSQLOpts, erro
 		return nil, err
 	}
 
-	// Fetch the source MSSQLServer custom resource
 	mssql, err := dbClient.KubedbV1alpha2().MSSQLServers(namespace).Get(context.TODO(), dbName, metav1.GetOptions{})
 	if err != nil {
 		return nil, err
