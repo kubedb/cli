@@ -27,14 +27,16 @@ import (
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
+	as "kmodules.xyz/custom-resources/client/clientset/versioned"
 )
 
 // MSSQLOpts holds clients and the fetched MSSQLServer object for a command.
 type MSSQLOpts struct {
-	DB       *dbapi.MSSQLServer
-	Config   *rest.Config
-	Client   *kubernetes.Clientset
-	DBClient *cs.Clientset
+	DB           *dbapi.MSSQLServer
+	Config       *rest.Config
+	Client       *kubernetes.Clientset
+	DBClient     *cs.Clientset
+	AppcatClient *as.Clientset
 }
 
 // NewMSSQLOpts creates a new MSSQLOpts instance, fetches the MSSQLServer CR,
@@ -55,6 +57,11 @@ func NewMSSQLOpts(f cmdutil.Factory, dbName, namespace string) (*MSSQLOpts, erro
 		return nil, err
 	}
 
+	appcatClient, err := as.NewForConfig(config)
+	if err != nil {
+		return nil, err
+	}
+
 	mssql, err := dbClient.KubedbV1alpha2().MSSQLServers(namespace).Get(context.TODO(), dbName, metav1.GetOptions{})
 	if err != nil {
 		return nil, err
@@ -67,9 +74,10 @@ func NewMSSQLOpts(f cmdutil.Factory, dbName, namespace string) (*MSSQLOpts, erro
 	}
 
 	return &MSSQLOpts{
-		DB:       mssql,
-		Config:   config,
-		Client:   client,
-		DBClient: dbClient,
+		DB:           mssql,
+		Config:       config,
+		Client:       client,
+		DBClient:     dbClient,
+		AppcatClient: appcatClient,
 	}, nil
 }

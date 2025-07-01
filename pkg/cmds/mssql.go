@@ -28,6 +28,7 @@ import (
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
+	appApi "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	"sigs.k8s.io/yaml"
 )
 
@@ -128,6 +129,22 @@ func generateMSSQLDAGConfig(ctx context.Context, opts *common.MSSQLOpts) ([]byte
 		finalYAML = append(finalYAML, secretYAML...)
 		finalYAML = append(finalYAML, []byte("---\n")...)
 	}
+
+	appBindingName := opts.DB.Name
+	fmt.Printf("  - Fetching AppBinding '%s'...\n", appBindingName)
+	appBinding, err := opts.AppcatClient.AppcatalogV1alpha1().AppBindings(opts.DB.Namespace).Get(ctx, appBindingName, metav1.GetOptions{})
+	if err != nil {
+		return nil, fmt.Errorf("failed to get AppBinding '%s': %w", appBindingName, err)
+	}
+
+	cleanedAppBinding := cleanupAppBindingForExport(appBinding)
+	appBindingYAML, err := yaml.Marshal(cleanedAppBinding)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal AppBinding '%s' to YAML: %w", appBindingName, err)
+	}
+	finalYAML = append(finalYAML, appBindingYAML...)
+	finalYAML = append(finalYAML, []byte("---\n")...)
+
 	return finalYAML, nil
 }
 
@@ -144,5 +161,20 @@ func cleanupSecretForExport(secret *core.Secret) *core.Secret {
 		},
 		Data: secret.Data,
 		Type: secret.Type,
+	}
+}
+
+// creates a clean, portable version of an AppBinding.
+func cleanupAppBindingForExport(appBinding *appApi.AppBinding) *appApi.AppBinding {
+	return &appApi.AppBinding{
+		TypeMeta: metav1.TypeMeta{
+			APIVersion: appApi.SchemeGroupVersion.String(),
+			Kind:       appApi.ResourceKindApp,
+		},
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      appBinding.Name,
+			Namespace: appBinding.Namespace,
+		},
+		Spec: appBinding.Spec,
 	}
 }
