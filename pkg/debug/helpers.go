@@ -17,12 +17,47 @@ limitations under the License.
 package debug
 
 import (
+	"bytes"
+	shell "gomodules.xyz/go-sh"
+	"k8s.io/klog/v2"
 	"os"
 	"path"
 
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/yaml"
 )
+
+func runHelmCommands(name, ns, fullPath string) error {
+	sh := shell.NewSession()
+	sh.ShowCMD = true
+
+	buf := new(bytes.Buffer)
+	command := []interface{}{
+		"ls", "-n", ns,
+	}
+
+	err := sh.Command("helm", command...).WriteStdout(path.Join(fullPath, "info.txt"))
+	//err := sess.Run()
+	if err != nil {
+		klog.ErrorS(err, "Failed to run command", "command", command)
+	}
+
+	err = os.WriteFile(path.Join(fullPath, "info.txt"), buf.Bytes(), filePerm)
+	if err != nil {
+		klog.ErrorS(err, "Failed to write info.txt")
+	}
+
+	command = []interface{}{
+		"get", "values", "-n", ns, name,
+	}
+	sess := sh.Command("helm", command...).SetStdin(buf)
+	err = sess.Run()
+	if err != nil {
+		klog.ErrorS(err, "Failed to run command", "command", command)
+	}
+
+	return os.WriteFile(path.Join(fullPath, "values.yaml"), buf.Bytes(), filePerm)
+}
 
 func writeYaml(obj client.Object, fullPath string) error {
 	b, err := yaml.Marshal(obj)

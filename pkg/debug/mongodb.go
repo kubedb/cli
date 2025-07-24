@@ -51,6 +51,7 @@ type mongodbOpts struct {
 func MongoDBDebugCMD(f cmdutil.Factory) *cobra.Command {
 	var (
 		dbName            string
+		operatorName      string
 		operatorNamespace string
 	)
 
@@ -77,6 +78,8 @@ func MongoDBDebugCMD(f cmdutil.Factory) *cobra.Command {
 				log.Fatalln(err)
 			}
 
+			_ = runHelmCommands(operatorName, operatorNamespace, opts.dir)
+
 			err = opts.collectOperatorLogs()
 			if err != nil {
 				log.Fatal(err)
@@ -98,6 +101,7 @@ func MongoDBDebugCMD(f cmdutil.Factory) *cobra.Command {
 			}
 		},
 	}
+	mgDebugCmd.Flags().StringVarP(&operatorName, "operator-name", "p", "kubedb", "the name where the kubedb operator is installed")
 	mgDebugCmd.Flags().StringVarP(&operatorNamespace, "operator-namespace", "o", "kubedb", "the namespace where the kubedb operator is installed")
 
 	return mgDebugCmd
