@@ -363,7 +363,7 @@ func (d *Druid) GetMetadataStorageType(metadataStorage string) DruidMetadataStor
 }
 
 func (d *Druid) PVCName(alias string) string {
-	return meta_util.NameWithSuffix(d.Name, alias)
+	return alias
 }
 
 func (d *Druid) GetDruidSegmentCacheConfig() string {

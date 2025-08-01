@@ -63,6 +63,20 @@ type PlacementPolicySpec struct {
 	// If specified, the pod's scheduling constraints
 	// +optional
 	Affinity *Affinity `json:"affinity,omitempty"`
+
+	// OCM provides spec for distributed pod placements using open cluster management
+	// +optional
+	OCM *OCMSpec `json:"ocm,omitempty"`
+}
+
+type OCMSpec struct {
+	DistributionRules []DistributionRule `json:"distributionRules,omitempty"`
+	SliceName         string             `json:"sliceName,omitempty"`
+}
+
+type DistributionRule struct {
+	ClusterName string  `json:"clusterName,omitempty"`
+	Replicas    []int32 `json:"replicas,omitempty"`
 }
 
 type ZoneSpreadConstraint struct {

@@ -361,6 +361,7 @@ const (
 	ScaleUpRedisReplicasInSentinelMode   = "ScaleUpRedisReplicasInSentinelMode"
 	ScaleDownRedisReplicasInSentinelMode = "ScaleDownRedisReplicasInSentinelMode"
 
+	RedisUpdateAnnounces        = "UpdateAnnounces"
 	HorizontalScaleReplicasUp   = "HorizontalScaleReplicasUp"
 	HorizontalScaleReplicasDown = "HorizontalScaleReplicasDown"
 	HorizontalScaleSentinelUp   = "HorizontalScaleSentinelUp"

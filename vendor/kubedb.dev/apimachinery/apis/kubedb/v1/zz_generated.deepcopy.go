@@ -1308,6 +1308,11 @@ func (in *MaxScaleSpec) DeepCopyInto(out *MaxScaleSpec) {
 		*out = new(bool)
 		**out = **in
 	}
+	if in.ConfigSecret != nil {
+		in, out := &in.ConfigSecret, &out.ConfigSecret
+		*out = new(corev1.LocalObjectReference)
+		**out = **in
+	}
 	return
 }
 

@@ -1,12 +1,12 @@
 module kubedb.dev/cli
 
-go 1.23.0
+go 1.23.6
 
-toolchain go1.24.1
+toolchain go1.24.5
 
 require (
 	github.com/Masterminds/semver/v3 v3.3.1
-	github.com/cert-manager/cert-manager v1.17.1
+	github.com/cert-manager/cert-manager v1.18.2
 	github.com/fatih/camelcase v1.0.0
 	github.com/go-sql-driver/mysql v1.9.0
 	github.com/prometheus/client_golang v1.20.5
@@ -26,12 +26,12 @@ require (
 	k8s.io/klog/v2 v2.130.1
 	k8s.io/kubectl v0.32.3
 	kmodules.xyz/cert-manager-util v0.29.0
-	kmodules.xyz/client-go v0.32.6
+	kmodules.xyz/client-go v0.32.7
 	kmodules.xyz/custom-resources v0.32.0
-	kmodules.xyz/monitoring-agent-api v0.32.0
-	kubedb.dev/apimachinery v0.56.0
-	kubedb.dev/db-client-go v0.11.0
-	kubeops.dev/petset v0.0.10
+	kmodules.xyz/monitoring-agent-api v0.32.1
+	kubedb.dev/apimachinery v0.57.0-rc.0
+	kubedb.dev/db-client-go v0.12.0-rc.0
+	kubeops.dev/petset v0.0.11
 	sigs.k8s.io/controller-runtime v0.20.4
 	sigs.k8s.io/yaml v1.4.0
 	stash.appscode.dev/apimachinery v0.39.0
@@ -118,7 +118,7 @@ require (
 	github.com/zeebo/xxh3 v1.0.2 // indirect
 	go.virtual-secrets.dev/apimachinery v0.0.1 // indirect
 	golang.org/x/net v0.40.0 // indirect
-	golang.org/x/oauth2 v0.27.0 // indirect
+	golang.org/x/oauth2 v0.28.0 // indirect
 	golang.org/x/sync v0.14.0 // indirect
 	golang.org/x/sys v0.33.0 // indirect
 	golang.org/x/term v0.32.0 // indirect
@@ -145,10 +145,11 @@ require (
 	kmodules.xyz/objectstore-api v0.32.0 // indirect
 	kmodules.xyz/offshoot-api v0.32.0 // indirect
 	kmodules.xyz/prober v0.32.0 // indirect
-	kmodules.xyz/resource-metadata v0.30.1 // indirect
+	kmodules.xyz/resource-metadata v0.32.1 // indirect
 	kubeops.dev/csi-driver-cacerts v0.1.0 // indirect
 	kubeops.dev/sidekick v0.0.11 // indirect
 	kubestash.dev/apimachinery v0.19.0 // indirect
+	open-cluster-management.io/api v1.0.0 // indirect
 	sigs.k8s.io/gateway-api v1.1.0 // indirect
 	sigs.k8s.io/json v0.0.0-20241014173422-cfa47c3a1cc8 // indirect
 	sigs.k8s.io/kustomize/api v0.18.0 // indirect

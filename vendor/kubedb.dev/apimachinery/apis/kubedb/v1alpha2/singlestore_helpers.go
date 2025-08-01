@@ -216,8 +216,7 @@ func (s *Singlestore) IsStandalone() bool {
 }
 
 func (s *Singlestore) PVCName(alias string) string {
-	return metautil.NameWithSuffix(s.OffshootName(), alias)
-	// return s.OffshootName()
+	return alias
 }
 
 func (s *Singlestore) AggregatorPetSet() string {

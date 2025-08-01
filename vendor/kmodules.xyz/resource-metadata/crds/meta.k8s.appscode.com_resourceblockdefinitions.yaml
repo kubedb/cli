@@ -263,6 +263,16 @@ spec:
                           type: array
                         name:
                           type: string
+                        sort:
+                          properties:
+                            fieldName:
+                              type: string
+                            order:
+                              enum:
+                              - Ascending
+                              - Descending
+                              type: string
+                          type: object
                       type: object
                     width:
                       type: integer

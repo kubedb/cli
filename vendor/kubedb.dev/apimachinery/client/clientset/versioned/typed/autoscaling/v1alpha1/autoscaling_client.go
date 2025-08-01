@@ -35,6 +35,7 @@ type AutoscalingV1alpha1Interface interface {
 	ElasticsearchAutoscalersGetter
 	EtcdAutoscalersGetter
 	FerretDBAutoscalersGetter
+	HazelcastAutoscalersGetter
 	KafkaAutoscalersGetter
 	MSSQLServerAutoscalersGetter
 	MariaDBAutoscalersGetter
@@ -81,6 +82,10 @@ func (c *AutoscalingV1alpha1Client) EtcdAutoscalers(namespace string) EtcdAutosc
 
 func (c *AutoscalingV1alpha1Client) FerretDBAutoscalers(namespace string) FerretDBAutoscalerInterface {
 	return newFerretDBAutoscalers(c, namespace)
+}
+
+func (c *AutoscalingV1alpha1Client) HazelcastAutoscalers(namespace string) HazelcastAutoscalerInterface {
+	return newHazelcastAutoscalers(c, namespace)
 }
 
 func (c *AutoscalingV1alpha1Client) KafkaAutoscalers(namespace string) KafkaAutoscalerInterface {

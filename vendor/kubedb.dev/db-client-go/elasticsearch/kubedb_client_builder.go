@@ -45,6 +45,7 @@ import (
 	osapiv2 "github.com/opensearch-project/opensearch-go/v2/opensearchapi"
 	"github.com/pkg/errors"
 	core "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/klog/v2"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
@@ -91,6 +92,11 @@ func (o *KubeDBClientBuilder) GetElasticClient() (*Client, error) {
 	}
 
 	var esVersion catalog.ElasticsearchVersion
+	esVersion.SetGroupVersionKind(schema.GroupVersionKind{
+		Group:   catalog.SchemeGroupVersion.Group,
+		Version: catalog.SchemeGroupVersion.Version,
+		Kind:    catalog.ResourceKindElasticsearchVersion,
+	})
 	err := o.kc.Get(o.ctx, client.ObjectKey{Namespace: o.db.Namespace, Name: o.db.Spec.Version}, &esVersion)
 	if err != nil {
 		return nil, errors.Errorf("Failed to get elasticsearchVersion with %s", err)

@@ -27913,6 +27913,13 @@ func schema_apimachinery_apis_kubedb_v1_MariaDBSpec(ref common.ReferenceCallback
 							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1.Archiver"),
 						},
 					},
+					"distributed": {
+						SchemaProps: spec.SchemaProps{
+							Description: "specify if the database deployment distributed or not",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
 				},
 				Required: []string{"version"},
 			},
@@ -28036,11 +28043,17 @@ func schema_apimachinery_apis_kubedb_v1_MaxScaleSpec(ref common.ReferenceCallbac
 							Format:      "",
 						},
 					},
+					"configSecret": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ConfigSecret is an optional field to provide custom configuration file for maxscale (i.e custom-maxscale.cnf). If specified, this file will be merged with default configuration file.",
+							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
+						},
+					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec"},
 	}
 }
 
@@ -30268,6 +30281,13 @@ func schema_apimachinery_apis_kubedb_v1_PostgresSpec(ref common.ReferenceCallbac
 							Description: "AutoOps contains configuration of automatic ops-request-recommendation generation",
 							Default:     map[string]interface{}{},
 							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1.AutoOpsSpec"),
+						},
+					},
+					"distributed": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Distributed if set true, manifestwork objects will be created instead of raw resources",
+							Type:        []string{"boolean"},
+							Format:      "",
 						},
 					},
 					"version": {

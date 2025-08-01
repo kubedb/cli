@@ -101,6 +101,24 @@ spec:
                 x-kubernetes-map-type: atomic
               horizontalScaling:
                 properties:
+                  announce:
+                    properties:
+                      shards:
+                        items:
+                          properties:
+                            endpoints:
+                              items:
+                                type: string
+                              type: array
+                          type: object
+                        type: array
+                      type:
+                        default: hostname
+                        enum:
+                        - ip
+                        - hostname
+                        type: string
+                    type: object
                   replicas:
                     format: int32
                     type: integer

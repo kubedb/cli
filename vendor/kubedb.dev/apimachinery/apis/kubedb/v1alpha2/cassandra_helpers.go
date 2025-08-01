@@ -177,7 +177,7 @@ func (r *Cassandra) CassandraKeystoreCredSecretName() string {
 }
 
 func (r *Cassandra) PVCName(alias string) string {
-	return meta_util.NameWithSuffix(r.Name, alias)
+	return alias
 }
 
 func (r *Cassandra) PetSetName() string {

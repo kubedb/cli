@@ -98,8 +98,8 @@ func (h *Hazelcast) PodControllerLabels(extraLabels ...map[string]string) map[st
 	return h.offshootLabels(meta_util.OverwriteKeys(h.OffshootSelectors(), extraLabels...), h.Spec.PodTemplate.Controller.Labels)
 }
 
-func (h *Hazelcast) PVCName(alias string) string {
-	return meta_util.NameWithSuffix(h.Name, alias)
+func (d *Hazelcast) PVCName(alias string) string {
+	return alias
 }
 
 func (h *Hazelcast) PodLabels(extraLabels ...map[string]string) map[string]string {

@@ -32,8 +32,19 @@ const (
 
 	KubeDBOrganization = "kubedb"
 
-	LabelRole   = GroupName + "/role"
-	LabelPetSet = GroupName + "/petset"
+	StatefulSetPodNameLabelKey = "statefulset.kubernetes.io/pod-name"
+	LabelRole                  = GroupName + "/role"
+	LabelPetSet                = GroupName + "/petset"
+
+	// distributed const
+	DistributedCustomConfigSecretNameSuffix = "custom-config"
+	DistributedRBACNameSuffix               = "rbac"
+	DistributedServiceExportNameSuffix      = "serviceexports"
+	DistributedTLSSecretNameSuffix          = "tls-secrets"
+	DistributedAuthSecretNameSuffix         = "auth"
+	KubeSliceNSMIPKey                       = "kubeslice.io/nsmIP"
+	KubeSlicePodIPVolumeName                = "podip"
+	KubeSlicePodIPFileName                  = "podip"
 
 	ReplicationModeDetectorContainerName = "replication-mode-detector"
 	DatabasePodPrimary                   = "primary"
@@ -363,19 +374,20 @@ const (
 	DatabasePodSlaveComponent            = "Slave"
 
 	// Maxscale
-	MaxscaleCommonName        = "mx"
-	MaxscaleContainerName     = "maxscale"
-	MaxscaleInitContainerName = "maxscale-init"
-	MaxscaleServerName        = "server"
-	MaxscaleConfigName        = "config"
-	MaxscaleConfigPath        = "/etc/maxscale.cnf.d"
-	MaxscaleDefaultConfigName = "default-config"
-	MaxscaleDefaultConfigPath = "/etc/maxscale"
-	MaxscaleDataVolumeName    = "data"
-	MaxscaleDataVolumePath    = "/var/lib/maxscale"
-	MaxscaleUIPort            = 8989
-	MaxscaleUIPortName        = "ui"
-	MaxscaleCertMountPath     = "/etc/ssl/maxscale"
+	MaxscaleCommonName            = "mx"
+	MaxscaleContainerName         = "maxscale"
+	MaxscaleInitContainerName     = "maxscale-init"
+	MaxscaleServerName            = "server"
+	MaxscaleConfigName            = "config"
+	MaxscaleConfigPath            = "/etc/maxscale.cnf.d"
+	MaxScaleCustomConfigMountPath = "/etc/maxscale/maxscale.custom.d"
+	MaxscaleDefaultConfigName     = "default-config"
+	MaxscaleDefaultConfigPath     = "/etc/maxscale"
+	MaxscaleDataVolumeName        = "data"
+	MaxscaleDataVolumePath        = "/var/lib/maxscale"
+	MaxscaleUIPort                = 8989
+	MaxscaleUIPortName            = "ui"
+	MaxscaleCertMountPath         = "/etc/ssl/maxscale"
 
 	// =========================== SingleStore Constants ============================
 	SinglestoreDatabasePortName       = "db"
@@ -496,6 +508,8 @@ const (
 	PostgresCoordinatorClientPort     = 2379
 	PostgresCoordinatorClientPortName = "coordinatclient"
 
+	PostgresGRPCServerPort      = 2384
+	PostgresGRPCServerPortName  = "grpcserver"
 	RaftMetricsExporterPort     = 23790
 	RaftMetricsExporterPortName = "raft-metrics"
 
@@ -1309,7 +1323,7 @@ const (
 	DruidHistoricalsSegmentCacheLocations              = "druid.segmentCache.locations"
 	DruidHistoricalsSegmentCacheDropSegmentDelayMillis = "druid.segmentCache.dropSegmentDelayMillis"
 	DruidHistoricalsSegmentCacheDir                    = "/druid/data/segments"
-	DruidVolumeHistoricalsSegmentCache                 = "segment-cache"
+	DruidVolumeHistoricalsSegmentCache                 = "data"
 
 	// Query Cache
 	DruidHistoricalCacheUseCache      = "druid.historical.cache.useCache"
@@ -1328,7 +1342,7 @@ const (
 	DruidWorkerBaseTaskDirSize                             = "druid.worker.baseTaskDirSize"
 	DruidIndexerForkPropertyDruidProcessingBufferSizeBytes = "druid.indexer.fork.property.druid.processing.buffer.sizeBytes"
 	DruidMiddleManagersVolumeBaseTaskDir                   = "base-task-dir"
-	DruidVolumeMiddleManagersBaseTaskDir                   = "base-task-dir"
+	DruidVolumeMiddleManagersBaseTaskDir                   = "data"
 
 	// Values
 	DruidIndexerTaskBaseTaskDirValue = "/druid/data/baseTaskDir"
@@ -1511,10 +1525,9 @@ const (
 	IgniteInitScriptVolName    = "init-scripts"
 	IgniteInitScriptDir        = "/scripts"
 	IgniteConfigVolName        = "ignite-config"
-	IgniteWorkVolName          = "ignite-work"
 	IgniteConfigFileName       = "node-configuration.xml"
 	IgniteDataVolName          = "data"
-	IgniteDataDir              = "/ignite/data"
+	IgniteDataDir              = "/opt/ignite/apache-ignite/work"
 	IgniteContainerName        = "ignite"
 	IgniteConfigDir            = "/ignite/config"
 	IgniteRestPortName         = "rest"
@@ -1557,6 +1570,7 @@ const (
 
 	ComponentCoOrdinator = "coordinator"
 
+	ClickHouseDataSyncCheckFile           = "/scripts/check.txt"
 	ClickHousePromethusEndpoint           = "/metrics"
 	ClickHouseDataDir                     = "/var/lib/clickhouse"
 	ClickHouseKeeperDataDir               = "/var/lib/clickhouse_keeper"
@@ -1573,9 +1587,12 @@ const (
 	ClickHouseClientCertVolumeName     = "certs"
 	ClickHouseTempClientCertVolumeName = "certs-tmp"
 	ClickHouseTempClientCertMountPath  = "/certs-tmp"
+	ClickHouseScriptsVolumeName        = "scripts"
+	ClickHouseScriptsMountPath         = "/scripts"
 	ClickHouseTempConfigDir            = "/config-tmp"
 	ClickHouseCACertKey                = "ca.crt"
 	ClickHouseCACertPath               = "ca.crt"
+	ClickHouseClientCACertPath         = "client-ca.crt"
 	ClickHouseServerCertKey            = "tls.crt"
 	ClickHouseServerCertPath           = "server.crt"
 	ClickHouseServerKey                = "tls.key"

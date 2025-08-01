@@ -62,6 +62,9 @@ type PetSet struct {
 
 // A PetSetSpec is the specification of a PetSet.
 type PetSetSpec struct {
+	// Distributed means manifestworks will be used to manage pods
+	Distributed bool `json:"distributed,omitempty"`
+
 	// replicas is the desired number of replicas of the given Template.
 	// These are replicas in the sense that they are instantiations of the
 	// same Template, but individual replicas also have a consistent identity.
