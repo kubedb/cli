@@ -270,7 +270,7 @@ func (i *Ignite) ConfigSecretName() string {
 }
 
 func (i *Ignite) PVCName(alias string) string {
-	return meta_util.NameWithSuffix(i.Name, alias)
+	return alias
 }
 
 func (i *Ignite) Address() string {

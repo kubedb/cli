@@ -254,7 +254,7 @@ func (s *Solr) StatsServiceLabels() map[string]string {
 }
 
 func (s *Solr) PVCName(alias string) string {
-	return meta_util.NameWithSuffix(s.Name, alias)
+	return alias
 }
 
 func (s Solr) NodeRoleSpecificLabelKey(roleType SolrNodeRoleType) string {

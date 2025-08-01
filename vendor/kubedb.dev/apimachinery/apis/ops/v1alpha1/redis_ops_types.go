@@ -128,6 +128,12 @@ type RedisHorizontalScalingSpec struct {
 	Shards *int32 `json:"shards,omitempty"`
 	// specifies the number of replica of the shards
 	Replicas *int32 `json:"replicas,omitempty"`
+
+	// Announce is used to announce the redis cluster endpoints.
+	// It is used to set
+	// cluster-announce-ip, cluster-announce-port, cluster-announce-bus-port, cluster-announce-tls-port
+	// While scaling up shard or replica just provide the missing announces.
+	Announce *Announce `json:"announce,omitempty"`
 }
 
 // RedisVerticalScalingSpec is the spec for Redis vertical scaling

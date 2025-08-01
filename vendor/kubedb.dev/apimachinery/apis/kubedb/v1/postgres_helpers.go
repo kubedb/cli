@@ -63,11 +63,15 @@ func (p Postgres) OffshootName() string {
 }
 
 func (p Postgres) OffshootSelectors() map[string]string {
-	return map[string]string{
+	sel := map[string]string{
 		meta_util.NameLabelKey:      p.ResourceFQN(),
 		meta_util.InstanceLabelKey:  p.Name,
 		meta_util.ManagedByLabelKey: kubedb.GroupName,
 	}
+	if p.Spec.Distributed {
+		sel[meta_util.NamespaceLabelKey] = p.Namespace
+	}
+	return sel
 }
 
 func (p Postgres) OffshootLabels() map[string]string {
@@ -137,6 +141,26 @@ func (p Postgres) StandbyServiceName() string {
 
 func (p Postgres) GoverningServiceName() string {
 	return meta_util.NameWithSuffix(p.ServiceName(), "pods")
+}
+
+func (p Postgres) OffshootDistributedRBACName() string {
+	return meta_util.NameWithSuffix(p.OffshootName(), kubedb.DistributedRBACNameSuffix)
+}
+
+func (p Postgres) OffshootDistributedServiceExportName() string {
+	return meta_util.NameWithSuffix(p.OffshootName(), kubedb.DistributedServiceExportNameSuffix)
+}
+
+func (p Postgres) OffshootDistributedAuthSecretName() string {
+	return meta_util.NameWithSuffix(p.OffshootName(), kubedb.DistributedAuthSecretNameSuffix)
+}
+
+func (p Postgres) OffshootDistributedTLSName() string {
+	return meta_util.NameWithSuffix(p.Name, kubedb.DistributedTLSSecretNameSuffix)
+}
+
+func (p Postgres) OffshootDistributedConfigSecretName() string {
+	return meta_util.NameWithSuffix(p.Name, kubedb.DistributedCustomConfigSecretNameSuffix)
 }
 
 type postgresApp struct {

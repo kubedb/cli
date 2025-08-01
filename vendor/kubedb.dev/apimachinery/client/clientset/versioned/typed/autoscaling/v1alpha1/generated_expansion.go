@@ -30,6 +30,8 @@ type EtcdAutoscalerExpansion interface{}
 
 type FerretDBAutoscalerExpansion interface{}
 
+type HazelcastAutoscalerExpansion interface{}
+
 type KafkaAutoscalerExpansion interface{}
 
 type MSSQLServerAutoscalerExpansion interface{}

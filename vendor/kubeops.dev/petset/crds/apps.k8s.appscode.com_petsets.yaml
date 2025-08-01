@@ -46,6 +46,10 @@ spec:
           spec:
             description: Spec defines the desired identities of pods in this set.
             properties:
+              distributed:
+                description: Distributed means manifestworks will be used to manage
+                  pods
+                type: boolean
               minReadySeconds:
                 description: |-
                   Minimum number of seconds for which a newly created pod should be ready

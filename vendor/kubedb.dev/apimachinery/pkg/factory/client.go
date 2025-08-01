@@ -35,6 +35,7 @@ import (
 	sidekickapi "kubeops.dev/sidekick/apis/apps/v1alpha1"
 	stashcoreapi "kubestash.dev/apimachinery/apis/core/v1alpha1"
 	stashstorageapi "kubestash.dev/apimachinery/apis/storage/v1alpha1"
+	kubesliceapi "open-cluster-management.io/api/work/v1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/client/apiutil"
 	stashscheme "stash.appscode.dev/apimachinery/client/clientset/versioned/scheme"
@@ -113,6 +114,10 @@ func NewUncachedClient(cfg *rest.Config) (client.Client, error) {
 	}
 
 	if err := psapi.AddToScheme(scheme); err != nil {
+		return nil, err
+	}
+
+	if err := kubesliceapi.AddToScheme(scheme); err != nil {
 		return nil, err
 	}
 

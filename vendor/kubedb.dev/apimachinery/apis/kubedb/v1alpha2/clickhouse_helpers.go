@@ -105,10 +105,6 @@ func (c *ClickHouse) OffshootLabels() map[string]string {
 	return c.offshootLabels(c.OffshootSelectors(), nil)
 }
 
-func (c *ClickHouse) OffshootDBLabels() map[string]string {
-	return c.offshootLabels(c.OffshootDBSelectors(), nil)
-}
-
 func (c *ClickHouse) ServiceLabels(alias ServiceAlias, extraLabels ...map[string]string) map[string]string {
 	svcTemplate := GetServiceTemplate(c.Spec.ServiceTemplates, alias)
 	return c.offshootLabels(meta_util.OverwriteKeys(c.OffshootSelectors(), extraLabels...), svcTemplate.Labels)
@@ -190,12 +186,8 @@ func (c *ClickHouse) KeeperGoverningServiceName() string {
 	return meta_util.NameWithSuffix(c.KeeperServiceName(), "pods")
 }
 
-func (c *ClickHouse) ClusterGoverningServiceName(name string) string {
-	return meta_util.NameWithSuffix(name, "pods")
-}
-
-func (c *ClickHouse) ClusterGoverningServiceDNS(petSetName string, replicaNo int) string {
-	return fmt.Sprintf("%s-%d.%s.%s.svc", petSetName, replicaNo, c.GoverningServiceName(), c.GetNamespace())
+func (c *ClickHouse) GoverningServiceDNS(podName string) string {
+	return fmt.Sprintf("%s.%s.%s.svc", podName, c.GoverningServiceName(), c.GetNamespace())
 }
 
 func (c *ClickHouse) GetAuthSecretName() string {

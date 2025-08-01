@@ -91,7 +91,7 @@ func (z *ZooKeeper) ConfigSecretName() string {
 }
 
 func (z *ZooKeeper) PVCName(alias string) string {
-	return meta_util.NameWithSuffix(z.Name, alias)
+	return alias
 }
 
 func (z *ZooKeeper) ServiceName() string {

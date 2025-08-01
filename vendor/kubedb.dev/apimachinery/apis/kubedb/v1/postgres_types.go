@@ -63,6 +63,9 @@ type PostgresSpec struct {
 	// +optional
 	AutoOps AutoOpsSpec `json:"autoOps,omitempty"`
 
+	// Distributed if set true, manifestwork objects will be created instead of raw resources
+	Distributed bool `json:"distributed,omitempty"`
+
 	// Version of Postgres to be deployed.
 	Version string `json:"version"`
 
