@@ -273,6 +273,9 @@ const (
 	PostgresServerCert          PostgresCertificateAlias = "server"
 	PostgresClientCert          PostgresCertificateAlias = "client"
 	PostgresArchiverCert        PostgresCertificateAlias = "archiver"
+	PostgresGRPCCaCert          PostgresCertificateAlias = "grpc-ca"
+	PostgresGRPCServerCert      PostgresCertificateAlias = "grpc-server"
+	PostgresGRPCClientCert      PostgresCertificateAlias = "grpc-client"
 	PostgresMetricsExporterCert PostgresCertificateAlias = "metrics-exporter"
 )
 

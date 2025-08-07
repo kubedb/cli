@@ -21,7 +21,7 @@ import (
 	kubedbscheme "kubedb.dev/apimachinery/client/clientset/versioned/scheme"
 
 	cmscheme "github.com/cert-manager/cert-manager/pkg/client/clientset/versioned/scheme"
-	vsapi "github.com/kubernetes-csi/external-snapshotter/client/v7/apis/volumesnapshot/v1"
+	vsapi "github.com/kubernetes-csi/external-snapshotter/client/v8/apis/volumesnapshot/v1"
 	promscheme "github.com/prometheus-operator/prometheus-operator/pkg/client/versioned/scheme"
 	crdscheme "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset/scheme"
 	"k8s.io/apimachinery/pkg/runtime"

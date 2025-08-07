@@ -29,12 +29,12 @@ require (
 	kmodules.xyz/client-go v0.32.7
 	kmodules.xyz/custom-resources v0.32.0
 	kmodules.xyz/monitoring-agent-api v0.32.1
-	kubedb.dev/apimachinery v0.57.0-rc.0
-	kubedb.dev/db-client-go v0.12.0-rc.0
+	kubedb.dev/apimachinery v0.57.0
+	kubedb.dev/db-client-go v0.12.0
 	kubeops.dev/petset v0.0.11
 	sigs.k8s.io/controller-runtime v0.20.4
 	sigs.k8s.io/yaml v1.4.0
-	stash.appscode.dev/apimachinery v0.39.0
+	stash.appscode.dev/apimachinery v0.41.0
 )
 
 require (
@@ -85,7 +85,7 @@ require (
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/compress v1.18.0 // indirect
 	github.com/klauspost/cpuid/v2 v2.0.9 // indirect
-	github.com/kubernetes-csi/external-snapshotter/client/v7 v7.0.0 // indirect
+	github.com/kubernetes-csi/external-snapshotter/client/v8 v8.2.0 // indirect
 	github.com/liggitt/tabwriter v0.0.0-20181228230101-89fcab3d43de // indirect
 	github.com/mailru/easyjson v0.9.0 // indirect
 	github.com/mitchellh/go-wordwrap v1.0.1 // indirect
@@ -148,7 +148,7 @@ require (
 	kmodules.xyz/resource-metadata v0.32.1 // indirect
 	kubeops.dev/csi-driver-cacerts v0.1.0 // indirect
 	kubeops.dev/sidekick v0.0.11 // indirect
-	kubestash.dev/apimachinery v0.19.0 // indirect
+	kubestash.dev/apimachinery v0.20.0 // indirect
 	open-cluster-management.io/api v1.0.0 // indirect
 	sigs.k8s.io/gateway-api v1.1.0 // indirect
 	sigs.k8s.io/json v0.0.0-20241014173422-cfa47c3a1cc8 // indirect
