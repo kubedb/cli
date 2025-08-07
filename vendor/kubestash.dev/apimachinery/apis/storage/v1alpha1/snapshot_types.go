@@ -198,6 +198,10 @@ type Component struct {
 	// +optional
 	ResticStats []ResticStats `json:"resticStats,omitempty"`
 
+	// SolrStats specifies the "Solr" driver specific information
+	// +optional
+	SolrStats []SolrStats `json:"solrStats,omitempty"`
+
 	// WalGStats specifies the "WalG" driver specific information
 	// +optional
 	WalGStats *WalGStats `json:"walGStats,omitempty"`
@@ -328,6 +332,30 @@ type MedusaStats struct {
 
 	// Finishing time of the backup
 	FinishTime string `json:"finishTime,omitempty"`
+}
+
+// SolrStats specifies the information specific to the "Solr" driver.
+type SolrStats struct {
+	// BackupId represents the ID of the backup
+	BackupId int `json:"backupId,omitempty"`
+
+	// collection represents the collection for which backup has been taken
+	Collection string `json:"collection,omitempty"`
+
+	// indexFileCount represents number of index files in collection
+	IndexFileCount int `json:"indexFileCount,omitempty"`
+
+	// indexSizeMB represents number of index files in collection
+	IndexSizeMB float64 `json:"indexSizeMB,omitempty"`
+
+	// location of the backup
+	Location string `json:"location,omitempty"`
+
+	// Starting time of the backup
+	StartTime string `json:"startTime,omitempty"`
+
+	// Finishing time of the backup
+	UploadedIndexFileMB float64 `json:"uploadedIndexFileMB,omitempty"`
 }
 
 const (

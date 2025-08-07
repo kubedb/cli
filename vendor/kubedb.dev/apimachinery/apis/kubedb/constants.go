@@ -41,6 +41,7 @@ const (
 	DistributedRBACNameSuffix               = "rbac"
 	DistributedServiceExportNameSuffix      = "serviceexports"
 	DistributedTLSSecretNameSuffix          = "tls-secrets"
+	DistributedGRPCSecretNameSuffix         = "grpc-secrets"
 	DistributedAuthSecretNameSuffix         = "auth"
 	KubeSliceNSMIPKey                       = "kubeslice.io/nsmIP"
 	KubeSlicePodIPVolumeName                = "podip"
@@ -475,6 +476,8 @@ const (
 	MSSQLVolumeMountPathConfig                 = "/var/opt/mssql/mssql.conf"
 	MSSQLVolumeNameInitScript                  = "init-scripts"
 	MSSQLVolumeMountPathInitScript             = "/scripts"
+	MSSQLVolumeNameInitDatabase                = "init-database"
+	MSSQLVolumeMountPathInitDatabase           = "/init-database"
 	MSSQLVolumeNameEndpointCert                = "endpoint-cert"
 	MSSQLVolumeMountPathEndpointCert           = "/var/opt/mssql/endpoint-cert"
 	MSSQLVolumeNameCerts                       = "certs"
@@ -552,6 +555,9 @@ const (
 	IPS_LOCK                  = "IPC_LOCK"
 	SYS_RESOURCE              = "SYS_RESOURCE"
 	DropCapabilityALL         = "ALL"
+
+	PostgresGRPCIssuerName           = "grpc-issuer"
+	PostgresGRPCSelfSignedIssuerName = "grpc-selfsigned"
 
 	// =========================== ProxySQL Constants ============================
 	LabelProxySQLName                  = ProxySQLKey + "/name"
