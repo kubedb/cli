@@ -56,6 +56,9 @@ type PgpoolVersionSpec struct {
 	// +optional
 	Deprecated bool `json:"deprecated,omitempty"`
 
+	// +optional
+	GitSyncer GitSyncer `json:"gitSyncer,omitempty"`
+
 	// Exporter Image
 	Exporter PgpoolVersionExporter `json:"exporter,omitempty"`
 

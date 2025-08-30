@@ -3538,6 +3538,7 @@ func autoConvert_v1_PgBouncerSpec_To_v1alpha2_PgBouncerSpec(in *v1.PgBouncerSpec
 	out.ConnectionPool = (*ConnectionPoolConfig)(unsafe.Pointer(in.ConnectionPool))
 	out.AuthSecret = (*SecretReference)(unsafe.Pointer(in.AuthSecret))
 	out.ConfigSecret = (*corev1.LocalObjectReference)(unsafe.Pointer(in.ConfigSecret))
+	// WARNING: in.Init requires manual conversion: does not exist in peer-type
 	out.Monitor = (*monitoringagentapiapiv1.AgentSpec)(unsafe.Pointer(in.Monitor))
 	out.SSLMode = PgBouncerSSLMode(in.SSLMode)
 	out.TLS = (*clientgoapiv1.TLSConfig)(unsafe.Pointer(in.TLS))

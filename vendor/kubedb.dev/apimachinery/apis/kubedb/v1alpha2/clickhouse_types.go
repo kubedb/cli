@@ -127,7 +127,7 @@ type ClickHouseSpec struct {
 
 type ClusterTopology struct {
 	// Clickhouse Cluster Structure
-	Cluster []ClusterSpec `json:"cluster,omitempty"`
+	Cluster ClusterSpec `json:"cluster,omitempty"`
 
 	// ClickHouse Keeper server name
 	ClickHouseKeeper *ClickHouseKeeper `json:"clickHouseKeeper,omitempty"`

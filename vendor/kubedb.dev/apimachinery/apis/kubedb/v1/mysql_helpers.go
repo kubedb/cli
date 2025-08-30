@@ -185,6 +185,10 @@ func (m MySQL) GetAuthSecretName() string {
 	return meta_util.NameWithSuffix(m.OffshootName(), "auth")
 }
 
+func (m MySQL) GetStorageClassName() string {
+	return *m.Spec.Storage.StorageClassName
+}
+
 type mysqlApp struct {
 	*MySQL
 }

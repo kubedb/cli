@@ -131,6 +131,10 @@ func (p Postgres) GetAuthSecretName() string {
 	return meta_util.NameWithSuffix(p.OffshootName(), "auth")
 }
 
+func (p Postgres) GetStorageClassName() string {
+	return *p.Spec.Storage.StorageClassName
+}
+
 func (p Postgres) ServiceName() string {
 	return p.OffshootName()
 }

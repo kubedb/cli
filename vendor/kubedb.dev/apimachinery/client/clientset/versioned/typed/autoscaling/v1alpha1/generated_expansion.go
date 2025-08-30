@@ -32,6 +32,8 @@ type FerretDBAutoscalerExpansion interface{}
 
 type HazelcastAutoscalerExpansion interface{}
 
+type IgniteAutoscalerExpansion interface{}
+
 type KafkaAutoscalerExpansion interface{}
 
 type MSSQLServerAutoscalerExpansion interface{}

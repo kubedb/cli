@@ -87,6 +87,41 @@ spec:
                       type: object
                     type: array
                 type: object
+              clusterSpreadConstraint:
+                description: ClusterSpreadConstraint provides spec for distributed
+                  pod placements
+                properties:
+                  distributionRules:
+                    items:
+                      properties:
+                        clusterName:
+                          type: string
+                        replicaIndices:
+                          items:
+                            format: int32
+                            type: integer
+                          type: array
+                        storageClassName:
+                          type: string
+                      required:
+                      - clusterName
+                      - replicaIndices
+                      type: object
+                    type: array
+                  slice:
+                    properties:
+                      projectNamespace:
+                        type: string
+                      sliceName:
+                        type: string
+                    required:
+                    - projectNamespace
+                    - sliceName
+                    type: object
+                required:
+                - distributionRules
+                - slice
+                type: object
               nodeSpreadConstraint:
                 properties:
                   maxSkew:
@@ -99,25 +134,6 @@ spec:
                 required:
                 - maxSkew
                 - whenUnsatisfiable
-                type: object
-              ocm:
-                description: OCM provides spec for distributed pod placements using
-                  open cluster management
-                properties:
-                  distributionRules:
-                    items:
-                      properties:
-                        clusterName:
-                          type: string
-                        replicas:
-                          items:
-                            format: int32
-                            type: integer
-                          type: array
-                      type: object
-                    type: array
-                  sliceName:
-                    type: string
                 type: object
               zoneSpreadConstraint:
                 properties:

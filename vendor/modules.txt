@@ -782,8 +782,8 @@ github.com/klauspost/compress/internal/le
 github.com/klauspost/compress/internal/snapref
 github.com/klauspost/compress/zstd
 github.com/klauspost/compress/zstd/internal/xxhash
-# github.com/klauspost/cpuid/v2 v2.0.9
-## explicit; go 1.13
+# github.com/klauspost/cpuid/v2 v2.2.5
+## explicit; go 1.15
 github.com/klauspost/cpuid/v2
 # github.com/kubernetes-csi/external-snapshotter/client/v8 v8.2.0
 ## explicit; go 1.22.0
@@ -1645,8 +1645,8 @@ kmodules.xyz/prober/api/v1
 kmodules.xyz/resource-metadata/apis/node
 kmodules.xyz/resource-metadata/apis/node/v1alpha1
 kmodules.xyz/resource-metadata/crds
-# kubedb.dev/apimachinery v0.57.0
-## explicit; go 1.23.6
+# kubedb.dev/apimachinery v0.58.0
+## explicit; go 1.24.0
 kubedb.dev/apimachinery/apis
 kubedb.dev/apimachinery/apis/archiver/v1alpha1
 kubedb.dev/apimachinery/apis/autoscaling
@@ -1690,8 +1690,8 @@ kubedb.dev/apimachinery/client/clientset/versioned/typed/ui/v1alpha1
 kubedb.dev/apimachinery/crds
 kubedb.dev/apimachinery/pkg/double_optin
 kubedb.dev/apimachinery/pkg/factory
-# kubedb.dev/db-client-go v0.12.0
-## explicit; go 1.23.6
+# kubedb.dev/db-client-go v0.13.0
+## explicit; go 1.24.0
 kubedb.dev/db-client-go/elasticsearch
 kubedb.dev/db-client-go/redis
 # kubeops.dev/csi-driver-cacerts v0.1.0
@@ -1699,8 +1699,8 @@ kubedb.dev/db-client-go/redis
 kubeops.dev/csi-driver-cacerts/apis/cacerts
 kubeops.dev/csi-driver-cacerts/apis/cacerts/v1alpha1
 kubeops.dev/csi-driver-cacerts/crds
-# kubeops.dev/petset v0.0.11
-## explicit; go 1.23.6
+# kubeops.dev/petset v0.0.12
+## explicit; go 1.24.0
 kubeops.dev/petset/apis/apps/v1
 kubeops.dev/petset/client/clientset/versioned
 kubeops.dev/petset/client/clientset/versioned/scheme

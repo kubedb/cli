@@ -441,14 +441,14 @@ func (r *Cassandra) GetSeed() string {
 	namespace := r.Namespace
 	name := r.Name
 	if r.Spec.Topology == nil {
-		seed = fmt.Sprintf("%s-0.%s-pods.%s.svc.cluster.local", name, name, namespace)
+		seed = fmt.Sprintf("%s-0.%s-pods.%s.svc", name, name, namespace)
 		seed = seed + " , "
 		return seed
 	}
 	for _, rack := range r.Spec.Topology.Rack {
 		rackCount := min(*rack.Replicas, 3)
 		for i := int32(0); i < rackCount; i++ {
-			current_seed := fmt.Sprintf("%s-rack-%s-%d.%s-rack-%s-pods.%s.svc.cluster.local", name, rack.Name, i, name, rack.Name, namespace)
+			current_seed := fmt.Sprintf("%s-rack-%s-%d.%s-rack-%s-pods.%s.svc", name, rack.Name, i, name, rack.Name, namespace)
 			seed += current_seed + " , "
 		}
 	}

@@ -666,6 +666,8 @@ const (
 	PgBouncerConfigSectionPeers             = "peers"
 	PgBouncerConfigSectionPgbouncer         = "pgbouncer"
 	PgBouncerConfigSectionUsers             = "users"
+	PgBouncerInitVolumePath                 = "/init-scripts"
+	PgBouncerInitVolumeName                 = "init-scripts"
 
 	// =========================== Pgpool Constants ============================
 	EnvPostgresUsername                = "POSTGRES_USERNAME"
@@ -703,6 +705,8 @@ const (
 	PgpoolCustomHBAConfigFile          = "pool_hba.conf"
 	PgpoolCustomPCPFile                = "pcp.conf"
 	PGPOOL_INSTALL_DIR                 = "/opt/pgpool-II"
+	PgpoolInitVolumePath               = "/init-scripts"
+	PgpoolInitVolumeName               = "init-scripts"
 	// ========================================== ZooKeeper Constants =================================================//
 
 	KubeDBZooKeeperRoleName         = "kubedb:zookeeper-version-reader"
@@ -1439,7 +1443,7 @@ const (
 	RabbitMQPeerDiscoveryKey           = "cluster_formation.peer_discovery_backend"
 	RabbitMQPeerDiscoveryVal           = "rabbit_peer_discovery_k8s"
 	RabbitMQK8sHostKey                 = "cluster_formation.k8s.host"
-	RabbitMQK8sHostVal                 = "kubernetes.default.svc.cluster.local"
+	RabbitMQK8sHostVal                 = "kubernetes.default.svc"
 	RabbitMQK8sAddressTypeKey          = "cluster_formation.k8s.address_type"
 	RabbitMQK8sAddressTypeVal          = "hostname"
 	RabbitMQNodeCleanupWarningKey      = "cluster_formation.node_cleanup.only_log_warning"
@@ -1770,6 +1774,12 @@ const (
 	CassandraTLSStoreTypeJKSValue          = "JKS"
 )
 
+// =========================== Migration Constant  =================================
+const (
+	StorageMigration          = "StorageMigration"
+	StorageMigrationSucceeded = "StorageMigrationSucceeded"
+)
+
 // =========================== Virtual Secrets Constants ============================
 
 const (
@@ -1828,6 +1838,16 @@ var (
 		},
 		Limits: core.ResourceList{
 			core.ResourceMemory: resource.MustParse("4Gi"),
+		},
+	}
+
+	IgniteDefaultResources = core.ResourceRequirements{
+		Requests: core.ResourceList{
+			core.ResourceCPU:    resource.MustParse(".500"),
+			core.ResourceMemory: resource.MustParse("2Gi"),
+		},
+		Limits: core.ResourceList{
+			core.ResourceMemory: resource.MustParse("2Gi"),
 		},
 	}
 
@@ -1976,11 +1996,11 @@ func DefaultArbiter(computeOnly bool) core.ResourceRequirements {
 }
 
 const (
-	InitFromGit          = "init-from-git"
-	InitFromGitMountPath = "/git"
-	GitSecretVolume      = "git-secret"
-	GitSecretMountPath   = "/etc/git-secret"
-	GitSyncContainerName = "git-sync"
+	InitFromGit                 = "init-from-git"
+	DefaultInitFromGitMountPath = "/git"
+	GitSecretVolume             = "git-secret"
+	GitSecretMountPath          = "/etc/git-secret"
+	GitSyncContainerName        = "git-sync"
 )
 
 const (
