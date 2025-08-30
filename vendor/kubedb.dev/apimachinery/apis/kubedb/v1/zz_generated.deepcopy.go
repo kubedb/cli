@@ -2441,6 +2441,11 @@ func (in *PgBouncerSpec) DeepCopyInto(out *PgBouncerSpec) {
 		*out = new(corev1.LocalObjectReference)
 		**out = **in
 	}
+	if in.Init != nil {
+		in, out := &in.Init, &out.Init
+		*out = new(InitSpec)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.Monitor != nil {
 		in, out := &in.Monitor, &out.Monitor
 		*out = new(monitoringagentapiapiv1.AgentSpec)

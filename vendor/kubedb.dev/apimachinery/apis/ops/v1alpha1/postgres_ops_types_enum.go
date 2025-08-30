@@ -33,6 +33,8 @@ const (
 	PostgresOpsRequestTypeForceFailOver PostgresOpsRequestType = "ForceFailOver"
 	// PostgresOpsRequestTypeSetRaftKeyPair is a PostgresOpsRequestType of type SetRaftKeyPair.
 	PostgresOpsRequestTypeSetRaftKeyPair PostgresOpsRequestType = "SetRaftKeyPair"
+	// PostgresOpsRequestTypeStorageMigration is a PostgresOpsRequestType of type StorageMigration.
+	PostgresOpsRequestTypeStorageMigration PostgresOpsRequestType = "StorageMigration"
 )
 
 var ErrInvalidPostgresOpsRequestType = fmt.Errorf("not a valid PostgresOpsRequestType, try [%s]", strings.Join(_PostgresOpsRequestTypeNames, ", "))
@@ -49,6 +51,7 @@ var _PostgresOpsRequestTypeNames = []string{
 	string(PostgresOpsRequestTypeReconnectStandby),
 	string(PostgresOpsRequestTypeForceFailOver),
 	string(PostgresOpsRequestTypeSetRaftKeyPair),
+	string(PostgresOpsRequestTypeStorageMigration),
 }
 
 // PostgresOpsRequestTypeNames returns a list of possible string values of PostgresOpsRequestType.
@@ -72,6 +75,7 @@ func PostgresOpsRequestTypeValues() []PostgresOpsRequestType {
 		PostgresOpsRequestTypeReconnectStandby,
 		PostgresOpsRequestTypeForceFailOver,
 		PostgresOpsRequestTypeSetRaftKeyPair,
+		PostgresOpsRequestTypeStorageMigration,
 	}
 }
 
@@ -99,6 +103,7 @@ var _PostgresOpsRequestTypeValue = map[string]PostgresOpsRequestType{
 	"ReconnectStandby":  PostgresOpsRequestTypeReconnectStandby,
 	"ForceFailOver":     PostgresOpsRequestTypeForceFailOver,
 	"SetRaftKeyPair":    PostgresOpsRequestTypeSetRaftKeyPair,
+	"StorageMigration":  PostgresOpsRequestTypeStorageMigration,
 }
 
 // ParsePostgresOpsRequestType attempts to convert a string to a PostgresOpsRequestType.

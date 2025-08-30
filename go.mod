@@ -1,6 +1,6 @@
 module kubedb.dev/cli
 
-go 1.23.6
+go 1.24.0
 
 toolchain go1.24.5
 
@@ -29,9 +29,9 @@ require (
 	kmodules.xyz/client-go v0.32.7
 	kmodules.xyz/custom-resources v0.32.0
 	kmodules.xyz/monitoring-agent-api v0.32.1
-	kubedb.dev/apimachinery v0.57.0
-	kubedb.dev/db-client-go v0.12.0
-	kubeops.dev/petset v0.0.11
+	kubedb.dev/apimachinery v0.58.0
+	kubedb.dev/db-client-go v0.13.0
+	kubeops.dev/petset v0.0.12
 	sigs.k8s.io/controller-runtime v0.20.4
 	sigs.k8s.io/yaml v1.4.0
 	stash.appscode.dev/apimachinery v0.41.0
@@ -84,7 +84,7 @@ require (
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/compress v1.18.0 // indirect
-	github.com/klauspost/cpuid/v2 v2.0.9 // indirect
+	github.com/klauspost/cpuid/v2 v2.2.5 // indirect
 	github.com/kubernetes-csi/external-snapshotter/client/v8 v8.2.0 // indirect
 	github.com/liggitt/tabwriter v0.0.0-20181228230101-89fcab3d43de // indirect
 	github.com/mailru/easyjson v0.9.0 // indirect

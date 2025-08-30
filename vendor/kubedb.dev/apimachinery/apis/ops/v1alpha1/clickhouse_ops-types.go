@@ -18,6 +18,8 @@ limitations under the License.
 package v1alpha1
 
 import (
+	olddbapi "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+
 	core "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -71,13 +73,15 @@ type ClickHouseOpsRequestSpec struct {
 	Configuration *ClickHouseCustomConfigurationSpec `json:"configuration,omitempty"`
 	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
 	Timeout *metav1.Duration `json:"timeout,omitempty"`
+	// Specifies information necessary for configuring TLS
+	TLS *ClickHouseTLSSpec `json:"tls,omitempty"`
 	// ApplyOption is to control the execution of OpsRequest depending on the database state.
 	// +kubebuilder:default="IfReady"
 	Apply ApplyOption `json:"apply,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=Restart;VerticalScaling;HorizontalScaling;UpdateVersion;VolumeExpansion;Reconfigure
-// ENUM(Restart, VerticalScaling, HorizontalScaling, UpdateVersion, VolumeExpansion, Reconfigure)
+// +kubebuilder:validation:Enum=Restart;VerticalScaling;HorizontalScaling;UpdateVersion;VolumeExpansion;Reconfigure;ReconfigureTLS;RotateAuth
+// ENUM(Restart, VerticalScaling, HorizontalScaling, UpdateVersion, VolumeExpansion, Reconfigure, ReconfigureTLS, RotateAuth)
 type ClickHouseOpsRequestType string
 
 // ClickHouseUpdateVersionSpec contains the update version information of a clickhouse cluster
@@ -114,32 +118,23 @@ type ClickHouseCustomConfigurationSpec struct {
 	RemoveCustomConfig bool `json:"removeCustomConfig,omitempty"`
 }
 
+// ClickHouseTLSSpec contains necessary information for configuring TLS
+type ClickHouseTLSSpec struct {
+	// SSLVerificationMode specifies how server certificates should be verified
+	SSLVerificationMode olddbapi.SSLVerificationMode `json:"sslVerificationMode,omitempty"`
+	// TLSSpec holds the TLS certificate and key configuration.
+	TLSSpec `json:",inline,omitempty"`
+}
+
 // ClickHouseVerticalScalingSpec contains the vertical scaling information of a clickhouse cluster
 type ClickHouseVerticalScalingSpec struct {
-	// Resource spec for Standalone node
-	Standalone *PodResources `json:"standalone,omitempty"`
-	// List of cluster configurations for ClickHouse when running in cluster mode.
-	Cluster []*ClickHouseClusterVerticalScalingSpec `json:"cluster,omitempty"`
+	Node *PodResources `json:"node,omitempty"`
 }
 
 // ClickHouseHorizontalScalingSpec contains the horizontal scaling information of a clickhouse cluster
 type ClickHouseHorizontalScalingSpec struct {
-	// List of cluster configurations for ClickHouse when running in cluster mode.
-	Cluster []*ClickHouseClusterHorizontalScalingSpec `json:"cluster,omitempty"`
-}
-
-type ClickHouseClusterHorizontalScalingSpec struct {
-	// Name of the ClickHouse cluster to which the vertical scaling configuration applies.
-	ClusterName string `json:"clusterName,omitempty"`
 	// Number of node
 	Replicas *int32 `json:"replicas,omitempty"`
-}
-
-type ClickHouseClusterVerticalScalingSpec struct {
-	// Name of the ClickHouse cluster to which the vertical scaling configuration applies.
-	ClusterName string `json:"clusterName,omitempty"`
-	// Resource specifications for the nodes in this ClickHouse cluster.
-	Node *PodResources `json:"node,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

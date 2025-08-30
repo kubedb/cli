@@ -21,4 +21,6 @@ const (
 	ManifestWorkClusterNameLabel = "open-cluster-management.io/cluster-name"
 	RolePod                      = "pod"
 	RolePVC                      = "pvc"
+	DeletionPolicyAnnotation     = GroupName + "/deletion-policy"
+	DeletionPolicyOrphan         = "Orphan"
 )

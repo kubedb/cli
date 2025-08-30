@@ -3063,6 +3063,7 @@ func (in *PgBouncerVersionSpec) DeepCopyInto(out *PgBouncerVersionSpec) {
 	*out = *in
 	out.PgBouncer = in.PgBouncer
 	out.Exporter = in.Exporter
+	out.GitSyncer = in.GitSyncer
 	in.SecurityContext.DeepCopyInto(&out.SecurityContext)
 	in.UpdateConstraints.DeepCopyInto(&out.UpdateConstraints)
 	if in.UI != nil {
@@ -3218,6 +3219,7 @@ func (in *PgpoolVersionPodSecurityPolicy) DeepCopy() *PgpoolVersionPodSecurityPo
 func (in *PgpoolVersionSpec) DeepCopyInto(out *PgpoolVersionSpec) {
 	*out = *in
 	out.Pgpool = in.Pgpool
+	out.GitSyncer = in.GitSyncer
 	out.Exporter = in.Exporter
 	in.UpdateConstraints.DeepCopyInto(&out.UpdateConstraints)
 	in.SecurityContext.DeepCopyInto(&out.SecurityContext)

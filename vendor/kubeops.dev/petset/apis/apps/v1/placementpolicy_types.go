@@ -64,19 +64,36 @@ type PlacementPolicySpec struct {
 	// +optional
 	Affinity *Affinity `json:"affinity,omitempty"`
 
-	// OCM provides spec for distributed pod placements using open cluster management
+	// ClusterSpreadConstraint provides spec for distributed pod placements
 	// +optional
-	OCM *OCMSpec `json:"ocm,omitempty"`
+	ClusterSpreadConstraint *ClusterSpreadConstraint `json:"clusterSpreadConstraint,omitempty"`
 }
 
-type OCMSpec struct {
-	DistributionRules []DistributionRule `json:"distributionRules,omitempty"`
-	SliceName         string             `json:"sliceName,omitempty"`
+// https://kubeslice.io/documentation/open-source/1.4.0/install-kubeslice/yaml/yaml-controller-install#create-project-namespace
+// https://kubeslice.io/documentation/open-source/1.4.0/install-kubeslice/yaml/slice-operations/slice-operations-slice-creation#serviceexport-dns
+
+/*
+A cluster cannot be registered to multiple projects.
+The KubeSlice worker controller must be deployed in the kubeslice-system namespace.
+When a SliceConfig resource is created, KubeSlice generates a Slice resource in the kubeslice-system namespace across all clusters specified in the SliceConfig resource.
+When a sliceName is specified in a ServiceExport, the KubeSlice worker controller retrieves the Slice resource from the kubeslice-system namespace and verifies whether the namespace associated with the ServiceExport is onboarded.
+
+So, the project field is not required in the placementPolicy API . But if want to validate whether the clusters specified in the placementPolicy are included in the SliceConfig's cluster list then we need to include the project name as well.
+*/
+type ClusterSpreadConstraint struct {
+	DistributionRules []DistributionRule `json:"distributionRules"`
+	Slice             KubeSliceConfig    `json:"slice"`
 }
 
 type DistributionRule struct {
-	ClusterName string  `json:"clusterName,omitempty"`
-	Replicas    []int32 `json:"replicas,omitempty"`
+	ClusterName      string  `json:"clusterName"`
+	ReplicaIndices   []int32 `json:"replicaIndices"`
+	StorageClassName string  `json:"storageClassName,omitempty"`
+}
+
+type KubeSliceConfig struct {
+	ProjectNamespace string `json:"projectNamespace"`
+	SliceName        string `json:"sliceName"`
 }
 
 type ZoneSpreadConstraint struct {

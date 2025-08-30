@@ -58,6 +58,8 @@ type PgBouncerVersionSpec struct {
 	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
 	// +optional
 	Deprecated bool `json:"deprecated,omitempty"`
+	// +optional
+	GitSyncer GitSyncer `json:"gitSyncer,omitempty"`
 	// SecurityContext is for the additional config for pgbouncer DB container
 	// +optional
 	SecurityContext PgBouncerSecurityContext `json:"securityContext"`

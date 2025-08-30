@@ -54,6 +54,13 @@ spec:
                 required:
                 - image
                 type: object
+              gitSyncer:
+                properties:
+                  image:
+                    type: string
+                required:
+                - image
+                type: object
               pgBouncer:
                 properties:
                   image:
