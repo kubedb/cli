@@ -58,6 +58,7 @@ func MySQLDebugCMD(f cmdutil.Factory) *cobra.Command {
 		Use: "mysql",
 		Aliases: []string{
 			"my",
+			"mysqls",
 		},
 		Short:   "Debug helper for mysql database",
 		Example: `kubectl dba debug mysql -n demo sample-mysql --operator-namespace kubedb`,

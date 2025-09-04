@@ -58,6 +58,7 @@ func MongoDBDebugCMD(f cmdutil.Factory) *cobra.Command {
 		Use: "mongodb",
 		Aliases: []string{
 			"mg",
+			"mongodbs",
 		},
 		Short:   "Debug helper for mongodb database",
 		Example: `kubectl dba debug mongodb -n demo sample-mongodb --operator-namespace kubedb`,

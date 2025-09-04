@@ -58,6 +58,7 @@ func MariaDBDebugCMD(f cmdutil.Factory) *cobra.Command {
 		Use: "mariadb",
 		Aliases: []string{
 			"md",
+			"mariadbs",
 		},
 		Short:   "Debug helper for mariadb database",
 		Example: `kubectl dba debug mariadb -n demo sample-mariadb --operator-namespace kubedb`,

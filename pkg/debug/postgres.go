@@ -58,6 +58,7 @@ func PostgresDebugCMD(f cmdutil.Factory) *cobra.Command {
 		Use: "postgres",
 		Aliases: []string{
 			"pg",
+			"postgreses",
 		},
 		Short:   "Debug helper for postgres database",
 		Example: `kubectl dba debug postgres -n demo sample-postgres --operator-namespace kubedb`,

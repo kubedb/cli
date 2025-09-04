@@ -58,6 +58,7 @@ func ElasticsearchDebugCMD(f cmdutil.Factory) *cobra.Command {
 		Use: "elasticsearch",
 		Aliases: []string{
 			"es",
+			"elasticsearches",
 		},
 		Short:   "Debug helper for elasticsearch database",
 		Example: `kubectl dba debug elasticsearch -n demo sample-elasticsearch --operator-namespace kubedb`,
