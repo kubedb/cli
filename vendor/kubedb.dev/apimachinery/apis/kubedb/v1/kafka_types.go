@@ -79,6 +79,9 @@ type KafkaSpec struct {
 	// To enable ssl for http layer
 	EnableSSL bool `json:"enableSSL,omitempty"`
 
+	// Broker Rack defines the rack awareness configuration for Kafka brokers
+	BrokerRack *BrokerRack `json:"brokerRack,omitempty"`
+
 	// disable security. It disables authentication security of user.
 	// If unset, default is false
 	// +optional
@@ -155,6 +158,11 @@ type KafkaNode struct {
 	// PodTemplate is an optional configuration for pods used to expose database
 	// +optional
 	PodTemplate ofstv2.PodTemplateSpec `json:"podTemplate,omitempty"`
+}
+
+type BrokerRack struct {
+	// TopologyKey is the node label key which is used to identify the rack of a broker
+	TopologyKey string `json:"topologyKey,omitempty"`
 }
 
 // KafkaStatus defines the observed state of Kafka

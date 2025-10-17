@@ -209,6 +209,15 @@ func (m *Memcached) SetDefaults(mcVersion *catalog.MemcachedVersion) {
 		m.Spec.PodTemplate.Spec.ServiceAccountName = m.OffshootName()
 	}
 
+	if !m.Spec.DisableAuth {
+		if m.Spec.AuthSecret == nil {
+			m.Spec.AuthSecret = &SecretReference{}
+		}
+		if m.Spec.AuthSecret.Kind == "" {
+			m.Spec.AuthSecret.Kind = kubedb.ResourceKindSecret
+		}
+	}
+
 	m.setDefaultContainerSecurityContext(mcVersion, &m.Spec.PodTemplate)
 	m.setDefaultContainerResourceLimits(&m.Spec.PodTemplate)
 

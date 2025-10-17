@@ -20,6 +20,7 @@ import (
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
+	app_api "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	ofstv1 "kmodules.xyz/offshoot-api/api/v1"
 )
 
@@ -191,14 +192,10 @@ type SystemUserSecretsSpec struct {
 
 type SecretReference struct {
 	// +optional
-	// Two possible groups: "", virtual-secrets.dev
-	ApiGroup string `json:"apiGroup,omitempty"`
-
-	// +optional
 	// SecretSource references the secret manager used for virtual secret
 	SecretStoreName string `json:"secretStoreName,omitempty"`
 
-	core.LocalObjectReference `json:",inline,omitempty"`
+	app_api.TypedLocalObjectReference `json:",inline,omitempty"`
 	// Recommendation engine will generate RotateAuth opsReq using this field
 	// +optional
 	RotateAfter *metav1.Duration `json:"rotateAfter,omitempty"`

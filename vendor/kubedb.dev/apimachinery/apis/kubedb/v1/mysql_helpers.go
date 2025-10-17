@@ -284,6 +284,13 @@ func (m *MySQL) SetDefaults(myVersion *v1alpha1.MySQLVersion) error {
 		m.Spec.DeletionPolicy = DeletionPolicyDelete
 	}
 
+	if m.Spec.AuthSecret == nil {
+		m.Spec.AuthSecret = &SecretReference{}
+	}
+	if m.Spec.AuthSecret.Kind == "" {
+		m.Spec.AuthSecret.Kind = kubedb.ResourceKindSecret
+	}
+
 	if m.UsesGroupReplication() || m.IsInnoDBCluster() || m.IsSemiSync() {
 		if m.Spec.Replicas == nil {
 			m.Spec.Replicas = pointer.Int32P(kubedb.MySQLDefaultGroupSize)

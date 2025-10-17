@@ -77,6 +77,10 @@ type ClickHouseSpec struct {
 	// Storage to specify how storage shall be used.
 	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty"`
 
+	// Init is used to initialize database
+	// +optional
+	Init *InitSpec `json:"init,omitempty"`
+
 	// disable security. It disables authentication security of user.
 	// If unset, default is false
 	// +optional

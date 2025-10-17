@@ -233,6 +233,15 @@ func (h *Hazelcast) setDefaultProbes(podTemplate *ofst.PodTemplateSpec) {
 }
 
 func (h *Hazelcast) SetTLSDefaults() {
+	if !h.Spec.DisableSecurity {
+		if h.Spec.AuthSecret == nil {
+			h.Spec.AuthSecret = &SecretReference{}
+		}
+		if h.Spec.AuthSecret.Kind == "" {
+			h.Spec.AuthSecret.Kind = kube.ResourceKindSecret
+		}
+	}
+
 	if h.Spec.TLS == nil || h.Spec.TLS.IssuerRef == nil {
 		return
 	}

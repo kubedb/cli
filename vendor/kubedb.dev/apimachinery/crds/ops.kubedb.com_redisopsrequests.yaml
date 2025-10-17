@@ -70,9 +70,17 @@ spec:
                 properties:
                   secretRef:
                     properties:
-                      name:
+                      apiGroup:
                         default: ""
                         type: string
+                      kind:
+                        default: Secret
+                        type: string
+                      name:
+                        type: string
+                    required:
+                    - kind
+                    - name
                     type: object
                     x-kubernetes-map-type: atomic
                 type: object
@@ -81,6 +89,24 @@ spec:
                   applyConfig:
                     additionalProperties:
                       type: string
+                    type: object
+                  auth:
+                    properties:
+                      deleteUsers:
+                        items:
+                          type: string
+                        type: array
+                      secretRef:
+                        properties:
+                          name:
+                            default: ""
+                            type: string
+                        type: object
+                        x-kubernetes-map-type: atomic
+                      syncACL:
+                        items:
+                          type: string
+                        type: array
                     type: object
                   configSecret:
                     properties:

@@ -33,13 +33,11 @@ var (
 )
 
 // Selector defines the interface for selecting connections from the pool.
-//
 type Selector interface {
 	Select([]*Connection) (*Connection, error)
 }
 
 // ConnectionPool defines the interface for the connection pool.
-//
 type ConnectionPool interface {
 	Next() (*Connection, error)  // Next returns the next available connection.
 	OnSuccess(*Connection) error // OnSuccess reports that the connection was successful.
@@ -47,8 +45,11 @@ type ConnectionPool interface {
 	URLs() []*url.URL            // URLs returns the list of URLs of available connections.
 }
 
+type UpdatableConnectionPool interface {
+	Update([]*Connection) error // Update injects newly found nodes in the cluster.
+}
+
 // Connection represents a connection to a node.
-//
 type Connection struct {
 	sync.Mutex
 
@@ -61,6 +62,15 @@ type Connection struct {
 	Name       string
 	Roles      []string
 	Attributes map[string]interface{}
+}
+
+func (c *Connection) Cmp(connection *Connection) bool {
+	if c.URL.Hostname() == connection.URL.Hostname() {
+		if c.URL.Port() == connection.URL.Port() {
+			return c.URL.Path == connection.URL.Path
+		}
+	}
+	return false
 }
 
 type singleConnectionPool struct {
@@ -86,7 +96,6 @@ type roundRobinSelector struct {
 }
 
 // NewConnectionPool creates and returns a default connection pool.
-//
 func NewConnectionPool(conns []*Connection, selector Selector) (ConnectionPool, error) {
 	if len(conns) == 1 {
 		return &singleConnectionPool{connection: conns[0]}, nil
@@ -98,7 +107,6 @@ func NewConnectionPool(conns []*Connection, selector Selector) (ConnectionPool, 
 }
 
 // Next returns the connection from pool.
-//
 func (cp *singleConnectionPool) Next() (*Connection, error) {
 	return cp.connection, nil
 }
@@ -115,7 +123,6 @@ func (cp *singleConnectionPool) URLs() []*url.URL { return []*url.URL{cp.connect
 func (cp *singleConnectionPool) connections() []*Connection { return []*Connection{cp.connection} }
 
 // Next returns a connection from pool, or an error.
-//
 func (cp *statusConnectionPool) Next() (*Connection, error) {
 	cp.Lock()
 	defer cp.Unlock()
@@ -136,25 +143,30 @@ func (cp *statusConnectionPool) Next() (*Connection, error) {
 }
 
 // OnSuccess marks the connection as successful.
-//
 func (cp *statusConnectionPool) OnSuccess(c *Connection) error {
+	// Short-circuit for live connection
+	c.Lock()
+	if !c.IsDead {
+		c.Unlock()
+		return nil
+	}
+	c.Unlock()
+
+	cp.Lock()
+	defer cp.Unlock()
+
 	c.Lock()
 	defer c.Unlock()
 
-	// Short-circuit for live connection
 	if !c.IsDead {
 		return nil
 	}
 
 	c.markAsHealthy()
-
-	cp.Lock()
-	defer cp.Unlock()
 	return cp.resurrect(c, true)
 }
 
 // OnFailure marks the connection as failed.
-//
 func (cp *statusConnectionPool) OnFailure(c *Connection) error {
 	cp.Lock()
 	defer cp.Unlock()
@@ -176,20 +188,6 @@ func (cp *statusConnectionPool) OnFailure(c *Connection) error {
 	cp.scheduleResurrect(c)
 	c.Unlock()
 
-	// Push item to dead list and sort slice by number of failures
-	cp.dead = append(cp.dead, c)
-	sort.Slice(cp.dead, func(i, j int) bool {
-		c1 := cp.dead[i]
-		c2 := cp.dead[j]
-		c1.Lock()
-		c2.Lock()
-		defer c1.Unlock()
-		defer c2.Unlock()
-
-		res := c1.Failures > c2.Failures
-		return res
-	})
-
 	// Check if connection exists in the list, return error if not.
 	index := -1
 	for i, conn := range cp.live {
@@ -201,6 +199,16 @@ func (cp *statusConnectionPool) OnFailure(c *Connection) error {
 		return errors.New("connection not in live list")
 	}
 
+	// Push item to dead list and sort slice by number of failures
+	cp.dead = append(cp.dead, c)
+	sort.Slice(cp.dead, func(i, j int) bool {
+		c1 := cp.dead[i]
+		c2 := cp.dead[j]
+
+		res := c1.Failures > c2.Failures
+		return res
+	})
+
 	// Remove item; https://github.com/golang/go/wiki/SliceTricks
 	copy(cp.live[index:], cp.live[index+1:])
 	cp.live = cp.live[:len(cp.live)-1]
@@ -208,8 +216,72 @@ func (cp *statusConnectionPool) OnFailure(c *Connection) error {
 	return nil
 }
 
+// Update merges the existing live and dead connections with the latest nodes discovered from the cluster.
+// ConnectionPool must be locked before calling.
+func (cp *statusConnectionPool) Update(connections []*Connection) error {
+	if len(connections) == 0 {
+		return errors.New("no connections provided, connection pool left untouched")
+	}
+
+	// Remove hosts that are no longer in the new list of connections
+	for i := 0; i < len(cp.live); i++ {
+		found := false
+		for _, c := range connections {
+			if cp.live[i].Cmp(c) {
+				found = true
+				break
+			}
+		}
+
+		if !found {
+			// Remove item; https://github.com/golang/go/wiki/SliceTricks
+			copy(cp.live[i:], cp.live[i+1:])
+			cp.live = cp.live[:len(cp.live)-1]
+			i--
+		}
+	}
+
+	// Remove hosts that are no longer in the dead list of connections
+	for i := 0; i < len(cp.dead); i++ {
+		found := false
+		for _, c := range connections {
+			if cp.dead[i].Cmp(c) {
+				found = true
+				break
+			}
+		}
+
+		if !found {
+			copy(cp.dead[i:], cp.dead[i+1:])
+			cp.dead = cp.dead[:len(cp.dead)-1]
+			i--
+		}
+	}
+
+	// Add new connections that are not already in the live or dead list
+	for _, c := range connections {
+		found := false
+		for _, conn := range cp.live {
+			if conn.Cmp(c) {
+				found = true
+				break
+			}
+		}
+		for _, conn := range cp.dead {
+			if conn.Cmp(c) {
+				found = true
+				break
+			}
+		}
+		if !found {
+			cp.live = append(cp.live, c)
+		}
+	}
+
+	return nil
+}
+
 // URLs returns the list of URLs of available connections.
-//
 func (cp *statusConnectionPool) URLs() []*url.URL {
 	var urls []*url.URL
 
@@ -233,7 +305,6 @@ func (cp *statusConnectionPool) connections() []*Connection {
 // resurrect adds the connection to the list of available connections.
 // When removeDead is true, it also removes it from the dead list.
 // The calling code is responsible for locking.
-//
 func (cp *statusConnectionPool) resurrect(c *Connection, removeDead bool) error {
 	if debugLogger != nil {
 		debugLogger.Logf("Resurrecting %s\n", c.URL)
@@ -260,7 +331,6 @@ func (cp *statusConnectionPool) resurrect(c *Connection, removeDead bool) error 
 }
 
 // scheduleResurrect schedules the connection to be resurrected.
-//
 func (cp *statusConnectionPool) scheduleResurrect(c *Connection) {
 	factor := math.Min(float64(c.Failures-1), float64(defaultResurrectTimeoutFactorCutoff))
 	timeout := time.Duration(defaultResurrectTimeoutInitial.Seconds() * math.Exp2(factor) * float64(time.Second))
@@ -287,7 +357,6 @@ func (cp *statusConnectionPool) scheduleResurrect(c *Connection) {
 }
 
 // Select returns the connection in a round-robin fashion.
-//
 func (s *roundRobinSelector) Select(conns []*Connection) (*Connection, error) {
 	s.Lock()
 	defer s.Unlock()
@@ -297,7 +366,6 @@ func (s *roundRobinSelector) Select(conns []*Connection) (*Connection, error) {
 }
 
 // markAsDead marks the connection as dead.
-//
 func (c *Connection) markAsDead() {
 	c.IsDead = true
 	if c.DeadSince.IsZero() {
@@ -307,13 +375,11 @@ func (c *Connection) markAsDead() {
 }
 
 // markAsLive marks the connection as alive.
-//
 func (c *Connection) markAsLive() {
 	c.IsDead = false
 }
 
 // markAsHealthy marks the connection as healthy.
-//
 func (c *Connection) markAsHealthy() {
 	c.IsDead = false
 	c.DeadSince = time.Time{}
@@ -321,7 +387,6 @@ func (c *Connection) markAsHealthy() {
 }
 
 // String returns a readable connection representation.
-//
 func (c *Connection) String() string {
 	c.Lock()
 	defer c.Unlock()

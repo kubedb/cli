@@ -230,6 +230,13 @@ func (f *FerretDB) SetDefaults(kc client.Client) {
 		f.Spec.SSLMode = SSLModeDisabled
 	}
 
+	if f.Spec.AuthSecret == nil {
+		f.Spec.AuthSecret = &SecretReference{}
+	}
+	if f.Spec.AuthSecret.Kind == "" {
+		f.Spec.AuthSecret.Kind = kubedb.ResourceKindSecret
+	}
+
 	var frVersion catalog.FerretDBVersion
 	err := kc.Get(context.TODO(), types.NamespacedName{
 		Name: f.Spec.Version,

@@ -178,5 +178,5 @@ func UsesAcmeIssuer(kc client.Client, ns string, issuerRef core.TypedLocalObject
 }
 
 func IsVirtualAuthSecretReferred(authSecret *SecretReference) bool {
-	return authSecret != nil && authSecret.ApiGroup == vsecretapi.GroupName
+	return authSecret != nil && authSecret.APIGroup == vsecretapi.GroupName
 }

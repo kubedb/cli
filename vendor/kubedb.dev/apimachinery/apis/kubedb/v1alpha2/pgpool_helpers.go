@@ -283,6 +283,13 @@ func (p *Pgpool) GetCertSecretName(alias PgpoolCertificateAlias) string {
 }
 
 func (p *Pgpool) SetTLSDefaults() {
+	if p.Spec.AuthSecret == nil {
+		p.Spec.AuthSecret = &SecretReference{}
+	}
+	if p.Spec.AuthSecret.Kind == "" {
+		p.Spec.AuthSecret.Kind = kubedb.ResourceKindSecret
+	}
+
 	if p.Spec.TLS == nil || p.Spec.TLS.IssuerRef == nil {
 		return
 	}

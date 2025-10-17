@@ -454,6 +454,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec":                      schema_custom_resources_apis_appcatalog_v1alpha1_StashAddonSpec(ref),
 		"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashTaskSpec":                       schema_custom_resources_apis_appcatalog_v1alpha1_StashTaskSpec(ref),
 		"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.TaskRef":                             schema_custom_resources_apis_appcatalog_v1alpha1_TaskRef(ref),
+		"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.TypedLocalObjectReference":           schema_custom_resources_apis_appcatalog_v1alpha1_TypedLocalObjectReference(ref),
 		"kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec":                                         schema_kmodulesxyz_monitoring_agent_api_api_v1_AgentSpec(ref),
 		"kmodules.xyz/monitoring-agent-api/api/v1.AlertPreset":                                       schema_kmodulesxyz_monitoring_agent_api_api_v1_AlertPreset(ref),
 		"kmodules.xyz/monitoring-agent-api/api/v1.BasicAuth":                                         schema_kmodulesxyz_monitoring_agent_api_api_v1_BasicAuth(ref),
@@ -22554,7 +22555,7 @@ func schema_custom_resources_apis_appcatalog_v1alpha1_AppBindingSpec(ref common.
 					"secret": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Secret is the name of the secret to create in the AppBinding's namespace that will hold the credentials associated with the AppBinding.",
-							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
+							Ref:         ref("kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.TypedLocalObjectReference"),
 						},
 					},
 					"secretTransforms": {
@@ -22580,7 +22581,7 @@ func schema_custom_resources_apis_appcatalog_v1alpha1_AppBindingSpec(ref common.
 					"tlsSecret": {
 						SchemaProps: spec.SchemaProps{
 							Description: "TLSSecret is the name of the secret that will hold the client certificate and private key associated with the AppBinding.",
-							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
+							Ref:         ref("kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.TypedLocalObjectReference"),
 						},
 					},
 				},
@@ -22588,7 +22589,7 @@ func schema_custom_resources_apis_appcatalog_v1alpha1_AppBindingSpec(ref common.
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/runtime.RawExtension", "kmodules.xyz/client-go/api/v1.TypedObjectReference", "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.ClientConfig", "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.SecretTransform"},
+			"k8s.io/apimachinery/pkg/runtime.RawExtension", "kmodules.xyz/client-go/api/v1.TypedObjectReference", "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.ClientConfig", "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.SecretTransform", "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.TypedLocalObjectReference"},
 	}
 }
 
@@ -23001,6 +23002,48 @@ func schema_custom_resources_apis_appcatalog_v1alpha1_TaskRef(ref common.Referen
 		},
 		Dependencies: []string{
 			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.Param"},
+	}
+}
+
+func schema_custom_resources_apis_appcatalog_v1alpha1_TypedLocalObjectReference(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"apiGroup": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIGroup is the group for the resource being referenced. If APIGroup is not specified, the specified Kind must be in the core API group. For any other third-party types, APIGroup is required.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is the type of resource being referenced",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Name is the name of resource being referenced",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"kind", "name"},
+			},
+			VendorExtensible: spec.VendorExtensible{
+				Extensions: spec.Extensions{
+					"x-kubernetes-map-type": "atomic",
+				},
+			},
+		},
 	}
 }
 

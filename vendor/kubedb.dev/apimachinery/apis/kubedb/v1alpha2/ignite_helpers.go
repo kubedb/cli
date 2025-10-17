@@ -116,6 +116,15 @@ func (i *Ignite) SetDefaults(kc client.Client) {
 		i.Spec.StorageType = StorageTypeDurable
 	}
 
+	if !i.Spec.DisableSecurity {
+		if i.Spec.AuthSecret == nil {
+			i.Spec.AuthSecret = &SecretReference{}
+		}
+		if i.Spec.AuthSecret.Kind == "" {
+			i.Spec.AuthSecret.Kind = kubedb.ResourceKindSecret
+		}
+	}
+
 	var igVersion catalog.IgniteVersion
 	err := kc.Get(context.TODO(), types.NamespacedName{
 		Name: i.Spec.Version,

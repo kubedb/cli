@@ -143,6 +143,20 @@ type RedisVerticalScalingSpec struct {
 	Coordinator *ContainerResources `json:"coordinator,omitempty"`
 }
 
+type RedisAclSpec struct {
+	// SecretRef holds the password against which ACLs will be created if syncACL is given.
+	// +optional
+	SecretRef *core.LocalObjectReference `json:"secretRef,omitempty"`
+
+	// SyncACL specifies the list of users whose ACLs should be synchronized with the new authentication secret.
+	// If provided, the system will update the ACLs for these users to ensure they are in sync with the new authentication settings.
+	SyncACL []string `json:"syncACL,omitempty"`
+
+	// DeleteUsers specifies the list of users that should be deleted from the database.
+	// If provided, the system will remove these users from the database to enhance security or manage
+	DeleteUsers []string `json:"deleteUsers,omitempty"`
+}
+
 // RedisVolumeExpansionSpec is the spec for Redis volume expansion
 type RedisVolumeExpansionSpec struct {
 	Mode  VolumeExpansionMode `json:"mode"`
@@ -153,6 +167,7 @@ type RedisCustomConfigurationSpec struct {
 	ConfigSecret       *core.LocalObjectReference `json:"configSecret,omitempty"`
 	ApplyConfig        map[string]string          `json:"applyConfig,omitempty"`
 	RemoveCustomConfig bool                       `json:"removeCustomConfig,omitempty"`
+	Auth               *RedisAclSpec              `json:"auth,omitempty"`
 }
 
 // +kubebuilder:validation:Enum=ip;hostname

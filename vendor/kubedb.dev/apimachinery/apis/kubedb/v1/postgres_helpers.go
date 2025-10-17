@@ -249,6 +249,13 @@ func (p *Postgres) SetDefaults(postgresVersion *catalog.PostgresVersion) {
 		p.Spec.DeletionPolicy = DeletionPolicyDelete
 	}
 
+	if p.Spec.AuthSecret == nil {
+		p.Spec.AuthSecret = &SecretReference{}
+	}
+	if p.Spec.AuthSecret.Kind == "" {
+		p.Spec.AuthSecret.Kind = kubedb.ResourceKindSecret
+	}
+
 	if p.Spec.LeaderElection == nil {
 		p.Spec.LeaderElection = &PostgreLeaderElectionConfig{
 			// The upper limit of election timeout is 50000ms (50s), which should only be used when deploying a

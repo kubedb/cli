@@ -288,6 +288,15 @@ func (r *RabbitMQ) SetDefaults(kc client.Client) {
 		r.Spec.StorageType = StorageTypeDurable
 	}
 
+	if !r.Spec.DisableSecurity {
+		if r.Spec.AuthSecret == nil {
+			r.Spec.AuthSecret = &SecretReference{}
+		}
+		if r.Spec.AuthSecret.Kind == "" {
+			r.Spec.AuthSecret.Kind = kubedb.ResourceKindSecret
+		}
+	}
+
 	var rmVersion catalog.RabbitMQVersion
 	err := kc.Get(context.TODO(), types.NamespacedName{
 		Name: r.Spec.Version,
