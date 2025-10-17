@@ -18,6 +18,7 @@
 package elastictransport
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -30,7 +31,6 @@ import (
 )
 
 // Discoverable defines the interface for transports supporting node discovery.
-//
 type Discoverable interface {
 	DiscoverNodes() error
 }
@@ -38,7 +38,6 @@ type Discoverable interface {
 // nodeInfo represents the information about node in a cluster.
 //
 // See: https://www.elastic.co/guide/en/elasticsearch/reference/current/cluster-nodes-info.html
-//
 type nodeInfo struct {
 	ID         string
 	Name       string
@@ -51,7 +50,6 @@ type nodeInfo struct {
 }
 
 // DiscoverNodes reloads the client connections by fetching information from the cluster.
-//
 func (c *Client) DiscoverNodes() error {
 	var conns []*Connection
 
@@ -109,10 +107,18 @@ func (c *Client) DiscoverNodes() error {
 	if c.poolFunc != nil {
 		c.pool = c.poolFunc(conns, c.selector)
 	} else {
-		// TODO(karmi): Replace only live connections, leave dead scheduled for resurrect?
-		c.pool, err = NewConnectionPool(conns, c.selector)
-		if err != nil {
-			return err
+		if p, ok := c.pool.(UpdatableConnectionPool); ok {
+			err = p.Update(conns)
+			if err != nil {
+				if debugLogger != nil {
+					debugLogger.Logf("Error updating pool: %s\n", err)
+				}
+			}
+		} else {
+			c.pool, err = NewConnectionPool(conns, c.selector)
+			if err != nil {
+				return err
+			}
 		}
 	}
 
@@ -125,7 +131,17 @@ func (c *Client) getNodesInfo() ([]nodeInfo, error) {
 		scheme = c.urls[0].Scheme
 	)
 
-	req, err := http.NewRequest("GET", "/_nodes/http", nil)
+	var ctx context.Context
+	var cancel context.CancelFunc
+
+	if c.discoverNodeTimeout != nil {
+		ctx, cancel = context.WithTimeout(context.Background(), *c.discoverNodeTimeout)
+		defer cancel()
+	} else {
+		ctx = context.Background() // Use default context if no timeout is set
+	}
+
+	req, err := http.NewRequestWithContext(ctx, "GET", "/_nodes/http", nil)
 	if err != nil {
 		return out, err
 	}
@@ -141,6 +157,7 @@ func (c *Client) getNodesInfo() ([]nodeInfo, error) {
 	c.setReqURL(conn.URL, req)
 	c.setReqAuth(conn.URL, req)
 	c.setReqUserAgent(req)
+	c.setReqGlobalHeader(req)
 
 	res, err := c.transport.RoundTrip(req)
 	if err != nil {

@@ -47,13 +47,16 @@ var (
 )
 
 // Interface defines the interface for HTTP client.
-//
 type Interface interface {
 	Perform(*http.Request) (*http.Response, error)
 }
 
+// Instrumented allows to retrieve the current transport Instrumentation
+type Instrumented interface {
+	InstrumentationEnabled() Instrumentation
+}
+
 // Config represents the configuration of HTTP client.
-//
 type Config struct {
 	UserAgent string
 
@@ -83,12 +86,18 @@ type Config struct {
 	MaxRetries   int
 	RetryBackoff func(attempt int) time.Duration
 
-	CompressRequestBody bool
+	CompressRequestBody      bool
+	CompressRequestBodyLevel int
+	// If PoolCompressor is true, a sync.Pool based gzip writer is used. Should be enabled with CompressRequestBody.
+	PoolCompressor bool
 
 	EnableMetrics     bool
 	EnableDebugLogger bool
 
+	Instrumentation Instrumentation
+
 	DiscoverNodesInterval time.Duration
+	DiscoverNodeTimeout   *time.Duration
 
 	Transport http.RoundTripper
 	Logger    Logger
@@ -100,7 +109,6 @@ type Config struct {
 }
 
 // Client represents the HTTP client.
-//
 type Client struct {
 	sync.Mutex
 
@@ -123,8 +131,13 @@ type Client struct {
 	retryBackoff          func(attempt int) time.Duration
 	discoverNodesInterval time.Duration
 	discoverNodesTimer    *time.Timer
+	discoverNodeTimeout   *time.Duration
 
-	compressRequestBody bool
+	compressRequestBody      bool
+	compressRequestBodyLevel int
+	gzipCompressor           gzipCompressor
+
+	instrumentation Instrumentation
 
 	metrics *metrics
 
@@ -138,10 +151,13 @@ type Client struct {
 // New creates new transport client.
 //
 // http.DefaultTransport will be used if no transport is passed in the configuration.
-//
 func New(cfg Config) (*Client, error) {
 	if cfg.Transport == nil {
-		cfg.Transport = http.DefaultTransport
+		defaultTransport, ok := http.DefaultTransport.(*http.Transport)
+		if !ok {
+			return nil, errors.New("cannot clone http.DefaultTransport")
+		}
+		cfg.Transport = defaultTransport.Clone()
 	}
 
 	if transport, ok := cfg.Transport.(*http.Transport); ok {
@@ -216,12 +232,19 @@ func New(cfg Config) (*Client, error) {
 		retryBackoff:          cfg.RetryBackoff,
 		discoverNodesInterval: cfg.DiscoverNodesInterval,
 
-		compressRequestBody: cfg.CompressRequestBody,
+		compressRequestBody:      cfg.CompressRequestBody,
+		compressRequestBodyLevel: cfg.CompressRequestBodyLevel,
 
 		transport: cfg.Transport,
 		logger:    cfg.Logger,
 		selector:  cfg.Selector,
 		poolFunc:  cfg.ConnectionPoolFunc,
+
+		instrumentation: cfg.Instrumentation,
+	}
+
+	if cfg.DiscoverNodeTimeout != nil {
+		client.discoverNodeTimeout = cfg.DiscoverNodeTimeout
 	}
 
 	if client.poolFunc != nil {
@@ -251,11 +274,20 @@ func New(cfg Config) (*Client, error) {
 		})
 	}
 
+	if client.compressRequestBodyLevel == 0 {
+		client.compressRequestBodyLevel = gzip.DefaultCompression
+	}
+
+	if cfg.PoolCompressor {
+		client.gzipCompressor = newPooledGzipCompressor(client.compressRequestBodyLevel)
+	} else {
+		client.gzipCompressor = newSimpleGzipCompressor(client.compressRequestBodyLevel)
+	}
+
 	return &client, nil
 }
 
 // Perform executes the request and returns a response or error.
-//
 func (c *Client) Perform(req *http.Request) (*http.Response, error) {
 	var (
 		res *http.Response
@@ -275,17 +307,15 @@ func (c *Client) Perform(req *http.Request) (*http.Response, error) {
 
 	if req.Body != nil && req.Body != http.NoBody {
 		if c.compressRequestBody {
-			var buf bytes.Buffer
-			zw := gzip.NewWriter(&buf)
-			if _, err := io.Copy(zw, req.Body); err != nil {
-				return nil, fmt.Errorf("failed to compress request body: %s", err)
+			buf, err := c.gzipCompressor.compress(req.Body)
+			if err != nil {
+				return nil, err
 			}
-			if err := zw.Close(); err != nil {
-				return nil, fmt.Errorf("failed to compress request body (during close): %s", err)
-			}
+			defer c.gzipCompressor.collectBuffer(buf)
 
 			req.GetBody = func() (io.ReadCloser, error) {
-				r := buf
+				// Copy value of buf so it's not destroyed on first read
+				r := *buf
 				return ioutil.NopCloser(&r), nil
 			}
 			req.Body, _ = req.GetBody()
@@ -299,6 +329,7 @@ func (c *Client) Perform(req *http.Request) (*http.Response, error) {
 				buf.ReadFrom(req.Body)
 
 				req.GetBody = func() (io.ReadCloser, error) {
+					// Copy value of buf so it's not destroyed on first read
 					r := buf
 					return ioutil.NopCloser(&r), nil
 				}
@@ -307,6 +338,7 @@ func (c *Client) Perform(req *http.Request) (*http.Response, error) {
 		}
 	}
 
+	originalPath := req.URL.Path
 	for i := 0; i <= c.maxRetries; i++ {
 		var (
 			conn            *Connection
@@ -380,6 +412,10 @@ func (c *Client) Perform(req *http.Request) (*http.Response, error) {
 			c.metrics.Unlock()
 		}
 
+		if res != nil && c.instrumentation != nil {
+			c.instrumentation.AfterResponse(req.Context(), res)
+		}
+
 		// Retry on configured response statuses
 		if res != nil && !c.disableRetry {
 			for _, code := range c.retryOnStatus {
@@ -419,6 +455,10 @@ func (c *Client) Perform(req *http.Request) (*http.Response, error) {
 				break
 			}
 		}
+
+		// Re-init the path of the request to its original state
+		// This will be re-enriched by the connection upon retry
+		req.URL.Path = originalPath
 	}
 
 	// TODO(karmi): Wrap error
@@ -426,10 +466,12 @@ func (c *Client) Perform(req *http.Request) (*http.Response, error) {
 }
 
 // URLs returns a list of transport URLs.
-//
-//
 func (c *Client) URLs() []*url.URL {
 	return c.pool.URLs()
+}
+
+func (c *Client) InstrumentationEnabled() Instrumentation {
+	return c.instrumentation
 }
 
 func (c *Client) setReqURL(u *url.URL, req *http.Request) *http.Request {

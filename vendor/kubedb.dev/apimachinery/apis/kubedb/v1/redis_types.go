@@ -90,6 +90,10 @@ type RedisSpec struct {
 	// +optional
 	AuthSecret *SecretReference `json:"authSecret,omitempty"`
 
+	// Redis ACL Configuration
+	// +optional
+	Acl *RedisAclSpec `json:"acl,omitempty"`
+
 	// If disable Auth true then don't create any auth secret
 	// +optional
 	DisableAuth bool `json:"disableAuth,omitempty"`
@@ -176,6 +180,16 @@ type Announce struct {
 	Type PreferredEndpointType `json:"type,omitempty"`
 	// This field is used to set cluster-announce information for redis cluster of each shard.
 	Shards []Shards `json:"shards,omitempty"`
+}
+
+type RedisAclSpec struct {
+	// SecretRef holds the password against which ACLs will be created if Rules are given.
+	// +optional
+	SecretRef *core.LocalObjectReference `json:"secretRef,omitempty"`
+
+	// Rules specifies the ACL rules to be applied to the user associated with the provided SecretRef.
+	// If provided, the system will update the ACLs for this user to ensure they are in sync with the new authentication settings.
+	Rules []string `json:"rules,omitempty"`
 }
 
 type Shards struct {

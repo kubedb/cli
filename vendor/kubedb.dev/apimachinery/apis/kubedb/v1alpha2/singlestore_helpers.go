@@ -330,6 +330,13 @@ func (s *Singlestore) SetDefaults(kc client.Client) {
 		s.Spec.DeletionPolicy = DeletionPolicyDelete
 	}
 
+	if s.Spec.AuthSecret == nil {
+		s.Spec.AuthSecret = &SecretReference{}
+	}
+	if s.Spec.AuthSecret.Kind == "" {
+		s.Spec.AuthSecret.Kind = kubedb.ResourceKindSecret
+	}
+
 	if s.Spec.Topology == nil {
 		if s.Spec.PodTemplate == nil {
 			s.Spec.PodTemplate = &ofst.PodTemplateSpec{}

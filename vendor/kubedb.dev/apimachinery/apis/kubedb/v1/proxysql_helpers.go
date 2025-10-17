@@ -194,6 +194,13 @@ func (p *ProxySQL) SetDefaults(psVersion *v1alpha1.ProxySQLVersion, usesAcme boo
 		p.Spec.Replicas = pointer.Int32P(1)
 	}
 
+	if p.Spec.AuthSecret == nil {
+		p.Spec.AuthSecret = &SecretReference{}
+	}
+	if p.Spec.AuthSecret.Kind == "" {
+		p.Spec.AuthSecret.Kind = kubedb.ResourceKindSecret
+	}
+
 	p.setDefaultContainerSecurityContext(psVersion, &p.Spec.PodTemplate)
 
 	p.Spec.Monitor.SetDefaults()

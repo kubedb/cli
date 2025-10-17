@@ -119,6 +119,7 @@ const (
 	Restart              = "Restart"
 	RestartNodes         = "RestartNodes"
 	RestartPods          = "RestartPods"
+	RestartKeeperPods    = "RestartKeeperPods"
 	RestartPodsSucceeded = "RestartPodsSucceeded"
 	RestartPodsFailed    = "RestartPodsFailed"
 )
@@ -366,6 +367,8 @@ const (
 	HorizontalScaleReplicasDown = "HorizontalScaleReplicasDown"
 	HorizontalScaleSentinelUp   = "HorizontalScaleSentinelUp"
 	HorizontalScaleSentinelDown = "HorizontalScaleSentinelDown"
+
+	RedisUpdateAclSecret = "UpdateAclSecret"
 )
 
 // Druid Constants

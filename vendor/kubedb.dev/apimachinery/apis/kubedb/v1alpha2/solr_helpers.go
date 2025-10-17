@@ -314,6 +314,15 @@ func (s *Solr) SetDefaults(kc client.Client) {
 		s.Spec.StorageType = StorageTypeDurable
 	}
 
+	if !s.Spec.DisableSecurity {
+		if s.Spec.AuthSecret == nil {
+			s.Spec.AuthSecret = &SecretReference{}
+		}
+		if s.Spec.AuthSecret.Kind == "" {
+			s.Spec.AuthSecret.Kind = kubedb.ResourceKindSecret
+		}
+	}
+
 	s.SetDefaultsToZooKeeperRef()
 	s.SetZooKeeperObjectRef()
 

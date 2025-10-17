@@ -40,6 +40,7 @@ import (
 	coreutil "kmodules.xyz/client-go/core/v1"
 	meta_util "kmodules.xyz/client-go/meta"
 	"kmodules.xyz/client-go/policy/secomp"
+	app_api "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v2"
@@ -300,10 +301,20 @@ func (r *Cassandra) SetDefaults(kc client.Client) {
 	if r.Spec.EnableSSL {
 		if r.Spec.KeystoreCredSecret == nil {
 			r.Spec.KeystoreCredSecret = &SecretReference{
-				LocalObjectReference: core.LocalObjectReference{
+				TypedLocalObjectReference: app_api.TypedLocalObjectReference{
+					Kind: "Secret",
 					Name: r.CassandraKeystoreCredSecretName(),
 				},
 			}
+		}
+	}
+
+	if !r.Spec.DisableSecurity {
+		if r.Spec.AuthSecret == nil {
+			r.Spec.AuthSecret = &SecretReference{}
+		}
+		if r.Spec.AuthSecret.Kind == "" {
+			r.Spec.AuthSecret.Kind = kubedb.ResourceKindSecret
 		}
 	}
 

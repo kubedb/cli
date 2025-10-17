@@ -27,10 +27,10 @@ require (
 	k8s.io/kubectl v0.32.3
 	kmodules.xyz/cert-manager-util v0.29.0
 	kmodules.xyz/client-go v0.32.7
-	kmodules.xyz/custom-resources v0.32.0
+	kmodules.xyz/custom-resources v0.32.2
 	kmodules.xyz/monitoring-agent-api v0.32.1
-	kubedb.dev/apimachinery v0.58.0
-	kubedb.dev/db-client-go v0.13.0
+	kubedb.dev/apimachinery v0.59.0
+	kubedb.dev/db-client-go v0.14.0
 	kubeops.dev/petset v0.0.12
 	sigs.k8s.io/controller-runtime v0.20.4
 	sigs.k8s.io/yaml v1.4.0
@@ -50,11 +50,12 @@ require (
 	github.com/cyphar/filepath-securejoin v0.3.4 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
-	github.com/elastic/elastic-transport-go/v8 v8.1.0 // indirect
+	github.com/elastic/elastic-transport-go/v8 v8.7.0 // indirect
 	github.com/elastic/go-elasticsearch/v5 v5.6.1 // indirect
 	github.com/elastic/go-elasticsearch/v6 v6.8.10 // indirect
 	github.com/elastic/go-elasticsearch/v7 v7.15.1 // indirect
 	github.com/elastic/go-elasticsearch/v8 v8.4.0 // indirect
+	github.com/elastic/go-elasticsearch/v9 v9.1.0 // indirect
 	github.com/emicklei/go-restful/v3 v3.12.1 // indirect
 	github.com/evanphx/json-patch v5.9.11+incompatible // indirect
 	github.com/evanphx/json-patch/v5 v5.9.11 // indirect
@@ -64,6 +65,7 @@ require (
 	github.com/fxamacker/cbor/v2 v2.7.0 // indirect
 	github.com/go-errors/errors v1.4.2 // indirect
 	github.com/go-logr/logr v1.4.2 // indirect
+	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-openapi/jsonpointer v0.21.0 // indirect
 	github.com/go-openapi/jsonreference v0.21.0 // indirect
 	github.com/go-openapi/swag v0.23.0 // indirect
@@ -116,6 +118,10 @@ require (
 	github.com/yudai/gojsondiff v1.0.0 // indirect
 	github.com/yudai/golcs v0.0.0-20170316035057-ecda9a501e82 // indirect
 	github.com/zeebo/xxh3 v1.0.2 // indirect
+	go.opentelemetry.io/auto/sdk v1.1.0 // indirect
+	go.opentelemetry.io/otel v1.35.0 // indirect
+	go.opentelemetry.io/otel/metric v1.35.0 // indirect
+	go.opentelemetry.io/otel/trace v1.35.0 // indirect
 	go.virtual-secrets.dev/apimachinery v0.0.1 // indirect
 	golang.org/x/net v0.40.0 // indirect
 	golang.org/x/oauth2 v0.28.0 // indirect
@@ -148,7 +154,7 @@ require (
 	kmodules.xyz/resource-metadata v0.32.1 // indirect
 	kubeops.dev/csi-driver-cacerts v0.1.0 // indirect
 	kubeops.dev/sidekick v0.0.11 // indirect
-	kubestash.dev/apimachinery v0.20.0 // indirect
+	kubestash.dev/apimachinery v0.21.0 // indirect
 	open-cluster-management.io/api v1.0.0 // indirect
 	sigs.k8s.io/gateway-api v1.1.0 // indirect
 	sigs.k8s.io/json v0.0.0-20241014173422-cfa47c3a1cc8 // indirect

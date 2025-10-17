@@ -38,6 +38,8 @@ import (
 	esv7 "github.com/elastic/go-elasticsearch/v7"
 	esv8 "github.com/elastic/go-elasticsearch/v8"
 	"github.com/elastic/go-elasticsearch/v8/esapi"
+	esv9 "github.com/elastic/go-elasticsearch/v9"
+	esapi9 "github.com/elastic/go-elasticsearch/v9/esapi"
 	"github.com/go-resty/resty/v2"
 	osv1 "github.com/opensearch-project/opensearch-go"
 	osapiv1 "github.com/opensearch-project/opensearch-go/opensearchapi"
@@ -272,8 +274,6 @@ func (o *KubeDBClientBuilder) GetElasticClient() (*Client, error) {
 				&ESClientV7{client: esClient},
 			}, nil
 
-			// for Elasticsearch 8.x.x
-
 		// for Elasticsearch 8.x.x
 		case version.Major() == 8:
 			defaultTLSConfig, err := o.getDefaultTLSConfig()
@@ -320,6 +320,54 @@ func (o *KubeDBClientBuilder) GetElasticClient() (*Client, error) {
 
 			return &Client{
 				&ESClientV8{client: esClient},
+			}, nil
+
+		// for Elasticsearch 9.x.x
+		case version.Major() == 9:
+			defaultTLSConfig, err := o.getDefaultTLSConfig()
+			if err != nil {
+				klog.Errorf("Failed get default TLS configuration")
+				return nil, err
+
+			}
+
+			esClient, err := esv9.NewClient(esv9.Config{
+				Addresses:         []string{o.url},
+				Username:          username,
+				Password:          password,
+				EnableDebugLogger: true,
+				DisableRetry:      true,
+				Transport: &http.Transport{
+					IdleConnTimeout: 3 * time.Second,
+					DialContext: (&net.Dialer{
+						Timeout: 30 * time.Second,
+					}).DialContext,
+					TLSClientConfig: defaultTLSConfig,
+				},
+			})
+			if err != nil {
+				klog.Errorf("Failed to create HTTP client for Elasticsearch: %s/%s with: %s", o.db.Namespace, o.db.Name, err)
+				return nil, err
+			}
+
+			res, err := esapi9.PingRequest{}.Do(o.ctx, esClient.Transport)
+			if err != nil {
+				return nil, err
+			}
+
+			defer func(Body io.ReadCloser) {
+				err = Body.Close()
+				if err != nil {
+					klog.Errorf("failed to close response body, reason: %s", err)
+				}
+			}(res.Body)
+
+			if res.IsError() {
+				return nil, fmt.Errorf("cluster ping request failed with status code: %d", res.StatusCode)
+			}
+
+			return &Client{
+				&ESClientV9{client: esClient},
 			}, nil
 		}
 

@@ -182,5 +182,5 @@ func GetActivationTimeFromSecret(secretName *core.Secret) (*metav1.Time, error) 
 }
 
 func IsVirtualAuthSecretReferred(authSecret *SecretReference) bool {
-	return authSecret != nil && authSecret.ApiGroup == vsecretapi.GroupName
+	return authSecret != nil && authSecret.APIGroup == vsecretapi.GroupName
 }

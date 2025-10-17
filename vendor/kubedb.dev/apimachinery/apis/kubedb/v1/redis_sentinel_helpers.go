@@ -213,6 +213,15 @@ func (rs *RedisSentinel) SetDefaults(rdVersion *catalog.RedisVersion) error {
 		rs.Spec.StorageType = StorageTypeDurable
 	}
 
+	if !rs.Spec.DisableAuth {
+		if rs.Spec.AuthSecret == nil {
+			rs.Spec.AuthSecret = &SecretReference{}
+		}
+		if rs.Spec.AuthSecret.Kind == "" {
+			rs.Spec.AuthSecret.Kind = kubedb.ResourceKindSecret
+		}
+	}
+
 	rs.setDefaultContainerSecurityContext(rdVersion, &rs.Spec.PodTemplate)
 	rs.setDefaultContainerResourceLimits(&rs.Spec.PodTemplate)
 

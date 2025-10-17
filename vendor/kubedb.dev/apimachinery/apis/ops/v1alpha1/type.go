@@ -20,6 +20,7 @@ import (
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
+	app_api "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	nodemeta "kmodules.xyz/resource-metadata/apis/node/v1alpha1"
 )
 
@@ -95,7 +96,7 @@ type TLSSpec struct {
 type AuthSpec struct {
 	// SecretRef holds the new authSecret
 	// If it is given, ops-manager will use this. Otherwise, will generate random password
-	SecretRef *core.LocalObjectReference `json:"secretRef,omitempty"`
+	SecretRef *app_api.TypedLocalObjectReference `json:"secretRef,omitempty"`
 }
 
 // +kubebuilder:validation:Enum=IfReady;Always
