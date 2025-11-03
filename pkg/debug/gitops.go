@@ -19,25 +19,27 @@ package debug
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"log"
 	"os"
 	"path"
+	"strings"
 
 	"github.com/spf13/cobra"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
-	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/discovery"
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
+	"k8s.io/client-go/rest"
 	"k8s.io/klog/v2"
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
-	kmapi "kmodules.xyz/client-go/api/v1"
+	gitops "kubedb.dev/apimachinery/apis/gitops/v1alpha1"
 	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
+	opsapi "kubedb.dev/apimachinery/apis/ops/v1alpha1"
 	kubedbscheme "kubedb.dev/apimachinery/client/clientset/versioned/scheme"
-	ps "kubeops.dev/petset/client/clientset/versioned"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -48,18 +50,27 @@ func init() {
 	utilruntime.Must(kubedbscheme.AddToScheme(scheme))
 }
 
+type GitOpsStatus struct {
+	GitOps gitops.GitOpsStatus `json:"gitops,omitempty" yaml:"gitops,omitempty"`
+}
+type GitOps struct {
+	Status GitOpsStatus `json:"status,omitempty" yaml:"status,omitempty"`
+}
+
 type dbInfo struct {
 	resource  string
 	name      string
 	namespace string
 }
 type gitOpsOpts struct {
-	kc client.Client
-	db dbInfo
+	kc     client.Client
+	config *rest.Config
+	db     dbInfo
 
 	operatorNamespace string
 	dir               string
 	errWriter         *bytes.Buffer
+	resMap            map[string]string
 }
 
 func GitOpsDebugCMD(f cmdutil.Factory) *cobra.Command {
@@ -67,7 +78,7 @@ func GitOpsDebugCMD(f cmdutil.Factory) *cobra.Command {
 		dbName            string
 		operatorNamespace string
 	)
-
+	opts := newGitOpsOpts(f)
 	gitOpsDebugCmd := &cobra.Command{
 		Use: "gitops",
 		Aliases: []string{
@@ -86,9 +97,20 @@ func GitOpsDebugCMD(f cmdutil.Factory) *cobra.Command {
 				klog.Error(err, "failed to get current namespace")
 			}
 
-			opts, err := newGitOpsOpts(f, dbName, namespace, operatorNamespace)
+			pwd, _ := os.Getwd()
+			dir := path.Join(pwd, dbName)
+			err = os.MkdirAll(path.Join(dir, logsDir), dirPerm)
 			if err != nil {
-				log.Fatalln(err)
+				log.Fatalln(fmt.Errorf("failed to create directory %s: %w", dir, err))
+			}
+			err = os.MkdirAll(path.Join(dir, yamlsDir), dirPerm)
+			if err != nil {
+				log.Fatalln(fmt.Errorf("failed to create directory %s: %w", dir, err))
+			}
+			opts.dir = dir
+			opts.db = dbInfo{
+				namespace: namespace,
+				name:      dbName,
 			}
 
 			err = opts.collectGitOpsDatabase()
@@ -96,32 +118,22 @@ func GitOpsDebugCMD(f cmdutil.Factory) *cobra.Command {
 				log.Fatal(err)
 			}
 
-			err = opts.collectForAllDBPetSets()
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			err = opts.collectForAllDBPods()
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			err = opts.collectOtherYamls()
+			err = opts.collectDatabase()
 			if err != nil {
 				log.Fatal(err)
 			}
 		},
 	}
 	gitOpsDebugCmd.Flags().StringVarP(&operatorNamespace, "operator-namespace", "o", "kubedb", "the namespace where the kubedb gitops operator is installed")
-	gitOpsDebugCmd.Flags().StringVarP(&opts, "operator-namespace", "o", "kubedb", "the namespace where the kubedb gitops operator is installed")
+	gitOpsDebugCmd.Flags().StringVarP(&opts.db.resource, "db-type", "t", "postgre", "database type")
 
 	return gitOpsDebugCmd
 }
 
-func newGitOpsOpts(f cmdutil.Factory, dbName, namespace, operatorNS string) (*gitOpsOpts, error) {
+func newGitOpsOpts(f cmdutil.Factory) *gitOpsOpts {
 	config, err := f.ToRESTConfig()
 	if err != nil {
-		return nil, err
+		log.Fatalln(err)
 	}
 
 	kc, err := client.New(config, client.Options{Scheme: scheme})
@@ -129,31 +141,82 @@ func newGitOpsOpts(f cmdutil.Factory, dbName, namespace, operatorNS string) (*gi
 		log.Fatalf("failed to create client: %v", err)
 	}
 
-	pwd, _ := os.Getwd()
-	dir := path.Join(pwd, dbName)
-	err = os.MkdirAll(path.Join(dir, logsDir), dirPerm)
-	if err != nil {
-		return nil, err
-	}
-	err = os.MkdirAll(path.Join(dir, yamlsDir), dirPerm)
-	if err != nil {
-		return nil, err
-	}
-
 	opts := &gitOpsOpts{
-		db: dbInfo{
-			name:      dbName,
-			namespace: namespace,
-		},
-		kc:                kc,
-		operatorNamespace: operatorNS,
-		dir:               dir,
-		errWriter:         &bytes.Buffer{},
+		kc:        kc,
+		config:    config,
+		errWriter: &bytes.Buffer{},
 	}
-	return opts, nil
+	return opts
 }
 
 func (g *gitOpsOpts) collectGitOpsDatabase() error {
+	var uns unstructured.Unstructured
+	uns.SetGroupVersionKind(gitops.SchemeGroupVersion.WithKind(g.getKindFromResource(g.db.resource)))
+	err := g.kc.Get(context.Background(), types.NamespacedName{
+		Namespace: g.db.namespace,
+		Name:      g.db.name,
+	}, &uns)
+	if err != nil {
+		log.Fatalf("failed to get gitops database obj: %v", err)
+		return err
+	}
+
+	var gitOpsObj GitOps
+	err = runtime.DefaultUnstructuredConverter.FromUnstructured(uns.Object, &gitOpsObj)
+	if err != nil {
+		log.Fatalf("failed to convert unstructured to gitops obj: %v", err)
+		return err
+	}
+
+	if err := g.collectOpsRequests(gitOpsObj.Status); err != nil {
+		return err
+	}
+
+	return writeYaml(&uns, g.dir)
+}
+
+func (g *gitOpsOpts) collectOpsRequests(gitOpsStatus GitOpsStatus) error {
+	opsYamlDir := path.Join(g.dir, yamlsDir, "ops")
+	err := os.MkdirAll(opsYamlDir, dirPerm)
+	if err != nil {
+		return err
+	}
+	for _, info := range gitOpsStatus.GitOps.GitOpsInfo {
+		for _, op := range info.Operations {
+			var uns unstructured.Unstructured
+			uns.SetGroupVersionKind(opsapi.SchemeGroupVersion.WithKind(g.getKindFromResource(g.db.resource + "opsrequest")))
+			err := g.kc.Get(context.Background(), types.NamespacedName{
+				Namespace: g.db.namespace,
+				Name:      op.Name,
+			}, &uns)
+			if err != nil {
+				log.Fatalf("failed to get opsrequest: %v", err)
+				return err
+			}
+			err = writeYaml(&uns, opsYamlDir)
+			if err != nil {
+				return err
+			}
+			var opsStatus opsapi.OpsRequestStatus
+			err = runtime.DefaultUnstructuredConverter.FromUnstructured(uns.Object, &opsStatus)
+			if err != nil {
+				log.Fatalf("failed to convert unstructured to opsrequest obj: %v", err)
+				return err
+			}
+			if opsStatus.Phase == opsapi.OpsRequestPhaseFailed {
+				for _, cond := range opsStatus.Conditions {
+					if cond.Type == opsapi.Failed {
+
+					}
+				}
+			}
+		}
+	}
+
+	return nil
+}
+
+func (g *gitOpsOpts) collectDatabase() error {
 	var uns unstructured.Unstructured
 	uns.SetGroupVersionKind(dbapi.SchemeGroupVersion.WithKind(g.getKindFromResource(g.db.resource)))
 	err := g.kc.Get(context.Background(), types.NamespacedName{
@@ -165,4 +228,51 @@ func (g *gitOpsOpts) collectGitOpsDatabase() error {
 	}
 
 	return writeYaml(&uns, path.Join(g.dir, yamlsDir))
+}
+
+func (g *gitOpsOpts) populateResourceMap() error {
+	dc, err := discovery.NewDiscoveryClientForConfig(g.config)
+	if err != nil {
+		return err
+	}
+	g.resMap = make(map[string]string)
+
+	if err := g.populate(dc, "kubedb.com/v1"); err != nil {
+		return err
+	}
+	if err := g.populate(dc, "kubedb.com/v1alpha2"); err != nil {
+		return err
+	}
+	if err := g.populate(dc, "gitops.kubedb.com/v1alpha1"); err != nil {
+		return err
+	}
+	if err := g.populate(dc, "ops.kubedb.com/v1alpha1"); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (g *gitOpsOpts) populate(dc *discovery.DiscoveryClient, gv string) error {
+	resources, err := dc.ServerResourcesForGroupVersion(gv)
+	if err != nil {
+		return err
+	}
+	for _, r := range resources.APIResources {
+		if !strings.ContainsAny(r.Name, "/") {
+			g.resMap[r.Name] = r.Kind
+			g.resMap[r.SingularName] = r.Kind
+			for _, s := range r.ShortNames {
+				g.resMap[s] = r.Kind
+			}
+			g.resMap[r.Kind] = r.Kind
+		}
+	}
+	return nil
+}
+func (g *gitOpsOpts) getKindFromResource(res string) string {
+	kind, exists := g.resMap[res]
+	if !exists {
+		_ = fmt.Errorf("resource %s not supported", res)
+	}
+	return kind
 }
