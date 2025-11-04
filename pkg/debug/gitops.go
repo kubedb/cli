@@ -25,21 +25,24 @@ import (
 	"path"
 	"strings"
 
+	gitops "kubedb.dev/apimachinery/apis/gitops/v1alpha1"
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
+	opsapi "kubedb.dev/apimachinery/apis/ops/v1alpha1"
+	kubedbscheme "kubedb.dev/apimachinery/client/clientset/versioned/scheme"
+
 	"github.com/spf13/cobra"
+	corev1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	"k8s.io/client-go/discovery"
+	"k8s.io/client-go/kubernetes"
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
 	"k8s.io/client-go/rest"
-	"k8s.io/klog/v2"
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
-	gitops "kubedb.dev/apimachinery/apis/gitops/v1alpha1"
-	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
-	opsapi "kubedb.dev/apimachinery/apis/ops/v1alpha1"
-	kubedbscheme "kubedb.dev/apimachinery/client/clientset/versioned/scheme"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -53,6 +56,7 @@ func init() {
 type GitOpsStatus struct {
 	GitOps gitops.GitOpsStatus `json:"gitops,omitempty" yaml:"gitops,omitempty"`
 }
+
 type GitOps struct {
 	Status GitOpsStatus `json:"status,omitempty" yaml:"status,omitempty"`
 }
@@ -62,10 +66,12 @@ type dbInfo struct {
 	name      string
 	namespace string
 }
+
 type gitOpsOpts struct {
-	kc     client.Client
-	config *rest.Config
-	db     dbInfo
+	kc         client.Client
+	config     *rest.Config
+	db         dbInfo
+	kubeClient kubernetes.Interface
 
 	operatorNamespace string
 	dir               string
@@ -74,10 +80,7 @@ type gitOpsOpts struct {
 }
 
 func GitOpsDebugCMD(f cmdutil.Factory) *cobra.Command {
-	var (
-		dbName            string
-		operatorNamespace string
-	)
+	var dbName string
 	opts := newGitOpsOpts(f)
 	gitOpsDebugCmd := &cobra.Command{
 		Use: "gitops",
@@ -92,14 +95,9 @@ func GitOpsDebugCMD(f cmdutil.Factory) *cobra.Command {
 			}
 			dbName = args[0]
 
-			namespace, _, err := f.ToRawKubeConfigLoader().Namespace()
-			if err != nil {
-				klog.Error(err, "failed to get current namespace")
-			}
-
 			pwd, _ := os.Getwd()
 			dir := path.Join(pwd, dbName)
-			err = os.MkdirAll(path.Join(dir, logsDir), dirPerm)
+			err := os.MkdirAll(path.Join(dir, logsDir), dirPerm)
 			if err != nil {
 				log.Fatalln(fmt.Errorf("failed to create directory %s: %w", dir, err))
 			}
@@ -108,9 +106,11 @@ func GitOpsDebugCMD(f cmdutil.Factory) *cobra.Command {
 				log.Fatalln(fmt.Errorf("failed to create directory %s: %w", dir, err))
 			}
 			opts.dir = dir
-			opts.db = dbInfo{
-				namespace: namespace,
-				name:      dbName,
+			opts.db.name = dbName
+
+			err = opts.populateResourceMap()
+			if err != nil {
+				log.Fatal(err)
 			}
 
 			err = opts.collectGitOpsDatabase()
@@ -122,10 +122,17 @@ func GitOpsDebugCMD(f cmdutil.Factory) *cobra.Command {
 			if err != nil {
 				log.Fatal(err)
 			}
+
+			err = opts.collectOperatorLogs(opts.operatorNamespace)
+			if err != nil {
+				log.Fatal(err)
+			}
 		},
 	}
-	gitOpsDebugCmd.Flags().StringVarP(&operatorNamespace, "operator-namespace", "o", "kubedb", "the namespace where the kubedb gitops operator is installed")
-	gitOpsDebugCmd.Flags().StringVarP(&opts.db.resource, "db-type", "t", "postgre", "database type")
+
+	gitOpsDebugCmd.Flags().StringVarP(&opts.db.namespace, "namespace", "n", "demo", "Database namespace")
+	gitOpsDebugCmd.Flags().StringVarP(&opts.operatorNamespace, "operator-namespace", "o", "kubedb", "the namespace where the kubedb gitops operator is installed")
+	gitOpsDebugCmd.Flags().StringVarP(&opts.db.resource, "db-type", "t", "postgres", "database type")
 
 	return gitOpsDebugCmd
 }
@@ -141,10 +148,16 @@ func newGitOpsOpts(f cmdutil.Factory) *gitOpsOpts {
 		log.Fatalf("failed to create client: %v", err)
 	}
 
+	cs, err := kubernetes.NewForConfig(config)
+	if err != nil {
+		log.Fatalf("failed to create kube client: %v", err)
+	}
+
 	opts := &gitOpsOpts{
-		kc:        kc,
-		config:    config,
-		errWriter: &bytes.Buffer{},
+		kc:         kc,
+		config:     config,
+		errWriter:  &bytes.Buffer{},
+		kubeClient: cs,
 	}
 	return opts
 }
@@ -203,13 +216,13 @@ func (g *gitOpsOpts) collectOpsRequests(gitOpsStatus GitOpsStatus) error {
 				log.Fatalf("failed to convert unstructured to opsrequest obj: %v", err)
 				return err
 			}
-			if opsStatus.Phase == opsapi.OpsRequestPhaseFailed {
-				for _, cond := range opsStatus.Conditions {
-					if cond.Type == opsapi.Failed {
-
-					}
-				}
-			}
+			// if opsStatus.Phase == opsapi.OpsRequestPhaseFailed {
+			// 	for _, cond := range opsStatus.Conditions {
+			// 		if cond.Type == opsapi.Failed {
+			// 			// TODO: ()
+			// 		}
+			// 	}
+			// }
 		}
 	}
 
@@ -228,6 +241,28 @@ func (g *gitOpsOpts) collectDatabase() error {
 	}
 
 	return writeYaml(&uns, path.Join(g.dir, yamlsDir))
+}
+
+func (g *gitOpsOpts) collectOperatorLogs(operatorNamespace string) error {
+	pods, err := g.kubeClient.CoreV1().Pods(operatorNamespace).List(context.TODO(), metav1.ListOptions{})
+	if err != nil {
+		return err
+	}
+	for _, pod := range pods.Items {
+		isOperatorPod := false
+		for _, container := range pod.Spec.Containers {
+			if container.Name == operatorContainerName {
+				isOperatorPod = true
+			}
+		}
+		if isOperatorPod {
+			err = g.writeLogs(pod.Name, pod.Namespace, operatorContainerName)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }
 
 func (g *gitOpsOpts) populateResourceMap() error {
@@ -269,10 +304,39 @@ func (g *gitOpsOpts) populate(dc *discovery.DiscoveryClient, gv string) error {
 	}
 	return nil
 }
+
 func (g *gitOpsOpts) getKindFromResource(res string) string {
 	kind, exists := g.resMap[res]
 	if !exists {
 		_ = fmt.Errorf("resource %s not supported", res)
 	}
 	return kind
+}
+
+func (g *gitOpsOpts) writeLogs(podName, ns, container string) error {
+	req := g.kubeClient.CoreV1().Pods(ns).GetLogs(podName, &corev1.PodLogOptions{
+		Container: container,
+	})
+
+	podLogs, err := req.Stream(context.TODO())
+	if err != nil {
+		return err
+	}
+	defer podLogs.Close()
+
+	logFile, err := os.Create(path.Join(g.dir, logsDir, podName+"_"+container+".log"))
+	if err != nil {
+		return err
+	}
+	defer logFile.Close()
+
+	buf := make([]byte, 1024)
+	for {
+		bytesRead, err := podLogs.Read(buf)
+		if err != nil {
+			break
+		}
+		_, _ = logFile.Write(buf[:bytesRead])
+	}
+	return nil
 }
