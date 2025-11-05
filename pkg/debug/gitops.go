@@ -61,6 +61,10 @@ type GitOps struct {
 	Status GitOpsStatus `json:"status,omitempty" yaml:"status,omitempty"`
 }
 
+type Ops struct {
+	Status *opsapi.OpsRequestStatus `json:"status,omitempty" yaml:"status,omitempty"`
+}
+
 type dbInfo struct {
 	resource  string
 	name      string
@@ -77,6 +81,7 @@ type gitOpsOpts struct {
 	dir               string
 	errWriter         *bytes.Buffer
 	resMap            map[string]string
+	summary           []string
 }
 
 func GitOpsDebugCMD(f cmdutil.Factory) *cobra.Command {
@@ -127,6 +132,12 @@ func GitOpsDebugCMD(f cmdutil.Factory) *cobra.Command {
 			if err != nil {
 				log.Fatal(err)
 			}
+
+			fmt.Println("Summary:")
+			for _, line := range opts.summary {
+				fmt.Println("- ", line)
+			}
+			fmt.Println("--------------- Done ---------------")
 		},
 	}
 
@@ -158,6 +169,8 @@ func newGitOpsOpts(f cmdutil.Factory) *gitOpsOpts {
 		config:     config,
 		errWriter:  &bytes.Buffer{},
 		kubeClient: cs,
+		resMap:     make(map[string]string),
+		summary:    make([]string, 0),
 	}
 	return opts
 }
@@ -180,6 +193,23 @@ func (g *gitOpsOpts) collectGitOpsDatabase() error {
 		log.Fatalf("failed to convert unstructured to gitops obj: %v", err)
 		return err
 	}
+
+	statuses := []string{
+		string(gitops.ChangeRequestStatusInCurrent), string(gitops.ChangeRequestStatusPending),
+		string(gitops.ChangeRequestStatusInProgress), string(gitops.ChangeRequestStatusFailed),
+	}
+	statusIdx := 0
+	for _, info := range gitOpsObj.Status.GitOps.GitOpsInfo {
+		for i := range statuses {
+			if string(info.ChangeRequestStatus) == statuses[i] {
+				if i > statusIdx {
+					statusIdx = i
+				}
+			}
+		}
+	}
+
+	g.summary = append(g.summary, fmt.Sprintf("GitOps Database Status for: %s/%s is %s", g.db.namespace, g.db.name, statuses[statusIdx]))
 
 	if err := g.collectOpsRequests(gitOpsObj.Status); err != nil {
 		return err
@@ -210,19 +240,19 @@ func (g *gitOpsOpts) collectOpsRequests(gitOpsStatus GitOpsStatus) error {
 			if err != nil {
 				return err
 			}
-			var opsStatus opsapi.OpsRequestStatus
-			err = runtime.DefaultUnstructuredConverter.FromUnstructured(uns.Object, &opsStatus)
+			var ops Ops
+			err = runtime.DefaultUnstructuredConverter.FromUnstructured(uns.Object, &ops)
 			if err != nil {
 				log.Fatalf("failed to convert unstructured to opsrequest obj: %v", err)
 				return err
 			}
-			// if opsStatus.Phase == opsapi.OpsRequestPhaseFailed {
-			// 	for _, cond := range opsStatus.Conditions {
-			// 		if cond.Type == opsapi.Failed {
-			// 			// TODO: ()
-			// 		}
-			// 	}
-			// }
+			if ops.Status.Phase == opsapi.OpsRequestPhaseFailed {
+				for _, cond := range ops.Status.Conditions {
+					if cond.Reason == opsapi.Failed {
+						g.summary = append(g.summary, fmt.Sprintf("RequestName %s: %s", op.Name, cond.Message))
+					}
+				}
+			}
 		}
 	}
 
