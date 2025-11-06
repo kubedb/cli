@@ -63,7 +63,6 @@ func NewCmdDebug(f cmdutil.Factory) *cobra.Command {
 	cmd.AddCommand(debug.PostgresDebugCMD(f))
 	cmd.AddCommand(debug.ProxySQLDebugCMD(f))
 	cmd.AddCommand(debug.RedisDebugCMD(f))
-	cmd.AddCommand(debug.GitOpsDebugCMD(f))
 
 	// KubeDB v1alpha2 databases
 	cmd.AddCommand(debug.CassandraDebugCMD(f))

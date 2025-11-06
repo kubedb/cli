@@ -20,9 +20,19 @@ import (
 	"os"
 	"path"
 
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/yaml"
 )
+
+func IsOwnByGitOpsObject(owners []metav1.OwnerReference, name, kind string) bool {
+	for _, owner := range owners {
+		if owner.Kind == kind && owner.Name == name && owner.APIVersion == "gitops.kubedb.com/v1alpha1" {
+			return true
+		}
+	}
+	return false
+}
 
 func writeYaml(obj client.Object, fullPath string) error {
 	b, err := yaml.Marshal(obj)
