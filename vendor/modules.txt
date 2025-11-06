@@ -2581,7 +2581,6 @@ kubeops.dev/csi-driver-cacerts/crds
 # kubeops.dev/petset v0.0.12
 ## explicit; go 1.24.0
 kubeops.dev/petset/apis/apps/v1
-kubeops.dev/petset/client/clientset/versioned
 kubeops.dev/petset/client/clientset/versioned/scheme
 kubeops.dev/petset/client/clientset/versioned/typed/apps/v1
 kubeops.dev/petset/client/listers/apps/v1

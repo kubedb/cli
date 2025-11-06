@@ -30,23 +30,23 @@ import (
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
 )
 
-func ElasticsearchDebugCMD(f cmdutil.Factory) *cobra.Command {
+func PerconaXtraDBDebugCMD(f cmdutil.Factory) *cobra.Command {
 	var (
 		dbName            string
 		operatorNamespace string
 	)
 
 	mdDebugCmd := &cobra.Command{
-		Use: "elasticsearch",
+		Use: "perconaxtradb",
 		Aliases: []string{
-			"es",
-			"elasticsearches",
+			"prx",
+			"perconaxtradbs",
 		},
-		Short:   "Debug helper for Elasticsearch database",
-		Example: `kubectl dba debug elasticsearch -n demo sample-elasticsearch --operator-namespace kubedb`,
+		Short:   "Debug helper for PerconaXtraDB database",
+		Example: `kubectl dba debug perconaxtradb -n demo sample-perconaxtradb --operator-namespace kubedb`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 {
-				log.Fatal("Enter elasticsearch object's name as an argument")
+				log.Fatal("Enter perconaxtradb object's name as an argument")
 			}
 			dbName = args[0]
 
@@ -56,7 +56,7 @@ func ElasticsearchDebugCMD(f cmdutil.Factory) *cobra.Command {
 			}
 
 			gvk := func() schema.GroupVersionKind {
-				kind := dbapi.ResourceKindElasticsearch
+				kind := dbapi.ResourceKindPerconaXtraDB
 				return schema.GroupVersionKind{
 					Group:   dbapi.SchemeGroupVersion.Group,
 					Version: dbapi.SchemeGroupVersion.Version,
@@ -68,7 +68,7 @@ func ElasticsearchDebugCMD(f cmdutil.Factory) *cobra.Command {
 				log.Fatalln(err)
 			}
 
-			var db dbapi.Elasticsearch
+			var db dbapi.PerconaXtraDB
 			err = opts.kc.Get(context.TODO(), types.NamespacedName{Name: dbName, Namespace: namespace}, &db)
 			if err != nil {
 				log.Fatalln(err)

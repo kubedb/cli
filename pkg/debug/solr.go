@@ -20,7 +20,7 @@ import (
 	"context"
 	"log"
 
-	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
+	olddbapi "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 
 	"github.com/spf13/cobra"
 	"k8s.io/apimachinery/pkg/runtime/schema"
@@ -30,23 +30,23 @@ import (
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
 )
 
-func ElasticsearchDebugCMD(f cmdutil.Factory) *cobra.Command {
+func SolrDebugCMD(f cmdutil.Factory) *cobra.Command {
 	var (
 		dbName            string
 		operatorNamespace string
 	)
 
 	mdDebugCmd := &cobra.Command{
-		Use: "elasticsearch",
+		Use: "solr",
 		Aliases: []string{
-			"es",
-			"elasticsearches",
+			"sl",
+			"solrs",
 		},
-		Short:   "Debug helper for Elasticsearch database",
-		Example: `kubectl dba debug elasticsearch -n demo sample-elasticsearch --operator-namespace kubedb`,
+		Short:   "Debug helper for Solr database",
+		Example: `kubectl dba debug solr -n demo sample-solr --operator-namespace kubedb`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 {
-				log.Fatal("Enter elasticsearch object's name as an argument")
+				log.Fatal("Enter solr object's name as an argument")
 			}
 			dbName = args[0]
 
@@ -56,10 +56,10 @@ func ElasticsearchDebugCMD(f cmdutil.Factory) *cobra.Command {
 			}
 
 			gvk := func() schema.GroupVersionKind {
-				kind := dbapi.ResourceKindElasticsearch
+				kind := olddbapi.ResourceKindSolr
 				return schema.GroupVersionKind{
-					Group:   dbapi.SchemeGroupVersion.Group,
-					Version: dbapi.SchemeGroupVersion.Version,
+					Group:   olddbapi.SchemeGroupVersion.Group,
+					Version: olddbapi.SchemeGroupVersion.Version,
 					Kind:    kind,
 				}
 			}()
@@ -68,7 +68,7 @@ func ElasticsearchDebugCMD(f cmdutil.Factory) *cobra.Command {
 				log.Fatalln(err)
 			}
 
-			var db dbapi.Elasticsearch
+			var db olddbapi.Solr
 			err = opts.kc.Get(context.TODO(), types.NamespacedName{Name: dbName, Namespace: namespace}, &db)
 			if err != nil {
 				log.Fatalln(err)

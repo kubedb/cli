@@ -30,23 +30,23 @@ import (
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
 )
 
-func ElasticsearchDebugCMD(f cmdutil.Factory) *cobra.Command {
+func ProxySQLDebugCMD(f cmdutil.Factory) *cobra.Command {
 	var (
 		dbName            string
 		operatorNamespace string
 	)
 
 	mdDebugCmd := &cobra.Command{
-		Use: "elasticsearch",
+		Use: "proxysql",
 		Aliases: []string{
-			"es",
-			"elasticsearches",
+			"px",
+			"proxysqls",
 		},
-		Short:   "Debug helper for Elasticsearch database",
-		Example: `kubectl dba debug elasticsearch -n demo sample-elasticsearch --operator-namespace kubedb`,
+		Short:   "Debug helper for ProxySQL database",
+		Example: `kubectl dba debug proxysql -n demo sample-proxysql --operator-namespace kubedb`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 {
-				log.Fatal("Enter elasticsearch object's name as an argument")
+				log.Fatal("Enter proxysql object's name as an argument")
 			}
 			dbName = args[0]
 
@@ -56,7 +56,7 @@ func ElasticsearchDebugCMD(f cmdutil.Factory) *cobra.Command {
 			}
 
 			gvk := func() schema.GroupVersionKind {
-				kind := dbapi.ResourceKindElasticsearch
+				kind := dbapi.ResourceKindProxySQL
 				return schema.GroupVersionKind{
 					Group:   dbapi.SchemeGroupVersion.Group,
 					Version: dbapi.SchemeGroupVersion.Version,
@@ -68,7 +68,7 @@ func ElasticsearchDebugCMD(f cmdutil.Factory) *cobra.Command {
 				log.Fatalln(err)
 			}
 
-			var db dbapi.Elasticsearch
+			var db dbapi.ProxySQL
 			err = opts.kc.Get(context.TODO(), types.NamespacedName{Name: dbName, Namespace: namespace}, &db)
 			if err != nil {
 				log.Fatalln(err)
