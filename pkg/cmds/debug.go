@@ -51,7 +51,7 @@ func NewCmdDebug(f cmdutil.Factory) *cobra.Command {
 	}
 
 	cmd.AddCommand(debug.ElasticsearchDebugCMD(f))
-	cmd.AddCommand(debug.MariaDBDebugCMD(f))
+	cmd.AddCommand(debug.MariaDebugCMD(f))
 	cmd.AddCommand(debug.MongoDBDebugCMD(f))
 	cmd.AddCommand(debug.MySQLDebugCMD(f))
 	cmd.AddCommand(debug.PostgresDebugCMD(f))

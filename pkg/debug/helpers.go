@@ -31,3 +31,22 @@ func writeYaml(obj client.Object, fullPath string) error {
 	}
 	return os.WriteFile(path.Join(fullPath, obj.GetName()+".yaml"), b, filePerm)
 }
+
+type OpsRequest struct {
+	Spec OpsRequestSpec `json:"spec,omitempty" yaml:"spec,omitempty"`
+}
+
+type OpsRequestSpec struct {
+	DatabaseRef DatabaseRef `json:"databaseRef,omitempty" yaml:"databaseRef,omitempty"`
+}
+
+type Autoscaler struct {
+	Spec AutoscalerSpec `json:"spec,omitempty" yaml:"spec,omitempty"`
+}
+
+type AutoscalerSpec struct {
+	DatabaseRef DatabaseRef `json:"databaseRef,omitempty" yaml:"databaseRef,omitempty"`
+}
+type DatabaseRef struct {
+	Name string `json:"name,omitempty" yaml:"name,omitempty"`
+}
