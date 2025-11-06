@@ -30,7 +30,7 @@ import (
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
 )
 
-func MariaDebugCMD(f cmdutil.Factory) *cobra.Command {
+func MariaDBDebugCMD(f cmdutil.Factory) *cobra.Command {
 	var (
 		dbName            string
 		operatorNamespace string
@@ -42,7 +42,7 @@ func MariaDebugCMD(f cmdutil.Factory) *cobra.Command {
 			"md",
 			"mariadbs",
 		},
-		Short:   "Debug helper for mariadb database",
+		Short:   "Debug helper for MariaDB database",
 		Example: `kubectl dba debug mariadb -n demo sample-mariadb --operator-namespace kubedb`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 {
@@ -73,8 +73,13 @@ func MariaDebugCMD(f cmdutil.Factory) *cobra.Command {
 			if err != nil {
 				log.Fatalln(err)
 			}
+
+			err = writeYaml(&db, getDir(db.GetName()))
+			if err != nil {
+				return
+			}
 			opts.selectors = db.OffshootSelectors()
-			klog.Infof("db selectors: %v", opts.selectors)
+			klog.Infof("db selectors: %v;\nDebug info has been generated in '%v' folder", opts.selectors, dbName)
 			err = opts.collectALl()
 			if err != nil {
 				log.Fatalln(err)

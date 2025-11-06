@@ -36,7 +36,6 @@ import (
 	"k8s.io/client-go/kubernetes"
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
-	"k8s.io/klog/v2"
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
 	psapi "kubeops.dev/petset/apis/apps/v1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -102,7 +101,6 @@ func newDBOpts(f cmdutil.Factory, gvk schema.GroupVersionKind, dbName, namespace
 }
 
 func (opts *dbOpts) collectALl() error {
-	klog.Infof("11111")
 	err := opts.collectOperatorLogs()
 	if err != nil {
 		return err
@@ -124,7 +122,7 @@ func (opts *dbOpts) collectALl() error {
 
 func (opts *dbOpts) collectOperatorLogs() error {
 	var pods corev1.PodList
-	err := opts.kc.List(context.TODO(), &pods)
+	err := opts.kc.List(context.TODO(), &pods, client.InNamespace(opts.operatorNamespace))
 	if err != nil {
 		return err
 	}

@@ -50,12 +50,33 @@ func NewCmdDebug(f cmdutil.Factory) *cobra.Command {
 		DisableAutoGenTag:     true,
 	}
 
+	// KubeDB v1 databases
 	cmd.AddCommand(debug.ElasticsearchDebugCMD(f))
-	cmd.AddCommand(debug.MariaDebugCMD(f))
+	cmd.AddCommand(debug.KafkaDebugCMD(f))
+	cmd.AddCommand(debug.MariaDBDebugCMD(f))
+	cmd.AddCommand(debug.MemcachedDebugCMD(f))
 	cmd.AddCommand(debug.MongoDBDebugCMD(f))
 	cmd.AddCommand(debug.MySQLDebugCMD(f))
+	cmd.AddCommand(debug.PerconaXtraDBDebugCMD(f))
+	cmd.AddCommand(debug.PgBouncerDebugCMD(f))
 	cmd.AddCommand(debug.PostgresDebugCMD(f))
+	cmd.AddCommand(debug.ProxySQLDebugCMD(f))
 	cmd.AddCommand(debug.RedisDebugCMD(f))
+
+	// KubeDB v1alpha2 databases
+	cmd.AddCommand(debug.CassandraDebugCMD(f))
+	cmd.AddCommand(debug.ClickHouseDebugCMD(f))
+	cmd.AddCommand(debug.DruidDebugCMD(f))
+	cmd.AddCommand(debug.FerretDBDebugCMD(f))
+	cmd.AddCommand(debug.HazelcastDebugCMD(f))
+	cmd.AddCommand(debug.IgniteDebugCMD(f))
+	cmd.AddCommand(debug.MSSQLServerDebugCMD(f))
+	cmd.AddCommand(debug.OracleDebugCMD(f))
+	cmd.AddCommand(debug.PgpoolDebugCMD(f))
+	cmd.AddCommand(debug.RabbitMQDebugCMD(f))
+	cmd.AddCommand(debug.SinglestoreDebugCMD(f))
+	cmd.AddCommand(debug.SolrDebugCMD(f))
+	cmd.AddCommand(debug.ZooKeeperDebugCMD(f))
 
 	return cmd
 }

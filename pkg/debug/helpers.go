@@ -32,6 +32,12 @@ func writeYaml(obj client.Object, fullPath string) error {
 	return os.WriteFile(path.Join(fullPath, obj.GetName()+".yaml"), b, filePerm)
 }
 
+func getDir(dbName string) string {
+	pwd, _ := os.Getwd()
+	dir := path.Join(pwd, dbName)
+	return dir
+}
+
 type OpsRequest struct {
 	Spec OpsRequestSpec `json:"spec,omitempty" yaml:"spec,omitempty"`
 }
