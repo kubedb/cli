@@ -40,7 +40,7 @@ func RedisDebugCMD(f cmdutil.Factory) *cobra.Command {
 		Use: "redis",
 		Aliases: []string{
 			"rd",
-			"rediss",
+			"redises",
 		},
 		Short:   "Debug helper for Redis database",
 		Example: `kubectl dba debug redis -n demo sample-redis --operator-namespace kubedb`,
