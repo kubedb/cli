@@ -115,22 +115,13 @@ func (g *gitOpsOpts) collectGitOpsDatabase() error {
 		return err
 	}
 
-	statuses := []string{
-		string(gitops.ChangeRequestStatusInCurrent), string(gitops.ChangeRequestStatusPending),
-		string(gitops.ChangeRequestStatusInProgress), string(gitops.ChangeRequestStatusFailed),
-	}
-	statusIdx := 0
-	for _, info := range gitOpsObj.Status.GitOps.GitOpsInfo {
-		for i := range statuses {
-			if string(info.ChangeRequestStatus) == statuses[i] {
-				if i > statusIdx {
-					statusIdx = i
-				}
-			}
-		}
+	status := string(gitops.ChangeRequestStatusInCurrent)
+	// last status is the latest status
+	if len(gitOpsObj.Status.GitOps.GitOpsInfo) > 0 {
+		status = string(gitOpsObj.Status.GitOps.GitOpsInfo[len(gitOpsObj.Status.GitOps.GitOpsInfo)-1].ChangeRequestStatus)
 	}
 
-	g.summary = append(g.summary, fmt.Sprintf("GitOps Database Status for: %s/%s is %s", g.db.namespace, g.db.name, statuses[statusIdx]))
+	g.summary = append(g.summary, fmt.Sprintf("GitOps Database Status for: %s/%s is %s", g.db.namespace, g.db.name, status))
 
 	if err := g.collectOpsRequests(gitOpsObj.Status); err != nil {
 		return err
