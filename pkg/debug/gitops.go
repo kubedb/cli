@@ -19,7 +19,6 @@ package debug
 import (
 	"context"
 	"fmt"
-	"log"
 	"os"
 	"path"
 
@@ -104,14 +103,12 @@ func (g *gitOpsOpts) collectGitOpsDatabase() error {
 		Name:      g.db.name,
 	}, &uns)
 	if err != nil {
-		log.Fatalf("failed to get gitops database obj: %v", err)
 		return err
 	}
 
 	var gitOpsObj GitOps
 	err = runtime.DefaultUnstructuredConverter.FromUnstructured(uns.Object, &gitOpsObj)
 	if err != nil {
-		log.Fatalf("failed to convert unstructured to gitops obj: %v", err)
 		return err
 	}
 
@@ -149,7 +146,6 @@ func (g *gitOpsOpts) collectOpsRequests(gitOpsStatus GitOpsStatus) error {
 				Name:      op.Name,
 			}, &uns)
 			if err != nil {
-				log.Fatalf("failed to get opsrequest: %v", err)
 				return err
 			}
 			err = writeYaml(&uns, opsYamlDir)
@@ -159,7 +155,6 @@ func (g *gitOpsOpts) collectOpsRequests(gitOpsStatus GitOpsStatus) error {
 			var ops Ops
 			err = runtime.DefaultUnstructuredConverter.FromUnstructured(uns.Object, &ops)
 			if err != nil {
-				log.Fatalf("failed to convert unstructured to opsrequest obj: %v", err)
 				return err
 			}
 			if ops.Status.Phase == opsapi.OpsRequestPhaseFailed {
