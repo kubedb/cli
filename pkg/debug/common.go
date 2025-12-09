@@ -117,6 +117,16 @@ func (opts *dbOpts) collectALl() error {
 	if err != nil {
 		return err
 	}
+	if IsOwnByGitOpsObject(opts.db.GetOwnerReferences(), opts.db.GetName(), opts.kind) {
+		gitOpsOpts, err := newGitOpsOpts(opts.kc, opts.db.GetName(), opts.db.GetNamespace(), opts.kind, path.Join(opts.dir, "gitops"))
+		if err != nil {
+			return err
+		}
+		err = gitOpsOpts.collectGitOpsYamls()
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 

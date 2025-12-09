@@ -73,6 +73,7 @@ func IgniteDebugCMD(f cmdutil.Factory) *cobra.Command {
 			if err != nil {
 				log.Fatalln(err)
 			}
+			opts.db.OwnerReferences = db.OwnerReferences
 
 			err = writeYaml(&db, getDir(db.GetName()))
 			if err != nil {

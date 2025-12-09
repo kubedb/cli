@@ -36,6 +36,7 @@ var (
 			* mysql
 			* postgres
 			* redis
+			* gitops
 `)
 )
 
