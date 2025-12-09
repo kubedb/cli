@@ -18,6 +18,7 @@ package v1alpha1
 
 import (
 	"fmt"
+	"strings"
 
 	"kubedb.dev/apimachinery/apis"
 	"kubedb.dev/apimachinery/apis/catalog"
@@ -56,10 +57,12 @@ func (p *PgpoolVersion) ValidateSpecs() error {
 	if p.Spec.Version == "" ||
 		p.Spec.Pgpool.Image == "" ||
 		p.Spec.Exporter.Image == "" {
-		return fmt.Errorf(`atleast one of the following specs is not set for pgpoolVersion "%v":
-spec.version,
-spec.pgpool.image,
-spec.exporter.image`, p.Name)
+		fields := []string{
+			"spec.version",
+			"spec.pgpool.image",
+			"spec.exporter.image",
+		}
+		return fmt.Errorf("atleast one of the following specs is not set for pgpoolVersion %q: %s", p.Name, strings.Join(fields, ", "))
 	}
 	return nil
 }

@@ -22,6 +22,8 @@ type CassandraExpansion interface{}
 
 type ClickHouseExpansion interface{}
 
+type DB2Expansion interface{}
+
 type DruidExpansion interface{}
 
 type ElasticsearchExpansion interface{}
@@ -29,6 +31,8 @@ type ElasticsearchExpansion interface{}
 type EtcdExpansion interface{}
 
 type FerretDBExpansion interface{}
+
+type HanaDBExpansion interface{}
 
 type HazelcastExpansion interface{}
 
@@ -42,9 +46,13 @@ type MariaDBExpansion interface{}
 
 type MemcachedExpansion interface{}
 
+type MilvusExpansion interface{}
+
 type MongoDBExpansion interface{}
 
 type MySQLExpansion interface{}
+
+type Neo4jExpansion interface{}
 
 type OracleExpansion interface{}
 
@@ -58,6 +66,8 @@ type PostgresExpansion interface{}
 
 type ProxySQLExpansion interface{}
 
+type QdrantExpansion interface{}
+
 type RabbitMQExpansion interface{}
 
 type RedisExpansion interface{}
@@ -67,5 +77,7 @@ type RedisSentinelExpansion interface{}
 type SinglestoreExpansion interface{}
 
 type SolrExpansion interface{}
+
+type WeaviateExpansion interface{}
 
 type ZooKeeperExpansion interface{}

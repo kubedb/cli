@@ -27,7 +27,7 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (_ EtcdOpsRequest) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (EtcdOpsRequest) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralEtcdOpsRequest))
 }
 

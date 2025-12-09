@@ -147,9 +147,9 @@ func generateMySQLConfig(f cmdutil.Factory, userName string, password string, dn
 	apb.Kind = AppcatKind
 	apb.Spec.ClientConfig.Service.Name = dns
 	apb.Spec.Secret.Name = authSecretName
-	apb.ObjectMeta.Annotations = nil
-	apb.ObjectMeta.ManagedFields = nil
-	apb.ObjectMeta.OwnerReferences = nil
+	apb.Annotations = nil
+	apb.ManagedFields = nil
+	apb.OwnerReferences = nil
 
 	appbindingYaml, err := yaml.Marshal(apb)
 	if err != nil {
@@ -185,8 +185,8 @@ func generateMySQLTlsSecret(userName string, apb *appApi.AppBinding, ns string, 
 	}
 	tlsSecret.APIVersion = ApiversionV1
 	tlsSecret.Kind = KindSecret
-	tlsSecret.ObjectMeta.Annotations = nil
-	tlsSecret.ObjectMeta.ManagedFields = nil
+	tlsSecret.Annotations = nil
+	tlsSecret.ManagedFields = nil
 	tlsSecretYaml, err := yaml.Marshal(tlsSecret)
 	if err != nil {
 		return nil, "", fmt.Errorf("failed to marshal tls secret yaml %v", err)

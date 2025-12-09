@@ -221,9 +221,10 @@ func (k *Kafka) NodeRoleSpecificLabelKey(role KafkaNodeRoleType) string {
 }
 
 func (k *Kafka) ConfigSecretName(role KafkaNodeRoleType) string {
-	if role == KafkaNodeRoleController {
+	switch role {
+	case KafkaNodeRoleController:
 		return meta_util.NameWithSuffix(k.OffshootName(), "controller-config")
-	} else if role == KafkaNodeRoleBroker {
+	case KafkaNodeRoleBroker:
 		return meta_util.NameWithSuffix(k.OffshootName(), "broker-config")
 	}
 	return meta_util.NameWithSuffix(k.OffshootName(), "config")

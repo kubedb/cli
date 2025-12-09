@@ -212,18 +212,18 @@ func newmysqlOpts(f cmdutil.Factory, dbName, namespace string) (*mysqlOpts, erro
 	}, nil
 }
 
-func (opts *mysqlOpts) getDockerShellCommand(localPort int, dockerFlags, mysqlExtraFlags []interface{}) (*shell.Session, error) {
+func (opts *mysqlOpts) getDockerShellCommand(localPort int, dockerFlags, mysqlExtraFlags []any) (*shell.Session, error) {
 	sh := shell.NewSession()
 	sh.ShowCMD = false
 
 	db := opts.db
-	dockerCommand := []interface{}{
+	dockerCommand := []any{
 		"run", "--network=host",
 		"-e", fmt.Sprintf("MYSQL_PWD=%s", opts.pass),
 	}
 	dockerCommand = append(dockerCommand, dockerFlags...)
 
-	mysqlCommand := []interface{}{
+	mysqlCommand := []any{
 		"mysql",
 		"--host=127.0.0.1", fmt.Sprintf("--port=%d", localPort),
 		fmt.Sprintf("--user=%s", opts.username),
@@ -284,7 +284,7 @@ func (opts *mysqlOpts) getDockerShellCommand(localPort int, dockerFlags, mysqlEx
 }
 
 func (opts *mysqlOpts) connect(localPort int) error {
-	dockerFlag := []interface{}{
+	dockerFlag := []any{
 		"-it",
 	}
 	shSession, err := opts.getDockerShellCommand(localPort, dockerFlag, nil)
@@ -296,7 +296,7 @@ func (opts *mysqlOpts) connect(localPort int) error {
 }
 
 func (opts *mysqlOpts) executeCommand(localPort int, command, mysqlDBName string) error {
-	mysqlExtraFlags := []interface{}{
+	mysqlExtraFlags := []any{
 		mysqlDBName,
 		"-e", command,
 	}
@@ -307,7 +307,7 @@ func (opts *mysqlOpts) executeCommand(localPort int, command, mysqlDBName string
 
 	out, err := shSession.Output()
 	if err != nil {
-		return fmt.Errorf("failed to execute command, error: %s, output: %s\n", err, out)
+		return fmt.Errorf("failed to execute command, error: %s, output: %s", err, out)
 	}
 	output := ""
 	if string(out) != "" {
@@ -325,10 +325,10 @@ func (opts *mysqlOpts) executeFile(localPort int, fileName, mysqlDBName string) 
 	}
 	tempFileName := "/tmp/my.sql"
 
-	dockerFlag := []interface{}{
+	dockerFlag := []any{
 		"-v", fmt.Sprintf("%s:%s", fileName, tempFileName),
 	}
-	mysqlExtraFlags := []interface{}{
+	mysqlExtraFlags := []any{
 		mysqlDBName,
 		"-e", fmt.Sprintf("source %s", tempFileName),
 	}
@@ -339,7 +339,7 @@ func (opts *mysqlOpts) executeFile(localPort int, fileName, mysqlDBName string) 
 
 	out, err := shSession.Output()
 	if err != nil {
-		return fmt.Errorf("failed to execute file, error: %s, output: %s\n", err, out)
+		return fmt.Errorf("failed to execute file, error: %s, output: %s", err, out)
 	}
 
 	output := ""

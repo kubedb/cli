@@ -32,6 +32,7 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/klog/v2"
 	"k8s.io/utils/ptr"
+	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	metautil "kmodules.xyz/client-go/meta"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
@@ -41,7 +42,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
-func (_ Oracle) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (Oracle) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralOracle))
 }
 
@@ -326,12 +327,24 @@ func (o *Oracle) SetDefaults(kc client.Client) {
 	o.SetInitContainerDefaults(o.Spec.PodTemplate, oraVersion)
 	o.SetHealthCheckerDefaults()
 	o.Spec.Monitor.SetDefaults()
+	o.SetTcpsDefaults()
 	if o.Spec.Monitor != nil && o.Spec.Monitor.Prometheus != nil {
 		if o.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser == nil {
 			o.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser = oraVersion.Spec.SecurityContext.RunAsUser
 		}
 		if o.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup == nil {
 			o.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup = oraVersion.Spec.SecurityContext.RunAsUser
+		}
+	}
+}
+
+func (o *Oracle) SetTcpsDefaults() {
+	if o.Spec.TCPSConfig != nil {
+		if o.Spec.TCPSConfig.TCPSListener == nil {
+			o.Spec.TCPSConfig.TCPSListener = &ListenerSpec{}
+		}
+		if o.Spec.TCPSConfig.TCPSListener.Port == nil {
+			o.Spec.TCPSConfig.TCPSListener.Port = ptr.To(int32(2484))
 		}
 	}
 }
@@ -481,4 +494,21 @@ func (o *Oracle) SetDataGuardDefaults() {
 			Resources: kubedb.DefaultResourceStorageOracleObserver,
 		}
 	}
+}
+
+// CertificateName returns the default certificate name and/or certificate secret name for a certificate alias
+func (p *Oracle) CertificateName(alias OracleCertificateAlias) string {
+	return metautil.NameWithSuffix(p.Name, fmt.Sprintf("%s-cert", string(alias)))
+}
+
+// GetCertSecretName returns the secret name for a certificate alias if any provide,
+// otherwise returns default certificate secret name for the given alias.
+func (p *Oracle) GetCertSecretName(alias OracleCertificateAlias) string {
+	if p.Spec.TCPSConfig != nil && p.Spec.TCPSConfig.TLS != nil {
+		name, ok := kmapi.GetCertificateSecretName(p.Spec.TCPSConfig.TLS.Certificates, string(alias))
+		if ok {
+			return name
+		}
+	}
+	return p.CertificateName(alias)
 }

@@ -29,6 +29,10 @@ const (
 	Failed     = "Failed"
 )
 
+const (
+	Retrying = "Retrying"
+)
+
 // Database
 const (
 	DatabaseReady           = "DatabaseReady"

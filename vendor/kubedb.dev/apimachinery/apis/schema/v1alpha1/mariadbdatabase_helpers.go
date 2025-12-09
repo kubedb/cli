@@ -36,7 +36,7 @@ const (
 	MariaDBSuffix string = dbapi.ResourceSingularMariaDB
 )
 
-func (_ MariaDBDatabase) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (MariaDBDatabase) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourceMariaDBDatabases))
 }
 

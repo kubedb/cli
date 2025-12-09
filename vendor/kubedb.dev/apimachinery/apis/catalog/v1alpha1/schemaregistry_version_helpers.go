@@ -18,6 +18,7 @@ package v1alpha1
 
 import (
 	"fmt"
+	"strings"
 
 	"kubedb.dev/apimachinery/apis"
 	"kubedb.dev/apimachinery/apis/catalog"
@@ -26,7 +27,7 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (_ *SchemaRegistryVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (*SchemaRegistryVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralSchemaRegistryVersion))
 }
 
@@ -56,9 +57,12 @@ func (r *SchemaRegistryVersion) ValidateSpecs() error {
 	if r.Spec.Version == "" ||
 		r.Spec.Registry.Image == "" ||
 		r.Spec.InMemory.Image == "" {
-		return fmt.Errorf(`atleast one of the following specs is not set for schemaRegistryVersion "%v":
-							spec.version,
-							spec.registry.image, r.inMemory.image`, r.Name)
+		fields := []string{
+			"spec.version",
+			"spec.registry.image",
+			"spec.inMemory.image",
+		}
+		return fmt.Errorf("atleast one of the following specs is not set for schemaRegistryVersion %q: %s", r.Name, strings.Join(fields, ", "))
 	}
 	return nil
 }

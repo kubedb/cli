@@ -128,7 +128,7 @@ func DescriberFor(kind schema.GroupKind, clientConfig *rest.Config) (describe.Re
 func describeStatefulSet(ps *appsv1.StatefulSet, running, waiting, succeeded, failed int, w describe.PrefixWriter) {
 	w.Write(LEVEL_0, "\n")
 	w.Write(LEVEL_0, "StatefulSet:\t\n")
-	w.Write(LEVEL_1, "Name:\t%s\n", ps.ObjectMeta.Name)
+	w.Write(LEVEL_1, "Name:\t%s\n", ps.Name)
 	w.Write(LEVEL_1, "CreationTimestamp:\t%s\n", timeToString(&ps.CreationTimestamp))
 	printLabelsMultiline(LEVEL_1, w, "Labels", ps.Labels)
 	printAnnotationsMultiline(LEVEL_1, w, "Annotations", ps.Annotations)
@@ -139,7 +139,7 @@ func describeStatefulSet(ps *appsv1.StatefulSet, running, waiting, succeeded, fa
 func describeDeployment(d *appsv1.Deployment, running, waiting, succeeded, failed int, w describe.PrefixWriter) {
 	w.Write(LEVEL_0, "\n")
 	w.Write(LEVEL_0, "Deployment:\t\n")
-	w.Write(LEVEL_1, "Name:\t%s\n", d.ObjectMeta.Name)
+	w.Write(LEVEL_1, "Name:\t%s\n", d.Name)
 	w.Write(LEVEL_1, "CreationTimestamp:\t%s\n", timeToString(&d.CreationTimestamp))
 	printLabelsMultiline(LEVEL_1, w, "Labels", d.Labels)
 	printAnnotationsMultiline(LEVEL_1, w, "Annotations", d.Annotations)
@@ -635,7 +635,7 @@ func tabbedString(f func(io.Writer) error) (string, error) {
 		return "", err
 	}
 
-	out.Flush()
+	_ = out.Flush()
 	str := string(buf.String())
 	return str, nil
 }

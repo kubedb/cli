@@ -40,7 +40,6 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 	coreutil "kmodules.xyz/client-go/core/v1"
 	meta_util "kmodules.xyz/client-go/meta"
-	metautil "kmodules.xyz/client-go/meta"
 	"kmodules.xyz/client-go/policy/secomp"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
@@ -91,25 +90,25 @@ func (m *MSSQLServer) ServiceName() string {
 }
 
 func (m *MSSQLServer) SecondaryServiceName() string {
-	return metautil.NameWithPrefix(m.ServiceName(), string(SecondaryServiceAlias))
+	return meta_util.NameWithPrefix(m.ServiceName(), string(SecondaryServiceAlias))
 }
 
 func (m *MSSQLServer) GoverningServiceName() string {
-	return metautil.NameWithSuffix(m.ServiceName(), "pods")
+	return meta_util.NameWithSuffix(m.ServiceName(), "pods")
 }
 
 func (m *MSSQLServer) DefaultUserCredSecretName(username string) string {
-	return metautil.NameWithSuffix(m.Name, strings.ReplaceAll(fmt.Sprintf("%s-cred", username), "_", "-"))
+	return meta_util.NameWithSuffix(m.Name, strings.ReplaceAll(fmt.Sprintf("%s-cred", username), "_", "-"))
 }
 
 func (m *MSSQLServer) offshootLabels(selector, override map[string]string) map[string]string {
-	selector[metautil.ComponentLabelKey] = kubedb.ComponentDatabase
-	return metautil.FilterKeys(kubedb.GroupName, selector, metautil.OverwriteKeys(nil, m.Labels, override))
+	selector[meta_util.ComponentLabelKey] = kubedb.ComponentDatabase
+	return meta_util.FilterKeys(kubedb.GroupName, selector, meta_util.OverwriteKeys(nil, m.Labels, override))
 }
 
 func (m *MSSQLServer) ServiceLabels(alias ServiceAlias, extraLabels ...map[string]string) map[string]string {
 	svcTemplate := GetServiceTemplate(m.Spec.ServiceTemplates, alias)
-	return m.offshootLabels(metautil.OverwriteKeys(m.OffshootSelectors(), extraLabels...), svcTemplate.Labels)
+	return m.offshootLabels(meta_util.OverwriteKeys(m.OffshootSelectors(), extraLabels...), svcTemplate.Labels)
 }
 
 func (m *MSSQLServer) OffshootLabels() map[string]string {
@@ -118,11 +117,11 @@ func (m *MSSQLServer) OffshootLabels() map[string]string {
 
 func (m *MSSQLServer) OffshootSelectors(extraSelectors ...map[string]string) map[string]string {
 	selector := map[string]string{
-		metautil.NameLabelKey:      m.ResourceFQN(),
-		metautil.InstanceLabelKey:  m.Name,
-		metautil.ManagedByLabelKey: kubedb.GroupName,
+		meta_util.NameLabelKey:      m.ResourceFQN(),
+		meta_util.InstanceLabelKey:  m.Name,
+		meta_util.ManagedByLabelKey: kubedb.GroupName,
 	}
-	return metautil.OverwriteKeys(selector, extraSelectors...)
+	return meta_util.OverwriteKeys(selector, extraSelectors...)
 }
 
 type mssqlserverStatsService struct {
@@ -191,11 +190,11 @@ func (m *MSSQLServer) IsStandalone() bool {
 }
 
 func (m *MSSQLServer) PVCName(alias string) string {
-	return metautil.NameWithSuffix(m.Name, alias)
+	return meta_util.NameWithSuffix(m.Name, alias)
 }
 
 func (m *MSSQLServer) PodLabels(extraLabels ...map[string]string) map[string]string {
-	return m.offshootLabels(metautil.OverwriteKeys(m.OffshootSelectors(), extraLabels...), m.Spec.PodTemplate.Labels)
+	return m.offshootLabels(meta_util.OverwriteKeys(m.OffshootSelectors(), extraLabels...), m.Spec.PodTemplate.Labels)
 }
 
 func (m *MSSQLServer) PodLabel(podTemplate *ofst.PodTemplateSpec) map[string]string {
@@ -206,7 +205,7 @@ func (m *MSSQLServer) PodLabel(podTemplate *ofst.PodTemplateSpec) map[string]str
 }
 
 func (m *MSSQLServer) ConfigSecretName() string {
-	return metautil.NameWithSuffix(m.OffshootName(), "config")
+	return meta_util.NameWithSuffix(m.OffshootName(), "config")
 }
 
 func (m *MSSQLServer) PetSetName() string {
@@ -252,7 +251,7 @@ func (m MSSQLServer) SidekickLabels(skName string) map[string]string {
 }
 
 func (m *MSSQLServer) PodControllerLabels(extraLabels ...map[string]string) map[string]string {
-	return m.offshootLabels(metautil.OverwriteKeys(m.OffshootSelectors(), extraLabels...), m.Spec.PodTemplate.Controller.Labels)
+	return m.offshootLabels(meta_util.OverwriteKeys(m.OffshootSelectors(), extraLabels...), m.Spec.PodTemplate.Controller.Labels)
 }
 
 func (m *MSSQLServer) PodControllerLabel(podTemplate *ofst.PodTemplateSpec) map[string]string {
@@ -296,41 +295,41 @@ func (m MSSQLServer) GetAuthSecretName() string {
 	if m.Spec.AuthSecret != nil && m.Spec.AuthSecret.Name != "" {
 		return m.Spec.AuthSecret.Name
 	}
-	return metautil.NameWithSuffix(m.OffshootName(), "auth")
+	return meta_util.NameWithSuffix(m.OffshootName(), "auth")
 }
 
 func (m *MSSQLServer) CAProviderClassName() string {
-	return metautil.NameWithSuffix(m.OffshootName(), "ca-provider")
+	return meta_util.NameWithSuffix(m.OffshootName(), "ca-provider")
 }
 
 func (m *MSSQLServer) DbmLoginSecretName() string {
 	if m.Spec.Topology != nil && m.Spec.Topology.AvailabilityGroup != nil && m.Spec.Topology.AvailabilityGroup.LoginSecretName != "" {
 		return m.Spec.Topology.AvailabilityGroup.LoginSecretName
 	}
-	return metautil.NameWithSuffix(m.OffshootName(), "dbm-login")
+	return meta_util.NameWithSuffix(m.OffshootName(), "dbm-login")
 }
 
 func (m *MSSQLServer) MasterKeySecretName() string {
 	if m.Spec.Topology != nil && m.Spec.Topology.AvailabilityGroup != nil && m.Spec.Topology.AvailabilityGroup.MasterKeySecretName != "" {
 		return m.Spec.Topology.AvailabilityGroup.MasterKeySecretName
 	}
-	return metautil.NameWithSuffix(m.OffshootName(), "master-key")
+	return meta_util.NameWithSuffix(m.OffshootName(), "master-key")
 }
 
 func (m *MSSQLServer) EndpointCertSecretName() string {
 	if m.Spec.Topology != nil && m.Spec.Topology.AvailabilityGroup != nil && m.Spec.Topology.AvailabilityGroup.EndpointCertSecretName != "" {
 		return m.Spec.Topology.AvailabilityGroup.EndpointCertSecretName
 	}
-	return metautil.NameWithSuffix(m.OffshootName(), "endpoint-cert")
+	return meta_util.NameWithSuffix(m.OffshootName(), "endpoint-cert")
 }
 
 // CertificateName returns the default certificate name and/or certificate secret name for a certificate alias
 func (m *MSSQLServer) CertificateName(alias MSSQLServerCertificateAlias) string {
-	return metautil.NameWithSuffix(m.Name, fmt.Sprintf("%s-cert", string(alias)))
+	return meta_util.NameWithSuffix(m.Name, fmt.Sprintf("%s-cert", string(alias)))
 }
 
 func (m *MSSQLServer) SecretName(alias MSSQLServerCertificateAlias) string {
-	return metautil.NameWithSuffix(m.Name, string(alias))
+	return meta_util.NameWithSuffix(m.Name, string(alias))
 }
 
 // GetCertSecretName returns the secret name for a certificate alias if any

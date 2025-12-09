@@ -32,7 +32,6 @@ import (
 	promapi "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1"
 	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
-	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -44,7 +43,6 @@ import (
 	coreutil "kmodules.xyz/client-go/core/v1"
 	meta_util "kmodules.xyz/client-go/meta"
 	"kmodules.xyz/client-go/policy/secomp"
-	app_api "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v2"
@@ -326,10 +324,11 @@ func (d *Druid) GetConnectionScheme() string {
 
 func (d *Druid) GetMetadataStorageConnectURI(appbinding *appcat.AppBinding, metadataStorageType DruidMetadataStorageType) string {
 	var url string
-	if metadataStorageType == DruidMetadataStorageMySQL {
+	switch metadataStorageType {
+	case DruidMetadataStorageMySQL:
 		url = *appbinding.Spec.ClientConfig.URL
 		url = kubedb.DruidMetadataStorageConnectURIPrefixMySQL + url[4:len(url)-2] + "/" + ResourceSingularDruid
-	} else if metadataStorageType == DruidMetadataStoragePostgreSQL {
+	case DruidMetadataStoragePostgreSQL:
 		url = appbinding.Spec.ClientConfig.Service.Name + ":" + strconv.Itoa(int(appbinding.Spec.ClientConfig.Service.Port))
 		url = kubedb.DruidMetadataStorageConnectURIPrefixPostgreSQL + url + "/" + ResourceSingularDruid
 	}
@@ -447,7 +446,7 @@ func (d *Druid) SetDefaults(kc client.Client) {
 	if d.Spec.EnableSSL {
 		if d.Spec.KeystoreCredSecret == nil {
 			d.Spec.KeystoreCredSecret = &SecretReference{
-				TypedLocalObjectReference: app_api.TypedLocalObjectReference{
+				TypedLocalObjectReference: appcat.TypedLocalObjectReference{
 					Kind: "Secret",
 					Name: d.DruidSecretName(kubedb.DruidKeystoreSecretKey),
 				},
@@ -480,7 +479,7 @@ func (d *Druid) SetDefaults(kc client.Client) {
 			}
 			if version.Major() > 25 {
 				if d.Spec.Topology.Coordinators.PodTemplate.Spec.SecurityContext == nil {
-					d.Spec.Topology.Coordinators.PodTemplate.Spec.SecurityContext = &v1.PodSecurityContext{FSGroup: druidVersion.Spec.SecurityContext.RunAsUser}
+					d.Spec.Topology.Coordinators.PodTemplate.Spec.SecurityContext = &core.PodSecurityContext{FSGroup: druidVersion.Spec.SecurityContext.RunAsUser}
 				}
 				d.setDefaultContainerSecurityContext(&druidVersion, &d.Spec.Topology.Coordinators.PodTemplate)
 				d.setDefaultContainerResourceLimits(&d.Spec.Topology.Coordinators.PodTemplate, DruidNodeRoleCoordinators)
@@ -493,7 +492,7 @@ func (d *Druid) SetDefaults(kc client.Client) {
 			}
 			if version.Major() > 25 {
 				if d.Spec.Topology.Overlords.PodTemplate.Spec.SecurityContext == nil {
-					d.Spec.Topology.Overlords.PodTemplate.Spec.SecurityContext = &v1.PodSecurityContext{FSGroup: druidVersion.Spec.SecurityContext.RunAsUser}
+					d.Spec.Topology.Overlords.PodTemplate.Spec.SecurityContext = &core.PodSecurityContext{FSGroup: druidVersion.Spec.SecurityContext.RunAsUser}
 				}
 				d.setDefaultContainerSecurityContext(&druidVersion, &d.Spec.Topology.Overlords.PodTemplate)
 				d.setDefaultContainerResourceLimits(&d.Spec.Topology.Overlords.PodTemplate, DruidNodeRoleOverlords)
@@ -515,7 +514,7 @@ func (d *Druid) SetDefaults(kc client.Client) {
 			}
 			if version.Major() > 25 {
 				if d.Spec.Topology.MiddleManagers.PodTemplate.Spec.SecurityContext == nil {
-					d.Spec.Topology.MiddleManagers.PodTemplate.Spec.SecurityContext = &v1.PodSecurityContext{FSGroup: druidVersion.Spec.SecurityContext.RunAsUser}
+					d.Spec.Topology.MiddleManagers.PodTemplate.Spec.SecurityContext = &core.PodSecurityContext{FSGroup: druidVersion.Spec.SecurityContext.RunAsUser}
 				}
 				d.setDefaultContainerSecurityContext(&druidVersion, &d.Spec.Topology.MiddleManagers.PodTemplate)
 				d.setDefaultContainerResourceLimits(&d.Spec.Topology.MiddleManagers.PodTemplate, DruidNodeRoleMiddleManagers)
@@ -537,7 +536,7 @@ func (d *Druid) SetDefaults(kc client.Client) {
 			}
 			if version.Major() > 25 {
 				if d.Spec.Topology.Historicals.PodTemplate.Spec.SecurityContext == nil {
-					d.Spec.Topology.Historicals.PodTemplate.Spec.SecurityContext = &v1.PodSecurityContext{FSGroup: druidVersion.Spec.SecurityContext.RunAsUser}
+					d.Spec.Topology.Historicals.PodTemplate.Spec.SecurityContext = &core.PodSecurityContext{FSGroup: druidVersion.Spec.SecurityContext.RunAsUser}
 				}
 				d.setDefaultContainerSecurityContext(&druidVersion, &d.Spec.Topology.Historicals.PodTemplate)
 				d.setDefaultContainerResourceLimits(&d.Spec.Topology.Historicals.PodTemplate, DruidNodeRoleHistoricals)
@@ -553,7 +552,7 @@ func (d *Druid) SetDefaults(kc client.Client) {
 			}
 			if version.Major() > 25 {
 				if d.Spec.Topology.Brokers.PodTemplate.Spec.SecurityContext == nil {
-					d.Spec.Topology.Brokers.PodTemplate.Spec.SecurityContext = &v1.PodSecurityContext{FSGroup: druidVersion.Spec.SecurityContext.RunAsUser}
+					d.Spec.Topology.Brokers.PodTemplate.Spec.SecurityContext = &core.PodSecurityContext{FSGroup: druidVersion.Spec.SecurityContext.RunAsUser}
 				}
 				d.setDefaultContainerSecurityContext(&druidVersion, &d.Spec.Topology.Brokers.PodTemplate)
 				d.setDefaultContainerResourceLimits(&d.Spec.Topology.Brokers.PodTemplate, DruidNodeRoleBrokers)
@@ -567,7 +566,7 @@ func (d *Druid) SetDefaults(kc client.Client) {
 			}
 			if version.Major() > 25 {
 				if d.Spec.Topology.Routers.PodTemplate.Spec.SecurityContext == nil {
-					d.Spec.Topology.Routers.PodTemplate.Spec.SecurityContext = &v1.PodSecurityContext{FSGroup: druidVersion.Spec.SecurityContext.RunAsUser}
+					d.Spec.Topology.Routers.PodTemplate.Spec.SecurityContext = &core.PodSecurityContext{FSGroup: druidVersion.Spec.SecurityContext.RunAsUser}
 				}
 				d.setDefaultContainerSecurityContext(&druidVersion, &d.Spec.Topology.Routers.PodTemplate)
 				d.setDefaultContainerResourceLimits(&d.Spec.Topology.Routers.PodTemplate, DruidNodeRoleRouters)
@@ -673,7 +672,7 @@ func (d *Druid) setDefaultContainerSecurityContext(druidVersion *catalog.DruidVe
 		return
 	}
 	if podTemplate.Spec.SecurityContext == nil {
-		podTemplate.Spec.SecurityContext = &v1.PodSecurityContext{}
+		podTemplate.Spec.SecurityContext = &core.PodSecurityContext{}
 	}
 	if podTemplate.Spec.SecurityContext.FSGroup == nil {
 		podTemplate.Spec.SecurityContext.FSGroup = druidVersion.Spec.SecurityContext.RunAsUser
@@ -681,36 +680,36 @@ func (d *Druid) setDefaultContainerSecurityContext(druidVersion *catalog.DruidVe
 
 	container := coreutil.GetContainerByName(podTemplate.Spec.Containers, kubedb.DruidContainerName)
 	if container == nil {
-		container = &v1.Container{
+		container = &core.Container{
 			Name: kubedb.DruidContainerName,
 		}
 	}
 	if container.SecurityContext == nil {
-		container.SecurityContext = &v1.SecurityContext{}
+		container.SecurityContext = &core.SecurityContext{}
 	}
 	d.assignDefaultContainerSecurityContext(druidVersion, container.SecurityContext)
 	podTemplate.Spec.Containers = coreutil.UpsertContainer(podTemplate.Spec.Containers, *container)
 
 	initContainer := coreutil.GetContainerByName(podTemplate.Spec.InitContainers, kubedb.DruidInitContainerName)
 	if initContainer == nil {
-		initContainer = &v1.Container{
+		initContainer = &core.Container{
 			Name: kubedb.DruidInitContainerName,
 		}
 	}
 	if initContainer.SecurityContext == nil {
-		initContainer.SecurityContext = &v1.SecurityContext{}
+		initContainer.SecurityContext = &core.SecurityContext{}
 	}
 	d.assignDefaultContainerSecurityContext(druidVersion, initContainer.SecurityContext)
 	podTemplate.Spec.InitContainers = coreutil.UpsertContainer(podTemplate.Spec.InitContainers, *initContainer)
 }
 
-func (d *Druid) assignDefaultContainerSecurityContext(druidVersion *catalog.DruidVersion, sc *v1.SecurityContext) {
+func (d *Druid) assignDefaultContainerSecurityContext(druidVersion *catalog.DruidVersion, sc *core.SecurityContext) {
 	if sc.AllowPrivilegeEscalation == nil {
 		sc.AllowPrivilegeEscalation = pointer.BoolP(false)
 	}
 	if sc.Capabilities == nil {
-		sc.Capabilities = &v1.Capabilities{
-			Drop: []v1.Capability{"ALL"},
+		sc.Capabilities = &core.Capabilities{
+			Drop: []core.Capability{"ALL"},
 		}
 	}
 	if sc.RunAsNonRoot == nil {

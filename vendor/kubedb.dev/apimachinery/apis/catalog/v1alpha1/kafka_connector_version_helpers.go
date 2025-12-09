@@ -18,6 +18,7 @@ package v1alpha1
 
 import (
 	"fmt"
+	"strings"
 
 	"kubedb.dev/apimachinery/apis"
 	"kubedb.dev/apimachinery/apis/catalog"
@@ -26,7 +27,7 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (_ *KafkaConnectorVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (*KafkaConnectorVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralKafkaConnectorVersion))
 }
 
@@ -55,9 +56,11 @@ func (r *KafkaConnectorVersion) ResourcePlural() string {
 func (r *KafkaConnectorVersion) ValidateSpecs() error {
 	if r.Spec.Version == "" ||
 		r.Spec.ConnectorPlugin.Image == "" {
-		return fmt.Errorf(`atleast one of the following specs is not set for kafkaConnectorVersion "%v":
-							spec.version,
-							spec.connectorPlugin.image`, r.Name)
+		fields := []string{
+			"spec.version",
+			"spec.connectorPlugin.image",
+		}
+		return fmt.Errorf("atleast one of the following specs is not set for kafkaConnectorVersion %q: %s", r.Name, strings.Join(fields, ", "))
 	}
 	return nil
 }

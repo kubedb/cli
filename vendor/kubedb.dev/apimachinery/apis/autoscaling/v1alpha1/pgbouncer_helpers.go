@@ -26,7 +26,7 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (_ PgBouncerAutoscaler) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (PgBouncerAutoscaler) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralPgBouncerAutoscaler))
 }
 

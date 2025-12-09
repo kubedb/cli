@@ -26,7 +26,7 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (_ MemcachedAutoscaler) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (MemcachedAutoscaler) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralMemcachedAutoscaler))
 }
 

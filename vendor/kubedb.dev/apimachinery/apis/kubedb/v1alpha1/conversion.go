@@ -27,7 +27,7 @@ import (
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/conversion"
 	"k8s.io/apimachinery/pkg/util/intstr"
-	app_api "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
+	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v1"
 )
@@ -97,7 +97,7 @@ func Convert_v1alpha1_ElasticsearchSpec_To_v1alpha2_ElasticsearchSpec(in *Elasti
 	// WARNING: in.AuthPlugin requires manual conversion: does not exist in peer-type
 	if in.DatabaseSecret != nil {
 		out.AuthSecret = &v1alpha2.SecretReference{
-			TypedLocalObjectReference: app_api.TypedLocalObjectReference{
+			TypedLocalObjectReference: appcat.TypedLocalObjectReference{
 				Kind: "Secret",
 				Name: in.DatabaseSecret.SecretName,
 			},
@@ -257,7 +257,7 @@ func Convert_v1alpha1_EtcdSpec_To_v1alpha2_EtcdSpec(in *EtcdSpec, out *v1alpha2.
 	out.Storage = (*v1.PersistentVolumeClaimSpec)(unsafe.Pointer(in.Storage))
 	if in.DatabaseSecret != nil {
 		out.AuthSecret = &v1alpha2.SecretReference{
-			TypedLocalObjectReference: app_api.TypedLocalObjectReference{
+			TypedLocalObjectReference: appcat.TypedLocalObjectReference{
 				Kind: "Secret",
 				Name: in.DatabaseSecret.SecretName,
 			},
@@ -334,7 +334,7 @@ func Convert_v1alpha1_MariaDBSpec_To_v1alpha2_MariaDBSpec(in *MariaDBSpec, out *
 	out.Storage = (*v1.PersistentVolumeClaimSpec)(unsafe.Pointer(in.Storage))
 	if in.DatabaseSecret != nil {
 		out.AuthSecret = &v1alpha2.SecretReference{
-			TypedLocalObjectReference: app_api.TypedLocalObjectReference{
+			TypedLocalObjectReference: appcat.TypedLocalObjectReference{
 				Kind: "Secret",
 				Name: in.DatabaseSecret.SecretName,
 			},
@@ -497,7 +497,7 @@ func Convert_v1alpha1_MongoDBSpec_To_v1alpha2_MongoDBSpec(in *MongoDBSpec, out *
 	out.Storage = (*v1.PersistentVolumeClaimSpec)(unsafe.Pointer(in.Storage))
 	if in.DatabaseSecret != nil {
 		out.AuthSecret = &v1alpha2.SecretReference{
-			TypedLocalObjectReference: app_api.TypedLocalObjectReference{
+			TypedLocalObjectReference: appcat.TypedLocalObjectReference{
 				Kind: "Secret",
 				Name: in.DatabaseSecret.SecretName,
 			},
@@ -692,7 +692,7 @@ func Convert_v1alpha1_MySQLSpec_To_v1alpha2_MySQLSpec(in *MySQLSpec, out *v1alph
 	out.Storage = (*v1.PersistentVolumeClaimSpec)(unsafe.Pointer(in.Storage))
 	if in.DatabaseSecret != nil {
 		out.AuthSecret = &v1alpha2.SecretReference{
-			TypedLocalObjectReference: app_api.TypedLocalObjectReference{
+			TypedLocalObjectReference: appcat.TypedLocalObjectReference{
 				Kind: "Secret",
 				Name: in.DatabaseSecret.SecretName,
 			},
@@ -805,7 +805,7 @@ func Convert_v1alpha1_PerconaXtraDBSpec_To_v1alpha2_PerconaXtraDBSpec(in *Percon
 	out.Storage = (*v1.PersistentVolumeClaimSpec)(unsafe.Pointer(in.Storage))
 	if in.DatabaseSecret != nil {
 		out.AuthSecret = &v1alpha2.SecretReference{
-			TypedLocalObjectReference: app_api.TypedLocalObjectReference{
+			TypedLocalObjectReference: appcat.TypedLocalObjectReference{
 				Kind: "Secret",
 				Name: in.DatabaseSecret.SecretName,
 			},
@@ -896,7 +896,7 @@ func Convert_v1alpha1_PostgresSpec_To_v1alpha2_PostgresSpec(in *PostgresSpec, ou
 	}
 	if in.DatabaseSecret != nil {
 		out.AuthSecret = &v1alpha2.SecretReference{
-			TypedLocalObjectReference: app_api.TypedLocalObjectReference{
+			TypedLocalObjectReference: appcat.TypedLocalObjectReference{
 				Kind: "Secret",
 				Name: in.DatabaseSecret.SecretName,
 			},

@@ -26,7 +26,7 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (_ EtcdAutoscaler) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (EtcdAutoscaler) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralEtcdAutoscaler))
 }
 

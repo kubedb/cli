@@ -342,11 +342,11 @@ func (opts *mongoDBOpts) getShellCommand(command string) (*shell.Session, error)
 
 	db := opts.db
 	svcName := fmt.Sprintf("svc/%s", db.Name)
-	kubectlCommand := []interface{}{
+	kubectlCommand := []any{
 		"exec", "-n", db.Namespace, svcName, "-c", "mongodb", "--",
 	}
 
-	mgCommand := []interface{}{
+	mgCommand := []any{
 		opts.cliCommand,
 	}
 
@@ -371,7 +371,7 @@ func (opts *mongoDBOpts) getShellCommand(command string) (*shell.Session, error)
 	return sh.Command("kubectl", finalCommand...), nil
 }
 
-func (opts *mongoDBOpts) handleTLS() ([]interface{}, error) {
+func (opts *mongoDBOpts) handleTLS() ([]any, error) {
 	db := opts.db
 
 	getTLSUser := func(path string) (string, error) {
@@ -412,7 +412,7 @@ func (opts *mongoDBOpts) handleTLS() ([]interface{}, error) {
 		return nil, err
 	}
 
-	mgCommand := []interface{}{
+	mgCommand := []any{
 		KubeDBDatabaseName, "--quiet",
 		"--tls",
 		fmt.Sprintf("--tlsCAFile=%v", mgCAFile),

@@ -236,9 +236,10 @@ func (r *Redis) SetDefaults(rdVersion *catalog.RedisVersion) error {
 	}
 
 	// perform defaulting
-	if r.Spec.Mode == "" {
+	switch r.Spec.Mode {
+	case "":
 		r.Spec.Mode = RedisModeStandalone
-	} else if r.Spec.Mode == RedisModeCluster {
+	case RedisModeCluster:
 		if r.Spec.Cluster == nil {
 			r.Spec.Cluster = &RedisClusterSpec{}
 		}
@@ -248,7 +249,7 @@ func (r *Redis) SetDefaults(rdVersion *catalog.RedisVersion) error {
 		if r.Spec.Cluster.Replicas == nil {
 			r.Spec.Cluster.Replicas = pointer.Int32P(2)
 		}
-	} else if r.Spec.Mode == RedisModeSentinel {
+	case RedisModeSentinel:
 		if r.Spec.SentinelRef != nil && r.Spec.SentinelRef.Namespace == "" {
 			r.Spec.SentinelRef.Namespace = r.Namespace
 		}
@@ -322,7 +323,7 @@ func (r *RedisSpec) GetPersistentSecrets() []string {
 	}
 
 	var secrets []string
-	if r.AuthSecret != nil {
+	if !IsVirtualAuthSecretReferred(r.AuthSecret) && r.AuthSecret != nil && r.AuthSecret.Name != "" {
 		secrets = append(secrets, r.AuthSecret.Name)
 	}
 	return secrets

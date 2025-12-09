@@ -19,6 +19,7 @@ package v1
 import (
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 )
 
 const (
@@ -86,9 +87,14 @@ type ClusterSpreadConstraint struct {
 }
 
 type DistributionRule struct {
-	ClusterName      string  `json:"clusterName"`
-	ReplicaIndices   []int32 `json:"replicaIndices"`
-	StorageClassName string  `json:"storageClassName,omitempty"`
+	ClusterName      string      `json:"clusterName"`
+	ReplicaIndices   []int32     `json:"replicaIndices"`
+	StorageClassName string      `json:"storageClassName,omitempty"`
+	Monitoring       *Monitoring `json:"monitoring,omitempty"`
+}
+
+type Monitoring struct {
+	Prometheus *mona.Prometheus `json:"prometheus,omitempty"`
 }
 
 type KubeSliceConfig struct {

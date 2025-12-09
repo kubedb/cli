@@ -18,6 +18,7 @@ package v1alpha1
 
 import (
 	"fmt"
+	"strings"
 
 	"kubedb.dev/apimachinery/apis"
 	"kubedb.dev/apimachinery/apis/catalog"
@@ -55,9 +56,11 @@ func (s SolrVersion) ResourcePlural() string {
 func (s SolrVersion) ValidateSpecs() error {
 	if s.Spec.Version == "" ||
 		s.Spec.DB.Image == "" {
-		return fmt.Errorf(`atleast one of the following specs is not set for solrVersion "%v":
-spec.version,
-spec.db.image`, s.Name)
+		fields := []string{
+			"spec.version",
+			"spec.db.image",
+		}
+		return fmt.Errorf("atleast one of the following specs is not set for solrVersion %q: %s", s.Name, strings.Join(fields, ", "))
 	}
 	return nil
 }

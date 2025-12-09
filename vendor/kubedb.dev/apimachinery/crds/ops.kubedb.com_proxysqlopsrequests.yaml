@@ -137,6 +137,10 @@ spec:
                     format: int32
                     type: integer
                 type: object
+              maxRetries:
+                default: 1
+                format: int32
+                type: integer
               proxyRef:
                 properties:
                   name:

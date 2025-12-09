@@ -26,7 +26,7 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (_ MySQLAutoscaler) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (MySQLAutoscaler) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralMySQLAutoscaler))
 }
 

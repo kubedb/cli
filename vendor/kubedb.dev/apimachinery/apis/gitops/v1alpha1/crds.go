@@ -24,43 +24,43 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (_ Druid) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (Druid) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1a2.ResourcePluralDruid))
 }
 
-func (_ Elasticsearch) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (Elasticsearch) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1.ResourcePluralElasticsearch))
 }
 
-func (_ FerretDB) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (FerretDB) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1a2.ResourcePluralFerretDB))
 }
 
-func (_ Kafka) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (Kafka) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1.ResourcePluralKafka))
 }
 
-func (_ MariaDB) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (MariaDB) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1.ResourcePluralMariaDB))
 }
 
-func (_ Memcached) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (Memcached) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1.ResourcePluralMemcached))
 }
 
-func (_ MongoDB) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (MongoDB) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1.ResourcePluralMongoDB))
 }
 
-func (_ MSSQLServer) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (MSSQLServer) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1a2.ResourcePluralMSSQLServer))
 }
 
-func (_ MySQL) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (MySQL) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1.ResourcePluralMySQL))
 }
 
-func (_ PerconaXtraDB) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (PerconaXtraDB) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1.ResourcePluralPerconaXtraDB))
 }
 
@@ -68,38 +68,38 @@ func (p PgBouncer) CustomResourceDefinition() *apiextensions.CustomResourceDefin
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1.ResourcePluralPgBouncer))
 }
 
-func (_ Pgpool) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (Pgpool) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1a2.ResourcePluralPgpool))
 }
 
-func (_ Postgres) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (Postgres) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1.ResourcePluralPostgres))
 }
 
-func (_ ProxySQL) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (ProxySQL) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1.ResourcePluralProxySQL))
 }
 
-func (_ RabbitMQ) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (RabbitMQ) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1a2.ResourcePluralRabbitmq))
 }
 
-func (_ Redis) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (Redis) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1.ResourcePluralRedis))
 }
 
-func (_ RedisSentinel) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (RedisSentinel) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1.ResourcePluralRedisSentinel))
 }
 
-func (_ Singlestore) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (Singlestore) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1a2.ResourcePluralSinglestore))
 }
 
-func (_ Solr) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (Solr) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1a2.ResourcePluralSolr))
 }
 
-func (_ ZooKeeper) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (ZooKeeper) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1a2.ResourcePluralZooKeeper))
 }

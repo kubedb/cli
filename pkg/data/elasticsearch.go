@@ -273,7 +273,7 @@ func (opts *elasticsearchOpts) insertDataInDatabase(rows int) error {
 		name := fmt.Sprintf("document index %d", i+1)
 
 		id := fmt.Sprintf("%d", i+1)
-		body := map[string]interface{}{
+		body := map[string]any{
 			"name": name,
 		}
 		if err := opts.esClient.PutData(idx, id, body); err != nil {

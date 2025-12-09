@@ -18,6 +18,7 @@ package v1alpha1
 
 import (
 	"fmt"
+	"strings"
 
 	"kubedb.dev/apimachinery/apis"
 	"kubedb.dev/apimachinery/apis/catalog"
@@ -55,9 +56,11 @@ func (h HazelcastVersion) ResourcePlural() string {
 func (h HazelcastVersion) ValidateSpecs() error {
 	if h.Spec.Version == "" ||
 		h.Spec.DB.Image == "" {
-		return fmt.Errorf(`atleast one of the following specs is not set for HazelcastVersion "%v":
-spec.version,
-spec.db.image`, h.Name)
+		fields := []string{
+			"spec.version",
+			"spec.db.image",
+		}
+		return fmt.Errorf("atleast one of the following specs is not set for HazelcastVersion %q: %s", h.Name, strings.Join(fields, ", "))
 	}
 	return nil
 }

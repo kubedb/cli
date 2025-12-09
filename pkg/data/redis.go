@@ -132,7 +132,7 @@ func (opts *redisOpts) insertDataInDatabase(rows int) error {
 		return opts.insertDataInRedisCluster(rows)
 	}
 
-	redisCommand := []interface{}{
+	redisCommand := []any{
 		"eval", dataInsertScript, "0", fmt.Sprintf("%d", rows), "hash",
 	}
 	output, err := opts.execCommand("", redisCommand)
@@ -160,7 +160,7 @@ func (opts *redisOpts) insertDataInRedisCluster(rows int) error {
 	extraKey := rows % len(masterNodes)
 	for _, node := range masterNodes {
 		keyHash := slotKey[node.slot]
-		redisCommand := []interface{}{
+		redisCommand := []any{
 			"eval", dataInsertScript, "0", fmt.Sprintf("%d", keysPerMaster+extraKey), keyHash,
 		}
 		extraKey = 0
@@ -225,7 +225,7 @@ func (opts *redisOpts) verifyRedisData(rows int) error {
 	if opts.db.Spec.Mode == dbapi.RedisModeCluster {
 		return opts.verifyDataInRedisCluster(rows)
 	}
-	redisCommand := []interface{}{
+	redisCommand := []any{
 		"eval", dataVerifyScript, "0", fmt.Sprintf("%s*", redisKeyPrefix),
 	}
 	output, err := opts.execCommand("", redisCommand)
@@ -251,7 +251,7 @@ func (opts *redisOpts) verifyDataInRedisCluster(rows int) error {
 	}
 	totalKeys := 0
 	for _, node := range masterNodes {
-		redisCommand := []interface{}{
+		redisCommand := []any{
 			"eval", dataVerifyScript, "0", fmt.Sprintf("%s*", redisKeyPrefix),
 		}
 		output, err := opts.execCommand(node.host, redisCommand)
@@ -313,7 +313,7 @@ func (opts *redisOpts) dropRedisData() error {
 	if opts.db.Spec.Mode == dbapi.RedisModeCluster {
 		return opts.dropRedisClusterData()
 	}
-	redisCommand := []interface{}{
+	redisCommand := []any{
 		"eval", dataDeleteScript, "0", fmt.Sprintf("%s*", redisKeyPrefix),
 	}
 	output, err := opts.execCommand("", redisCommand)
@@ -334,7 +334,7 @@ func (opts *redisOpts) dropRedisClusterData() error {
 	}
 
 	for _, node := range masterNodes {
-		redisCommand := []interface{}{
+		redisCommand := []any{
 			"eval", dataDeleteScript, "0", fmt.Sprintf("%s*", redisKeyPrefix),
 		}
 		output, err := opts.execCommand(node.host, redisCommand)
@@ -376,11 +376,11 @@ func newRedisOpts(f cmdutil.Factory, dbName, namespace string) (*redisOpts, erro
 	}, nil
 }
 
-func (opts *redisOpts) execCommand(host string, redisCommand []interface{}) (string, error) {
+func (opts *redisOpts) execCommand(host string, redisCommand []any) (string, error) {
 	shSession := opts.getShellCommand(host, redisCommand)
 	out, err := shSession.Output()
 	if err != nil {
-		return "", fmt.Errorf("failed to execute redisCommand, error: %s, output: %s\n", err, out)
+		return "", fmt.Errorf("failed to execute redisCommand, error: %s, output: %s", err, out)
 	}
 
 	errOutput := opts.errWriter.String()
@@ -428,31 +428,31 @@ func (opts *redisOpts) getClusterMasterNodes() ([]MasterNode, error) {
 }
 
 func (opts *redisOpts) getClusterNodesConf() (string, error) {
-	redisExtraFlags := []interface{}{
+	redisExtraFlags := []any{
 		"cluster", "nodes",
 	}
 	shSession := opts.getShellCommand("", redisExtraFlags)
 	out, err := shSession.Output()
 	if err != nil {
-		return "", fmt.Errorf("failed to execute command, error: %s, output: %s\n", err, out)
+		return "", fmt.Errorf("failed to execute command, error: %s, output: %s", err, out)
 	}
 	return strings.TrimSpace(string(out)), nil
 }
 
-func (opts *redisOpts) getShellCommand(podIP string, redisCommand []interface{}) *shell.Session {
+func (opts *redisOpts) getShellCommand(podIP string, redisCommand []any) *shell.Session {
 	sh := shell.NewSession()
 	sh.ShowCMD = false
 	sh.Stderr = opts.errWriter
 
 	db := opts.db
-	redisBaseCommand := []interface{}{
+	redisBaseCommand := []any{
 		"--", "redis-cli",
 	}
 	if len(podIP) != 0 {
 		redisBaseCommand = append(redisBaseCommand, "-h", podIP)
 	}
 	svcName := fmt.Sprintf("svc/%s", db.Name)
-	kubectlCommand := []interface{}{
+	kubectlCommand := []any{
 		"exec", "-n", db.Namespace, svcName, "-c", "redis",
 	}
 

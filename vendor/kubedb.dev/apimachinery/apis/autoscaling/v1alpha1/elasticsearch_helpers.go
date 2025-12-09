@@ -26,7 +26,7 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (_ ElasticsearchAutoscaler) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (ElasticsearchAutoscaler) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralElasticsearchAutoscaler))
 }
 

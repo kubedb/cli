@@ -22,10 +22,10 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (_ PetSet) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (PetSet) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePetSets))
 }
 
-func (_ PlacementPolicy) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (PlacementPolicy) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePlacementPolicies))
 }

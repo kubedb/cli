@@ -26,7 +26,7 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (_ *KafkaAutoscaler) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (*KafkaAutoscaler) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralKafkaAutoscaler))
 }
 

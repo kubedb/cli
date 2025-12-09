@@ -143,9 +143,9 @@ func generateConfig(f cmdutil.Factory, userName string, password string, dns str
 	apb.Kind = AppcatKind
 	apb.Spec.ClientConfig.Service.Name = dns
 	apb.Spec.Secret.Name = authSecretName
-	apb.ObjectMeta.Annotations = nil
-	apb.ObjectMeta.ManagedFields = nil
-	apb.ObjectMeta.OwnerReferences = nil
+	apb.Annotations = nil
+	apb.ManagedFields = nil
+	apb.OwnerReferences = nil
 
 	appbindingYaml, err := yaml.Marshal(apb)
 	if err != nil {
@@ -181,8 +181,8 @@ func generateTlsSecret(userName string, apb *appApi.AppBinding, ns string, opts 
 	}
 	tlsSecret.APIVersion = "v1"
 	tlsSecret.Kind = "Secret"
-	tlsSecret.ObjectMeta.Annotations = nil
-	tlsSecret.ObjectMeta.ManagedFields = nil
+	tlsSecret.Annotations = nil
+	tlsSecret.ManagedFields = nil
 	tlsSecretYaml, err := yaml.Marshal(tlsSecret)
 	if err != nil {
 		return nil, "", fmt.Errorf("failed to marshal tls secret yaml %v", err)

@@ -29,7 +29,6 @@ import (
 
 	"github.com/spf13/cobra"
 	shell "gomodules.xyz/go-sh"
-	corev1 "k8s.io/api/core/v1"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -152,12 +151,12 @@ func newElasticsearchOpts(f cmdutil.Factory, dbName, namespace string) (*elastic
 	}, nil
 }
 
-func (opts *elasticsearchOpts) getDockerShellCommand(localPort int, dockerFlags, esCommands []interface{}) (*shell.Session, error) {
+func (opts *elasticsearchOpts) getDockerShellCommand(localPort int, dockerFlags, esCommands []any) (*shell.Session, error) {
 	sh := shell.NewSession()
 	sh.ShowCMD = false
 
 	db := opts.db
-	dockerCommand := []interface{}{
+	dockerCommand := []any{
 		"run", "--network=host", "-it",
 		"-e", fmt.Sprintf("USERNAME=%s", opts.username),
 		"-e", fmt.Sprintf("PASSWORD=%s", opts.pass),
@@ -171,27 +170,27 @@ func (opts *elasticsearchOpts) getDockerShellCommand(localPort int, dockerFlags,
 			return nil, err
 		}
 
-		caCrt, ok := certSecret.Data[corev1.ServiceAccountRootCAKey]
+		caCrt, ok := certSecret.Data[v1.ServiceAccountRootCAKey]
 		if !ok {
-			return nil, fmt.Errorf("missing %s in secret %s/%s", corev1.ServiceAccountRootCAKey, certSecret.Namespace, certSecret.Name)
+			return nil, fmt.Errorf("missing %s in secret %s/%s", v1.ServiceAccountRootCAKey, certSecret.Namespace, certSecret.Name)
 		}
 		err = os.WriteFile(caFile, caCrt, 0o644)
 		if err != nil {
 			return nil, err
 		}
 
-		crt, ok := certSecret.Data[corev1.TLSCertKey]
+		crt, ok := certSecret.Data[v1.TLSCertKey]
 		if !ok {
-			return nil, fmt.Errorf("missing %s in secret %s/%s", corev1.TLSCertKey, certSecret.Namespace, certSecret.Name)
+			return nil, fmt.Errorf("missing %s in secret %s/%s", v1.TLSCertKey, certSecret.Namespace, certSecret.Name)
 		}
 		err = os.WriteFile(certFile, crt, 0o644)
 		if err != nil {
 			return nil, err
 		}
 
-		key, ok := certSecret.Data[corev1.TLSPrivateKeyKey]
+		key, ok := certSecret.Data[v1.TLSPrivateKeyKey]
 		if !ok {
-			return nil, fmt.Errorf("missing %s in secret %s/%s", corev1.TLSPrivateKeyKey, certSecret.Namespace, certSecret.Name)
+			return nil, fmt.Errorf("missing %s in secret %s/%s", v1.TLSPrivateKeyKey, certSecret.Namespace, certSecret.Name)
 		}
 		err = os.WriteFile(keyFile, key, 0o644)
 		if err != nil {
@@ -221,7 +220,7 @@ func (opts *elasticsearchOpts) getDockerShellCommand(localPort int, dockerFlags,
 }
 
 func (opts *elasticsearchOpts) connect(localPort int) error {
-	shellCmd, err := opts.getDockerShellCommand(localPort, []interface{}{"-it"}, []interface{}{"sh"})
+	shellCmd, err := opts.getDockerShellCommand(localPort, []any{"-it"}, []any{"sh"})
 	if err != nil {
 		return err
 	}

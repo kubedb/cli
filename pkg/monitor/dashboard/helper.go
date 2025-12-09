@@ -67,13 +67,13 @@ func getURL(branch, database, dashboard string) string {
 	return fmt.Sprintf("https://raw.githubusercontent.com/appscode/grafana-dashboards/%s/%s/%s.json", branch, database, dashboard)
 }
 
-func getDashboardFromURL(url string) map[string]interface{} {
-	var dashboardData map[string]interface{}
+func getDashboardFromURL(url string) map[string]any {
+	var dashboardData map[string]any
 	response, err := http.Get(url)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer response.Body.Close()
+	defer func() { _ = response.Body.Close() }()
 	if response.StatusCode != http.StatusOK {
 		log.Fatalf("Error fetching url. status : %s", response.Status)
 	}
@@ -89,12 +89,12 @@ func getDashboardFromURL(url string) map[string]interface{} {
 	return dashboardData
 }
 
-func getDashboardFromFile(file string) map[string]interface{} {
+func getDashboardFromFile(file string) map[string]any {
 	body, err := os.ReadFile(file)
 	if err != nil {
 		log.Fatal("Error on ReadFile:", err)
 	}
-	var dashboardData map[string]interface{}
+	var dashboardData map[string]any
 	err = json.Unmarshal(body, &dashboardData)
 	if err != nil {
 		log.Fatal("Error unmarshalling JSON data:", err)

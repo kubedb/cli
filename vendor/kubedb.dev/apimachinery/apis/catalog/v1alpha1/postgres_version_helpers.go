@@ -18,6 +18,7 @@ package v1alpha1
 
 import (
 	"fmt"
+	"strings"
 
 	"kubedb.dev/apimachinery/apis"
 	"kubedb.dev/apimachinery/apis/catalog"
@@ -26,7 +27,7 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (_ PostgresVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (PostgresVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralPostgresVersion))
 }
 
@@ -56,10 +57,12 @@ func (p PostgresVersion) ValidateSpecs() error {
 	if p.Spec.Version == "" ||
 		p.Spec.DB.Image == "" ||
 		p.Spec.Exporter.Image == "" {
-		return fmt.Errorf(`atleast one of the following specs is not set for postgresVersion "%v":
-spec.version,
-spec.db.image,
-spec.exporter.image.`, p.Name)
+		fields := []string{
+			"spec.version",
+			"spec.db.image",
+			"spec.exporter.image",
+		}
+		return fmt.Errorf("atleast one of the following specs is not set for postgresVersion %q: %s", p.Name, strings.Join(fields, ", "))
 	}
 	return nil
 }

@@ -123,7 +123,7 @@ func (o *ResumeOptions) Complete(f cmdutil.Factory, cmd *cobra.Command, args []s
 	}
 
 	if len(args) == 0 && cmdutil.IsFilenameSliceEmpty(o.FilenameOptions.Filenames, o.FilenameOptions.Kustomize) {
-		return fmt.Errorf("You must specify the type of resource to describe. %s\n", cmdutil.SuggestAPIResources(o.CmdParent))
+		return fmt.Errorf("you must specify the type of resource to describe. %s", cmdutil.SuggestAPIResources(o.CmdParent))
 	}
 
 	o.BuilderArgs = args
@@ -160,7 +160,7 @@ func (o *ResumeOptions) Run() error {
 	}
 
 	if len(infos) == 0 {
-		fmt.Fprintf(o.Out, "No resources found in %s namespace.\n", o.Namespace)
+		_, _ = fmt.Fprintf(o.Out, "No resources found in %s namespace.\n", o.Namespace)
 		return nil
 	}
 
@@ -184,16 +184,16 @@ func (o *ResumeOptions) Run() error {
 			errs.Insert(err.Error())
 		}
 
-		resumeAll := !(o.onlyBackup || o.onlyDb || o.onlyArchiver)
+		resumeAll := !o.onlyBackup && !o.onlyDb && !o.onlyArchiver
 
 		if o.onlyDb || resumeAll {
-			fmt.Fprintf(o.Out, "Successfully resumed %s/%s.\n", info.Namespace, info.Name)
+			_, _ = fmt.Fprintf(o.Out, "Successfully resumed %s/%s.\n", info.Namespace, info.Name)
 		}
 		if (o.onlyBackup || resumeAll) && backupConfigFound {
-			fmt.Fprintf(o.Out, "Successfully resumed backupconfigurations of %s/%s.\n", info.Namespace, info.Name)
+			_, _ = fmt.Fprintf(o.Out, "Successfully resumed backupconfigurations of %s/%s.\n", info.Namespace, info.Name)
 		}
 		if o.onlyArchiver || resumeAll {
-			fmt.Fprintf(o.Out, "Successfully resumed archiver of db %s/%s.\n", info.Namespace, info.Name)
+			_, _ = fmt.Fprintf(o.Out, "Successfully resumed archiver of db %s/%s.\n", info.Namespace, info.Name)
 		}
 	}
 	return utilerrors.NewAggregate(allErrs)

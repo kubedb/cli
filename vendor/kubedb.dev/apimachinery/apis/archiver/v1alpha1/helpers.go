@@ -26,23 +26,23 @@ func GetFinalizer() string {
 	return SchemeGroupVersion.Group
 }
 
-func (_ MongoDBArchiver) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (MongoDBArchiver) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralMongoDBArchiver))
 }
 
-func (_ PostgresArchiver) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (PostgresArchiver) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralPostgresArchiver))
 }
 
-func (_ MySQLArchiver) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (MySQLArchiver) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralMySQLArchiver))
 }
 
-func (_ MariaDBArchiver) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (MariaDBArchiver) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralMariaDBArchiver))
 }
 
-func (_ MSSQLServerArchiver) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (MSSQLServerArchiver) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralMSSQLServerArchiver))
 }
 

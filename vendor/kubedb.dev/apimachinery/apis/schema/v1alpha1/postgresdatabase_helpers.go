@@ -31,7 +31,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
-func (_ PostgresDatabase) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (PostgresDatabase) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePostgresDatabases))
 }
 

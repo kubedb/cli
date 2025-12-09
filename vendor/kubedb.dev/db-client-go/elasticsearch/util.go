@@ -34,7 +34,7 @@ var (
 
 func calculateDatabaseSize(body io.ReadCloser) (string, error) {
 	var totalDiskUsageInBytes float64
-	resMap := make(map[string]interface{})
+	resMap := make(map[string]any)
 	if err := json.NewDecoder(body).Decode(&resMap); err != nil {
 		klog.Errorf("failed to deserialize the response body for disk usage request: %v", err)
 		return "", err
@@ -42,7 +42,7 @@ func calculateDatabaseSize(body io.ReadCloser) (string, error) {
 
 	// Parse the deserialized json response to find out storage of each index
 	for _, val := range resMap {
-		if valMap, ok := val.(map[string]interface{}); ok {
+		if valMap, ok := val.(map[string]any); ok {
 			for key, field := range valMap {
 				if key == diskUsageRequestKey {
 					storeSizeInByes := field.(float64)

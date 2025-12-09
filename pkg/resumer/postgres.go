@@ -75,7 +75,7 @@ func (e *PostgresResumer) Resume(name, namespace string) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	resumeAll := !(e.onlyBackup || e.onlyDb || e.onlyArchiver)
+	resumeAll := !e.onlyBackup && !e.onlyDb && !e.onlyArchiver
 
 	if (e.onlyArchiver || resumeAll) && db.Spec.Archiver != nil {
 		if err := pautil.PauseOrResumePostgresArchiver(e.kc, false, db.Spec.Archiver.Ref); err != nil {
@@ -110,7 +110,7 @@ func (e *PostgresResumer) Resume(name, namespace string) (bool, error) {
 			return false, err
 		}
 
-		if db.ObjectMeta.Generation == db.Status.ObservedGeneration {
+		if db.Generation == db.Status.ObservedGeneration {
 			return true, nil
 		}
 

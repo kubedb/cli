@@ -26,7 +26,7 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (_ MariaDBAutoscaler) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (MariaDBAutoscaler) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralMariaDBAutoscaler))
 }
 

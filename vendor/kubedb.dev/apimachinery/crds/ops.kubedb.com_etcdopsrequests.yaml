@@ -77,6 +77,10 @@ spec:
                 x-kubernetes-map-type: atomic
               horizontalScaling:
                 type: object
+              maxRetries:
+                default: 1
+                format: int32
+                type: integer
               restart:
                 type: object
               tls:

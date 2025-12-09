@@ -23,17 +23,17 @@ import (
 	"unicode"
 )
 
-func parseAllExpressions(dashboardData map[string]interface{}) []queryOpts {
+func parseAllExpressions(dashboardData map[string]any) []queryOpts {
 	var queries []queryOpts
-	if panels, ok := dashboardData["panels"].([]interface{}); ok {
+	if panels, ok := dashboardData["panels"].([]any); ok {
 		for _, panel := range panels {
-			if targets, ok := panel.(map[string]interface{})["targets"].([]interface{}); ok {
-				title, ok := panel.(map[string]interface{})["title"].(string)
+			if targets, ok := panel.(map[string]any)["targets"].([]any); ok {
+				title, ok := panel.(map[string]any)["title"].(string)
 				if !ok {
 					log.Fatal("panel's title found empty")
 				}
 				for _, target := range targets {
-					if expr, ok := target.(map[string]interface{})["expr"]; ok {
+					if expr, ok := target.(map[string]any)["expr"]; ok {
 						if expr != "" {
 							query := expr.(string)
 							queries = append(queries, parseSingleExpression(query, title)...)
@@ -57,10 +57,7 @@ func parseSingleExpression(query, title string) []queryOpts {
 	for i := 0; i < len(query); i++ {
 		if query[i] == '{' {
 			j := i
-			for {
-				if j-1 < 0 || (!matchMetricRegex(rune(query[j-1]))) {
-					break
-				}
+			for j-1 >= 0 && (!matchMetricRegex(rune(query[j-1]))) {
 				j--
 			}
 			metric := query[j:i]

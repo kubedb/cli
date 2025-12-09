@@ -63,7 +63,7 @@ func (e *RedisPauser) Pause(name, namespace string) (bool, error) {
 		return false, nil
 	}
 
-	pauseAll := !(e.onlyBackup || e.onlyDb)
+	pauseAll := !e.onlyBackup && !e.onlyDb
 	if e.onlyDb || pauseAll {
 		_, err = dbutil.UpdateRedisStatus(context.TODO(), e.dbClient, db.ObjectMeta, func(status *dbapi.RedisStatus) (types.UID, *dbapi.RedisStatus) {
 			status.Conditions = condutil.SetCondition(status.Conditions, condutil.NewCondition(

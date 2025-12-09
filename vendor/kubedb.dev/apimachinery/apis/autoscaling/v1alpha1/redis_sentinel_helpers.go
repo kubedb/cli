@@ -26,7 +26,7 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (_ RedisSentinelAutoscaler) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (RedisSentinelAutoscaler) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralRedisSentinelAutoscaler))
 }
 
