@@ -25,7 +25,7 @@ import (
 	cutil "kmodules.xyz/client-go/conditions"
 )
 
-func (_ BackupConfiguration) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (BackupConfiguration) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(GroupVersion.WithResource(ResourcePluralBackupConfiguration))
 }
 

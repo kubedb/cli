@@ -23,7 +23,7 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (_ BackupBatch) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (BackupBatch) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(GroupVersion.WithResource(ResourcePluralBackupBatch))
 }
 

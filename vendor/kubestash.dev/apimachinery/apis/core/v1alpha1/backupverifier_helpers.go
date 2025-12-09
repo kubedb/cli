@@ -17,10 +17,11 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"kmodules.xyz/client-go/apiextensions"
 	"kubestash.dev/apimachinery/crds"
+
+	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (_ BackupVerifier) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (BackupVerifier) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(GroupVersion.WithResource(ResourcePluralBackupVerifier))
 }

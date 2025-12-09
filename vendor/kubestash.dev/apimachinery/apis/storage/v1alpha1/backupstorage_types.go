@@ -17,11 +17,11 @@ limitations under the License.
 package v1alpha1
 
 import (
-	ofst "kmodules.xyz/offshoot-api/api/v1"
 	"kubestash.dev/apimachinery/apis"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
+	ofst "kmodules.xyz/offshoot-api/api/v1"
 )
 
 type BackupStoragePhase string

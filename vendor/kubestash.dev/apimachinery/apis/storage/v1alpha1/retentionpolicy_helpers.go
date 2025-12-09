@@ -18,18 +18,18 @@ package v1alpha1
 
 import (
 	"errors"
-	core "k8s.io/api/core/v1"
-	"kubestash.dev/apimachinery/apis"
 	"strconv"
 	"strings"
 	"unicode"
 
+	"kubestash.dev/apimachinery/apis"
 	"kubestash.dev/apimachinery/crds"
 
+	core "k8s.io/api/core/v1"
 	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (_ RetentionPolicy) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (RetentionPolicy) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(GroupVersion.WithResource(ResourcePluralRetentionPolicy))
 }
 

@@ -17,15 +17,15 @@ limitations under the License.
 package v1alpha1
 
 import (
-	corev1 "k8s.io/api/core/v1"
-	meta_util "kmodules.xyz/client-go/meta"
 	"kubestash.dev/apimachinery/apis"
 	"kubestash.dev/apimachinery/crds"
 
+	corev1 "k8s.io/api/core/v1"
 	"kmodules.xyz/client-go/apiextensions"
+	meta_util "kmodules.xyz/client-go/meta"
 )
 
-func (_ HookTemplate) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (HookTemplate) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(GroupVersion.WithResource(ResourcePluralHookTemplate))
 }
 

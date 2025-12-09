@@ -17,19 +17,18 @@ limitations under the License.
 package v1alpha1
 
 import (
+	"kubestash.dev/apimachinery/apis"
+	"kubestash.dev/apimachinery/crds"
+
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/klog/v2"
-	meta_util "kmodules.xyz/client-go/meta"
-
 	"kmodules.xyz/client-go/apiextensions"
-
-	"kubestash.dev/apimachinery/apis"
-	"kubestash.dev/apimachinery/crds"
+	meta_util "kmodules.xyz/client-go/meta"
 )
 
-func (_ BackupBlueprint) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (BackupBlueprint) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(GroupVersion.WithResource(ResourcePluralBackupBlueprint))
 }
 

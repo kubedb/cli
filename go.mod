@@ -6,7 +6,7 @@ require (
 	github.com/Masterminds/semver/v3 v3.3.1
 	github.com/cert-manager/cert-manager v1.18.2
 	github.com/fatih/camelcase v1.0.0
-	github.com/go-sql-driver/mysql v1.9.0
+	github.com/go-sql-driver/mysql v1.9.1
 	github.com/prometheus/client_golang v1.20.5
 	github.com/prometheus/common v0.62.0
 	github.com/spf13/cobra v1.9.1
@@ -27,8 +27,8 @@ require (
 	kmodules.xyz/client-go v0.32.10
 	kmodules.xyz/custom-resources v0.32.2
 	kmodules.xyz/monitoring-agent-api v0.32.4
-	kubedb.dev/apimachinery v0.59.1-0.20251209011328-fac813c7865f
-	kubedb.dev/db-client-go v0.14.1-0.20251208121423-3789532d3c38
+	kubedb.dev/apimachinery v0.60.0-rc.0
+	kubedb.dev/db-client-go v0.15.0-rc.0
 	kubeops.dev/petset v0.0.15
 	sigs.k8s.io/controller-runtime v0.20.4
 	sigs.k8s.io/yaml v1.4.0
@@ -45,7 +45,7 @@ require (
 	github.com/chai2010/gettext-go v1.0.2 // indirect
 	github.com/codegangsta/inject v0.0.0-20150114235600-33e0aa1cb7c0 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.6 // indirect
-	github.com/cyphar/filepath-securejoin v0.3.6 // indirect
+	github.com/cyphar/filepath-securejoin v0.6.0 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/elastic/elastic-transport-go/v8 v8.7.0 // indirect
@@ -129,7 +129,7 @@ require (
 	golang.org/x/sync v0.18.0 // indirect
 	golang.org/x/sys v0.38.0 // indirect
 	golang.org/x/term v0.37.0 // indirect
-	golang.org/x/time v0.10.0 // indirect
+	golang.org/x/time v0.11.0 // indirect
 	gomodules.xyz/clock v0.0.0-20200817085942-06523dba733f // indirect
 	gomodules.xyz/encoding v0.0.8 // indirect
 	gomodules.xyz/flags v0.1.3 // indirect
@@ -139,7 +139,7 @@ require (
 	gomodules.xyz/sets v0.2.1 // indirect
 	gomodules.xyz/sync v0.1.0 // indirect
 	gomodules.xyz/wait v0.2.0 // indirect
-	google.golang.org/protobuf v1.36.5 // indirect
+	google.golang.org/protobuf v1.36.6 // indirect
 	gopkg.in/evanphx/json-patch.v4 v4.12.0 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
@@ -150,13 +150,13 @@ require (
 	k8s.io/metrics v0.32.3 // indirect
 	k8s.io/utils v0.0.0-20250321185631-1f6e0b77f77e // indirect
 	kmodules.xyz/apiversion v0.2.0 // indirect
-	kmodules.xyz/objectstore-api v0.32.0 // indirect
+	kmodules.xyz/objectstore-api v0.32.2 // indirect
 	kmodules.xyz/offshoot-api v0.32.0 // indirect
 	kmodules.xyz/prober v0.32.0 // indirect
 	kmodules.xyz/resource-metadata v0.32.1 // indirect
-	kubeops.dev/csi-driver-cacerts v0.1.0 // indirect
-	kubeops.dev/sidekick v0.0.11 // indirect
-	kubestash.dev/apimachinery v0.21.0 // indirect
+	kubeops.dev/csi-driver-cacerts v0.4.0 // indirect
+	kubeops.dev/sidekick v0.0.12 // indirect
+	kubestash.dev/apimachinery v0.22.0-rc.0 // indirect
 	open-cluster-management.io/api v1.0.0 // indirect
 	sigs.k8s.io/gateway-api v1.1.0 // indirect
 	sigs.k8s.io/json v0.0.0-20241014173422-cfa47c3a1cc8 // indirect
