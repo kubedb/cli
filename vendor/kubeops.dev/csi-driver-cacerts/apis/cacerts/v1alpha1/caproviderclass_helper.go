@@ -24,7 +24,7 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (_ CAProviderClass) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (CAProviderClass) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourceCAProviderClasses))
 }
 

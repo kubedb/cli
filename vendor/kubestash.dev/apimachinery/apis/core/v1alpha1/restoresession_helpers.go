@@ -18,6 +18,11 @@ package v1alpha1
 
 import (
 	"fmt"
+
+	"kubestash.dev/apimachinery/apis"
+	"kubestash.dev/apimachinery/apis/storage/v1alpha1"
+	"kubestash.dev/apimachinery/crds"
+
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
@@ -25,12 +30,9 @@ import (
 	meta_util "kmodules.xyz/client-go/meta"
 	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
 	olddbapi "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
-	"kubestash.dev/apimachinery/apis"
-	"kubestash.dev/apimachinery/apis/storage/v1alpha1"
-	"kubestash.dev/apimachinery/crds"
 )
 
-func (_ RestoreSession) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (RestoreSession) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(GroupVersion.WithResource(ResourcePluralRestoreSession))
 }
 

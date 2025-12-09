@@ -29,7 +29,7 @@ import (
 	"kmodules.xyz/client-go/meta"
 )
 
-func (_ BackupStorage) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (BackupStorage) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(GroupVersion.WithResource(ResourcePluralBackupStorage))
 }
 

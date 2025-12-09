@@ -45,9 +45,9 @@ const (
 	ProviderS3    StorageProvider = "s3"
 	ProviderGCS   StorageProvider = "gcs"
 	ProviderAzure StorageProvider = "azure"
-	//ProviderSwift StorageProvider = "swift"
-	//ProviderB2    StorageProvider = "b2"
-	//ProviderRest  StorageProvider = "rest"
+	// ProviderSwift StorageProvider = "swift"
+	// ProviderB2    StorageProvider = "b2"
+	// ProviderRest  StorageProvider = "rest"
 )
 
 type Backend struct {
@@ -90,6 +90,10 @@ type LocalSpec struct {
 	// Make sure the volume exist before using the volume as backend.
 	ofst.VolumeSource `json:",inline"`
 
+	// MaxConnections specifies the maximum number of concurrent connections to use to upload/download/delete data to this backend.
+	// +optional
+	MaxConnections int64 `json:"maxConnections,omitempty"`
+
 	// MountPath specifies the directory where this volume will be mounted
 	MountPath string `json:"mountPath,omitempty"`
 
@@ -117,6 +121,10 @@ type S3Spec struct {
 	// +optional
 	SecretName string `json:"secretName,omitempty"`
 
+	// MaxConnections specifies the maximum number of concurrent connections to use to upload/download/delete data to this backend.
+	// +optional
+	MaxConnections int64 `json:"maxConnections,omitempty"`
+
 	// InsecureTLS controls whether a client should skip TLS certificate verification.
 	// Setting this field to true disables verification, which might be necessary in cases
 	// where the server uses self-signed certificates or certificates from an untrusted CA.
@@ -133,7 +141,7 @@ type GCSSpec struct {
 	// Prefix specifies a directory inside the bucket/container where the data for this backend will be stored.
 	Prefix string `json:"prefix,omitempty"`
 
-	// MaxConnections specifies the maximum number of concurrent connections to use to upload/download data to this backend.
+	// MaxConnections specifies the maximum number of concurrent connections to use to upload/download/delete data to this backend.
 	// +optional
 	MaxConnections int64 `json:"maxConnections,omitempty"`
 
@@ -152,7 +160,7 @@ type AzureSpec struct {
 	// Prefix specifies a directory inside the bucket/container where the data for this backend will be stored.
 	Prefix string `json:"prefix,omitempty"`
 
-	// MaxConnections specifies the maximum number of concurrent connections to use to upload/download data to this backend.
+	// MaxConnections specifies the maximum number of concurrent connections to use to upload/download/delete data to this backend.
 	// +optional
 	MaxConnections int64 `json:"maxConnections,omitempty"`
 

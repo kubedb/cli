@@ -18,19 +18,19 @@ package v1alpha1
 
 import (
 	"fmt"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	kmapi "kmodules.xyz/client-go/api/v1"
-	cutil "kmodules.xyz/client-go/conditions"
-	"kmodules.xyz/client-go/meta"
-	"kubestash.dev/apimachinery/apis"
-	"kubestash.dev/apimachinery/crds"
 	"time"
 
+	"kubestash.dev/apimachinery/apis"
+	"kubestash.dev/apimachinery/crds"
+
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
+	cutil "kmodules.xyz/client-go/conditions"
 	meta_util "kmodules.xyz/client-go/meta"
 )
 
-func (_ BackupVerificationSession) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (BackupVerificationSession) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(GroupVersion.WithResource(ResourcePluralBackupVerificationSession))
 }
 
@@ -64,6 +64,7 @@ func (b *BackupVerificationSession) CalculatePhase() BackupVerificationSessionPh
 	return BackupVerificationSessionRunning
 }
 
+// nolint: unused
 func (b *BackupVerificationSession) sessionHistoryCleanupFailed() bool {
 	return cutil.IsConditionFalse(b.Status.Conditions, TypeVerificationSessionHistoryCleaned)
 }
@@ -81,7 +82,7 @@ func (b *BackupVerificationSession) failedToVerifyBackup() bool {
 }
 
 func GenerateBackupVerificationSessionName(repoName, sessionName string) string {
-	return meta.ValidNameWithPrefixNSuffix(repoName, sessionName, fmt.Sprintf("%d", time.Now().Unix()))
+	return meta_util.ValidNameWithPrefixNSuffix(repoName, sessionName, fmt.Sprintf("%d", time.Now().Unix()))
 }
 
 func (b *BackupVerificationSession) OffshootLabels() map[string]string {

@@ -17,8 +17,9 @@ limitations under the License.
 package apis
 
 import (
-	"k8s.io/apimachinery/pkg/runtime/schema"
 	"time"
+
+	"k8s.io/apimachinery/pkg/runtime/schema"
 )
 
 const (

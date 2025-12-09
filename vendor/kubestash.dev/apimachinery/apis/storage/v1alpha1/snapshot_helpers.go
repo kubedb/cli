@@ -18,17 +18,19 @@ package v1alpha1
 
 import (
 	"fmt"
-	"kmodules.xyz/client-go/apiextensions"
-	cutil "kmodules.xyz/client-go/conditions"
-	"kmodules.xyz/client-go/meta"
-	"kubestash.dev/apimachinery/apis"
-	"kubestash.dev/apimachinery/crds"
 	"path/filepath"
 	"regexp"
 	"strings"
+
+	"kubestash.dev/apimachinery/apis"
+	"kubestash.dev/apimachinery/crds"
+
+	"kmodules.xyz/client-go/apiextensions"
+	cutil "kmodules.xyz/client-go/conditions"
+	"kmodules.xyz/client-go/meta"
 )
 
-func (_ Snapshot) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (Snapshot) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(GroupVersion.WithResource(ResourcePluralSnapshot))
 }
 

@@ -18,16 +18,17 @@ package v1alpha1
 
 import (
 	"fmt"
+	"strconv"
+
 	"gomodules.xyz/x/filepath"
 	core "k8s.io/api/core/v1"
-	"strconv"
 )
 
 // ToVolumeAndMount returns volumes and mounts for local backend
 func (l LocalSpec) ToVolumeAndMount(storageName string) (core.Volume, core.VolumeMount) {
 	vol := core.Volume{
 		Name:         storageName,
-		VolumeSource: *l.VolumeSource.ToAPIObject(),
+		VolumeSource: *l.ToAPIObject(),
 	}
 	mnt := core.VolumeMount{
 		Name:      storageName,
