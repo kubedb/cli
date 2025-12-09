@@ -26,7 +26,7 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (_ PostgresAutoscaler) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (PostgresAutoscaler) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralPostgresAutoscaler))
 }
 

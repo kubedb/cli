@@ -45,7 +45,7 @@ import (
 
 func (*MongoDB) Hub() {}
 
-func (_ MongoDB) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (MongoDB) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralMongoDB))
 }
 

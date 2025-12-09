@@ -42,7 +42,7 @@ import (
 
 func (*ProxySQL) Hub() {}
 
-func (_ ProxySQL) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (ProxySQL) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralProxySQL))
 }
 

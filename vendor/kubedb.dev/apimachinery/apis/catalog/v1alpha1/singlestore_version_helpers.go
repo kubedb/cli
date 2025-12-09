@@ -18,6 +18,7 @@ package v1alpha1
 
 import (
 	"fmt"
+	"strings"
 
 	"kubedb.dev/apimachinery/apis"
 	"kubedb.dev/apimachinery/apis/catalog"
@@ -57,10 +58,12 @@ func (s SinglestoreVersion) ValidateSpecs() error {
 		s.Spec.DB.Image == "" ||
 		s.Spec.Coordinator.Image == "" ||
 		s.Spec.Standalone.Image == "" {
-		return fmt.Errorf(`atleast one of the following specs is not set for singlestoreVersion "%v":
-spec.version,
-spec.coordinator.image,
-spec.standalone.image.`, s.Name)
+		fields := []string{
+			"spec.version",
+			"spec.coordinator.image",
+			"spec.standalone.image",
+		}
+		return fmt.Errorf("atleast one of the following specs is not set for singlestoreVersion %q: %s", s.Name, strings.Join(fields, ", "))
 	}
 	return nil
 }

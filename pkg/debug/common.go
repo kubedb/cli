@@ -208,13 +208,13 @@ func (opts *dbOpts) writeLogs(podName, ns, container string) error {
 	if err != nil {
 		return err
 	}
-	defer podLogs.Close()
+	defer func() { _ = podLogs.Close() }()
 
 	logFile, err := os.Create(path.Join(opts.dir, logsDir, podName+"_"+container+".log"))
 	if err != nil {
 		return err
 	}
-	defer logFile.Close()
+	defer func() { _ = logFile.Close() }()
 
 	buf := make([]byte, 1024)
 	for {

@@ -118,7 +118,7 @@ func (o *RestartOptions) Complete(f cmdutil.Factory, cmd *cobra.Command, args []
 	}
 
 	if len(args) == 0 && cmdutil.IsFilenameSliceEmpty(o.FilenameOptions.Filenames, o.FilenameOptions.Kustomize) {
-		return fmt.Errorf("You must specify the type of resource to describe. %s\n", cmdutil.SuggestAPIResources(o.CmdParent))
+		return fmt.Errorf("you must specify the type of resource to describe. %s", cmdutil.SuggestAPIResources(o.CmdParent))
 	}
 
 	o.BuilderArgs = args
@@ -155,7 +155,7 @@ func (o *RestartOptions) Run() error {
 	}
 
 	if len(infos) == 0 {
-		fmt.Fprintf(o.Out, "No resources found in %s namespace.\n", o.Namespace)
+		_, _ = fmt.Fprintf(o.Out, "No resources found in %s namespace.\n", o.Namespace)
 		return nil
 	}
 
@@ -178,7 +178,7 @@ func (o *RestartOptions) Run() error {
 			allErrs = append(allErrs, err)
 			errs.Insert(err.Error())
 		} else {
-			fmt.Fprintf(o.Out, "opsrequest %s/%s created for database %s/%s.\n", info.Namespace, opsReqName, info.Namespace, info.Name)
+			_, _ = fmt.Fprintf(o.Out, "opsrequest %s/%s created for database %s/%s.\n", info.Namespace, opsReqName, info.Namespace, info.Name)
 		}
 	}
 

@@ -17,12 +17,17 @@ limitations under the License.
 package v1
 
 import (
+	"errors"
 	"fmt"
 
 	"kmodules.xyz/client-go/policy/secomp"
+	app_api "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
+	appcatalog "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 
 	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/utils/ptr"
 )
 
 func (agent *AgentSpec) SetDefaults() {
@@ -85,4 +90,51 @@ func GrafanaDatasource(isDefault bool, clusterName, projectId string) string {
 		return clusterName
 	}
 	return fmt.Sprintf("%s-%s", clusterName, projectId)
+}
+
+func (c *ConnectionSpec) ToAppBinding() (*appcatalog.AppBinding, error) {
+	var ns string
+	if c.AuthSecret != nil {
+		if c.AuthSecret.Namespace == "" {
+			return nil, errors.New("auth secret namespace not set")
+		}
+		ns = c.AuthSecret.Namespace
+	}
+	if c.TLSSecret != nil {
+		if c.TLSSecret.Namespace == "" {
+			return nil, errors.New("tls secret namespace not set")
+		}
+		if ns != "" && ns != c.TLSSecret.Namespace {
+			return nil, errors.New("tls secret namespace does not match auth secret namespace")
+		}
+	}
+
+	app := appcatalog.AppBinding{
+		TypeMeta: metav1.TypeMeta{},
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      "<generated>",
+			Namespace: ns,
+		},
+		Spec: appcatalog.AppBindingSpec{
+			ClientConfig: appcatalog.ClientConfig{
+				URL:                   ptr.To(c.URL),
+				InsecureSkipTLSVerify: c.InsecureSkipTLSVerify,
+				CABundle:              c.CABundle,
+				ServerName:            c.ServerName,
+			},
+		},
+	}
+	if c.AuthSecret != nil {
+		app.Spec.Secret = &app_api.TypedLocalObjectReference{
+			Kind: "Secret", // It will create circular dependency, If we use Kubedb Constant .
+			Name: c.AuthSecret.Name,
+		}
+	}
+	if c.TLSSecret != nil {
+		app.Spec.TLSSecret = &app_api.TypedLocalObjectReference{
+			Kind: "Secret",
+			Name: c.TLSSecret.Name,
+		}
+	}
+	return &app, nil
 }

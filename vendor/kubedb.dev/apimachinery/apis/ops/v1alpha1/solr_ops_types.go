@@ -80,6 +80,8 @@ type SolrOpsRequestSpec struct {
 	// ApplyOption is to control the execution of OpsRequest depending on the database state.
 	// +kubebuilder:default="IfReady"
 	Apply ApplyOption `json:"apply,omitempty"`
+	// +kubebuilder:default=1
+	MaxRetries int32 `json:"maxRetries,omitempty"`
 }
 
 type SolrVerticalScalingSpec struct {

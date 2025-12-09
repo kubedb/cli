@@ -26,7 +26,7 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (_ PerconaXtraDBAutoscaler) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (PerconaXtraDBAutoscaler) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralPerconaXtraDBAutoscaler))
 }
 

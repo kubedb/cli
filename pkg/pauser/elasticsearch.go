@@ -63,7 +63,7 @@ func (e *ElasticsearchPauser) Pause(name, namespace string) (bool, error) {
 		return false, nil
 	}
 
-	pauseAll := !(e.onlyBackup || e.onlyDb)
+	pauseAll := !e.onlyBackup && !e.onlyDb
 
 	if e.onlyDb || pauseAll {
 		_, err = dbutil.UpdateElasticsearchStatus(context.TODO(), e.dbClient, db.ObjectMeta, func(status *dbapi.ElasticsearchStatus) (types.UID, *dbapi.ElasticsearchStatus) {

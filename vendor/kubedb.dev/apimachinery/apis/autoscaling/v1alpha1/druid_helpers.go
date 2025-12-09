@@ -26,7 +26,7 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (_ *DruidAutoscaler) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (*DruidAutoscaler) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralDruidAutoscaler))
 }
 

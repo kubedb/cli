@@ -62,7 +62,7 @@ func (e *RedisResumer) Resume(name, namespace string) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	resumeAll := !(e.onlyBackup || e.onlyDb)
+	resumeAll := !e.onlyBackup && !e.onlyDb
 
 	if e.onlyDb || resumeAll {
 		_, err = dbutil.UpdateRedisStatus(context.TODO(), e.dbClient, db.ObjectMeta, func(status *dbapi.RedisStatus) (types.UID, *dbapi.RedisStatus) {
@@ -87,7 +87,7 @@ func (e *RedisResumer) Resume(name, namespace string) (bool, error) {
 			return false, err
 		}
 
-		if db.ObjectMeta.Generation == db.Status.ObservedGeneration {
+		if db.Generation == db.Status.ObservedGeneration {
 			return true, nil
 		}
 

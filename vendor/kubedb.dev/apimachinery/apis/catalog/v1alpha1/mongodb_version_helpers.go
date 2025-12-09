@@ -18,6 +18,7 @@ package v1alpha1
 
 import (
 	"fmt"
+	"strings"
 
 	"kubedb.dev/apimachinery/apis"
 	"kubedb.dev/apimachinery/apis/catalog"
@@ -26,7 +27,7 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (_ MongoDBVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (MongoDBVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralMongoDBVersion))
 }
 
@@ -57,11 +58,13 @@ func (m MongoDBVersion) ValidateSpecs() error {
 		m.Spec.DB.Image == "" ||
 		m.Spec.Exporter.Image == "" ||
 		m.Spec.InitContainer.Image == "" {
-		return fmt.Errorf(`atleast one of the following specs is not set for MongoDBVersion "%v":
-spec.version,
-spec.db.image,
-spec.exporter.image,
-spec.initContainer.image.`, m.Name)
+		fields := []string{
+			"spec.version",
+			"spec.db.image",
+			"spec.exporter.image",
+			"spec.initContainer.image",
+		}
+		return fmt.Errorf("atleast one of the following specs is not set for MongoDBVersion %q: %s", m.Name, strings.Join(fields, ", "))
 	}
 	return nil
 }

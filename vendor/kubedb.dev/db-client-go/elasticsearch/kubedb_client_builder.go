@@ -133,10 +133,8 @@ func (o *KubeDBClientBuilder) GetElasticClient() (*Client, error) {
 		return nil, errors.Wrap(err, "failed to parse version")
 	}
 
-	switch {
-	case esVersion.Spec.AuthPlugin == catalog.ElasticsearchAuthPluginXpack ||
-		esVersion.Spec.AuthPlugin == catalog.ElasticsearchAuthPluginSearchGuard ||
-		esVersion.Spec.AuthPlugin == catalog.ElasticsearchAuthPluginOpenDistro:
+	switch esVersion.Spec.AuthPlugin {
+	case catalog.ElasticsearchAuthPluginXpack, catalog.ElasticsearchAuthPluginSearchGuard, catalog.ElasticsearchAuthPluginOpenDistro:
 		switch {
 		// For Elasticsearch 5.x.x
 		case version.Major() == 5:
@@ -167,7 +165,7 @@ func (o *KubeDBClientBuilder) GetElasticClient() (*Client, error) {
 				return nil, err
 			}
 			defer func(Body io.ReadCloser) {
-				err := Body.Close()
+				err := Body.Close() // nolint:errcheck
 				if err != nil {
 					klog.Errorf("failed to close response body, reason: %s", err)
 				}
@@ -213,7 +211,7 @@ func (o *KubeDBClientBuilder) GetElasticClient() (*Client, error) {
 			}
 
 			defer func(Body io.ReadCloser) {
-				err = Body.Close()
+				err = Body.Close() // nolint:errcheck
 				if err != nil {
 					klog.Errorf("failed to close response body, reason: %s", err)
 				}
@@ -261,7 +259,7 @@ func (o *KubeDBClientBuilder) GetElasticClient() (*Client, error) {
 			}
 
 			defer func(Body io.ReadCloser) {
-				err = Body.Close()
+				err = Body.Close() // nolint:errcheck
 				if err != nil {
 					klog.Errorf("failed to close response body, reason: %s", err)
 				}
@@ -308,7 +306,7 @@ func (o *KubeDBClientBuilder) GetElasticClient() (*Client, error) {
 			}
 
 			defer func(Body io.ReadCloser) {
-				err = Body.Close()
+				err = Body.Close() // nolint:errcheck
 				if err != nil {
 					klog.Errorf("failed to close response body, reason: %s", err)
 				}
@@ -356,7 +354,7 @@ func (o *KubeDBClientBuilder) GetElasticClient() (*Client, error) {
 			}
 
 			defer func(Body io.ReadCloser) {
-				err = Body.Close()
+				err = Body.Close() // nolint:errcheck
 				if err != nil {
 					klog.Errorf("failed to close response body, reason: %s", err)
 				}
@@ -371,7 +369,7 @@ func (o *KubeDBClientBuilder) GetElasticClient() (*Client, error) {
 			}, nil
 		}
 
-	case esVersion.Spec.AuthPlugin == catalog.ElasticsearchAuthPluginOpenSearch:
+	case catalog.ElasticsearchAuthPluginOpenSearch:
 		switch {
 		case version.Major() == 1:
 			defaultTLSConfig, err := o.getDefaultTLSConfig()
@@ -406,7 +404,7 @@ func (o *KubeDBClientBuilder) GetElasticClient() (*Client, error) {
 			}
 
 			defer func(Body io.ReadCloser) {
-				err = Body.Close()
+				err = Body.Close() // nolint:errcheck
 				if err != nil {
 					klog.Errorf("failed to close response body, reason: %s", err)
 				}
@@ -451,7 +449,7 @@ func (o *KubeDBClientBuilder) GetElasticClient() (*Client, error) {
 			}
 
 			defer func(Body io.ReadCloser) {
-				err = Body.Close()
+				err = Body.Close() // nolint:errcheck
 				if err != nil {
 					klog.Errorf("failed to close response body, reason: %s", err)
 				}
@@ -542,7 +540,7 @@ func (client *ESRestyClient) Ping() (string, error) {
 		return "", err
 	}
 	body := res.RawBody()
-	responseBody := make(map[string]interface{})
+	responseBody := make(map[string]any)
 	if err := json.NewDecoder(body).Decode(&responseBody); err != nil {
 		return "", fmt.Errorf("failed to deserialize the response: %v", err)
 	}

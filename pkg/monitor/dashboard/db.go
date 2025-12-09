@@ -69,7 +69,7 @@ func Run(f cmdutil.Factory, args []string, branch, file, url string, prom monito
 
 		database = monitor.ConvertedResourceToSingular(database)
 	}
-	var dashboardData map[string]interface{}
+	var dashboardData map[string]any
 	if file == "" {
 		if url == "" { // fetch from appscode/grafana-dashboard repo
 			if len(args) < 3 {

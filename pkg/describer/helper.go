@@ -127,7 +127,7 @@ func showAppBinding(ab *appcat.AppBinding, w describe.PrefixWriter) error {
 	return nil
 }
 
-func printUnstructuredContent(w describe.PrefixWriter, level int, content map[string]interface{}, skipPrefix string, skip ...string) {
+func printUnstructuredContent(w describe.PrefixWriter, level int, content map[string]any, skipPrefix string, skip ...string) {
 	fields := []string{}
 	for field := range content {
 		fields = append(fields, field)
@@ -137,7 +137,7 @@ func printUnstructuredContent(w describe.PrefixWriter, level int, content map[st
 	for _, field := range fields {
 		value := content[field]
 		switch typedValue := value.(type) {
-		case map[string]interface{}:
+		case map[string]any:
 			skipExpr := fmt.Sprintf("%s.%s", skipPrefix, field)
 			if slice.ContainsString(skip, skipExpr, nil) {
 				continue
@@ -145,7 +145,7 @@ func printUnstructuredContent(w describe.PrefixWriter, level int, content map[st
 			w.Write(level, "%s:\n", smartLabelFor(field))
 			printUnstructuredContent(w, level+1, typedValue, skipExpr, skip...)
 
-		case []interface{}:
+		case []any:
 			skipExpr := fmt.Sprintf("%s.%s", skipPrefix, field)
 			if slice.ContainsString(skip, skipExpr, nil) {
 				continue
@@ -153,7 +153,7 @@ func printUnstructuredContent(w describe.PrefixWriter, level int, content map[st
 			w.Write(level, "%s:\n", smartLabelFor(field))
 			for _, child := range typedValue {
 				switch typedChild := child.(type) {
-				case map[string]interface{}:
+				case map[string]any:
 					printUnstructuredContent(w, level+1, typedChild, skipExpr, skip...)
 				default:
 					w.Write(level+1, "%v\n", typedChild)

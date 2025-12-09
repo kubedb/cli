@@ -252,6 +252,10 @@ spec:
                         type: integer
                     type: object
                 type: object
+              maxRetries:
+                default: 1
+                format: int32
+                type: integer
               readinessCriteria:
                 properties:
                   objectsCountDiffPercentage:

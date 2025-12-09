@@ -24,7 +24,7 @@ import (
 
 	"kubedb.dev/apimachinery/apis"
 	catalog "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
-	kube "kubedb.dev/apimachinery/apis/kubedb"
+	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
 	promapi "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1"
@@ -91,7 +91,7 @@ func (h *Hazelcast) ResourcePlural() string {
 }
 
 func (h *Hazelcast) ResourceFQN() string {
-	return fmt.Sprintf("%s.%s", h.ResourcePlural(), kube.GroupName)
+	return fmt.Sprintf("%s.%s", h.ResourcePlural(), kubedb.GroupName)
 }
 
 func (h *Hazelcast) PodControllerLabels(extraLabels ...map[string]string) map[string]string {
@@ -111,8 +111,8 @@ func (h *Hazelcast) OffshootLabels() map[string]string {
 }
 
 func (h *Hazelcast) offshootLabels(selector, override map[string]string) map[string]string {
-	selector[meta_util.ComponentLabelKey] = kube.ComponentDatabase
-	return meta_util.FilterKeys(kube.GroupName, selector, meta_util.OverwriteKeys(nil, h.Labels, override))
+	selector[meta_util.ComponentLabelKey] = kubedb.ComponentDatabase
+	return meta_util.FilterKeys(kubedb.GroupName, selector, meta_util.OverwriteKeys(nil, h.Labels, override))
 }
 
 func (h *Hazelcast) GoverningServiceName() string {
@@ -123,7 +123,7 @@ func (h *Hazelcast) OffshootSelectors(extraSelectors ...map[string]string) map[s
 	selector := map[string]string{
 		meta_util.NameLabelKey:      h.ResourceFQN(),
 		meta_util.InstanceLabelKey:  h.Name,
-		meta_util.ManagedByLabelKey: kube.GroupName,
+		meta_util.ManagedByLabelKey: kubedb.GroupName,
 	}
 	return meta_util.OverwriteKeys(selector, extraSelectors...)
 }
@@ -238,7 +238,7 @@ func (h *Hazelcast) SetTLSDefaults() {
 			h.Spec.AuthSecret = &SecretReference{}
 		}
 		if h.Spec.AuthSecret.Kind == "" {
-			h.Spec.AuthSecret.Kind = kube.ResourceKindSecret
+			h.Spec.AuthSecret.Kind = kubedb.ResourceKindSecret
 		}
 	}
 
@@ -343,7 +343,7 @@ func (h HazelcastApp) Name() string {
 }
 
 func (h HazelcastApp) Type() appcat.AppType {
-	return appcat.AppType(fmt.Sprintf("%s/%s", kube.GroupName, ResourceSingularHazelcast))
+	return appcat.AppType(fmt.Sprintf("%s/%s", kubedb.GroupName, ResourceSingularHazelcast))
 }
 
 func (h *Hazelcast) AppBindingMeta() appcat.AppBindingMeta {
@@ -379,7 +379,7 @@ func (h hazelcastStatsService) ServiceMonitorAdditionalLabels() map[string]strin
 }
 
 func (h hazelcastStatsService) Path() string {
-	return kube.DefaultStatsPath
+	return kubedb.DefaultStatsPath
 }
 
 func (h hazelcastStatsService) Scheme() string {
@@ -400,7 +400,7 @@ func (h *Hazelcast) StatsService() mona.StatsAccessor {
 }
 
 func (h *Hazelcast) StatsServiceLabels() map[string]string {
-	return h.ServiceLabels(StatsServiceAlias, map[string]string{kube.LabelRole: kube.RoleStats})
+	return h.ServiceLabels(StatsServiceAlias, map[string]string{kubedb.LabelRole: kubedb.RoleStats})
 }
 
 // CertificateName returns the default certificate name and/or certificate secret name for a certificate alias
@@ -434,4 +434,28 @@ func (h *Hazelcast) CertSecretVolumeName(alias HazelcastCertificateAlias) string
 // CertSecretVolumeMountPath returns the CertSecretVolumeMountPath
 func (h *Hazelcast) CertSecretVolumeMountPath(configDir string, cert string) string {
 	return filepath.Join(configDir, cert)
+}
+
+type HazelcastBind struct {
+	*Hazelcast
+}
+
+var _ DBBindInterface = &HazelcastBind{}
+
+func (d *HazelcastBind) ServiceNames() (string, string) {
+	return d.ServiceName(), d.ServiceName()
+}
+
+func (d *HazelcastBind) Ports() (int, int) {
+	dbPort := kubedb.HazelcastRestPort
+	uiPort := kubedb.HazelcastUIPort
+	return dbPort, uiPort
+}
+
+func (d *HazelcastBind) SecretName() string {
+	return d.GetAuthSecretName()
+}
+
+func (d *HazelcastBind) CertSecretName() string {
+	return d.GetCertSecretName(HazelcastClientCert)
 }

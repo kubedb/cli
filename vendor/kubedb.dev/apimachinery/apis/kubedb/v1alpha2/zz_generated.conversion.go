@@ -3719,6 +3719,7 @@ func autoConvert_v1alpha2_PostgresReplication_To_v1_PostgresReplication(in *Post
 	out.WalKeepSizeInMegaBytes = (*int32)(unsafe.Pointer(in.WalKeepSizeInMegaBytes))
 	out.WalKeepSegment = (*int32)(unsafe.Pointer(in.WalKeepSegment))
 	out.MaxSlotWALKeepSizeInMegaBytes = (*int32)(unsafe.Pointer(in.MaxSlotWALKeepSizeInMegaBytes))
+	out.ForceFailOverAcceptingDataLossAfter = (*metav1.Duration)(unsafe.Pointer(in.ForceFailOverAcceptingDataLossAfter))
 	return nil
 }
 
@@ -3732,6 +3733,7 @@ func autoConvert_v1_PostgresReplication_To_v1alpha2_PostgresReplication(in *v1.P
 	out.WalKeepSizeInMegaBytes = (*int32)(unsafe.Pointer(in.WalKeepSizeInMegaBytes))
 	out.WalKeepSegment = (*int32)(unsafe.Pointer(in.WalKeepSegment))
 	out.MaxSlotWALKeepSizeInMegaBytes = (*int32)(unsafe.Pointer(in.MaxSlotWALKeepSizeInMegaBytes))
+	out.ForceFailOverAcceptingDataLossAfter = (*metav1.Duration)(unsafe.Pointer(in.ForceFailOverAcceptingDataLossAfter))
 	return nil
 }
 
@@ -3809,6 +3811,7 @@ func autoConvert_v1_PostgresSpec_To_v1alpha2_PostgresSpec(in *v1.PostgresSpec, o
 	out.Archiver = (*Archiver)(unsafe.Pointer(in.Archiver))
 	out.Arbiter = (*ArbiterSpec)(unsafe.Pointer(in.Arbiter))
 	out.Replication = (*PostgresReplication)(unsafe.Pointer(in.Replication))
+	// WARNING: in.Tuning requires manual conversion: does not exist in peer-type
 	return nil
 }
 

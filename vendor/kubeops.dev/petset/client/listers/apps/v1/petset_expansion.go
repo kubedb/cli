@@ -38,7 +38,7 @@ type PetSetListerExpansion interface {
 
 // PetSetNamespaceListerExpansion allows custom methods to be added to
 // PetSetNamespaceLister.
-type PetSetNamespaceListerExpansion interface{}
+type PetSetNamespaceListerExpansion any
 
 // GetPodPetSets returns a list of PetSets that potentially match a pod.
 // Only the one specified in the Pod's ControllerRef will actually manage it.

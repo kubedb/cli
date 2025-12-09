@@ -26,7 +26,7 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (_ MongoDBAutoscaler) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (MongoDBAutoscaler) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralMongoDBAutoscaler))
 }
 

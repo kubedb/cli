@@ -18,6 +18,7 @@ package v1alpha1
 
 import (
 	"fmt"
+	"strings"
 
 	"kubedb.dev/apimachinery/apis"
 	"kubedb.dev/apimachinery/apis/catalog"
@@ -26,7 +27,7 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (_ KafkaVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (KafkaVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralKafkaVersion))
 }
 
@@ -56,9 +57,13 @@ func (r KafkaVersion) ValidateSpecs() error {
 	if r.Spec.Version == "" ||
 		r.Spec.DB.Image == "" ||
 		r.Spec.CruiseControl.Image == "" || r.Spec.ConnectCluster.Image == "" {
-		return fmt.Errorf(`atleast one of the following specs is not set for kafkaVersion "%v":
-							spec.version,
-							spec.db.image, r.cruiseControl.image, r.connectCluster.image`, r.Name)
+		fields := []string{
+			"spec.version",
+			"spec.db.image",
+			"spec.cruiseControl.image",
+			"spec.connectCluster.image",
+		}
+		return fmt.Errorf("atleast one of the following specs is not set for kafkaVersion %q: %s", r.Name, strings.Join(fields, ", "))
 	}
 	return nil
 }

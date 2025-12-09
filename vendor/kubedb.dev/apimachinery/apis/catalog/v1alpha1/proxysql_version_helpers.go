@@ -26,7 +26,7 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (_ ProxySQLVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (ProxySQLVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralProxySQLVersion))
 }
 

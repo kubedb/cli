@@ -128,7 +128,7 @@ func (o *DescribeOptions) Complete(f cmdutil.Factory, cmd *cobra.Command, args [
 	}
 
 	if len(args) == 0 && cmdutil.IsFilenameSliceEmpty(o.FilenameOptions.Filenames, o.FilenameOptions.Kustomize) {
-		return fmt.Errorf("You must specify the type of resource to describe. %s\n", cmdutil.SuggestAPIResources(o.CmdParent))
+		return fmt.Errorf("you must specify the type of resource to describe. %s", cmdutil.SuggestAPIResources(o.CmdParent))
 	}
 
 	o.BuilderArgs = args
@@ -194,9 +194,9 @@ func (o *DescribeOptions) Run() error {
 		}
 		if first {
 			first = false
-			fmt.Fprint(o.Out, s)
+			_, _ = fmt.Fprint(o.Out, s)
 		} else {
-			fmt.Fprintf(o.Out, "\n\n%s", s)
+			_, _ = fmt.Fprintf(o.Out, "\n\n%s", s)
 		}
 	}
 
@@ -232,7 +232,7 @@ func (o *DescribeOptions) DescribeMatchingResources(originalError error, resourc
 			if err != nil {
 				return err
 			}
-			fmt.Fprintf(o.Out, "%s\n", s)
+			_, _ = fmt.Fprintf(o.Out, "%s\n", s)
 		}
 	}
 	if !isFound {

@@ -18,6 +18,7 @@ package v1alpha1
 
 import (
 	"fmt"
+	"strings"
 
 	"kubedb.dev/apimachinery/apis"
 	"kubedb.dev/apimachinery/apis/catalog"
@@ -58,12 +59,14 @@ func (m MariaDBVersion) ValidateSpecs() error {
 		m.Spec.Exporter.Image == "" ||
 		m.Spec.InitContainer.Image == "" ||
 		m.Spec.Coordinator.Image == "" {
-		return fmt.Errorf(`atleast one of the following specs is not set for mariadbversion "%v":
-spec.version,
-spec.db.image,
-spec.exporter.image,
-spec.initContainer.image,
-spec.coordinator.image.`, m.Name)
+		fields := []string{
+			"spec.version",
+			"spec.db.image",
+			"spec.exporter.image",
+			"spec.initContainer.image",
+			"spec.coordinator.image",
+		}
+		return fmt.Errorf("atleast one of the following specs is not set for mariadbversion %q: %s", m.Name, strings.Join(fields, ", "))
 	}
 	return nil
 }

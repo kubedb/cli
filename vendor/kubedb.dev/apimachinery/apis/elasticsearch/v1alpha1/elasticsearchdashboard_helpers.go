@@ -30,7 +30,6 @@ import (
 
 	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
-	v1 "k8s.io/api/core/v1"
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/klog/v2"
@@ -43,7 +42,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
-func (_ ElasticsearchDashboard) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (ElasticsearchDashboard) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourceElasticsearchDashboards))
 }
 
@@ -284,7 +283,7 @@ func (ed *ElasticsearchDashboard) SetDefaults(kc client.Client) {
 		ed.Spec.Replicas = pointer.Int32P(1)
 	}
 	if ed.Spec.PodTemplate.Spec.SecurityContext == nil {
-		ed.Spec.PodTemplate.Spec.SecurityContext = &v1.PodSecurityContext{}
+		ed.Spec.PodTemplate.Spec.SecurityContext = &core.PodSecurityContext{}
 	}
 	ed.Spec.PodTemplate.Spec.SecurityContext.FSGroup = esVersion.Spec.SecurityContext.RunAsUser
 	ed.setDefaultContainerSecurityContext(esVersion, &ed.Spec.PodTemplate)

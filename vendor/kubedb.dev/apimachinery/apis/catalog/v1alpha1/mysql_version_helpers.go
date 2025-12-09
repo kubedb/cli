@@ -18,6 +18,7 @@ package v1alpha1
 
 import (
 	"fmt"
+	"strings"
 
 	"kubedb.dev/apimachinery/apis"
 	"kubedb.dev/apimachinery/apis/catalog"
@@ -26,7 +27,7 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (_ MySQLVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (MySQLVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralMySQLVersion))
 }
 
@@ -58,12 +59,14 @@ func (m MySQLVersion) ValidateSpecs() error {
 		m.Spec.Exporter.Image == "" ||
 		m.Spec.InitContainer.Image == "" ||
 		m.Spec.Coordinator.Image == "" {
-		return fmt.Errorf(`atleast one of the following specs is not set for mysqlVersion "%v":
-spec.version,
-spec.db.image,
-spec.exporter.image,
-spec.initContainer.image,
-spec.coordinator.image.`, m.Name)
+		fields := []string{
+			"spec.version",
+			"spec.db.image",
+			"spec.exporter.image",
+			"spec.initContainer.image",
+			"spec.coordinator.image",
+		}
+		return fmt.Errorf("atleast one of the following specs is not set for mysqlVersion %q: %s", m.Name, strings.Join(fields, ", "))
 	}
 	return nil
 }

@@ -18,6 +18,7 @@ package v1alpha1
 
 import (
 	"fmt"
+	"strings"
 
 	"kubedb.dev/apimachinery/apis"
 	"kubedb.dev/apimachinery/apis/catalog"
@@ -55,9 +56,11 @@ func (d DruidVersion) ResourcePlural() string {
 func (d DruidVersion) ValidateSpecs() error {
 	if d.Spec.Version == "" ||
 		d.Spec.DB.Image == "" {
-		return fmt.Errorf(`atleast one of the following specs is not set for druidVersion "%v":
-spec.version,
-spec.db.image`, d.Name)
+		fields := []string{
+			"spec.version",
+			"spec.db.image",
+		}
+		return fmt.Errorf("atleast one of the following specs is not set for druidVersion %q: %s", d.Name, strings.Join(fields, ", "))
 	}
 	return nil
 }

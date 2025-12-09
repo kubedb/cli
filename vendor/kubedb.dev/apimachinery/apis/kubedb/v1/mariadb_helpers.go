@@ -44,7 +44,7 @@ import (
 
 func (*MariaDB) Hub() {}
 
-func (_ MariaDB) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (MariaDB) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralMariaDB))
 }
 

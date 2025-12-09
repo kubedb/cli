@@ -18,6 +18,7 @@ package v1alpha1
 
 import (
 	"fmt"
+	"strings"
 
 	"kubedb.dev/apimachinery/apis"
 	"kubedb.dev/apimachinery/apis/catalog"
@@ -26,7 +27,7 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (_ ElasticsearchVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (ElasticsearchVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralElasticsearchVersion))
 }
 
@@ -59,13 +60,15 @@ func (e ElasticsearchVersion) ValidateSpecs() error {
 		e.Spec.Exporter.Image == "" ||
 		e.Spec.InitContainer.YQImage == "" ||
 		e.Spec.InitContainer.Image == "" {
-		return fmt.Errorf(`atleast one of the following specs is not set for elasticsearchVersion "%v":
-spec.authPlugin,
-spec.version,
-spec.db.image,
-spec.exporter.image,
-spec.initContainer.yqImage,
-spec.initContainer.image.`, e.Name)
+		fields := []string{
+			"spec.authPlugin",
+			"spec.version",
+			"spec.db.image",
+			"spec.exporter.image",
+			"spec.initContainer.yqImage",
+			"spec.initContainer.image",
+		}
+		return fmt.Errorf("atleast one of the following specs is not set for elasticsearchVersion %q: %s", e.Name, strings.Join(fields, ", "))
 	}
 	return nil
 }

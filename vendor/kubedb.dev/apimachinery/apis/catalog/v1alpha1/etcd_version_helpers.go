@@ -18,6 +18,7 @@ package v1alpha1
 
 import (
 	"fmt"
+	"strings"
 
 	"kubedb.dev/apimachinery/apis"
 	"kubedb.dev/apimachinery/apis/catalog"
@@ -26,7 +27,7 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (_ EtcdVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (EtcdVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralEtcdVersion))
 }
 
@@ -56,10 +57,12 @@ func (e EtcdVersion) ValidateSpecs() error {
 	if e.Spec.Version == "" ||
 		e.Spec.DB.Image == "" ||
 		e.Spec.Exporter.Image == "" {
-		return fmt.Errorf(`atleast one of the following specs is not set for etcdVersion "%v":
-spec.version,
-spec.db.image,
-spec.exporter.image.`, e.Name)
+		fields := []string{
+			"spec.version",
+			"spec.db.image",
+			"spec.exporter.image",
+		}
+		return fmt.Errorf("atleast one of the following specs is not set for etcdVersion %q: %s", e.Name, strings.Join(fields, ", "))
 	}
 	return nil
 }

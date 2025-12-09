@@ -18,6 +18,7 @@ package v1alpha1
 
 import (
 	"fmt"
+	"strings"
 
 	"kubedb.dev/apimachinery/apis"
 	"kubedb.dev/apimachinery/apis/catalog"
@@ -26,7 +27,7 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (_ MemcachedVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (MemcachedVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralMemcachedVersion))
 }
 
@@ -56,10 +57,12 @@ func (m MemcachedVersion) ValidateSpecs() error {
 	if m.Spec.Version == "" ||
 		m.Spec.DB.Image == "" ||
 		m.Spec.Exporter.Image == "" {
-		return fmt.Errorf(`atleast one of the following specs is not set for memcachedVersion "%v":
-spec.version,
-spec.db.image,
-spec.exporter.image,`, m.Name)
+		fields := []string{
+			"spec.version",
+			"spec.db.image",
+			"spec.exporter.image",
+		}
+		return fmt.Errorf("atleast one of the following specs is not set for memcachedVersion %q: %s", m.Name, strings.Join(fields, ", "))
 	}
 	return nil
 }

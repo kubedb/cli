@@ -46,7 +46,7 @@ import (
 
 func (*MySQL) Hub() {}
 
-func (_ MySQL) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (MySQL) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralMySQL))
 }
 

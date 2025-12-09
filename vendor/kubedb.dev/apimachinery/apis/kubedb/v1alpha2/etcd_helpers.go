@@ -34,7 +34,7 @@ import (
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 )
 
-func (_ Etcd) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (Etcd) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralEtcd))
 }
 

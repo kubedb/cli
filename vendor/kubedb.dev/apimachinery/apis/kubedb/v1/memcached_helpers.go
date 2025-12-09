@@ -27,7 +27,6 @@ import (
 	promapi "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1"
 	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
-	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	kmapi "kmodules.xyz/client-go/api/v1"
@@ -43,7 +42,7 @@ import (
 
 func (*Memcached) Hub() {}
 
-func (_ Memcached) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (Memcached) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralMemcached))
 }
 
@@ -276,8 +275,8 @@ func (m *Memcached) assignDefaultContainerSecurityContext(mcVersion *catalog.Mem
 		sc.AllowPrivilegeEscalation = pointer.BoolP(false)
 	}
 	if sc.Capabilities == nil {
-		sc.Capabilities = &corev1.Capabilities{
-			Drop: []corev1.Capability{"ALL"},
+		sc.Capabilities = &core.Capabilities{
+			Drop: []core.Capability{"ALL"},
 		}
 	}
 	if sc.RunAsNonRoot == nil {

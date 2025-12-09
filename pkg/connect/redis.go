@@ -206,19 +206,19 @@ func newRedisOpts(f cmdutil.Factory, dbName, namespace string, keys, args []stri
 	}, nil
 }
 
-func (opts *redisOpts) getShellCommand(kubectlFlags, redisExtraFlags []interface{}) *shell.Session {
+func (opts *redisOpts) getShellCommand(kubectlFlags, redisExtraFlags []any) *shell.Session {
 	sh := shell.NewSession()
 	sh.ShowCMD = false
 	sh.Stderr = opts.errWriter
 
 	db := opts.db
 	svcName := fmt.Sprintf("svc/%s", db.Name)
-	kubectlCommand := []interface{}{
+	kubectlCommand := []any{
 		"exec", "-n", db.Namespace, svcName, "-c", "redis",
 	}
 	kubectlCommand = append(kubectlCommand, kubectlFlags...)
 
-	redisCommand := []interface{}{
+	redisCommand := []any{
 		"--", "redis-cli", "-n", "0", "-c",
 	}
 
@@ -240,7 +240,7 @@ func (opts *redisOpts) getShellCommand(kubectlFlags, redisExtraFlags []interface
 }
 
 func (opts *redisOpts) connect() error {
-	kubectlFlag := []interface{}{
+	kubectlFlag := []any{
 		"-it",
 	}
 	shSession := opts.getShellCommand(kubectlFlag, nil)
@@ -265,7 +265,7 @@ func (opts *redisOpts) executeCommand(command string) error {
 
 	out, err := shSession.Output()
 	if err != nil {
-		return fmt.Errorf("failed to execute command, error: %s, output: %s\n", err, out)
+		return fmt.Errorf("failed to execute command, error: %s, output: %s", err, out)
 	}
 	output := ""
 	if string(out) != "" {
@@ -291,7 +291,7 @@ func (opts *redisOpts) executeFile(fileName string) error {
 		return err
 	}
 
-	redisExtraFlags := []interface{}{
+	redisExtraFlags := []any{
 		"eval", string(fileData), fmt.Sprintf("%v", len(opts.keys)),
 	}
 	keysIfcArray := convertToInterfaceArray(opts.keys)
@@ -305,7 +305,7 @@ func (opts *redisOpts) executeFile(fileName string) error {
 	out, err := shSession.Output()
 	if err != nil {
 		fmt.Println(opts.errWriter.String())
-		return fmt.Errorf("failed to execute file, error: %s, output: %s\n", err, out)
+		return fmt.Errorf("failed to execute file, error: %s, output: %s", err, out)
 	}
 
 	output := ""
@@ -323,8 +323,8 @@ func (opts *redisOpts) executeFile(fileName string) error {
 	return nil
 }
 
-func convertToInterfaceArray(strs []string) []interface{} {
-	interfaceArray := make([]interface{}, len(strs))
+func convertToInterfaceArray(strs []string) []any {
+	interfaceArray := make([]any, len(strs))
 	for i := range strs {
 		interfaceArray[i] = strs[i]
 	}

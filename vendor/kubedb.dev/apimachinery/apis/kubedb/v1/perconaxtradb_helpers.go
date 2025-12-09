@@ -43,7 +43,7 @@ import (
 
 func (*PerconaXtraDB) Hub() {}
 
-func (_ PerconaXtraDB) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (PerconaXtraDB) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralPerconaXtraDB))
 }
 

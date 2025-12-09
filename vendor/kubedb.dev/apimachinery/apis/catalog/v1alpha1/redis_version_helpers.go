@@ -18,6 +18,7 @@ package v1alpha1
 
 import (
 	"fmt"
+	"strings"
 
 	"kubedb.dev/apimachinery/apis"
 	"kubedb.dev/apimachinery/apis/catalog"
@@ -26,7 +27,7 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (_ RedisVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (RedisVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralRedisVersion))
 }
 
@@ -56,10 +57,12 @@ func (r RedisVersion) ValidateSpecs() error {
 	if r.Spec.Version == "" ||
 		r.Spec.DB.Image == "" ||
 		r.Spec.Exporter.Image == "" {
-		return fmt.Errorf(`atleast one of the following specs is not set for redisVersion "%v":
-spec.version,
-spec.db.image,
-spec.exporter.image.`, r.Name)
+		fields := []string{
+			"spec.version",
+			"spec.db.image",
+			"spec.exporter.image",
+		}
+		return fmt.Errorf("atleast one of the following specs is not set for redisVersion %q: %s", r.Name, strings.Join(fields, ", "))
 	}
 	return nil
 }

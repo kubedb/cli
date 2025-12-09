@@ -18,6 +18,7 @@ package v1alpha1
 
 import (
 	"fmt"
+	"strings"
 
 	"kubedb.dev/apimachinery/apis"
 	"kubedb.dev/apimachinery/apis/catalog"
@@ -55,9 +56,11 @@ func (f FerretDBVersion) ResourcePlural() string {
 func (f FerretDBVersion) ValidateSpecs() error {
 	if f.Spec.Version == "" ||
 		f.Spec.DB.Image == "" {
-		return fmt.Errorf(`atleast one of the following specs is not set for ferretdbVersion "%v":
-spec.version,
-spec.db.image`, f.Name)
+		fields := []string{
+			"spec.version",
+			"spec.db.image",
+		}
+		return fmt.Errorf("atleast one of the following specs is not set for ferretdbVersion %q: %s", f.Name, strings.Join(fields, ", "))
 	}
 	return nil
 }

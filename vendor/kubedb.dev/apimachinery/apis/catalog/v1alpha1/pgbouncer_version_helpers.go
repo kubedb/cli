@@ -18,6 +18,7 @@ package v1alpha1
 
 import (
 	"fmt"
+	"strings"
 
 	"kubedb.dev/apimachinery/apis"
 	"kubedb.dev/apimachinery/apis/catalog"
@@ -26,7 +27,7 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (_ PgBouncerVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (PgBouncerVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralPgBouncerVersion))
 }
 
@@ -56,10 +57,12 @@ func (p PgBouncerVersion) ValidateSpecs() error {
 	if p.Spec.Version == "" ||
 		p.Spec.Exporter.Image == "" ||
 		p.Spec.PgBouncer.Image == "" {
-		return fmt.Errorf(`atleast one of the following specs is not set for pgbouncerversion "%v":
-spec.version,
-spec.pgBouncer.image,
-spec.exporter.image.`, p.Name)
+		fields := []string{
+			"spec.version",
+			"spec.pgBouncer.image",
+			"spec.exporter.image",
+		}
+		return fmt.Errorf("atleast one of the following specs is not set for pgbouncerversion %q: %s", p.Name, strings.Join(fields, ", "))
 	}
 	return nil
 }

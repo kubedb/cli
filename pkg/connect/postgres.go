@@ -226,19 +226,19 @@ func newPostgresOpts(f cmdutil.Factory, dbName, namespace, postgresDBName string
 	}, nil
 }
 
-func (opts *postgresOpts) getDockerShellCommand(localPort int, dockerFlags, postgresExtraFlags []interface{}) (*shell.Session, error) {
+func (opts *postgresOpts) getDockerShellCommand(localPort int, dockerFlags, postgresExtraFlags []any) (*shell.Session, error) {
 	sh := shell.NewSession()
 	sh.ShowCMD = false
 	sh.Stderr = opts.errWriter
 
 	db := opts.db
-	dockerCommand := []interface{}{
+	dockerCommand := []any{
 		"run", "--network=host",
 		"-e", fmt.Sprintf("PGPASSWORD=%s", opts.pass),
 	}
 	dockerCommand = append(dockerCommand, dockerFlags...)
 
-	postgresCommand := []interface{}{
+	postgresCommand := []any{
 		"psql",
 		"--host=127.0.0.1", fmt.Sprintf("--port=%d", localPort),
 		fmt.Sprintf("--username=%s", opts.username),
@@ -292,7 +292,7 @@ func (opts *postgresOpts) getDockerShellCommand(localPort int, dockerFlags, post
 }
 
 func (opts *postgresOpts) connect(localPort int) error {
-	dockerFlag := []interface{}{
+	dockerFlag := []any{
 		"-it",
 	}
 	shSession, err := opts.getDockerShellCommand(localPort, dockerFlag, nil)
@@ -313,7 +313,7 @@ func (opts *postgresOpts) executeCommand(localPort int, command string) error {
 	if opts.postgresDBName != "" {
 		dbFlag = fmt.Sprintf("--dbname=%s", opts.postgresDBName)
 	}
-	postgresExtraFlags := []interface{}{
+	postgresExtraFlags := []any{
 		dbFlag,
 		fmt.Sprintf("--command=%s", command),
 	}
@@ -324,7 +324,7 @@ func (opts *postgresOpts) executeCommand(localPort int, command string) error {
 
 	out, err := shSession.Output()
 	if err != nil {
-		return fmt.Errorf("failed to execute command, error: %s, output: %s\n", err, out)
+		return fmt.Errorf("failed to execute command, error: %s, output: %s", err, out)
 	}
 	output := ""
 	if string(out) != "" {
@@ -351,10 +351,10 @@ func (opts *postgresOpts) executeFile(localPort int, fileName string) error {
 	}
 	tempFileName := "/tmp/postgres.sql"
 
-	dockerFlag := []interface{}{
+	dockerFlag := []any{
 		"-v", fmt.Sprintf("%s:%s", fileName, tempFileName),
 	}
-	postgresExtraFlags := []interface{}{
+	postgresExtraFlags := []any{
 		dbFlag,
 		fmt.Sprintf("--file=%v", tempFileName),
 	}
@@ -365,7 +365,7 @@ func (opts *postgresOpts) executeFile(localPort int, fileName string) error {
 
 	out, err := shSession.Output()
 	if err != nil {
-		return fmt.Errorf("failed to execute file, error: %s, output: %s\n", err, out)
+		return fmt.Errorf("failed to execute file, error: %s, output: %s", err, out)
 	}
 
 	output := ""

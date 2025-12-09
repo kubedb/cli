@@ -215,17 +215,17 @@ func newMongodbOpts(f cmdutil.Factory, dbName, namespace string) (*mongodbOpts, 
 	}, nil
 }
 
-func (opts *mongodbOpts) getDockerShellCommand(localPort int, dockerFlags, mongoExtraFlags []interface{}) (*shell.Session, error) {
+func (opts *mongodbOpts) getDockerShellCommand(localPort int, dockerFlags, mongoExtraFlags []any) (*shell.Session, error) {
 	sh := shell.NewSession()
 	sh.ShowCMD = false
 
 	db := opts.db
-	dockerCommand := []interface{}{
+	dockerCommand := []any{
 		"run", "--network=host",
 	}
 	dockerCommand = append(dockerCommand, dockerFlags...)
 
-	mongoCommand := []interface{}{
+	mongoCommand := []any{
 		"mongo", "admin",
 		"--host=127.0.0.1", fmt.Sprintf("--port=%d", localPort), "--quiet",
 		fmt.Sprintf("--username=%s", opts.username),
@@ -285,7 +285,7 @@ func (opts *mongodbOpts) getDockerShellCommand(localPort int, dockerFlags, mongo
 }
 
 func (opts *mongodbOpts) connect(localPort int) error {
-	dockerFlag := []interface{}{
+	dockerFlag := []any{
 		"-it",
 	}
 	shSession, err := opts.getDockerShellCommand(localPort, dockerFlag, nil)
@@ -297,7 +297,7 @@ func (opts *mongodbOpts) connect(localPort int) error {
 }
 
 func (opts *mongodbOpts) executeCommand(localPort int, command string) error {
-	mongoExtraFlags := []interface{}{
+	mongoExtraFlags := []any{
 		"--eval", command,
 	}
 	shSession, err := opts.getDockerShellCommand(localPort, nil, mongoExtraFlags)
@@ -307,7 +307,7 @@ func (opts *mongodbOpts) executeCommand(localPort int, command string) error {
 
 	out, err := shSession.Output()
 	if err != nil {
-		return fmt.Errorf("failed to execute command, error: %s, output: %s\n", err, out)
+		return fmt.Errorf("failed to execute command, error: %s, output: %s", err, out)
 	}
 	output := ""
 	if string(out) != "" {
@@ -325,10 +325,10 @@ func (opts *mongodbOpts) executeFile(localPort int, fileName string) error {
 	}
 	tempFileName := "/home/mongo.js"
 
-	dockerFlag := []interface{}{
+	dockerFlag := []any{
 		"-v", fmt.Sprintf("%s:%s", fileName, tempFileName),
 	}
-	mongoExtraFlags := []interface{}{
+	mongoExtraFlags := []any{
 		tempFileName,
 	}
 	shSession, err := opts.getDockerShellCommand(localPort, dockerFlag, mongoExtraFlags)
@@ -338,7 +338,7 @@ func (opts *mongodbOpts) executeFile(localPort int, fileName string) error {
 
 	out, err := shSession.Output()
 	if err != nil {
-		return fmt.Errorf("failed to execute file, error: %s, output: %s\n", err, out)
+		return fmt.Errorf("failed to execute file, error: %s, output: %s", err, out)
 	}
 
 	output := ""

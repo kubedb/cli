@@ -42,6 +42,15 @@ const (
 	// OracleModeSharding   OracleMode = "Sharding"
 )
 
+// +kubebuilder:validation:Enum=server;metrics-exporter;client
+type OracleCertificateAlias string
+
+const (
+	OracleServerCert          OracleCertificateAlias = "server"
+	OracleClientCert          OracleCertificateAlias = "client"
+	OracleMetricsExporterCert OracleCertificateAlias = "metrics-exporter"
+)
+
 // ProtectionMode defines the data protection mode for a resource.
 // +kubebuilder:validation:Enum=MaximumAvailability;MaximumPerformance;MaximumProtection
 type ProtectionMode string
@@ -159,6 +168,17 @@ type OracleSpec struct {
 	// Monitor is used monitor database instance
 	// +optional
 	Monitor *mona.AgentSpec `json:"monitor,omitempty"`
+
+	// TLS configuration for secure client connections
+	// +optional
+	TCPSConfig *OracleTCPSConfig `json:"tcpsConfig,omitempty"`
+}
+
+type OracleTCPSConfig struct {
+	TLS *kmapi.TLSConfig `json:"tls,omitempty"`
+	// Listener TCPS configuration
+	// +optional
+	TCPSListener *ListenerSpec `json:"tcpsListener,omitempty"`
 }
 
 // ListenerSpec defines a TNS listener (TCP or TCPS)
