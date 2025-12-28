@@ -66,6 +66,8 @@ spec:
                 - Official
                 - Valkey
                 type: string
+              endOfLife:
+                type: boolean
               exporter:
                 properties:
                   image:

@@ -50,6 +50,11 @@ type HazelcastVersion struct {
 type HazelcastVersionSpec struct {
 	// Version
 	Version string `json:"version"`
+
+	// EndOfLife refers if this version reached into its end of the life or not, based on https://endoflife.date/
+	// +optional
+	EndOfLife bool `json:"endOfLife"`
+
 	// Database Image
 	DB HazelcastVersionDatabase `json:"db"`
 	// Database Image

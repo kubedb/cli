@@ -56,7 +56,7 @@ func (d *ElasticsearchDescriber) Describe(namespace, name string, describerSetti
 
 	var events *core.EventList
 	if describerSettings.ShowEvents {
-		events, err = d.client.CoreV1().Events(item.Namespace).Search(scheme.Scheme, item)
+		events, err = d.client.CoreV1().Events(item.Namespace).SearchWithContext(context.Background(), scheme.Scheme, item)
 		if err != nil {
 			return "", err
 		}

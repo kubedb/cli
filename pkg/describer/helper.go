@@ -29,6 +29,7 @@ import (
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 	core "k8s.io/api/core/v1"
+	discoveryv1 "k8s.io/api/discovery/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -236,8 +237,10 @@ func showWorkload(client kubernetes.Interface, namespace string, selector labels
 
 	if services, err := client.CoreV1().Services(namespace).List(context.TODO(), opts); err == nil {
 		for _, s := range services.Items {
-			endpoints, _ := client.CoreV1().Endpoints(namespace).Get(context.TODO(), s.Name, metav1.GetOptions{})
-			describeService(&s, endpoints, w)
+			endpointSliceList, _ := client.DiscoveryV1().EndpointSlices(namespace).List(context.TODO(), metav1.ListOptions{
+				LabelSelector: fmt.Sprintf("%s=%s", discoveryv1.LabelServiceName, s.Name),
+			})
+			describeService(&s, endpointSliceList.Items, w)
 		}
 	}
 }

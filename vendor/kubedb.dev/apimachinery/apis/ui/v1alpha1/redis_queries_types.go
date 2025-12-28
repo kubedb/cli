@@ -40,6 +40,8 @@ type RedisQuerySpec struct {
 
 // RedisQueries is the Schema for the RedisQueries API
 
+// +genclient
+// +k8s:openapi-gen=true
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type RedisQueries struct {
 	metav1.TypeMeta   `json:",inline"`
@@ -55,8 +57,4 @@ type RedisQueriesList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
 	Items           []RedisQueries `json:"items"`
-}
-
-func init() {
-	SchemeBuilder.Register(&RedisQueries{}, &RedisQueriesList{})
 }

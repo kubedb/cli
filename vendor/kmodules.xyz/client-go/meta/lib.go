@@ -68,7 +68,7 @@ func DeleteInForeground() metav1.DeleteOptions {
 	return metav1.DeleteOptions{PropagationPolicy: &policy}
 }
 
-func GetKind(v interface{}) string {
+func GetKind(v any) string {
 	return reflect.Indirect(reflect.ValueOf(v)).Type().Name()
 }
 

@@ -32,6 +32,7 @@ import (
 
 	appsv1 "k8s.io/api/apps/v1"
 	core "k8s.io/api/core/v1"
+	discoveryv1 "k8s.io/api/discovery/v1"
 	"k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -184,10 +185,7 @@ func buildIngressString(ingress []core.LoadBalancerIngress) string {
 	return buffer.String()
 }
 
-func describeService(service *core.Service, endpoints *core.Endpoints, w describe.PrefixWriter) {
-	if endpoints == nil {
-		endpoints = &core.Endpoints{}
-	}
+func describeService(service *core.Service, endpointSlices []discoveryv1.EndpointSlice, w describe.PrefixWriter) {
 	w.Write(LEVEL_0, "\n")
 	w.Write(LEVEL_0, "Service:\t\n")
 	w.Write(LEVEL_1, "Name:\t%s\n", service.Name)
@@ -224,7 +222,7 @@ func describeService(service *core.Service, endpoints *core.Endpoints, w describ
 		if sp.NodePort != 0 {
 			w.Write(LEVEL_1, "NodePort:\t%s\t%d/%s\n", name, sp.NodePort, sp.Protocol)
 		}
-		w.Write(LEVEL_1, "Endpoints:\t%s\n", formatEndpoints(endpoints, sets.New[string](sp.Name)))
+		w.Write(LEVEL_1, "Endpoints:\t%s\n", formatEndpointSlices(endpointSlices, sets.New[string](sp.Name)))
 	}
 }
 

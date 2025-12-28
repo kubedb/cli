@@ -39,6 +39,9 @@ type PBSetting struct {
 }
 
 // PgBouncerSettings is the Schema for the PgBouncerSettingss API
+
+// +genclient
+// +k8s:openapi-gen=true
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type PgBouncerSettings struct {
 	metav1.TypeMeta   `json:",inline"`
@@ -48,13 +51,10 @@ type PgBouncerSettings struct {
 }
 
 // PgBouncerSettingsList contains a list of PgBouncerSettings
+
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type PgBouncerSettingsList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
 	Items           []PgBouncerSettings `json:"items"`
-}
-
-func init() {
-	SchemeBuilder.Register(&PgBouncerSettings{}, &PgBouncerSettingsList{})
 }

@@ -54,6 +54,8 @@ spec:
                 type: object
               deprecated:
                 type: boolean
+              endOfLife:
+                type: boolean
               securityContext:
                 properties:
                   runAsGroup:

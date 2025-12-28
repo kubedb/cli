@@ -21,7 +21,6 @@ import (
 	"fmt"
 
 	"kmodules.xyz/client-go/policy/secomp"
-	app_api "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	appcatalog "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 
 	"gomodules.xyz/pointer"
@@ -125,13 +124,13 @@ func (c *ConnectionSpec) ToAppBinding() (*appcatalog.AppBinding, error) {
 		},
 	}
 	if c.AuthSecret != nil {
-		app.Spec.Secret = &app_api.TypedLocalObjectReference{
+		app.Spec.Secret = &appcatalog.TypedLocalObjectReference{
 			Kind: "Secret", // It will create circular dependency, If we use Kubedb Constant .
 			Name: c.AuthSecret.Name,
 		}
 	}
 	if c.TLSSecret != nil {
-		app.Spec.TLSSecret = &app_api.TypedLocalObjectReference{
+		app.Spec.TLSSecret = &appcatalog.TypedLocalObjectReference{
 			Kind: "Secret",
 			Name: c.TLSSecret.Name,
 		}

@@ -64,7 +64,6 @@ func (hc *HTTPConfig) Validate() error {
 	if err := hc.ProxyConfig.Validate(); err != nil {
 		return err
 	}
-
 	return nil
 }
 
@@ -304,9 +303,11 @@ func (mr MonthRange) Parse() (*ParsedRange, error) {
 // ParsedRange is an integer representation of a range
 // +kubebuilder:object:generate:=false
 type ParsedRange struct {
-	// Start is the beginning of the range
+	// start defines the beginning of the range
+	// +optional
 	Start int `json:"start,omitempty"`
-	// End of the range
+	// end defines the end of the range
+	// +optional
 	End int `json:"end,omitempty"`
 }
 

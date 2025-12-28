@@ -29,11 +29,151 @@ import (
 
 type UiV1alpha1Interface interface {
 	RESTClient() rest.Interface
+	DatabaseConnectionsGetter
+	DatabaseInfosGetter
+	ElasticsearchInsightsGetter
+	ElasticsearchNodesStatsesGetter
+	ElasticsearchSchemaOverviewsGetter
+	MariaDBInsightsGetter
+	MariaDBQueriesesGetter
+	MariaDBSchemaOverviewsGetter
+	MongoDBInsightsGetter
+	MongoDBQueriesesGetter
+	MongoDBSchemaOverviewsGetter
+	MySQLInsightsGetter
+	MySQLQueriesesGetter
+	MySQLSchemaOverviewsGetter
+	PgBouncerInsightsGetter
+	PgBouncerPoolOverviewsGetter
+	PgBouncerServerOverviewsGetter
+	PgBouncerSettingsesGetter
+	PostgresInsightsGetter
+	PostgresQueriesesGetter
+	PostgresSchemaOverviewsGetter
+	PostgresSettingsesGetter
+	ProxySQLInsightsGetter
+	ProxySQLQueriesesGetter
+	ProxySQLSettingsesGetter
+	RedisInsightsGetter
+	RedisQueriesesGetter
+	RedisSchemaOverviewsGetter
 }
 
 // UiV1alpha1Client is used to interact with features provided by the ui.kubedb.com group.
 type UiV1alpha1Client struct {
 	restClient rest.Interface
+}
+
+func (c *UiV1alpha1Client) DatabaseConnections(namespace string) DatabaseConnectionInterface {
+	return newDatabaseConnections(c, namespace)
+}
+
+func (c *UiV1alpha1Client) DatabaseInfos() DatabaseInfoInterface {
+	return newDatabaseInfos(c)
+}
+
+func (c *UiV1alpha1Client) ElasticsearchInsights(namespace string) ElasticsearchInsightInterface {
+	return newElasticsearchInsights(c, namespace)
+}
+
+func (c *UiV1alpha1Client) ElasticsearchNodesStatses(namespace string) ElasticsearchNodesStatsInterface {
+	return newElasticsearchNodesStatses(c, namespace)
+}
+
+func (c *UiV1alpha1Client) ElasticsearchSchemaOverviews(namespace string) ElasticsearchSchemaOverviewInterface {
+	return newElasticsearchSchemaOverviews(c, namespace)
+}
+
+func (c *UiV1alpha1Client) MariaDBInsights(namespace string) MariaDBInsightInterface {
+	return newMariaDBInsights(c, namespace)
+}
+
+func (c *UiV1alpha1Client) MariaDBQuerieses(namespace string) MariaDBQueriesInterface {
+	return newMariaDBQuerieses(c, namespace)
+}
+
+func (c *UiV1alpha1Client) MariaDBSchemaOverviews(namespace string) MariaDBSchemaOverviewInterface {
+	return newMariaDBSchemaOverviews(c, namespace)
+}
+
+func (c *UiV1alpha1Client) MongoDBInsights(namespace string) MongoDBInsightInterface {
+	return newMongoDBInsights(c, namespace)
+}
+
+func (c *UiV1alpha1Client) MongoDBQuerieses(namespace string) MongoDBQueriesInterface {
+	return newMongoDBQuerieses(c, namespace)
+}
+
+func (c *UiV1alpha1Client) MongoDBSchemaOverviews(namespace string) MongoDBSchemaOverviewInterface {
+	return newMongoDBSchemaOverviews(c, namespace)
+}
+
+func (c *UiV1alpha1Client) MySQLInsights(namespace string) MySQLInsightInterface {
+	return newMySQLInsights(c, namespace)
+}
+
+func (c *UiV1alpha1Client) MySQLQuerieses(namespace string) MySQLQueriesInterface {
+	return newMySQLQuerieses(c, namespace)
+}
+
+func (c *UiV1alpha1Client) MySQLSchemaOverviews(namespace string) MySQLSchemaOverviewInterface {
+	return newMySQLSchemaOverviews(c, namespace)
+}
+
+func (c *UiV1alpha1Client) PgBouncerInsights(namespace string) PgBouncerInsightInterface {
+	return newPgBouncerInsights(c, namespace)
+}
+
+func (c *UiV1alpha1Client) PgBouncerPoolOverviews(namespace string) PgBouncerPoolOverviewInterface {
+	return newPgBouncerPoolOverviews(c, namespace)
+}
+
+func (c *UiV1alpha1Client) PgBouncerServerOverviews(namespace string) PgBouncerServerOverviewInterface {
+	return newPgBouncerServerOverviews(c, namespace)
+}
+
+func (c *UiV1alpha1Client) PgBouncerSettingses(namespace string) PgBouncerSettingsInterface {
+	return newPgBouncerSettingses(c, namespace)
+}
+
+func (c *UiV1alpha1Client) PostgresInsights(namespace string) PostgresInsightInterface {
+	return newPostgresInsights(c, namespace)
+}
+
+func (c *UiV1alpha1Client) PostgresQuerieses(namespace string) PostgresQueriesInterface {
+	return newPostgresQuerieses(c, namespace)
+}
+
+func (c *UiV1alpha1Client) PostgresSchemaOverviews(namespace string) PostgresSchemaOverviewInterface {
+	return newPostgresSchemaOverviews(c, namespace)
+}
+
+func (c *UiV1alpha1Client) PostgresSettingses(namespace string) PostgresSettingsInterface {
+	return newPostgresSettingses(c, namespace)
+}
+
+func (c *UiV1alpha1Client) ProxySQLInsights(namespace string) ProxySQLInsightInterface {
+	return newProxySQLInsights(c, namespace)
+}
+
+func (c *UiV1alpha1Client) ProxySQLQuerieses(namespace string) ProxySQLQueriesInterface {
+	return newProxySQLQuerieses(c, namespace)
+}
+
+func (c *UiV1alpha1Client) ProxySQLSettingses(namespace string) ProxySQLSettingsInterface {
+	return newProxySQLSettingses(c, namespace)
+}
+
+func (c *UiV1alpha1Client) RedisInsights(namespace string) RedisInsightInterface {
+	return newRedisInsights(c, namespace)
+}
+
+func (c *UiV1alpha1Client) RedisQuerieses(namespace string) RedisQueriesInterface {
+	return newRedisQuerieses(c, namespace)
+}
+
+func (c *UiV1alpha1Client) RedisSchemaOverviews(namespace string) RedisSchemaOverviewInterface {
+	return newRedisSchemaOverviews(c, namespace)
 }
 
 // NewForConfig creates a new UiV1alpha1Client for the given config.

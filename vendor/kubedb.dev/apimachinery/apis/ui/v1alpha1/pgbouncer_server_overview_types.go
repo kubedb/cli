@@ -66,6 +66,8 @@ type PgBouncerServer struct {
 
 // PgBouncerServerOverview is the Schema for the PgBouncerServerOverviews API
 
+// +genclient
+// +k8s:openapi-gen=true
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type PgBouncerServerOverview struct {
 	metav1.TypeMeta   `json:",inline"`
@@ -81,8 +83,4 @@ type PgBouncerServerOverviewList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
 	Items           []PgBouncerServerOverview `json:"items"`
-}
-
-func init() {
-	SchemeBuilder.Register(&PgBouncerServerOverview{}, &PgBouncerServerOverviewList{})
 }

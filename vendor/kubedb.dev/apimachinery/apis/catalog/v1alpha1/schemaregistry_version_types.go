@@ -53,6 +53,11 @@ type SchemaRegistryVersionSpec struct {
 	Distribution SchemaRegistryDistro `json:"distribution"`
 	// Version
 	Version string `json:"version"`
+
+	// EndOfLife refers if this version reached into its end of the life or not, based on https://endoflife.date/
+	// +optional
+	EndOfLife bool `json:"endOfLife"`
+
 	// Registry Image
 	Registry RegistryImage `json:"registry"`
 	// Schema Registry In Memory Image

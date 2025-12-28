@@ -298,6 +298,8 @@ type ElasticsearchNodesStatsStatus struct {
 
 // ElasticsearchNodesStats is the Schema for the ElasticsearchNodesStats API
 
+// +genclient
+// +k8s:openapi-gen=true
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type ElasticsearchNodesStats struct {
 	metav1.TypeMeta   `json:",inline"`
@@ -314,8 +316,4 @@ type ElasticsearchNodesStatsList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
 	Items           []ElasticsearchNodesStats `json:"items"`
-}
-
-func init() {
-	SchemeBuilder.Register(&ElasticsearchNodesStats{}, &ElasticsearchNodesStatsList{})
 }

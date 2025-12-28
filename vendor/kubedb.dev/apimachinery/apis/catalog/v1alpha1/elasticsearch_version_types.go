@@ -53,6 +53,11 @@ type ElasticsearchVersion struct {
 type ElasticsearchVersionSpec struct {
 	// Version
 	Version string `json:"version"`
+
+	// EndOfLife refers if this version reached into its end of the life or not, based on https://endoflife.date/
+	// +optional
+	EndOfLife bool `json:"endOfLife"`
+
 	// Distribution
 	Distribution ElasticsearchDistro `json:"distribution,omitempty"`
 	// Authentication plugin used by Elasticsearch cluster

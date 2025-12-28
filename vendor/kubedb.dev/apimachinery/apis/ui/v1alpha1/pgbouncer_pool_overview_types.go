@@ -69,6 +69,9 @@ type PgBouncerPool struct {
 }
 
 // PgBouncerPoolOverview is the Schema for the PgBouncerPoolOverviews API
+
+// +genclient
+// +k8s:openapi-gen=true
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type PgBouncerPoolOverview struct {
 	metav1.TypeMeta   `json:",inline"`
@@ -78,13 +81,10 @@ type PgBouncerPoolOverview struct {
 }
 
 // PgBouncerPoolOverviewList contains a list of PgBouncerPoolOverviews
+
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type PgBouncerPoolOverviewList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
 	Items           []PgBouncerPoolOverview `json:"items"`
-}
-
-func init() {
-	SchemeBuilder.Register(&PgBouncerPoolOverview{}, &PgBouncerPoolOverviewList{})
 }

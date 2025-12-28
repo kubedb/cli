@@ -32,7 +32,7 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
-func (_ AppBinding) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (AppBinding) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourceApps))
 }
 
