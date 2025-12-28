@@ -58,6 +58,8 @@ type PostgresQuerySpec struct {
 
 // PostgresQueries is the Schema for the PostgresQueries API
 
+// +genclient
+// +k8s:openapi-gen=true
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type PostgresQueries struct {
 	metav1.TypeMeta   `json:",inline"`
@@ -73,8 +75,4 @@ type PostgresQueriesList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
 	Items           []PostgresQueries `json:"items"`
-}
-
-func init() {
-	SchemeBuilder.Register(&PostgresQueries{}, &PostgresQueriesList{})
 }

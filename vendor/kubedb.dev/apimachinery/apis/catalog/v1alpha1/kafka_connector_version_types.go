@@ -53,6 +53,11 @@ type KafkaConnectorVersionSpec struct {
 	Type string `json:"type"`
 	// Version of the connector plugins
 	Version string `json:"version"`
+
+	// EndOfLife refers if this version reached into its end of the life or not, based on https://endoflife.date/
+	// +optional
+	EndOfLife bool `json:"endOfLife"`
+
 	// Database Image
 	ConnectorPlugin ConnectorPlugin `json:"connectorPlugin"`
 	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.

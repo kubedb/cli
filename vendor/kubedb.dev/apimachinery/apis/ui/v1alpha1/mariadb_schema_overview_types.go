@@ -30,6 +30,8 @@ type MariaDBSchemaOverviewSpec = GenericSchemaOverviewSpec
 
 // MariaDBSchemaOverview is the Schema for the MariaDBSchemaOverviews API
 
+// +genclient
+// +k8s:openapi-gen=true
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type MariaDBSchemaOverview struct {
 	metav1.TypeMeta   `json:",inline"`
@@ -45,8 +47,4 @@ type MariaDBSchemaOverviewList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
 	Items           []MariaDBSchemaOverview `json:"items"`
-}
-
-func init() {
-	SchemeBuilder.Register(&MariaDBSchemaOverview{}, &MariaDBSchemaOverviewList{})
 }

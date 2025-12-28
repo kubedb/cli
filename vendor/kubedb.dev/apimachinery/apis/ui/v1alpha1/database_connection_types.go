@@ -30,6 +30,8 @@ const (
 	ResourceDatabaseConnections    = "databaseconnections"
 )
 
+// +genclient
+// +k8s:openapi-gen=true
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type DatabaseConnection struct {
 	metav1.TypeMeta   `json:",inline"`
@@ -38,8 +40,6 @@ type DatabaseConnection struct {
 	Spec   DatabaseConnectionSpec `json:"spec,omitempty"`
 	Status dbapi.MariaDBStatus    `json:"status,omitempty"`
 }
-
-// TODO: Need to pass the Type information in the ObjectMeta. For example: MongoDB, MySQL etc.
 
 // DatabaseConnectionSpec defines the desired state of DatabaseConnection
 type DatabaseConnectionSpec struct {
@@ -90,8 +90,4 @@ type DatabaseConnectionList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
 	Items           []DatabaseConnection `json:"items"`
-}
-
-func init() {
-	SchemeBuilder.Register(&DatabaseConnection{}, &DatabaseConnectionList{})
 }

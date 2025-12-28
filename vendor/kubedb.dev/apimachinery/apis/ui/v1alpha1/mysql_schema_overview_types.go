@@ -30,6 +30,8 @@ type MySQLSchemaOverviewSpec = GenericSchemaOverviewSpec
 
 // MySQLSchemaOverview is the Schema for the MySQLSchemaOverviews API
 
+// +genclient
+// +k8s:openapi-gen=true
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type MySQLSchemaOverview struct {
 	metav1.TypeMeta   `json:",inline"`
@@ -45,8 +47,4 @@ type MySQLSchemaOverviewList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
 	Items           []MySQLSchemaOverview `json:"items"`
-}
-
-func init() {
-	SchemeBuilder.Register(&MySQLSchemaOverview{}, &MySQLSchemaOverviewList{})
 }

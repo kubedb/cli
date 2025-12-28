@@ -50,8 +50,13 @@ type WeaviateVersion struct {
 
 // WeaviateVersionSpec defines the desired state of WeaviateVersion.
 type WeaviateVersionSpec struct {
-	Version string                  `json:"version"`
-	DB      WeaviateVersionDatabase `json:"db"`
+	Version string `json:"version"`
+
+	// EndOfLife refers if this version reached into its end of the life or not, based on https://endoflife.date/
+	// +optional
+	EndOfLife bool `json:"endOfLife"`
+
+	DB WeaviateVersionDatabase `json:"db"`
 	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
 	// +optional
 	Deprecated bool `json:"deprecated,omitempty"`

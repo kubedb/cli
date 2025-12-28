@@ -55,6 +55,9 @@ type ProxySQLQuerySpec struct {
 }
 
 // ProxySQLQueries is the Schema for the proxysqlslowqueries API
+
+// +genclient
+// +k8s:openapi-gen=true
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type ProxySQLQueries struct {
 	metav1.TypeMeta   `json:",inline"`
@@ -64,13 +67,10 @@ type ProxySQLQueries struct {
 }
 
 // ProxySQLQueriesList contains a list of ProxySQLQueries
+
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type ProxySQLQueriesList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
 	Items           []ProxySQLQueries `json:"items"`
-}
-
-func init() {
-	SchemeBuilder.Register(&ProxySQLQueries{}, &ProxySQLQueriesList{})
 }

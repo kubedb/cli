@@ -76,8 +76,9 @@ spec:
                           in a Container.
                         properties:
                           name:
-                            description: Name of the environment variable. Must be
-                              a C_IDENTIFIER.
+                            description: |-
+                              Name of the environment variable.
+                              May consist of any printable ASCII characters except '='.
                             type: string
                           value:
                             description: |-
@@ -133,6 +134,43 @@ spec:
                                     type: string
                                 required:
                                 - fieldPath
+                                type: object
+                                x-kubernetes-map-type: atomic
+                              fileKeyRef:
+                                description: |-
+                                  FileKeyRef selects a key of the env file.
+                                  Requires the EnvFiles feature gate to be enabled.
+                                properties:
+                                  key:
+                                    description: |-
+                                      The key within the env file. An invalid key will prevent the pod from starting.
+                                      The keys defined within a source may consist of any printable ASCII characters except '='.
+                                      During Alpha stage of the EnvFiles feature gate, the key size is limited to 128 characters.
+                                    type: string
+                                  optional:
+                                    default: false
+                                    description: |-
+                                      Specify whether the file or its key must be defined. If the file or key
+                                      does not exist, then the env var is not published.
+                                      If optional is set to true and the specified key does not exist,
+                                      the environment variable will not be set in the Pod's containers.
+
+                                      If optional is set to false and the specified key does not exist,
+                                      an error will be returned during Pod creation.
+                                    type: boolean
+                                  path:
+                                    description: |-
+                                      The path within the volume from which to select the file.
+                                      Must be relative and may not contain the '..' path or start with '..'.
+                                    type: string
+                                  volumeName:
+                                    description: The name of the volume mount containing
+                                      the env file.
+                                    type: string
+                                required:
+                                - key
+                                - path
+                                - volumeName
                                 type: object
                                 x-kubernetes-map-type: atomic
                               resourceFieldRef:
@@ -199,7 +237,7 @@ spec:
                         Cannot be updated.
                       items:
                         description: EnvFromSource represents the source of a set
-                          of ConfigMaps
+                          of ConfigMaps or Secrets
                         properties:
                           configMapRef:
                             description: The ConfigMap to select from
@@ -220,8 +258,9 @@ spec:
                             type: object
                             x-kubernetes-map-type: atomic
                           prefix:
-                            description: An optional identifier to prepend to each
-                              key in the ConfigMap. Must be a C_IDENTIFIER.
+                            description: |-
+                              Optional text to prepend to the name of each environment variable.
+                              May consist of any printable ASCII characters except '='.
                             type: string
                           secretRef:
                             description: The Secret to select from
@@ -483,6 +522,12 @@ spec:
                               - port
                               type: object
                           type: object
+                        stopSignal:
+                          description: |-
+                            StopSignal defines which signal will be sent to a container when it is being stopped.
+                            If not specified, the default is defined by the container runtime in use.
+                            StopSignal can only be set for Pods with a non-empty .spec.os.name
+                          type: string
                       type: object
                     livenessProbe:
                       description: |-
@@ -1456,6 +1501,12 @@ spec:
                       description: Human-readable message indicating details about
                         last transition.
                       type: string
+                    observedGeneration:
+                      description: |-
+                        If set, this represents the .metadata.generation that the pod condition was set based upon.
+                        This is an alpha field. Enable PodObservedGenerationTracking to be able to use this field.
+                      format: int64
+                      type: integer
                     reason:
                       description: Unique, one-word, CamelCase reason for the condition's
                         last transition.
@@ -1670,7 +1721,7 @@ spec:
                             Claims lists the names of resources, defined in spec.resourceClaims,
                             that are used by this container.
 
-                            This is an alpha field and requires enabling the
+                            This field depends on the
                             DynamicResourceAllocation feature gate.
 
                             This field is immutable. It can only be set for containers.
@@ -1801,6 +1852,10 @@ spec:
                               type: string
                           type: object
                       type: object
+                    stopSignal:
+                      description: StopSignal reports the effective stop signal for
+                        this container
+                      type: string
                     user:
                       description: User represents user identity information initially
                         attached to the first process of the container
@@ -2063,7 +2118,7 @@ spec:
                             Claims lists the names of resources, defined in spec.resourceClaims,
                             that are used by this container.
 
-                            This is an alpha field and requires enabling the
+                            This field depends on the
                             DynamicResourceAllocation feature gate.
 
                             This field is immutable. It can only be set for containers.
@@ -2194,6 +2249,10 @@ spec:
                               type: string
                           type: object
                       type: object
+                    stopSignal:
+                      description: StopSignal reports the effective stop signal for
+                        this container
+                      type: string
                     user:
                       description: User represents user identity information initially
                         attached to the first process of the container
@@ -2265,6 +2324,45 @@ spec:
                   type: object
                 type: array
                 x-kubernetes-list-type: atomic
+              extendedResourceClaimStatus:
+                description: Status of extended resource claim backed by DRA.
+                properties:
+                  requestMappings:
+                    description: |-
+                      RequestMappings identifies the mapping of <container, extended resource backed by DRA> to  device request
+                      in the generated ResourceClaim.
+                    items:
+                      description: |-
+                        ContainerExtendedResourceRequest has the mapping of container name,
+                        extended resource name to the device request name.
+                      properties:
+                        containerName:
+                          description: The name of the container requesting resources.
+                          type: string
+                        requestName:
+                          description: The name of the request in the special ResourceClaim
+                            which corresponds to the extended resource.
+                          type: string
+                        resourceName:
+                          description: The name of the extended resource in that container
+                            which gets backed by DRA.
+                          type: string
+                      required:
+                      - containerName
+                      - requestName
+                      - resourceName
+                      type: object
+                    type: array
+                    x-kubernetes-list-type: atomic
+                  resourceClaimName:
+                    description: |-
+                      ResourceClaimName is the name of the ResourceClaim that was
+                      generated for the Pod in the namespace of the Pod.
+                    type: string
+                required:
+                - requestMappings
+                - resourceClaimName
+                type: object
               hostIP:
                 description: |-
                   hostIP holds the IP address of the host to which the pod is assigned. Empty if the pod has not started yet.
@@ -2482,7 +2580,7 @@ spec:
                             Claims lists the names of resources, defined in spec.resourceClaims,
                             that are used by this container.
 
-                            This is an alpha field and requires enabling the
+                            This field depends on the
                             DynamicResourceAllocation feature gate.
 
                             This field is immutable. It can only be set for containers.
@@ -2613,6 +2711,10 @@ spec:
                               type: string
                           type: object
                       type: object
+                    stopSignal:
+                      description: StopSignal reports the effective stop signal for
+                        this container
+                      type: string
                     user:
                       description: User represents user identity information initially
                         attached to the first process of the container
@@ -2698,6 +2800,12 @@ spec:
                   As a result, this field may be different than PodSpec.nodeName when the pod is
                   scheduled.
                 type: string
+              observedGeneration:
+                description: |-
+                  If set, this represents the .metadata.generation that the pod status was set based upon.
+                  This is an alpha field. Enable PodObservedGenerationTracking to be able to use this field.
+                format: int64
+                type: integer
               phase:
                 description: |-
                   The phase of a Pod is a simple, high-level summary of where the Pod is in its lifecycle.
@@ -2759,6 +2867,9 @@ spec:
                   Status of resources resize desired for pod's containers.
                   It is empty if no resources resize is pending.
                   Any changes to container resources will automatically set this to "Proposed"
+                  Deprecated: Resize status is moved to two pod conditions PodResizePending and PodResizeInProgress.
+                  PodResizePending will track states where the spec has been resized, but the Kubelet has not yet allocated the resources.
+                  PodResizeInProgress will track in-progress resizes, and should be present whenever allocated resources != acknowledged resources.
                 type: string
               resourceClaimStatuses:
                 description: Status of resource claims.

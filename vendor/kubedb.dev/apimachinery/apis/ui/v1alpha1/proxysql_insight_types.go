@@ -56,6 +56,9 @@ type ProxySQLInsightSpec struct {
 }
 
 // ProxySQLInsight is the Schema for the proxysqlinsights API
+
+// +genclient
+// +k8s:openapi-gen=true
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type ProxySQLInsight struct {
 	metav1.TypeMeta   `json:",inline"`
@@ -66,13 +69,10 @@ type ProxySQLInsight struct {
 }
 
 // ProxySQLInsightList contains a list of ProxySQLInsight
+
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type ProxySQLInsightList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
 	Items           []ProxySQLInsight `json:"items"`
-}
-
-func init() {
-	SchemeBuilder.Register(&ProxySQLInsight{}, &ProxySQLInsightList{})
 }

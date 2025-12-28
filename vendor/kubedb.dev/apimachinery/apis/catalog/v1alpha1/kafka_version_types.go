@@ -52,6 +52,11 @@ type KafkaVersion struct {
 type KafkaVersionSpec struct {
 	// Version
 	Version string `json:"version"`
+
+	// EndOfLife refers if this version reached into its end of the life or not, based on https://endoflife.date/
+	// +optional
+	EndOfLife bool `json:"endOfLife"`
+
 	// Init Container Image
 	// From kafka version 4.0.0, we have introduced an init container to handle the database initialization.
 	// +optional

@@ -40,6 +40,8 @@ type MongoDBCollectionSpec struct {
 
 // MongoDBSchemaOverview is the Schema for the MongoDBSchemaOverviews API
 
+// +genclient
+// +k8s:openapi-gen=true
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type MongoDBSchemaOverview struct {
 	metav1.TypeMeta   `json:",inline"`
@@ -55,8 +57,4 @@ type MongoDBSchemaOverviewList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
 	Items           []MongoDBSchemaOverview `json:"items"`
-}
-
-func init() {
-	SchemeBuilder.Register(&MongoDBSchemaOverview{}, &MongoDBSchemaOverviewList{})
 }

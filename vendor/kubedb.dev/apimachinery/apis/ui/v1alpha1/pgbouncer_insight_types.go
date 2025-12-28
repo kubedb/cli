@@ -66,6 +66,9 @@ type PgBouncerPodInsight struct {
 }
 
 // PgBouncerInsight is the Schema for the pgbouncerinsights API
+
+// +genclient
+// +k8s:openapi-gen=true
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type PgBouncerInsight struct {
 	metav1.TypeMeta   `json:",inline"`
@@ -76,13 +79,10 @@ type PgBouncerInsight struct {
 }
 
 // PgBouncerInsightList contains a list of PgBouncerInsight
+
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type PgBouncerInsightList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
 	Items           []PgBouncerInsight `json:"items"`
-}
-
-func init() {
-	SchemeBuilder.Register(&PgBouncerInsight{}, &PgBouncerInsightList{})
 }

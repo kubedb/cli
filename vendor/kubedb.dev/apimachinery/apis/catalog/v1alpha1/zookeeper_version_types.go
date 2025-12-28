@@ -52,6 +52,11 @@ type ZooKeeperVersion struct {
 type ZooKeeperVersionSpec struct {
 	// Version
 	Version string `json:"version"`
+
+	// EndOfLife refers if this version reached into its end of the life or not, based on https://endoflife.date/
+	// +optional
+	EndOfLife bool `json:"endOfLife"`
+
 	// init container image
 	// +optional
 	InitContainer ZooKeeperVersionInitContainer `json:"initContainer,omitempty"`

@@ -46,8 +46,10 @@ type MariaDBInsightSpec struct {
 	ThreadsRunning                *int32   `json:"threadsRunning,omitempty"`
 }
 
-// MariaDBInsight is the Schema for the mariaDBinsights API
+// MariaDBInsight is the Schema for the MariaDBInsights API
 
+// +genclient
+// +k8s:openapi-gen=true
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type MariaDBInsight struct {
 	metav1.TypeMeta   `json:",inline"`
@@ -64,8 +66,4 @@ type MariaDBInsightList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
 	Items           []MariaDBInsight `json:"items"`
-}
-
-func init() {
-	SchemeBuilder.Register(&MariaDBInsight{}, &MariaDBInsightList{})
 }

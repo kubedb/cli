@@ -151,6 +151,7 @@ func convertHTTPConfigFrom(in *v1alpha1.HTTPConfig) *HTTPConfig {
 		ProxyURLOriginal:  in.ProxyURLOriginal,
 		ProxyConfig:       in.ProxyConfig,
 		FollowRedirects:   in.FollowRedirects,
+		EnableHTTP2:       in.EnableHTTP2,
 	}
 }
 
@@ -267,6 +268,62 @@ func convertDiscordConfigFrom(in v1alpha1.DiscordConfig) DiscordConfig {
 		Title:        in.Title,
 		Message:      in.Message,
 		SendResolved: in.SendResolved,
+		Content:      in.Content,
+		Username:     in.Username,
+		AvatarURL:    (*URL)(in.AvatarURL),
+	}
+}
+
+func convertRocketChatFieldConfigsFrom(in []v1alpha1.RocketChatFieldConfig) []RocketChatFieldConfig {
+	if in == nil {
+		return nil
+	}
+	out := make([]RocketChatFieldConfig, len(in))
+	for i, field := range in {
+		out[i] = RocketChatFieldConfig{
+			Title: field.Title,
+			Value: field.Value,
+			Short: field.Short,
+		}
+	}
+	return out
+}
+
+func convertRocketChatActionConfigsFrom(in []v1alpha1.RocketChatActionConfig) []RocketChatActionConfig {
+	if in == nil {
+		return nil
+	}
+	out := make([]RocketChatActionConfig, len(in))
+	for i, action := range in {
+		out[i] = RocketChatActionConfig{
+			Text: action.Text,
+			URL:  (*URL)(action.URL),
+			Msg:  action.Msg,
+		}
+	}
+	return out
+}
+
+func convertRocketchatConfigFrom(in v1alpha1.RocketChatConfig) RocketChatConfig {
+	return RocketChatConfig{
+		SendResolved: in.SendResolved,
+		APIURL:       (*URL)(in.APIURL),
+		Channel:      in.Channel,
+		Token:        in.Token,
+		TokenID:      in.TokenID,
+		Color:        in.Color,
+		Emoji:        in.Emoji,
+		IconURL:      (*URL)(in.IconURL),
+		Text:         in.Text,
+		Title:        in.Title,
+		TitleLink:    in.TitleLink,
+		Fields:       convertRocketChatFieldConfigsFrom(in.Fields),
+		ShortFields:  in.ShortFields,
+		ImageURL:     (*URL)(in.ImageURL),
+		ThumbURL:     (*URL)(in.ThumbURL),
+		LinkNames:    in.LinkNames,
+		Actions:      convertRocketChatActionConfigsFrom(in.Actions),
+		HTTPConfig:   convertHTTPConfigFrom(in.HTTPConfig),
 	}
 }
 
@@ -353,6 +410,7 @@ func convertWebhookConfigFrom(in v1alpha1.WebhookConfig) WebhookConfig {
 		URLSecret:    convertSecretKeySelectorFrom(in.URLSecret),
 		HTTPConfig:   convertHTTPConfigFrom(in.HTTPConfig),
 		MaxAlerts:    in.MaxAlerts,
+		Timeout:      in.Timeout,
 	}
 }
 
@@ -423,6 +481,7 @@ func convertPushoverConfigFrom(in v1alpha1.PushoverConfig) PushoverConfig {
 		Retry:        in.Retry,
 		Expire:       in.Expire,
 		HTML:         in.HTML,
+		Monospace:    in.Monospace,
 		HTTPConfig:   convertHTTPConfigFrom(in.HTTPConfig),
 	}
 }
@@ -463,6 +522,16 @@ func convertMSTeamsConfigFrom(in v1alpha1.MSTeamsConfig) MSTeamsConfig {
 		WebhookURL:   in.WebhookURL,
 		Title:        in.Title,
 		Summary:      in.Summary,
+		Text:         in.Text,
+		HTTPConfig:   convertHTTPConfigFrom(in.HTTPConfig),
+	}
+}
+
+func convertMSTeamsV2ConfigFrom(in v1alpha1.MSTeamsV2Config) MSTeamsV2Config {
+	return MSTeamsV2Config{
+		SendResolved: in.SendResolved,
+		WebhookURL:   in.WebhookURL,
+		Title:        in.Title,
 		Text:         in.Text,
 		HTTPConfig:   convertHTTPConfigFrom(in.HTTPConfig),
 	}
@@ -567,6 +636,20 @@ func (dst *AlertmanagerConfig) ConvertFrom(srcRaw conversion.Hub) error {
 			out.MSTeamsConfigs = append(
 				out.MSTeamsConfigs,
 				convertMSTeamsConfigFrom(in),
+			)
+		}
+
+		for _, in := range in.MSTeamsV2Configs {
+			out.MSTeamsV2Configs = append(
+				out.MSTeamsV2Configs,
+				convertMSTeamsV2ConfigFrom(in),
+			)
+		}
+
+		for _, in := range in.RocketChatConfigs {
+			out.RocketChatConfigs = append(
+				out.RocketChatConfigs,
+				convertRocketchatConfigFrom(in),
 			)
 		}
 
