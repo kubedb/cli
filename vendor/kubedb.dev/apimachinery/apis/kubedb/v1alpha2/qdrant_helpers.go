@@ -29,6 +29,7 @@ import (
 	core "k8s.io/api/core/v1"
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
+	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	coreutil "kmodules.xyz/client-go/core/v1"
 	meta_util "kmodules.xyz/client-go/meta"
@@ -148,7 +149,8 @@ func (q *Qdrant) GetAPIKey(ctx context.Context, kc client.Client) string {
 }
 
 func (q *Qdrant) ConfigSecretName() string {
-	return meta_util.NameWithSuffix(q.OffshootName(), "config")
+	uid := string(q.UID)
+	return meta_util.NameWithSuffix(q.OffshootName(), uid[len(uid)-6:])
 }
 
 func (q *Qdrant) GetPersistentSecrets() []string {
@@ -180,6 +182,20 @@ func (q *Qdrant) OffshootSelectors(extraSelectors ...map[string]string) map[stri
 
 func (q *Qdrant) PodLabels(extraLabels ...map[string]string) map[string]string {
 	return q.offshootLabels(meta_util.OverwriteKeys(q.OffshootSelectors(), extraLabels...), q.Spec.PodTemplate.Labels)
+}
+
+func (q *Qdrant) CertificateName(alias QdrantCertificateAlias) string {
+	return meta_util.NameWithSuffix(q.Name, fmt.Sprintf("%s-cert", string(alias)))
+}
+
+func (q *Qdrant) GetCertSecretName(alias QdrantCertificateAlias) string {
+	if q.Spec.TLS != nil {
+		name, ok := kmapi.GetCertificateSecretName(q.Spec.TLS.Certificates, string(alias))
+		if ok {
+			return name
+		}
+	}
+	return q.CertificateName(alias)
 }
 
 func (q *Qdrant) SetDefaults(kc client.Client) {

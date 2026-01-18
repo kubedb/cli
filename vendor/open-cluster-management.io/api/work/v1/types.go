@@ -1,3 +1,4 @@
+// Copyright Contributors to the Open Cluster Management project
 package v1
 
 import (
@@ -34,15 +35,15 @@ const (
 
 // ManifestWorkSpec represents a desired configuration of manifests to be deployed on the managed cluster.
 type ManifestWorkSpec struct {
-	// Workload represents the manifest workload to be deployed on a managed cluster.
+	// workload represents the manifest workload to be deployed on a managed cluster.
 	Workload ManifestsTemplate `json:"workload,omitempty"`
 
-	// DeleteOption represents deletion strategy when the manifestwork is deleted.
+	// deleteOption represents deletion strategy when the manifestwork is deleted.
 	// Foreground deletion strategy is applied to all the resource in this manifestwork if it is not set.
 	// +optional
 	DeleteOption *DeleteOption `json:"deleteOption,omitempty"`
 
-	// ManifestConfigs represents the configurations of manifests defined in workload field.
+	// manifestConfigs represents the configurations of manifests defined in workload field.
 	// +optional
 	ManifestConfigs []ManifestConfigOption `json:"manifestConfigs,omitempty"`
 
@@ -64,7 +65,7 @@ type Manifest struct {
 
 // ManifestsTemplate represents the manifest workload to be deployed on a managed cluster.
 type ManifestsTemplate struct {
-	// Manifests represents a list of kuberenetes resources to be deployed on a managed cluster.
+	// manifests represents a list of kubernetes resources to be deployed on a managed cluster.
 	// +optional
 	Manifests []Manifest `json:"manifests,omitempty"`
 }
@@ -503,6 +504,25 @@ const (
 	// WorkDegraded represents that the current state of work does not match
 	// the desired state for a certain period.
 	WorkDegraded string = "Degraded"
+	// WorkComplete represents that the work has completed and should no longer
+	// be updated.
+	WorkComplete string = "Complete"
+	// WorkDeleting represents that the work is being deleted by the agent currently.
+	// This condition is added only when the work's deletion timestamp is not nil.
+	WorkDeleting = "Deleting"
+)
+
+// Work condition reasons
+const (
+	// WorkManifestsComplete represents that all completable manifests in the work
+	// have the Complete condition
+	WorkManifestsComplete string = "ManifestsComplete"
+	// WorkProgressingReasonApplying indicates resources are being applied
+	WorkProgressingReasonApplying string = "Applying"
+	// WorkProgressingReasonCompleted indicates all resources are applied and available
+	WorkProgressingReasonCompleted string = "Completed"
+	// WorkProgressingReasonFailed indicates the work failed to apply
+	WorkProgressingReasonFailed string = "Failed"
 )
 
 // ManifestCondition represents the conditions of the resources deployed on a
@@ -596,7 +616,10 @@ const (
 	ManifestComplete string = "Complete"
 )
 
-// Condition reasons
+// Manifest condition reasons
+//
+// All reasons set by condition rule evaluation are expected to be prefixed with "ConditionRule"
+// in order to determine which conditions were set by rules.
 const (
 	// ConditionRuleTrue is set when a rule is evaluated without error
 	ConditionRuleEvaluated string = "ConditionRuleEvaluated"

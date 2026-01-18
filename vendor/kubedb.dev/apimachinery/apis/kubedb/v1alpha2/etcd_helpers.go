@@ -154,7 +154,8 @@ func (e etcdStatsService) Path() string {
 }
 
 func (e etcdStatsService) Scheme() string {
-	return ""
+	sc := promapi.SchemeHTTP
+	return sc.String()
 }
 
 func (e etcdStatsService) TLSConfig() *promapi.TLSConfig {

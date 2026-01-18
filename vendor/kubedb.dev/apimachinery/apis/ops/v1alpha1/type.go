@@ -22,7 +22,46 @@ import (
 	kmapi "kmodules.xyz/client-go/api/v1"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	nodemeta "kmodules.xyz/resource-metadata/apis/node/v1alpha1"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 )
+
+// ReconfigureRestartType defines restart behavior during reconfiguration.
+// +kubebuilder:validation:Enum="auto";"true";"false"
+type ReconfigureRestartType string
+
+const (
+	// ReconfigureRestartAuto indicates the operator will determine if restart is needed
+	ReconfigureRestartAuto ReconfigureRestartType = "auto"
+	// ReconfigureRestartTrue forces a restart during reconfiguration
+	ReconfigureRestartTrue ReconfigureRestartType = "true"
+	// ReconfigureRestartFalse skips restart during reconfiguration
+	ReconfigureRestartFalse ReconfigureRestartType = "false"
+)
+
+// ReconfigurationSpec is the spec for Reconfiguring the Database
+type ReconfigurationSpec struct {
+	// ConfigSecret is an optional field to provide custom configuration file for the database (i.e. mssql.conf, mongod.conf).
+	// If specified, these configurations will be used with default configurations (if any) and applyConfig configurations (if any).
+	// Configurations from this secret will override default configurations.
+	// +optional
+	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty"`
+
+	// ApplyConfig contains key-value pairs of configurations to be applied to the database.
+	// These configurations will override both default configurations and configurations from the config secret (if any).
+	ApplyConfig map[string]string `json:"applyConfig,omitempty"`
+
+	// RemoveCustomConfig when set to true, removes any previous custom configuration (config secret and apply configs) and uses only current configurations (if provided) and the default configurations.
+	// +optional
+	RemoveCustomConfig bool `json:"removeCustomConfig,omitempty"`
+
+	// Restart controls whether to restart the database during reconfiguration.
+	// - auto (default): Operator determines if restart is needed based on configuration changes.
+	// - true: Restart the database during reconfiguration.
+	// - false: Don't restart the database during reconfiguration.
+	// +optional
+	// +kubebuilder:default=auto
+	Restart ReconfigureRestartType `json:"restart,omitempty"`
+}
 
 type OpsRequestStatus struct {
 	// Specifies the current phase of the ops request
@@ -110,9 +149,10 @@ const (
 type Accessor interface {
 	GetObjectMeta() metav1.ObjectMeta
 	GetDBRefName() string
-	GetRequestType() any
+	GetRequestType() string
 	GetStatus() OpsRequestStatus
 	SetStatus(_ OpsRequestStatus)
+	client.Object
 }
 
 // +kubebuilder:validation:Enum=ConfigureArchiver;DisableArchiver

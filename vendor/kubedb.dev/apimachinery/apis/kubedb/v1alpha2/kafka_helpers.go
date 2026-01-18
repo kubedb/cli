@@ -171,7 +171,8 @@ func (ks kafkaStatsService) Path() string {
 }
 
 func (ks kafkaStatsService) Scheme() string {
-	return ""
+	sc := promapi.SchemeHTTP
+	return sc.String()
 }
 
 func (k *Kafka) StatsService() mona.StatsAccessor {

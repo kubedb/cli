@@ -63,8 +63,8 @@ func (r *SinglestoreOpsRequest) GetDBRefName() string {
 	return r.Spec.DatabaseRef.Name
 }
 
-func (r *SinglestoreOpsRequest) GetRequestType() any {
-	return r.Spec.Type
+func (r *SinglestoreOpsRequest) GetRequestType() string {
+	return string(r.Spec.Type)
 }
 
 func (r *SinglestoreOpsRequest) GetStatus() OpsRequestStatus {

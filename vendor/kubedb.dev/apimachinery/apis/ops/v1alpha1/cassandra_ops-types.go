@@ -54,7 +54,7 @@ type CassandraOpsRequest struct {
 // CassandraOpsRequestSpec is the spec for CassandraOpsRequest
 type CassandraOpsRequestSpec struct {
 	// Specifies information necessary for custom configuration of Cassandra
-	Configuration *CassandraCustomConfigurationSpec `json:"configuration,omitempty"`
+	Configuration *ReconfigurationSpec `json:"configuration,omitempty"`
 	// Specifies the Cassandra reference
 	DatabaseRef core.LocalObjectReference `json:"databaseRef"`
 	// Specifies the ops request type: UpdateVersion, HorizontalScaling, VerticalScaling etc.

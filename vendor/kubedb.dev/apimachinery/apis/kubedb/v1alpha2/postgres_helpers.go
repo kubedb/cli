@@ -170,7 +170,8 @@ func (p postgresStatsService) Path() string {
 }
 
 func (p postgresStatsService) Scheme() string {
-	return ""
+	sc := promapi.SchemeHTTP
+	return sc.String()
 }
 
 func (p postgresStatsService) TLSConfig() *promapi.TLSConfig {

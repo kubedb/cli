@@ -1,0 +1,965 @@
+/*
+Copyright AppsCode Inc. and Contributors
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+package elasticsearch
+
+import (
+	"bytes"
+	"context"
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+	"strings"
+	"text/template"
+
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
+
+	osv3api "github.com/opensearch-project/opensearch-go/v3/opensearchapi"
+	"github.com/pkg/errors"
+	core "k8s.io/api/core/v1"
+	"k8s.io/klog/v2"
+	kutil "kmodules.xyz/client-go"
+)
+
+var _ ESClient = &OSClientV3{}
+
+type OSClientV3 struct {
+	client *osv3api.Client
+}
+
+func (os *OSClientV3) ClusterHealthInfo() (map[string]any, error) {
+	req, err := http.NewRequest(http.MethodGet, "/_cluster/health", nil)
+	if err != nil {
+		return nil, err
+	}
+
+	q := req.URL.Query()
+	q.Add("pretty", "true")
+	q.Add("human", "true")
+	req.URL.RawQuery = q.Encode()
+
+	resp, err := os.client.Client.Transport.Perform(req)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		if closeErr := resp.Body.Close(); closeErr != nil {
+			klog.Errorf("failed to close response body for ClusterHealthInfo, reason: %s", closeErr)
+		}
+	}()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("cluster health request failed with status code: %d", resp.StatusCode)
+	}
+
+	response := make(map[string]any)
+	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
+		return nil, errors.Wrap(err, "failed to parse the response body")
+	}
+	return response, nil
+}
+
+func (os *OSClientV3) NodesStats() (map[string]any, error) {
+	req, err := http.NewRequest(http.MethodGet, "/_nodes/stats", nil)
+	if err != nil {
+		return nil, err
+	}
+
+	q := req.URL.Query()
+	q.Add("pretty", "true")
+	q.Add("human", "true")
+	req.URL.RawQuery = q.Encode()
+
+	resp, err := os.client.Client.Transport.Perform(req)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		if closeErr := resp.Body.Close(); closeErr != nil {
+			klog.Errorf("failed to close response body for NodesStats, reason: %s", closeErr)
+		}
+	}()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("nodes stats request failed with status code: %d", resp.StatusCode)
+	}
+
+	nodesStats := make(map[string]any)
+	if err := json.NewDecoder(resp.Body).Decode(&nodesStats); err != nil {
+		return nil, fmt.Errorf("failed to deserialize the response: %v", err)
+	}
+
+	return nodesStats, nil
+}
+
+func (os *OSClientV3) DisableShardAllocation() error {
+	var b strings.Builder
+	b.WriteString(DisableShardAllocation)
+
+	req, err := http.NewRequest(http.MethodPut, "/_cluster/settings", strings.NewReader(b.String()))
+	if err != nil {
+		return err
+	}
+
+	q := req.URL.Query()
+	q.Add("pretty", "true")
+	q.Add("human", "true")
+	req.URL.RawQuery = q.Encode()
+
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := os.client.Client.Transport.Perform(req)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		if closeErr := resp.Body.Close(); closeErr != nil {
+			klog.Errorf("failed to close response body for DisableShardAllocation, reason: %s", closeErr)
+		}
+	}()
+
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("received status code: %d", resp.StatusCode)
+	}
+
+	return nil
+}
+
+func (os *OSClientV3) ShardStats() ([]ShardInfo, error) {
+	req, err := http.NewRequest(http.MethodGet, "/_cat/shards", nil)
+	if err != nil {
+		return nil, err
+	}
+
+	q := req.URL.Query()
+	q.Add("format", "json")
+	q.Add("bytes", "b")
+	q.Add("h", "index,shard,prirep,state,unassigned.reason")
+	req.URL.RawQuery = q.Encode()
+
+	resp, err := os.client.Client.Transport.Perform(req)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		if closeErr := resp.Body.Close(); closeErr != nil {
+			klog.Errorf("failed to close response body from ShardsStats, reason: %s", closeErr)
+		}
+	}()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("cat shards failed with status code: %d", resp.StatusCode)
+	}
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var shardStats []ShardInfo
+	if err := json.Unmarshal(body, &shardStats); err != nil {
+		return nil, err
+	}
+	return shardStats, nil
+}
+
+func (os *OSClientV3) GetIndicesInfo() ([]any, error) {
+	req, err := http.NewRequest(http.MethodGet, "/_cat/indices", nil)
+	if err != nil {
+		return nil, err
+	}
+
+	q := req.URL.Query()
+	q.Add("format", "json")
+	q.Add("bytes", "b")
+	req.URL.RawQuery = q.Encode()
+
+	resp, err := os.client.Client.Transport.Perform(req)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		if closeErr := resp.Body.Close(); closeErr != nil {
+			klog.Errorf("failed to close response body from GetIndicesInfo, reason: %s", closeErr)
+		}
+	}()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("cat indices failed with status code: %d", resp.StatusCode)
+	}
+
+	var indicesInfo []any
+	if err := json.NewDecoder(resp.Body).Decode(&indicesInfo); err != nil {
+		return nil, fmt.Errorf("failed to deserialize the response: %v", err)
+	}
+
+	return indicesInfo, nil
+}
+
+func (os *OSClientV3) ClusterStatus() (string, error) {
+	req, err := http.NewRequest(http.MethodGet, "/_cluster/health", nil)
+	if err != nil {
+		return "", err
+	}
+
+	q := req.URL.Query()
+	q.Add("pretty", "true")
+	req.URL.RawQuery = q.Encode()
+
+	resp, err := os.client.Client.Transport.Perform(req)
+	if err != nil {
+		return "", err
+	}
+	defer func() {
+		if closeErr := resp.Body.Close(); closeErr != nil {
+			klog.Errorf("failed to close response body from ClusterStatus, reason: %s", closeErr)
+		}
+	}()
+
+	if resp.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("cluster health request failed with status code: %d", resp.StatusCode)
+	}
+
+	response := make(map[string]any)
+	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
+		return "", errors.Wrap(err, "failed to parse the response body")
+	}
+	if value, ok := response["status"]; ok {
+		if strValue, ok := value.(string); ok {
+			return strValue, nil
+		}
+		return "", errors.New("failed to convert response to string")
+	}
+	return "", errors.New("status is missing")
+}
+
+func (os *OSClientV3) GetClusterWriteStatus(ctx context.Context, db *dbapi.Elasticsearch) error {
+	indexBody := WriteRequestIndexBody{
+		ID: writeRequestID,
+	}
+	indexReq := WriteRequestIndex{indexBody}
+	ReqBody := db.Spec
+
+	indexJson, err := json.Marshal(indexReq)
+	if err != nil {
+		return errors.Wrap(err, "Failed to encode index for performing write request")
+	}
+	bodyJson, err := json.Marshal(ReqBody)
+	if err != nil {
+		return errors.Wrap(err, "Failed to encode request body for performing write request")
+	}
+
+	// Bulk body requires newline-delimited JSON
+	bulkBody := string(indexJson) + "\n" + string(bodyJson) + "\n"
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, "/_bulk", strings.NewReader(bulkBody))
+	if err != nil {
+		return errors.Wrap(err, "Failed to create write request")
+	}
+
+	q := req.URL.Query()
+	q.Add("index", writeRequestIndex)
+	q.Add("pretty", "true")
+	req.URL.RawQuery = q.Encode()
+
+	req.Header.Set("Content-Type", "application/x-ndjson")
+
+	resp, err := os.client.Client.Transport.Perform(req)
+	if err != nil {
+		return errors.Wrap(err, "Failed to perform write request")
+	}
+	defer func() {
+		if closeErr := resp.Body.Close(); closeErr != nil {
+			klog.Errorf("Failed to close write request response body, reason: %s", closeErr)
+		}
+	}()
+
+	if resp.StatusCode >= 400 {
+		return fmt.Errorf("failed to get response from write request with error statuscode %d", resp.StatusCode)
+	}
+
+	responseBody := make(map[string]any)
+	if err := json.NewDecoder(resp.Body).Decode(&responseBody); err != nil {
+		return errors.Wrap(err, "Failed to decode response from write request")
+	}
+
+	if value, ok := responseBody["errors"]; ok {
+		if strValue, ok := value.(bool); ok {
+			if !strValue {
+				return nil
+			}
+			return errors.Errorf("Write request responded with error, %v", responseBody)
+		}
+		return errors.New("Failed to parse value for `errors` in response from write request")
+	}
+	return errors.New("Failed to parse key `errors` in response from write request")
+}
+
+func (os *OSClientV3) GetClusterReadStatus(ctx context.Context, db *dbapi.Elasticsearch) error {
+	path := fmt.Sprintf("/%s/_doc/%s", writeRequestIndex, writeRequestID)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, path, nil)
+	if err != nil {
+		return errors.Wrap(err, "Failed to create read request")
+	}
+
+	q := req.URL.Query()
+	q.Add("pretty", "true")
+	req.URL.RawQuery = q.Encode()
+
+	resp, err := os.client.Client.Transport.Perform(req)
+	if err != nil {
+		return errors.Wrap(err, "Failed to perform read request")
+	}
+	defer func() {
+		if closeErr := resp.Body.Close(); closeErr != nil {
+			klog.Errorf("failed to close read request response body, reason: %s", closeErr)
+		}
+	}()
+
+	if resp.StatusCode == http.StatusNotFound {
+		return kutil.ErrNotFound
+	}
+	if resp.StatusCode >= 400 {
+		return fmt.Errorf("failed to get response from read request with error statuscode %d", resp.StatusCode)
+	}
+
+	return nil
+}
+
+func (os *OSClientV3) GetTotalDiskUsage(ctx context.Context) (string, error) {
+	path := "/" + diskUsageRequestIndex + "/_disk_usage"
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, path, nil)
+	if err != nil {
+		return "", errors.Wrap(err, "Failed to create Disk Usage Request")
+	}
+
+	q := req.URL.Query()
+	q.Add("run_expensive_tasks", "true")
+	q.Add("expand_wildcards", diskUsageRequestWildcards)
+	req.URL.RawQuery = q.Encode()
+
+	res, err := os.client.Client.Transport.Perform(req)
+	if err != nil {
+		return "", errors.Wrap(err, "Failed to perform Disk Usage Request")
+	}
+	defer func() {
+		if closeErr := res.Body.Close(); closeErr != nil {
+			klog.Errorf("failed to close response body from Disk Usage Request, reason: %s", closeErr)
+		}
+	}()
+
+	if res.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("disk Usage Request failed with status code: %d", res.StatusCode)
+	}
+
+	totalDiskUsage, err := calculateDatabaseSize(res.Body)
+	if err != nil {
+		return "", errors.Wrap(err, "Failed to parse json response to get disk usage")
+	}
+
+	return totalDiskUsage, nil
+}
+
+func (os *OSClientV3) SyncCredentialFromSecret(secret *core.Secret) error {
+	return nil
+}
+
+func (os *OSClientV3) GetDBUserRole(ctx context.Context) (error, bool) {
+	return errors.New("not supported in os version 3"), false
+}
+
+func (os *OSClientV3) CreateDBUserRole(ctx context.Context) error {
+	return errors.New("not supported in os version 3")
+}
+
+func (os *OSClientV3) IndexExistsOrNot(index string) error {
+	req, err := http.NewRequest(http.MethodHead, "/"+index, nil)
+	if err != nil {
+		klog.Errorf("failed to create request while checking index existence %v", err)
+		return err
+	}
+
+	resp, err := os.client.Client.Transport.Perform(req)
+	if err != nil {
+		klog.Errorf("failed to get response while checking either index exists or not %v", err)
+		return err
+	}
+	defer func() {
+		if closeErr := resp.Body.Close(); closeErr != nil {
+			klog.Errorf("failed to close response body for checking the existence of index, reason: %s", closeErr)
+		}
+	}()
+
+	if resp.StatusCode == http.StatusNotFound {
+		klog.Errorf("index does not exist")
+		return fmt.Errorf("index %s does not exist (status code: 404)", index)
+	}
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		klog.Errorf("failed to check index existence with status code %d", resp.StatusCode)
+		return fmt.Errorf("failed to get index with statuscode %d", resp.StatusCode)
+	}
+
+	return nil
+}
+
+func (os *OSClientV3) CreateIndex(index string) error {
+	req, err := http.NewRequest(http.MethodPut, "/"+index, nil)
+	if err != nil {
+		klog.Errorf("failed to create request for creating index, reason: %s", err)
+		return err
+	}
+
+	q := req.URL.Query()
+	q.Add("pretty", "true")
+	req.URL.RawQuery = q.Encode()
+
+	res, err := os.client.Client.Transport.Perform(req)
+	if err != nil {
+		klog.Errorf("failed to apply create index request, reason: %s", err)
+		return err
+	}
+	defer func(Body io.ReadCloser) {
+		err = Body.Close()
+		if err != nil {
+			klog.Errorf("failed to close response body for creating index, reason: %s", err)
+		}
+	}(res.Body)
+
+	if res.StatusCode < 200 || res.StatusCode >= 300 {
+		klog.Errorf("creating index failed with statuscode %d", res.StatusCode)
+		return errors.New("failed to create index")
+	}
+
+	return nil
+}
+
+func (os *OSClientV3) DeleteIndex(index string) error {
+	req, err := http.NewRequest(http.MethodDelete, "/"+index, nil)
+	if err != nil {
+		klog.Errorf("failed to create request for deleting index, reason: %s", err)
+		return err
+	}
+
+	res, err := os.client.Client.Transport.Perform(req)
+	if err != nil {
+		klog.Errorf("failed to apply delete index request, reason: %s", err)
+		return err
+	}
+	defer func(Body io.ReadCloser) {
+		err = Body.Close()
+		if err != nil {
+			klog.Errorf("failed to close response body for deleting index, reason: %s", err)
+		}
+	}(res.Body)
+
+	if res.StatusCode < 200 || res.StatusCode >= 300 {
+		klog.Errorf("failed to delete index with status code %d", res.StatusCode)
+		return errors.New("failed to delete index")
+	}
+
+	return nil
+}
+
+func (os *OSClientV3) CountData(index string) (int, error) {
+	path := "/" + index + "/_count"
+	req, err := http.NewRequest(http.MethodGet, path, nil)
+	if err != nil {
+		return 0, err
+	}
+
+	res, err := os.client.Client.Transport.Perform(req)
+	if err != nil {
+		return 0, err
+	}
+	defer func(Body io.ReadCloser) {
+		err = Body.Close()
+		if err != nil {
+			klog.Errorf("failed to close response body for counting data, reason: %s", err)
+		}
+	}(res.Body)
+
+	if res.StatusCode < 200 || res.StatusCode >= 300 {
+		klog.Errorf("failed to count number of documents in index with statuscode %d", res.StatusCode)
+		return 0, errors.New("failed to count number of documents in index")
+	}
+
+	var response map[string]any
+	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
+		return 0, err
+	}
+
+	count, ok := response["count"]
+	if !ok {
+		return 0, errors.New("failed to parse value for index count in response body")
+	}
+
+	return int(count.(float64)), nil
+}
+
+func (os *OSClientV3) PutData(index, id string, data map[string]any) error {
+	dataBytes, err := json.Marshal(data)
+	if err != nil {
+		return errors.Wrap(err, "failed to Marshal data")
+	}
+
+	path := fmt.Sprintf("/%s/_doc/%s", index, id)
+	req, err := http.NewRequest(http.MethodPut, path, bytes.NewReader(dataBytes))
+	if err != nil {
+		klog.Errorf("failed to create request for putting data, reason: %s", err)
+		return err
+	}
+
+	q := req.URL.Query()
+	q.Add("pretty", "true")
+	req.URL.RawQuery = q.Encode()
+
+	req.Header.Set("Content-Type", "application/json")
+
+	res, err := os.client.Client.Transport.Perform(req)
+	if err != nil {
+		klog.Errorf("failed to put data in the index, reason: %s", err)
+		return err
+	}
+	defer func(Body io.ReadCloser) {
+		err = Body.Close()
+		if err != nil {
+			klog.Errorf("failed to close response body for putting data in the index, reason: %s", err)
+		}
+	}(res.Body)
+
+	if res.StatusCode < 200 || res.StatusCode >= 300 {
+		klog.Errorf("failed to put data in an index with statuscode %d", res.StatusCode)
+		return errors.New("failed to put data in an index")
+	}
+	return nil
+}
+
+func (os *OSClientV3) ReEnableShardAllocation() error {
+	var b strings.Builder
+	b.WriteString(ReEnableShardAllocation)
+
+	req, err := http.NewRequest(http.MethodPut, "/_cluster/settings", strings.NewReader(b.String()))
+	if err != nil {
+		return err
+	}
+
+	q := req.URL.Query()
+	q.Add("pretty", "true")
+	q.Add("human", "true")
+	req.URL.RawQuery = q.Encode()
+
+	req.Header.Set("Content-Type", "application/json")
+
+	res, err := os.client.Client.Transport.Perform(req)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		if closeErr := res.Body.Close(); closeErr != nil {
+			klog.Errorf("failed to close response body from ReEnableShardAllocation, reason: %s", closeErr)
+		}
+	}()
+
+	if res.StatusCode != http.StatusOK {
+		return fmt.Errorf("received status code: %d", res.StatusCode)
+	}
+
+	return nil
+}
+
+func (os *OSClientV3) CheckVersion() (string, error) {
+	req, err := http.NewRequest(http.MethodGet, "/", nil)
+	if err != nil {
+		return "", err
+	}
+
+	q := req.URL.Query()
+	q.Add("pretty", "true")
+	q.Add("human", "true")
+	req.URL.RawQuery = q.Encode()
+
+	res, err := os.client.Client.Transport.Perform(req)
+	if err != nil {
+		return "", err
+	}
+	defer func() {
+		if closeErr := res.Body.Close(); closeErr != nil {
+			klog.Errorf("failed to close response body from CheckVersion, reason: %s", closeErr)
+		}
+	}()
+	if res.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("info request failed with status code: %d", res.StatusCode)
+	}
+
+	nodeInfo := new(Info)
+	if err := json.NewDecoder(res.Body).Decode(&nodeInfo); err != nil {
+		return "", errors.Wrap(err, "failed to deserialize the response")
+	}
+
+	if nodeInfo.Version.Number == "" {
+		return "", errors.New("elasticsearch version is empty")
+	}
+
+	return nodeInfo.Version.Number, nil
+}
+
+func (os *OSClientV3) GetClusterStatus() (string, error) {
+	req, err := http.NewRequest(http.MethodGet, "/_cluster/health", nil)
+	if err != nil {
+		return "", err
+	}
+
+	q := req.URL.Query()
+	q.Add("pretty", "true")
+	req.URL.RawQuery = q.Encode()
+
+	resp, err := os.client.Client.Transport.Perform(req)
+	if err != nil {
+		return "", err
+	}
+	defer func() {
+		if closeErr := resp.Body.Close(); closeErr != nil {
+			klog.Errorf("failed to close response body for GetClusterStatus, reason: %s", closeErr)
+		}
+	}()
+
+	if resp.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("cluster health request failed with status code: %d", resp.StatusCode)
+	}
+
+	response := make(map[string]any)
+	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
+		return "", errors.Wrap(err, "failed to parse the response body")
+	}
+	if value, ok := response["status"]; ok {
+		if strValue, ok := value.(string); ok {
+			return strValue, nil
+		}
+	}
+	return "", errors.New("status is missing")
+}
+
+func (os *OSClientV3) CountIndex() (int, error) {
+	req, err := http.NewRequest(http.MethodGet, "/_all/_settings", nil)
+	if err != nil {
+		return 0, err
+	}
+
+	q := req.URL.Query()
+	q.Add("pretty", "true")
+	q.Add("human", "true")
+	req.URL.RawQuery = q.Encode()
+
+	res, err := os.client.Client.Transport.Perform(req)
+	if err != nil {
+		return 0, err
+	}
+	defer func() {
+		if closeErr := res.Body.Close(); closeErr != nil {
+			klog.Errorf("failed to close response body from CountIndex, reason: %s", closeErr)
+		}
+	}()
+
+	if res.StatusCode < 200 || res.StatusCode >= 300 {
+		return 0, fmt.Errorf("received status code: %d", res.StatusCode)
+	}
+
+	response := make(map[string]any)
+	if err2 := json.NewDecoder(res.Body).Decode(&response); err2 != nil {
+		return 0, errors.Wrap(err2, "failed to parse the response body")
+	}
+	return len(response), nil
+}
+
+func (os *OSClientV3) GetData(_index, _type, _id string) (map[string]any, error) {
+	path := fmt.Sprintf("/%s/_doc/%s", _index, _id)
+	req, err := http.NewRequest(http.MethodGet, path, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	q := req.URL.Query()
+	q.Add("pretty", "true")
+	q.Add("human", "true")
+	req.URL.RawQuery = q.Encode()
+
+	res, err := os.client.Client.Transport.Perform(req)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		if closeErr := res.Body.Close(); closeErr != nil {
+			klog.Errorf("failed to close response body from Get Data, reason: %s", closeErr)
+		}
+	}()
+
+	if res.StatusCode < 200 || res.StatusCode >= 300 {
+		return nil, fmt.Errorf("received status code: %d", res.StatusCode)
+	}
+
+	response := make(map[string]any)
+	if err2 := json.NewDecoder(res.Body).Decode(&response); err2 != nil {
+		return nil, errors.Wrap(err2, "failed to parse the response body")
+	}
+
+	return response, nil
+}
+
+func (os *OSClientV3) CountNodes() (int64, error) {
+	req, err := http.NewRequest(http.MethodGet, "/_nodes", nil)
+	if err != nil {
+		return -1, err
+	}
+
+	resp, err := os.client.Client.Transport.Perform(req)
+	if err != nil {
+		return -1, err
+	}
+	defer func() {
+		if closeErr := resp.Body.Close(); closeErr != nil {
+			klog.Errorf("failed to close response body from CountNodes, reason: %s", closeErr)
+		}
+	}()
+
+	if resp.StatusCode != http.StatusOK {
+		return -1, fmt.Errorf("nodes info request failed with status code: %d", resp.StatusCode)
+	}
+
+	nodeInfo := new(NodeInfo)
+	if err := json.NewDecoder(resp.Body).Decode(&nodeInfo); err != nil {
+		return -1, errors.Wrap(err, "failed to deserialize the response")
+	}
+
+	if nodeInfo.Nodes.Total == "" {
+		return -1, errors.New("Node count is empty")
+	}
+
+	return nodeInfo.Nodes.Total.Int64()
+}
+
+func (os *OSClientV3) AddVotingConfigExclusions(nodes []string) error {
+	nodeNames := strings.Join(nodes, ",")
+
+	req, err := http.NewRequest(http.MethodPost, "/_cluster/voting_config_exclusions", nil)
+	if err != nil {
+		return err
+	}
+
+	q := req.URL.Query()
+	q.Add("node_names", nodeNames)
+	req.URL.RawQuery = q.Encode()
+
+	res, err := os.client.Client.Transport.Perform(req)
+	if err != nil {
+		return err
+	}
+
+	defer func() {
+		if closeErr := res.Body.Close(); closeErr != nil {
+			klog.Errorf("failed to close response body from AddVotingConfigExclusions, reason: %s", closeErr)
+		}
+	}()
+
+	if res.StatusCode < 200 || res.StatusCode >= 300 {
+		return fmt.Errorf("failed with response.StatusCode: %d", res.StatusCode)
+	}
+	return nil
+}
+
+func (os *OSClientV3) DeleteVotingConfigExclusions() error {
+	req, err := http.NewRequest(http.MethodDelete, VotingExclusionUrl, nil)
+	if err != nil {
+		return err
+	}
+
+	resp, err := os.client.Client.Transport.Perform(req)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		if closeErr := resp.Body.Close(); closeErr != nil {
+			klog.Errorf("failed to close response body for DeleteVotingConfigExclusions, reason: %s", closeErr)
+		}
+	}()
+
+	if resp.StatusCode > 299 {
+		return fmt.Errorf("failed with response.StatusCode: %d", resp.StatusCode)
+	}
+	return nil
+}
+
+func (os *OSClientV3) ExcludeNodeAllocation(nodes []string) error {
+	list := strings.Join(nodes, ",")
+	var body bytes.Buffer
+	t, err := template.New("").Parse(ExcludeNodeAllocation)
+	if err != nil {
+		return errors.Wrap(err, "failed to parse the template")
+	}
+
+	if err := t.Execute(&body, list); err != nil {
+		return err
+	}
+
+	req, err := http.NewRequest(http.MethodPut, "/_cluster/settings", bytes.NewReader(body.Bytes()))
+	if err != nil {
+		return err
+	}
+
+	q := req.URL.Query()
+	q.Add("pretty", "true")
+	q.Add("human", "true")
+	req.URL.RawQuery = q.Encode()
+
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := os.client.Client.Transport.Perform(req)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		if closeErr := resp.Body.Close(); closeErr != nil {
+			klog.Errorf("failed to close response body from ExcludenodeAllocation, reason: %s", closeErr)
+		}
+	}()
+
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		return fmt.Errorf("received status code: %d", resp.StatusCode)
+	}
+
+	return nil
+}
+
+func (os *OSClientV3) DeleteNodeAllocationExclusion() error {
+	var b strings.Builder
+	b.WriteString(DeleteNodeAllocationExclusion)
+
+	req, err := http.NewRequest(http.MethodPut, "/_cluster/settings", strings.NewReader(b.String()))
+	if err != nil {
+		return err
+	}
+
+	q := req.URL.Query()
+	q.Add("pretty", "true")
+	q.Add("human", "true")
+	req.URL.RawQuery = q.Encode()
+
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := os.client.Client.Transport.Perform(req)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		if closeErr := resp.Body.Close(); closeErr != nil {
+			klog.Errorf("failed to close response body from DeleteNodeAllocation reason: %s", closeErr)
+		}
+	}()
+
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		return fmt.Errorf("received status code: %d", resp.StatusCode)
+	}
+
+	return nil
+}
+
+func (os *OSClientV3) GetUsedDataNodes() ([]string, error) {
+	req, err := http.NewRequest(http.MethodGet, "/_cat/shards", nil)
+	if err != nil {
+		return nil, err
+	}
+
+	q := req.URL.Query()
+	q.Add("format", "json")
+	q.Add("h", "index,node")
+	req.URL.RawQuery = q.Encode()
+
+	resp, err := os.client.Client.Transport.Perform(req)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		if closeErr := resp.Body.Close(); closeErr != nil {
+			klog.Errorf("failed to close response body from GetusedDataNode, reason: %s", closeErr)
+		}
+	}()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("cat shards request failed with status code: %d", resp.StatusCode)
+	}
+
+	data, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+	var list []IndexDistribution
+	err = json.Unmarshal(data, &list)
+	if err != nil {
+		return nil, err
+	}
+
+	var nodes []string
+	for _, value := range list {
+		if !IsIgnorableIndex(value.Index) {
+			nodes = append(nodes, value.Node)
+		}
+	}
+	return nodes, nil
+}
+
+func (os *OSClientV3) AssignedShardsSize(node string) (int64, error) {
+	path := fmt.Sprintf("/_nodes/%s/stats", node)
+	req, err := http.NewRequest(http.MethodGet, path, nil)
+	if err != nil {
+		return 0, err
+	}
+	q := req.URL.Query()
+	q.Add("pretty", "true")
+	q.Add("human", "true")
+	req.URL.RawQuery = q.Encode()
+
+	resp, err := os.client.Client.Transport.Perform(req)
+	if err != nil {
+		return 0, err
+	}
+	defer func() {
+		if closeErr := resp.Body.Close(); closeErr != nil {
+			klog.Errorf("failed to close response body from AssignShardsize, reason: %s", closeErr)
+		}
+	}()
+
+	if resp.StatusCode != http.StatusOK {
+		return 0, fmt.Errorf("nodes stats request failed with status code: %d", resp.StatusCode)
+	}
+
+	response := new(NodesStats)
+	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
+		return 0, err
+	}
+
+	for _, value := range response.Nodes {
+		return value.Indices.Store.SizeInBytes, nil
+	}
+	return 0, errors.New("empty response body")
+}
+
+// EnableUpgradeModeML    enables upgrade modes for ML nodes.
+func (os *OSClientV3) EnableUpgradeModeML() error {
+	return nil
+}
+
+// DisableUpgradeModeML    disables upgrade modes for ML nodes.
+func (os *OSClientV3) DisableUpgradeModeML() error {
+	return nil
+}

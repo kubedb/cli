@@ -67,8 +67,8 @@ func (m *MemcachedOpsRequest) GetDBRefName() string {
 	return m.Spec.DatabaseRef.Name
 }
 
-func (m *MemcachedOpsRequest) GetRequestType() any {
-	return m.Spec.Type
+func (m *MemcachedOpsRequest) GetRequestType() string {
+	return string(m.Spec.Type)
 }
 
 func (m *MemcachedOpsRequest) GetStatus() OpsRequestStatus {

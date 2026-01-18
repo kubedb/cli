@@ -87,10 +87,8 @@ type MilvusSpec struct {
 	// +optional
 	AuthSecret *SecretReference `json:"authSecret,omitempty"`
 
-	// ConfigSecret is an optional field to provide custom configuration file for database (i.e config.properties).
-	// If specified, this file will be used as configuration file otherwise default configuration file will be used.
 	// +optional
-	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty"`
+	Configuration *ConfigurationSpec `json:"configuration,omitempty"`
 
 	// ServiceTemplates is an optional configuration for services used to expose database
 	// +optional

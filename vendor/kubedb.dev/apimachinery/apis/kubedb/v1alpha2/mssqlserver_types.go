@@ -119,6 +119,9 @@ type MSSQLServerSpec struct {
 	// +optional
 	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty"`
 
+	// +optional
+	Configuration *ConfigurationSpec `json:"configuration,omitempty"`
+
 	// Init is used to initialize a database
 	// +optional
 	Init *InitSpec `json:"init,omitempty"`

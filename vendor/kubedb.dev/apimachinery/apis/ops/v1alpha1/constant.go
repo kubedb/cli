@@ -215,6 +215,11 @@ const (
 	UpdateCombinedNodePVCs   = "UpdateCombinedNodePVCs"
 )
 
+// MSSQLServer Constants
+const (
+	PrepareApplyConfig = "PrepareApplyConfig"
+)
+
 // Singlestore Constants
 const (
 	ScaleUpAggregator   = "ScaleUpAggregator"

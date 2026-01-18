@@ -126,12 +126,9 @@ func (m Memcached) GoverningServiceName() string {
 	return meta_util.NameWithSuffix(m.ServiceName(), "pods")
 }
 
-func (m Memcached) ConfigSecretName() string {
-	return meta_util.NameWithSuffix(m.OffshootName(), "config")
-}
-
-func (m Memcached) CustomConfigSecretName() string {
-	return meta_util.NameWithSuffix(m.OffshootName(), "custom-config")
+func (m *Memcached) ConfigSecretName() string {
+	uid := string(m.UID)
+	return meta_util.NameWithSuffix(m.OffshootName(), uid[len(uid)-6:])
 }
 
 type memcachedApp struct {
@@ -179,7 +176,8 @@ func (m memcachedStatsService) Path() string {
 }
 
 func (m memcachedStatsService) Scheme() string {
-	return ""
+	sc := promapi.SchemeHTTP
+	return sc.String()
 }
 
 func (m memcachedStatsService) TLSConfig() *promapi.TLSConfig {
@@ -216,6 +214,8 @@ func (m *Memcached) SetDefaults(mcVersion *catalog.MemcachedVersion) {
 			m.Spec.AuthSecret.Kind = kubedb.ResourceKindSecret
 		}
 	}
+
+	m.Spec.Configuration = copyConfigurationField(m.Spec.Configuration, &m.Spec.ConfigSecret)
 
 	m.setDefaultContainerSecurityContext(mcVersion, &m.Spec.PodTemplate)
 	m.setDefaultContainerResourceLimits(&m.Spec.PodTemplate)

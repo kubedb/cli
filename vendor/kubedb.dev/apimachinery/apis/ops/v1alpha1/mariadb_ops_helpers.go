@@ -88,8 +88,8 @@ func (m *MariaDBOpsRequest) GetDBRefName() string {
 	return m.Spec.DatabaseRef.Name
 }
 
-func (m *MariaDBOpsRequest) GetRequestType() any {
-	return m.Spec.Type
+func (m *MariaDBOpsRequest) GetRequestType() string {
+	return string(m.Spec.Type)
 }
 
 func (m *MariaDBOpsRequest) GetStatus() OpsRequestStatus {

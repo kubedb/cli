@@ -64,7 +64,7 @@ type PerconaXtraDBOpsRequestSpec struct {
 	// Specifies information necessary for volume expansion
 	VolumeExpansion *PerconaXtraDBVolumeExpansionSpec `json:"volumeExpansion,omitempty"`
 	// Specifies information necessary for custom configuration of PerconaXtraDB
-	Configuration *PerconaXtraDBCustomConfigurationSpec `json:"configuration,omitempty"`
+	Configuration *ReconfigurationSpec `json:"configuration,omitempty"`
 	// Specifies information necessary for configuring TLS
 	TLS *PerconaXtraDBTLSSpec `json:"tls,omitempty"`
 	// Specifies information necessary for configuring authSecret of the database

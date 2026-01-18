@@ -257,5 +257,6 @@ func (w *Weaviate) GetConnectionScheme() string {
 }
 
 func (w *Weaviate) ConfigSecretName() string {
-	return fmt.Sprintf("%s-config", w.Name)
+	uid := string(w.UID)
+	return meta_util.NameWithSuffix(w.OffshootName(), uid[len(uid)-6:])
 }

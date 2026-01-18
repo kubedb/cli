@@ -86,10 +86,11 @@ type ZooKeeperSpec struct {
 	// +optional
 	AuthSecret *SecretReference `json:"authSecret,omitempty"`
 
-	// ConfigSecret is an optional field to provide custom configuration file for database (i.e config.properties).
+	// Configuration is an optional field to provide custom configuration file for database (i.e config.properties).
 	// If specified, this file will be used as configuration file otherwise default configuration file will be used.
+	// You can provide custom configurations using SecretName or ApplyConfig.
 	// +optional
-	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty"`
+	Configuration *ConfigurationSpec `json:"configuration,omitempty"`
 
 	// Keystore encryption secret
 	// +optional

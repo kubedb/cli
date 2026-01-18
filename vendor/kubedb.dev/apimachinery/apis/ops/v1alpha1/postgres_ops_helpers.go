@@ -67,8 +67,8 @@ func (p *PostgresOpsRequest) GetDBRefName() string {
 	return p.Spec.DatabaseRef.Name
 }
 
-func (p *PostgresOpsRequest) GetRequestType() any {
-	return p.Spec.Type
+func (p *PostgresOpsRequest) GetRequestType() string {
+	return string(p.Spec.Type)
 }
 
 func (p *PostgresOpsRequest) GetStatus() OpsRequestStatus {

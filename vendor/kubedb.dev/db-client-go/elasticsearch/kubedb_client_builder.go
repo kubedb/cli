@@ -45,6 +45,8 @@ import (
 	osapiv1 "github.com/opensearch-project/opensearch-go/opensearchapi"
 	osv2 "github.com/opensearch-project/opensearch-go/v2"
 	osapiv2 "github.com/opensearch-project/opensearch-go/v2/opensearchapi"
+	osv3 "github.com/opensearch-project/opensearch-go/v3"
+	osapiv3 "github.com/opensearch-project/opensearch-go/v3/opensearchapi"
 	"github.com/pkg/errors"
 	core "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
@@ -460,6 +462,52 @@ func (o *KubeDBClientBuilder) GetElasticClient() (*Client, error) {
 			}
 			return &Client{
 				&OSClientV2{client: osClient},
+			}, nil
+		case version.Major() == 3:
+			defaultTLSConfig, err := o.getDefaultTLSConfig()
+			if err != nil {
+				klog.Errorf("Failed get default TLS configuration")
+				return nil, err
+			}
+
+			// Create the base client
+			baseClient, err := osv3.NewClient(osv3.Config{
+				Addresses:         []string{o.url},
+				Username:          username,
+				Password:          password,
+				EnableDebugLogger: true,
+				DisableRetry:      true,
+				Transport: &http.Transport{
+					IdleConnTimeout: 3 * time.Second,
+					DialContext: (&net.Dialer{
+						Timeout: 30 * time.Second,
+					}).DialContext,
+					TLSClientConfig: defaultTLSConfig,
+				},
+			})
+			if err != nil {
+				klog.Errorf("Failed to create HTTP client for Elasticsearch: %s/%s with: %s", o.db.Namespace, o.db.Name, err)
+				return nil, err
+			}
+
+			// Create the API client from the base client
+			osClient := &osapiv3.Client{
+				Client: baseClient,
+			}
+
+			// Use Info() to test connection
+			res, err := osClient.Info(o.ctx, nil)
+			if err != nil {
+				return nil, err
+			}
+
+			// Check if response indicates an error
+			if res.Inspect().Response.StatusCode >= 400 {
+				return nil, fmt.Errorf("cluster info request failed with status code: %d", res.Inspect().Response.StatusCode)
+			}
+
+			return &Client{
+				&OSClientV3{client: osClient},
 			}, nil
 		}
 	}

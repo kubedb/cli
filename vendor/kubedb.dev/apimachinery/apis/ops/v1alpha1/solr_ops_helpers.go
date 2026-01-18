@@ -63,8 +63,8 @@ func (s *SolrOpsRequest) GetDBRefName() string {
 	return s.Spec.DatabaseRef.Name
 }
 
-func (s *SolrOpsRequest) GetRequestType() any {
-	return s.Spec.Type
+func (s *SolrOpsRequest) GetRequestType() string {
+	return string(s.Spec.Type)
 }
 
 func (s *SolrOpsRequest) GetStatus() OpsRequestStatus {

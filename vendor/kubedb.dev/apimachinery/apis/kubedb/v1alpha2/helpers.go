@@ -180,3 +180,13 @@ func UsesAcmeIssuer(kc client.Client, ns string, issuerRef core.TypedLocalObject
 func IsVirtualAuthSecretReferred(authSecret *SecretReference) bool {
 	return authSecret != nil && authSecret.APIGroup == vsecretapi.GroupName
 }
+
+func copyConfigurationField(cnf *ConfigurationSpec, sec **core.LocalObjectReference) *ConfigurationSpec {
+	if cnf == nil && (*sec) != nil && (*sec).Name != "" {
+		cnf = &ConfigurationSpec{
+			SecretName: (*sec).Name,
+		}
+	}
+	*sec = nil
+	return cnf
+}

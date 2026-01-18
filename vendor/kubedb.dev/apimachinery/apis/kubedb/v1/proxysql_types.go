@@ -40,6 +40,15 @@ const (
 	LoadBalanceModeGroupReplication LoadBalanceMode = "GroupReplication"
 )
 
+// +kubebuilder:validation:Enum=server;archiver;metrics-exporter
+type ProxySQLCertificateAlias string
+
+const (
+	ProxySQLServerCert          ProxySQLCertificateAlias = "server"
+	ProxySQLClientCert          ProxySQLCertificateAlias = "client"
+	ProxySQLMetricsExporterCert ProxySQLCertificateAlias = "metrics-exporter"
+)
+
 // ProxySQL defines a percona variation of Mysql database.
 
 // +genclient
@@ -58,6 +67,120 @@ type ProxySQL struct {
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 	Spec              ProxySQLSpec   `json:"spec,omitempty"`
 	Status            ProxySQLStatus `json:"status,omitempty"`
+}
+
+type ProxySQLSpec struct {
+	// AutoOps contains configuration of automatic ops-request-recommendation generation
+	// +optional
+	AutoOps AutoOpsSpec `json:"autoOps,omitempty"`
+
+	// +optional
+	// SyncUsers is a boolean type and when enabled, operator fetches all users created in the backend server to the
+	// ProxySQL server. Password changes are also synced in proxysql when it is enabled.
+	SyncUsers bool `json:"syncUsers,omitempty"`
+
+	// +optional
+	// +kubebuilder:deprecatedversion:warning="Use spec.configuration.init.inline instead"
+	// InitConfiguration contains information with which the proxysql will bootstrap (only 4 tables are configurable)
+	InitConfiguration *ProxySQLConfiguration `json:"initConfig,omitempty"`
+
+	// +optional
+	// +kubebuilder:deprecatedversion:warning="Use spec.configuration.init.secretName instead"
+	// ConfigSecret is an optional field to provide custom configuration file for proxysql.
+	// Users can provide a Secret containing raw bootstrap config files for ProxySQL.
+	// Allowed keys: AdminVariables.cnf, MySQLVariables.cnf, MySQLUsers.cnf, MySQLQueryRules.cnf.
+	// Values are patched verbatim into proxysql.cnf during bootstrap.
+	// InitConfiguration (spec.initConfig) takes precedence than this.
+	// These configs are applied only once; invalid formatting may cause startup failure.
+	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty"`
+
+	// +optional
+	// Configuration is an optional field to provide custom configuration for ProxySQL.
+	// If specified, these configurations will be used with default configurations (if any).
+	// Configurations from this spec will override default configurations.
+	Configuration *ProxySQLConfigurationSpec `json:"configuration,omitempty"`
+
+	// Version of ProxySQL to be deployed.
+	Version string `json:"version"`
+
+	// Number of instances to deploy for ProxySQL. If replicas > 1, ProxySQL servers will be clustered.
+	Replicas *int32 `json:"replicas,omitempty"`
+
+	// Backend refers to the AppBinding of the backend MySQL/MariaDB/Percona-XtraDB server
+	Backend *core.LocalObjectReference `json:"backend,omitempty"`
+
+	// ProxySQL secret containing username and password for root user and proxysql user
+	// +optional
+	AuthSecret *SecretReference `json:"authSecret,omitempty"`
+
+	// Monitor is used monitor proxysql instance
+	// +optional
+	Monitor *mona.AgentSpec `json:"monitor,omitempty"`
+
+	// PodTemplate is an optional configuration for pods used to expose proxysql
+	// +optional
+	PodTemplate ofstv2.PodTemplateSpec `json:"podTemplate,omitempty"`
+
+	// ServiceTemplates is an optional configuration for services used to expose database
+	// +optional
+	ServiceTemplates []NamedServiceTemplateSpec `json:"serviceTemplates,omitempty"`
+
+	// TLS contains tls configurations for client and server.
+	// +optional
+	TLS *kmapi.TLSConfig `json:"tls,omitempty"`
+
+	// DeletionPolicy controls the delete operation for database
+	// +optional
+	DeletionPolicy DeletionPolicy `json:"deletionPolicy,omitempty"`
+
+	// HealthChecker defines attributes of the health checker
+	// +optional
+	// +kubebuilder:default={periodSeconds: 10, timeoutSeconds: 10, failureThreshold: 1}
+	HealthChecker kmapi.HealthCheckSpec `json:"healthChecker"`
+
+	// Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
+	// +optional
+	Halted bool `json:"halted,omitempty"`
+}
+
+type ProxySQLConfigurationSpec struct {
+	// +optional
+	// Init contains bootstrap-only configuration.
+	// This configuration is applied only once during initial deployment.
+	// Changes to this field after the database is initialized are ignored.
+	Init *ProxySQLInitConfiguration `json:"init,omitempty"`
+}
+
+type ProxySQLInitConfiguration struct {
+	// +optional
+	// Inline contains structured bootstrap configuration.
+	// These values always take precedence over ConfigSecret.
+	Inline *ProxySQLConfiguration `json:"inline,omitempty"`
+
+	// +optional
+	// a Secret containing raw bootstrap config files for ProxySQL.
+	// Allowed keys: AdminVariables.cnf, MySQLVariables.cnf, MySQLUsers.cnf, MySQLQueryRules.cnf.
+	// Values are patched verbatim into proxysql.cnf during bootstrap.
+	// Inline configuration (init.inline) always takes precedence.
+	// These configs are applied only once; invalid formatting may cause startup failure.
+	SecretName string `json:"secretName,omitempty"`
+}
+
+type ProxySQLConfiguration struct {
+	// +optional
+	MySQLUsers []MySQLUser `json:"mysqlUsers,omitempty"`
+
+	// +optional
+	// +kubebuilder:pruning:PreserveUnknownFields
+	MySQLQueryRules []*runtime.RawExtension `json:"mysqlQueryRules,omitempty"`
+
+	// +optional
+	// +kubebuilder:pruning:PreserveUnknownFields
+	MySQLVariables *runtime.RawExtension `json:"mysqlVariables,omitempty"`
+
+	// +optional
+	// +kubebuilder:pruning:PreserveUnknownFields
+	AdminVariables *runtime.RawExtension `json:"adminVariables,omitempty"`
 }
 
 type MySQLUser struct {
@@ -99,94 +222,6 @@ type MySQLUser struct {
 	// +optional
 	Comment string `json:"comment,omitempty"`
 }
-
-type ProxySQLConfiguration struct {
-	// +optional
-	MySQLUsers []MySQLUser `json:"mysqlUsers,omitempty"`
-
-	// +optional
-	// +kubebuilder:pruning:PreserveUnknownFields
-	MySQLQueryRules []*runtime.RawExtension `json:"mysqlQueryRules,omitempty"`
-
-	// +optional
-	// +kubebuilder:pruning:PreserveUnknownFields
-	MySQLVariables *runtime.RawExtension `json:"mysqlVariables,omitempty"`
-
-	// +optional
-	// +kubebuilder:pruning:PreserveUnknownFields
-	AdminVariables *runtime.RawExtension `json:"adminVariables,omitempty"`
-}
-
-type ProxySQLSpec struct {
-	// AutoOps contains configuration of automatic ops-request-recommendation generation
-	// +optional
-	AutoOps AutoOpsSpec `json:"autoOps,omitempty"`
-
-	// +optional
-	// SyncUsers is a boolean type and when enabled, operator fetches all users created in the backend server to the
-	// ProxySQL server . Password changes are also synced in proxysql when it is enabled.
-	SyncUsers bool `json:"syncUsers,omitempty"`
-
-	// +optional
-	// InitConfiguration contains information with which the proxysql will bootstrap (only 4 tables are configurable)
-	InitConfiguration *ProxySQLConfiguration `json:"initConfig,omitempty"`
-
-	// Version of ProxySQL to be deployed.
-	Version string `json:"version"`
-
-	// Number of instances to deploy for ProxySQL. Currently we support only replicas = 1.
-	// TODO: If replicas > 1, proxysql will be clustered
-	Replicas *int32 `json:"replicas,omitempty"`
-
-	// Backend refers to the AppBinding of the backend MySQL/MariaDB/Percona-XtraDB server
-	Backend *core.LocalObjectReference `json:"backend,omitempty"`
-
-	// ProxySQL secret containing username and password for root user and proxysql user
-	// +optional
-	AuthSecret *SecretReference `json:"authSecret,omitempty"`
-
-	// Monitor is used monitor proxysql instance
-	// +optional
-	Monitor *mona.AgentSpec `json:"monitor,omitempty"`
-
-	// ConfigSecret is an optional field to provide custom configuration file for proxysql (i.e custom-proxysql.cnf).
-	// If specified, this file will be used as configuration file otherwise default configuration file will be used.
-	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty"`
-
-	// PodTemplate is an optional configuration for pods used to expose proxysql
-	// +optional
-	PodTemplate ofstv2.PodTemplateSpec `json:"podTemplate,omitempty"`
-
-	// ServiceTemplates is an optional configuration for services used to expose database
-	// +optional
-	ServiceTemplates []NamedServiceTemplateSpec `json:"serviceTemplates,omitempty"`
-
-	// TLS contains tls configurations for client and server.
-	// +optional
-	TLS *kmapi.TLSConfig `json:"tls,omitempty"`
-
-	// DeletionPolicy controls the delete operation for database
-	// +optional
-	DeletionPolicy DeletionPolicy `json:"deletionPolicy,omitempty"`
-
-	// HealthChecker defines attributes of the health checker
-	// +optional
-	// +kubebuilder:default={periodSeconds: 10, timeoutSeconds: 10, failureThreshold: 1}
-	HealthChecker kmapi.HealthCheckSpec `json:"healthChecker"`
-
-	// Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
-	// +optional
-	Halted bool `json:"halted,omitempty"`
-}
-
-// +kubebuilder:validation:Enum=server;archiver;metrics-exporter
-type ProxySQLCertificateAlias string
-
-const (
-	ProxySQLServerCert          ProxySQLCertificateAlias = "server"
-	ProxySQLClientCert          ProxySQLCertificateAlias = "client"
-	ProxySQLMetricsExporterCert ProxySQLCertificateAlias = "metrics-exporter"
-)
 
 type ProxySQLStatus struct {
 	// Specifies the current phase of the database

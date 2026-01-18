@@ -85,13 +85,15 @@ spec:
                 default: 2182
                 format: int32
                 type: integer
-              configSecret:
+              configuration:
                 properties:
-                  name:
-                    default: ""
+                  inline:
+                    additionalProperties:
+                      type: string
+                    type: object
+                  secretName:
                     type: string
                 type: object
-                x-kubernetes-map-type: atomic
               deletionPolicy:
                 enum:
                 - Halt

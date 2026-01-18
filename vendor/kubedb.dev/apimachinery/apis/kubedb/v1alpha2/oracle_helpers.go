@@ -218,7 +218,8 @@ func (os oracleStatsService) Path() string {
 }
 
 func (os oracleStatsService) Scheme() string {
-	return ""
+	sc := promapi.SchemeHTTP
+	return sc.String()
 }
 
 func (o *Oracle) StatsService() mona.StatsAccessor {

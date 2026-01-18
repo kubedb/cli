@@ -69,6 +69,63 @@ spec:
                     type: string
                 type: object
                 x-kubernetes-map-type: atomic
+              configuration:
+                properties:
+                  init:
+                    properties:
+                      inline:
+                        properties:
+                          adminVariables:
+                            type: object
+                            x-kubernetes-preserve-unknown-fields: true
+                          mysqlQueryRules:
+                            items:
+                              type: object
+                              x-kubernetes-preserve-unknown-fields: true
+                            type: array
+                            x-kubernetes-preserve-unknown-fields: true
+                          mysqlUsers:
+                            items:
+                              properties:
+                                active:
+                                  type: integer
+                                attributes:
+                                  type: string
+                                backend:
+                                  type: integer
+                                comment:
+                                  type: string
+                                default_hostgroup:
+                                  type: integer
+                                default_schema:
+                                  type: string
+                                fast_forward:
+                                  type: integer
+                                frontend:
+                                  type: integer
+                                max_connections:
+                                  format: int32
+                                  type: integer
+                                schema_locked:
+                                  type: integer
+                                transaction_persistent:
+                                  type: integer
+                                use_ssl:
+                                  type: integer
+                                username:
+                                  type: string
+                              required:
+                              - username
+                              type: object
+                            type: array
+                          mysqlVariables:
+                            type: object
+                            x-kubernetes-preserve-unknown-fields: true
+                        type: object
+                      secretName:
+                        type: string
+                    type: object
+                type: object
               deletionPolicy:
                 enum:
                 - Halt

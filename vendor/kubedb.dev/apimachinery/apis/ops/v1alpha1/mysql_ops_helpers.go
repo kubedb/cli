@@ -68,8 +68,8 @@ func (m *MySQLOpsRequest) GetDBRefName() string {
 	return m.Spec.DatabaseRef.Name
 }
 
-func (m *MySQLOpsRequest) GetRequestType() any {
-	return m.Spec.Type
+func (m *MySQLOpsRequest) GetRequestType() string {
+	return string(m.Spec.Type)
 }
 
 func (m *MySQLOpsRequest) GetStatus() OpsRequestStatus {

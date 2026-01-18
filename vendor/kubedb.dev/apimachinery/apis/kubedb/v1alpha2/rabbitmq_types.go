@@ -87,6 +87,9 @@ type RabbitMQSpec struct {
 	// +optional
 	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty"`
 
+	// +optional
+	Configuration *ConfigurationSpec `json:"configuration,omitempty"`
+
 	// TLS contains tls configurations
 	// +optional
 	TLS *kmapi.TLSConfig `json:"tls,omitempty"`

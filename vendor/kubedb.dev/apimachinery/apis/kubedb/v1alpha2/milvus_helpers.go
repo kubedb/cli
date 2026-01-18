@@ -109,7 +109,8 @@ func (m *Milvus) GetAuthSecretName() string {
 }
 
 func (m *Milvus) ConfigSecretName() string {
-	return meta_util.NameWithSuffix(m.OffshootName(), "config")
+	uid := string(m.UID)
+	return meta_util.NameWithSuffix(m.OffshootName(), uid[len(uid)-6:])
 }
 
 func (m *Milvus) GetPersistentSecrets() []string {

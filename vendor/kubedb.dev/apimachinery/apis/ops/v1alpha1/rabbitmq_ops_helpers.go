@@ -63,8 +63,8 @@ func (r *RabbitMQOpsRequest) GetDBRefName() string {
 	return r.Spec.DatabaseRef.Name
 }
 
-func (r *RabbitMQOpsRequest) GetRequestType() any {
-	return r.Spec.Type
+func (r *RabbitMQOpsRequest) GetRequestType() string {
+	return string(r.Spec.Type)
 }
 
 func (r *RabbitMQOpsRequest) GetStatus() OpsRequestStatus {

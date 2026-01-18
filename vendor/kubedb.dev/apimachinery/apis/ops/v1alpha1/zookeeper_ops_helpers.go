@@ -63,8 +63,8 @@ func (z *ZooKeeperOpsRequest) GetDBRefName() string {
 	return z.Spec.DatabaseRef.Name
 }
 
-func (z *ZooKeeperOpsRequest) GetRequestType() any {
-	return z.Spec.Type
+func (z *ZooKeeperOpsRequest) GetRequestType() string {
+	return string(z.Spec.Type)
 }
 
 func (z *ZooKeeperOpsRequest) GetStatus() OpsRequestStatus {

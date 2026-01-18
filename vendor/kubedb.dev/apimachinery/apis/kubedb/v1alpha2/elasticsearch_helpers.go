@@ -372,7 +372,8 @@ func (e elasticsearchStatsService) Path() string {
 }
 
 func (e elasticsearchStatsService) Scheme() string {
-	return ""
+	sc := promapi.SchemeHTTP
+	return sc.String()
 }
 
 func (e elasticsearchStatsService) TLSConfig() *promapi.TLSConfig {

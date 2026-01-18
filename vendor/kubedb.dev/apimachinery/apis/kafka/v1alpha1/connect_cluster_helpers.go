@@ -159,7 +159,8 @@ func (ks connectClusterStatsService) Path() string {
 }
 
 func (ks connectClusterStatsService) Scheme() string {
-	return ""
+	sc := promapi.SchemeHTTP
+	return sc.String()
 }
 
 func (k *ConnectCluster) StatsService() mona.StatsAccessor {
@@ -179,7 +180,8 @@ func (k *ConnectCluster) PetSetName() string {
 }
 
 func (k *ConnectCluster) ConfigSecretName() string {
-	return meta_util.NameWithSuffix(k.OffshootName(), "config")
+	uid := string(k.UID)
+	return meta_util.NameWithSuffix(k.OffshootName(), uid[len(uid)-6:])
 }
 
 func (k *ConnectCluster) GetPersistentSecrets() []string {
@@ -255,6 +257,7 @@ func (k *ConnectCluster) SetDefaults(kc client.Client) {
 	if k.Spec.Replicas == nil {
 		k.Spec.Replicas = pointer.Int32P(1)
 	}
+	k.Spec.Configuration = copyConfigurationField(k.Spec.Configuration, &k.Spec.ConfigSecret)
 
 	var kfVersion catalog.KafkaVersion
 	err := kc.Get(context.TODO(), types.NamespacedName{Name: k.Spec.Version}, &kfVersion)

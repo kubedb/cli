@@ -2,14 +2,14 @@
 ## explicit; go 1.20
 filippo.io/edwards25519
 filippo.io/edwards25519/field
-# github.com/Azure/go-ansiterm v0.0.0-20230124172434-306776ec8161
+# github.com/Azure/go-ansiterm v0.0.0-20250102033503-faa5f7b0171c
 ## explicit; go 1.16
 github.com/Azure/go-ansiterm
 github.com/Azure/go-ansiterm/winterm
 # github.com/MakeNowJust/heredoc v1.0.0
 ## explicit; go 1.12
 github.com/MakeNowJust/heredoc
-# github.com/Masterminds/semver/v3 v3.3.1
+# github.com/Masterminds/semver/v3 v3.4.0
 ## explicit; go 1.21
 github.com/Masterminds/semver/v3
 # github.com/beorn7/perks v1.0.1
@@ -1664,7 +1664,7 @@ github.com/json-iterator/go
 # github.com/klauspost/cpuid/v2 v2.2.10
 ## explicit; go 1.22
 github.com/klauspost/cpuid/v2
-# github.com/kubernetes-csi/external-snapshotter/client/v8 v8.2.0
+# github.com/kubernetes-csi/external-snapshotter/client/v8 v8.4.0
 ## explicit; go 1.22.0
 github.com/kubernetes-csi/external-snapshotter/client/v8/apis/volumesnapshot/v1
 # github.com/liggitt/tabwriter v0.0.0-20181228230101-89fcab3d43de
@@ -1680,7 +1680,7 @@ github.com/mitchellh/mapstructure
 ## explicit; go 1.13
 github.com/moby/spdystream
 github.com/moby/spdystream/spdy
-# github.com/moby/term v0.5.0
+# github.com/moby/term v0.5.2
 ## explicit; go 1.18
 github.com/moby/term
 github.com/moby/term/windows
@@ -1729,6 +1729,13 @@ github.com/opensearch-project/opensearch-go/v2/internal/version
 github.com/opensearch-project/opensearch-go/v2/opensearchapi
 github.com/opensearch-project/opensearch-go/v2/opensearchtransport
 github.com/opensearch-project/opensearch-go/v2/signer
+# github.com/opensearch-project/opensearch-go/v3 v3.1.0
+## explicit; go 1.20
+github.com/opensearch-project/opensearch-go/v3
+github.com/opensearch-project/opensearch-go/v3/internal/version
+github.com/opensearch-project/opensearch-go/v3/opensearchapi
+github.com/opensearch-project/opensearch-go/v3/opensearchtransport
+github.com/opensearch-project/opensearch-go/v3/signer
 # github.com/peterbourgon/diskv v2.0.1+incompatible
 ## explicit
 github.com/peterbourgon/diskv
@@ -1918,7 +1925,7 @@ golang.org/x/text/secure/bidirule
 golang.org/x/text/transform
 golang.org/x/text/unicode/bidi
 golang.org/x/text/unicode/norm
-# golang.org/x/time v0.13.0
+# golang.org/x/time v0.14.0
 ## explicit; go 1.24.0
 golang.org/x/time/rate
 # gomodules.xyz/clock v0.0.0-20200817085942-06523dba733f
@@ -2579,12 +2586,12 @@ kmodules.xyz/offshoot-api/util
 # kmodules.xyz/prober v0.34.0
 ## explicit; go 1.24.0
 kmodules.xyz/prober/api/v1
-# kmodules.xyz/resource-metadata v0.40.2
-## explicit; go 1.24.0
+# kmodules.xyz/resource-metadata v0.41.0
+## explicit; go 1.25
 kmodules.xyz/resource-metadata/apis/node
 kmodules.xyz/resource-metadata/apis/node/v1alpha1
 kmodules.xyz/resource-metadata/crds
-# kubedb.dev/apimachinery v0.60.0-rc.1
+# kubedb.dev/apimachinery v0.60.0
 ## explicit; go 1.25.0
 kubedb.dev/apimachinery/apis
 kubedb.dev/apimachinery/apis/archiver/v1alpha1
@@ -2630,15 +2637,19 @@ kubedb.dev/apimachinery/crds
 kubedb.dev/apimachinery/pkg/double_optin
 kubedb.dev/apimachinery/pkg/factory
 kubedb.dev/apimachinery/pkg/lib
-# kubedb.dev/db-client-go v0.15.0-rc.1
+# kubedb.dev/db-client-go v0.15.0
 ## explicit; go 1.25.5
 kubedb.dev/db-client-go/elasticsearch
 kubedb.dev/db-client-go/redis
-# kubeops.dev/csi-driver-cacerts v0.4.0
-## explicit; go 1.24.0
+# kubeops.dev/csi-driver-cacerts v0.5.0
+## explicit; go 1.25.0
 kubeops.dev/csi-driver-cacerts/apis/cacerts
 kubeops.dev/csi-driver-cacerts/apis/cacerts/v1alpha1
 kubeops.dev/csi-driver-cacerts/crds
+# kubeops.dev/operator-shard-manager v0.0.5
+## explicit; go 1.25
+kubeops.dev/operator-shard-manager/api/v1alpha1
+kubeops.dev/operator-shard-manager/crds
 # kubeops.dev/petset v0.0.15
 ## explicit; go 1.24.0
 kubeops.dev/petset/apis/apps/v1
@@ -2651,14 +2662,14 @@ kubeops.dev/petset/crds
 kubeops.dev/sidekick/apis/apps
 kubeops.dev/sidekick/apis/apps/v1alpha1
 kubeops.dev/sidekick/crds
-# kubestash.dev/apimachinery v0.22.0
-## explicit; go 1.25
+# kubestash.dev/apimachinery v0.23.0
+## explicit; go 1.25.0
 kubestash.dev/apimachinery/apis
 kubestash.dev/apimachinery/apis/core/v1alpha1
 kubestash.dev/apimachinery/apis/storage/v1alpha1
 kubestash.dev/apimachinery/crds
-# open-cluster-management.io/api v1.0.0
-## explicit; go 1.23.6
+# open-cluster-management.io/api v1.1.1-0.20251222023835-510285203ee6
+## explicit; go 1.25.0
 open-cluster-management.io/api/work/v1
 # sigs.k8s.io/controller-runtime v0.22.4 => github.com/kmodules/controller-runtime v0.22.5-0.20251227114913-f011264689cd
 ## explicit; go 1.24.0

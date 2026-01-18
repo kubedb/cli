@@ -63,8 +63,8 @@ func (r *IgniteOpsRequest) GetDBRefName() string {
 	return r.Spec.DatabaseRef.Name
 }
 
-func (r *IgniteOpsRequest) GetRequestType() any {
-	return r.Spec.Type
+func (r *IgniteOpsRequest) GetRequestType() string {
+	return string(r.Spec.Type)
 }
 
 func (r *IgniteOpsRequest) GetStatus() OpsRequestStatus {

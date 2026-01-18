@@ -64,13 +64,15 @@ spec:
                 type: object
               clientAuthSSL:
                 type: string
-              configSecret:
+              configuration:
                 properties:
-                  name:
-                    default: ""
+                  inline:
+                    additionalProperties:
+                      type: string
+                    type: object
+                  secretName:
                     type: string
                 type: object
-                x-kubernetes-map-type: atomic
               deletionPolicy:
                 enum:
                 - Halt

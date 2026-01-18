@@ -116,7 +116,8 @@ func (s singlestoreStatsService) Path() string {
 }
 
 func (s singlestoreStatsService) Scheme() string {
-	return ""
+	sc := promapi.SchemeHTTP
+	return sc.String()
 }
 
 func (s singlestoreStatsService) TLSConfig() *promapi.TLSConfig {
@@ -247,10 +248,6 @@ func (s *Singlestore) PodLabel(podTemplate *ofst.PodTemplateSpec) map[string]str
 		return s.offshootLabels(s.OffshootSelectors(), podTemplate.Labels)
 	}
 	return s.offshootLabels(s.OffshootSelectors(), nil)
-}
-
-func (s *Singlestore) ConfigSecretName() string {
-	return metautil.NameWithSuffix(s.OffshootName(), "config")
 }
 
 func (s *Singlestore) PetSetName() string {
@@ -533,6 +530,18 @@ func (s *Singlestore) ReplicasAreReady(lister pslister.PetSetLister) (bool, stri
 		expectedItems = 2
 	}
 	return checkReplicasOfPetSet(lister.PetSets(s.Namespace), labels.SelectorFromSet(s.OffshootLabels()), expectedItems)
+}
+
+// ConfigSecretName returns the name of the inline config secret
+// it expects a suffix to differentiate between aggregator and leaf config secrets
+func (s *Singlestore) ConfigSecretName(suf string) string {
+	secretName := metautil.NameWithSuffix(s.OffshootName(), suf)
+	uid := string(s.UID)
+	return metautil.NameWithSuffix(secretName, uid[len(uid)-6:])
+}
+
+func (s *Singlestore) AddKeyPrefix(key string) string {
+	return metautil.NameWithPrefix(kubedb.InlineConfigKeyPrefixZZ, key)
 }
 
 type SinglestoreBind struct {

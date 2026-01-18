@@ -3,7 +3,7 @@ module kubedb.dev/cli
 go 1.25.5
 
 require (
-	github.com/Masterminds/semver/v3 v3.3.1
+	github.com/Masterminds/semver/v3 v3.4.0
 	github.com/cert-manager/cert-manager v1.19.2
 	github.com/fatih/camelcase v1.0.0
 	github.com/go-sql-driver/mysql v1.9.3
@@ -27,8 +27,8 @@ require (
 	kmodules.xyz/client-go v0.34.2
 	kmodules.xyz/custom-resources v0.34.0
 	kmodules.xyz/monitoring-agent-api v0.34.0
-	kubedb.dev/apimachinery v0.60.0-rc.1
-	kubedb.dev/db-client-go v0.15.0-rc.1
+	kubedb.dev/apimachinery v0.60.0
+	kubedb.dev/db-client-go v0.15.0
 	kubeops.dev/petset v0.0.15
 	sigs.k8s.io/controller-runtime v0.22.4
 	sigs.k8s.io/yaml v1.6.0
@@ -55,7 +55,7 @@ require (
 
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
-	github.com/Azure/go-ansiterm v0.0.0-20230124172434-306776ec8161 // indirect
+	github.com/Azure/go-ansiterm v0.0.0-20250102033503-faa5f7b0171c // indirect
 	github.com/MakeNowJust/heredoc v1.0.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/blang/semver/v4 v4.0.0 // indirect
@@ -100,12 +100,12 @@ require (
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.10 // indirect
-	github.com/kubernetes-csi/external-snapshotter/client/v8 v8.2.0 // indirect
+	github.com/kubernetes-csi/external-snapshotter/client/v8 v8.4.0 // indirect
 	github.com/liggitt/tabwriter v0.0.0-20181228230101-89fcab3d43de // indirect
 	github.com/mitchellh/go-wordwrap v1.0.1 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/moby/spdystream v0.5.0 // indirect
-	github.com/moby/term v0.5.0 // indirect
+	github.com/moby/term v0.5.2 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.3-0.20250322232337-35a7c28c31ee // indirect
 	github.com/monochromegane/go-gitignore v0.0.0-20200626010858-205db1a8cc00 // indirect
@@ -115,6 +115,7 @@ require (
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opensearch-project/opensearch-go v1.1.0 // indirect
 	github.com/opensearch-project/opensearch-go/v2 v2.3.0 // indirect
+	github.com/opensearch-project/opensearch-go/v3 v3.1.0 // indirect
 	github.com/peterbourgon/diskv v2.0.1+incompatible // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring v0.87.1 // indirect
@@ -142,7 +143,7 @@ require (
 	golang.org/x/sync v0.19.0 // indirect
 	golang.org/x/sys v0.39.0 // indirect
 	golang.org/x/term v0.38.0 // indirect
-	golang.org/x/time v0.13.0 // indirect
+	golang.org/x/time v0.14.0 // indirect
 	gomodules.xyz/clock v0.0.0-20200817085942-06523dba733f // indirect
 	gomodules.xyz/encoding v0.0.8 // indirect
 	gomodules.xyz/flags v0.1.3 // indirect
@@ -166,11 +167,12 @@ require (
 	kmodules.xyz/objectstore-api v0.34.0 // indirect
 	kmodules.xyz/offshoot-api v0.34.0 // indirect
 	kmodules.xyz/prober v0.34.0 // indirect
-	kmodules.xyz/resource-metadata v0.40.2 // indirect
-	kubeops.dev/csi-driver-cacerts v0.4.0 // indirect
+	kmodules.xyz/resource-metadata v0.41.0 // indirect
+	kubeops.dev/csi-driver-cacerts v0.5.0 // indirect
+	kubeops.dev/operator-shard-manager v0.0.5 // indirect
 	kubeops.dev/sidekick v0.0.12 // indirect
-	kubestash.dev/apimachinery v0.22.0 // indirect
-	open-cluster-management.io/api v1.0.0 // indirect
+	kubestash.dev/apimachinery v0.23.0 // indirect
+	open-cluster-management.io/api v1.1.1-0.20251222023835-510285203ee6 // indirect
 	sigs.k8s.io/gateway-api v1.4.0 // indirect
 	sigs.k8s.io/json v0.0.0-20250730193827-2d320260d730 // indirect
 	sigs.k8s.io/kustomize/api v0.20.1 // indirect

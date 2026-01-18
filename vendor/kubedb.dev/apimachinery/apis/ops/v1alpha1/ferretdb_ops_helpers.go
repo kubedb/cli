@@ -63,8 +63,8 @@ func (r *FerretDBOpsRequest) GetDBRefName() string {
 	return r.Spec.DatabaseRef.Name
 }
 
-func (r *FerretDBOpsRequest) GetRequestType() any {
-	return r.Spec.Type
+func (r *FerretDBOpsRequest) GetRequestType() string {
+	return string(r.Spec.Type)
 }
 
 func (r *FerretDBOpsRequest) GetStatus() OpsRequestStatus {

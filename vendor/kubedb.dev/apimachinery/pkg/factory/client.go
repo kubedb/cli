@@ -31,6 +31,7 @@ import (
 	metricsscheme "k8s.io/metrics/pkg/client/clientset/versioned/scheme"
 	crscheme "kmodules.xyz/custom-resources/client/clientset/versioned/scheme"
 	cacertsv1alpha1 "kubeops.dev/csi-driver-cacerts/apis/cacerts/v1alpha1"
+	shardapi "kubeops.dev/operator-shard-manager/api/v1alpha1"
 	psapi "kubeops.dev/petset/apis/apps/v1"
 	sidekickapi "kubeops.dev/sidekick/apis/apps/v1alpha1"
 	stashcoreapi "kubestash.dev/apimachinery/apis/core/v1alpha1"
@@ -117,7 +118,10 @@ func NewUncachedClient(cfg *rest.Config) (client.Client, error) {
 		return nil, err
 	}
 
-	if err := kubesliceapi.AddToScheme(scheme); err != nil {
+	if err := kubesliceapi.Install(scheme); err != nil {
+		return nil, err
+	}
+	if err := shardapi.AddToScheme(scheme); err != nil {
 		return nil, err
 	}
 

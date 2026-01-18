@@ -64,7 +64,7 @@ type ElasticsearchOpsRequestSpec struct {
 	// Specifies information necessary for volume expansion
 	VolumeExpansion *ElasticsearchVolumeExpansionSpec `json:"volumeExpansion,omitempty"`
 	// Specifies information necessary for custom configuration of Elasticsearch
-	Configuration *ElasticsearchCustomConfigurationSpec `json:"configuration,omitempty"`
+	Configuration *ElasticsearchReconfigurationSpec `json:"configuration,omitempty"`
 	// Specifies information necessary for configuring TLS
 	TLS *TLSSpec `json:"tls,omitempty"`
 	// Specifies information necessary for configuring authSecret of the database
@@ -158,8 +158,8 @@ type ElasticsearchVolumeExpansionSpec struct {
 	Coordinating *resource.Quantity `json:"coordinating,omitempty"`
 }
 
-// ElasticsearchCustomConfigurationSpec is the spec for Reconfiguring the Elasticsearch Settings
-type ElasticsearchCustomConfigurationSpec struct {
+// ElasticsearchReconfigurationSpecis the spec for Reconfiguring the Elasticsearch Settings
+type ElasticsearchReconfigurationSpec struct {
 	// ConfigSecret is an optional field to provide custom configuration file for database.
 	// +optional
 	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty"`
@@ -189,6 +189,14 @@ type ElasticsearchCustomConfigurationSpec struct {
 	// The elasticsearch.keystore will start will default password (i.e. "").
 	// +optional
 	RemoveSecureCustomConfig bool `json:"removeSecureCustomConfig,omitempty"`
+
+	// Restart controls whether to restart the database during reconfiguration.
+	// - auto (default): Operator determines if restart is needed based on configuration changes.
+	// - true: Restart the database during reconfiguration.
+	// - false: Don't restart the database during reconfiguration.
+	// +optional
+	// +kubebuilder:default=auto
+	Restart ReconfigureRestartType `json:"restart,omitempty"`
 }
 
 type ElasticsearchCustomConfiguration struct {

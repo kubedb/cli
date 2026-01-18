@@ -166,10 +166,8 @@ type RedisVolumeExpansionSpec struct {
 }
 
 type RedisCustomConfigurationSpec struct {
-	ConfigSecret       *core.LocalObjectReference `json:"configSecret,omitempty"`
-	ApplyConfig        map[string]string          `json:"applyConfig,omitempty"`
-	RemoveCustomConfig bool                       `json:"removeCustomConfig,omitempty"`
-	Auth               *RedisAclSpec              `json:"auth,omitempty"`
+	ReconfigurationSpec `json:",inline,omitempty"`
+	Auth                *RedisAclSpec `json:"auth,omitempty"`
 }
 
 // +kubebuilder:validation:Enum=ip;hostname

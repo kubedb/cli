@@ -520,6 +520,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1.ArchiverRecovery":                                    schema_apimachinery_apis_kubedb_v1_ArchiverRecovery(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.AutoOpsSpec":                                         schema_apimachinery_apis_kubedb_v1_AutoOpsSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.BrokerRack":                                          schema_apimachinery_apis_kubedb_v1_BrokerRack(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1.ConfigurationSpec":                                   schema_apimachinery_apis_kubedb_v1_ConfigurationSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.ConnectionPoolConfig":                                schema_apimachinery_apis_kubedb_v1_ConnectionPoolConfig(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.ConsumerNamespaces":                                  schema_apimachinery_apis_kubedb_v1_ConsumerNamespaces(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.Database":                                            schema_apimachinery_apis_kubedb_v1_Database(ref),
@@ -587,6 +588,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1.PgBouncerStatus":                                     schema_apimachinery_apis_kubedb_v1_PgBouncerStatus(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.PostgreLeaderElectionConfig":                         schema_apimachinery_apis_kubedb_v1_PostgreLeaderElectionConfig(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.Postgres":                                            schema_apimachinery_apis_kubedb_v1_Postgres(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1.PostgresConfiguration":                               schema_apimachinery_apis_kubedb_v1_PostgresConfiguration(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.PostgresList":                                        schema_apimachinery_apis_kubedb_v1_PostgresList(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.PostgresReplication":                                 schema_apimachinery_apis_kubedb_v1_PostgresReplication(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.PostgresSpec":                                        schema_apimachinery_apis_kubedb_v1_PostgresSpec(ref),
@@ -594,6 +596,8 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1.PostgresTuningConfig":                                schema_apimachinery_apis_kubedb_v1_PostgresTuningConfig(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.ProxySQL":                                            schema_apimachinery_apis_kubedb_v1_ProxySQL(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.ProxySQLConfiguration":                               schema_apimachinery_apis_kubedb_v1_ProxySQLConfiguration(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1.ProxySQLConfigurationSpec":                           schema_apimachinery_apis_kubedb_v1_ProxySQLConfigurationSpec(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1.ProxySQLInitConfiguration":                           schema_apimachinery_apis_kubedb_v1_ProxySQLInitConfiguration(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.ProxySQLList":                                        schema_apimachinery_apis_kubedb_v1_ProxySQLList(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.ProxySQLSpec":                                        schema_apimachinery_apis_kubedb_v1_ProxySQLSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.ProxySQLStatus":                                      schema_apimachinery_apis_kubedb_v1_ProxySQLStatus(ref),
@@ -601,6 +605,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1.Redis":                                               schema_apimachinery_apis_kubedb_v1_Redis(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.RedisAclSpec":                                        schema_apimachinery_apis_kubedb_v1_RedisAclSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.RedisClusterSpec":                                    schema_apimachinery_apis_kubedb_v1_RedisClusterSpec(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1.RedisConfiguration":                                  schema_apimachinery_apis_kubedb_v1_RedisConfiguration(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.RedisList":                                           schema_apimachinery_apis_kubedb_v1_RedisList(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.RedisSentinel":                                       schema_apimachinery_apis_kubedb_v1_RedisSentinel(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.RedisSentinelList":                                   schema_apimachinery_apis_kubedb_v1_RedisSentinelList(ref),
@@ -615,7 +620,6 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1.SemiSyncSpec":                                        schema_apimachinery_apis_kubedb_v1_SemiSyncSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.Shards":                                              schema_apimachinery_apis_kubedb_v1_Shards(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.SystemUserSecretsSpec":                               schema_apimachinery_apis_kubedb_v1_SystemUserSecretsSpec(ref),
-		"kubedb.dev/apimachinery/apis/kubedb/v1.TuningResourcesOverride":                             schema_apimachinery_apis_kubedb_v1_TuningResourcesOverride(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.elasticsearchApp":                                    schema_apimachinery_apis_kubedb_v1_elasticsearchApp(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.elasticsearchStatsService":                           schema_apimachinery_apis_kubedb_v1_elasticsearchStatsService(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.kafkaStatsService":                                   schema_apimachinery_apis_kubedb_v1_kafkaStatsService(ref),
@@ -26828,6 +26832,41 @@ func schema_apimachinery_apis_kubedb_v1_BrokerRack(ref common.ReferenceCallback)
 	}
 }
 
+func schema_apimachinery_apis_kubedb_v1_ConfigurationSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"secretName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "SecretName is an optional field to provide custom configuration file for the database (i.e. elasticsearch.yml, mongod.conf ..). If specified, these configurations will be used with default configurations (if any) and applyConfig configurations (if any). configurations from this secret will override default configurations. This secret must be created by user.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"inline": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Inline contains key-value pairs of configurations to be applied to the database. These configurations will override both default configurations and configurations from the config secret (if any).",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
 func schema_apimachinery_apis_kubedb_v1_ConnectionPoolConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -27380,6 +27419,11 @@ func schema_apimachinery_apis_kubedb_v1_ElasticsearchSpec(ref common.ReferenceCa
 							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
 						},
 					},
+					"configuration": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1.ConfigurationSpec"),
+						},
+					},
 					"secureConfigSecret": {
 						SchemaProps: spec.SchemaProps{
 							Description: "SecureConfigSecret is an optional field to provide secure settings for database.\n\t- Ref: https://www.elastic.co/guide/en/elasticsearch/reference/7.14/secure-settings.html\nSecure settings are store at \"ES_CONFIG_DIR/elasticsearch.keystore\" file (contents are encoded with password), once the keystore created. Expects a k8s secret name with data format:\n\tdata:\n\t\tkey: value\n\t\tpassword: KEYSTORE_PASSWORD\n\t\ts3.client.default.access_key: ACCESS_KEY\n\t\ts3.client.default.secret_key: SECRET_KEY",
@@ -27488,7 +27532,7 @@ func schema_apimachinery_apis_kubedb_v1_ElasticsearchSpec(ref common.ReferenceCa
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "k8s.io/apimachinery/pkg/util/intstr.IntOrString", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.ElasticsearchClusterTopology", "kubedb.dev/apimachinery/apis/kubedb/v1.ElasticsearchRoleMapSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.ElasticsearchUserSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.KernelSettings", "kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "k8s.io/apimachinery/pkg/util/intstr.IntOrString", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.ConfigurationSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.ElasticsearchClusterTopology", "kubedb.dev/apimachinery/apis/kubedb/v1.ElasticsearchRoleMapSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.ElasticsearchUserSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.KernelSettings", "kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"},
 	}
 }
 
@@ -27943,10 +27987,9 @@ func schema_apimachinery_apis_kubedb_v1_KafkaCruiseControl(ref common.ReferenceC
 			SchemaProps: spec.SchemaProps{
 				Type: []string{"object"},
 				Properties: map[string]spec.Schema{
-					"configSecret": {
+					"configuration": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Configuration for cruise-control",
-							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"),
+							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1.ConfigurationSpec"),
 						},
 					},
 					"replicas": {
@@ -27961,13 +28004,6 @@ func schema_apimachinery_apis_kubedb_v1_KafkaCruiseControl(ref common.ReferenceC
 							Description: "Suffix to append with node name",
 							Type:        []string{"string"},
 							Format:      "",
-						},
-					},
-					"resources": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Compute Resources required by the sidecar container.",
-							Default:     map[string]interface{}{},
-							Ref:         ref("k8s.io/api/core/v1.ResourceRequirements"),
 						},
 					},
 					"podTemplate": {
@@ -27987,7 +28023,7 @@ func schema_apimachinery_apis_kubedb_v1_KafkaCruiseControl(ref common.ReferenceC
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.ResourceRequirements", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.KafkaBrokerCapacity", "kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"},
+			"kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.ConfigurationSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.KafkaBrokerCapacity"},
 	}
 }
 
@@ -28161,6 +28197,11 @@ func schema_apimachinery_apis_kubedb_v1_KafkaSpec(ref common.ReferenceCallback) 
 							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
 						},
 					},
+					"configuration": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1.ConfigurationSpec"),
+						},
+					},
 					"keystoreCredSecret": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Keystore encryption secret",
@@ -28232,7 +28273,7 @@ func schema_apimachinery_apis_kubedb_v1_KafkaSpec(ref common.ReferenceCallback) 
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.BrokerRack", "kubedb.dev/apimachinery/apis/kubedb/v1.KafkaClusterTopology", "kubedb.dev/apimachinery/apis/kubedb/v1.KafkaCruiseControl", "kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.BrokerRack", "kubedb.dev/apimachinery/apis/kubedb/v1.ConfigurationSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.KafkaClusterTopology", "kubedb.dev/apimachinery/apis/kubedb/v1.KafkaCruiseControl", "kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"},
 	}
 }
 
@@ -28527,6 +28568,11 @@ func schema_apimachinery_apis_kubedb_v1_MariaDBSpec(ref common.ReferenceCallback
 							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
 						},
 					},
+					"configuration": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1.ConfigurationSpec"),
+						},
+					},
 					"podTemplate": {
 						SchemaProps: spec.SchemaProps{
 							Description: "PodTemplate is an optional configuration for pods used to expose database",
@@ -28606,7 +28652,7 @@ func schema_apimachinery_apis_kubedb_v1_MariaDBSpec(ref common.ReferenceCallback
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.AllowedConsumers", "kubedb.dev/apimachinery/apis/kubedb/v1.Archiver", "kubedb.dev/apimachinery/apis/kubedb/v1.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.MariaDBTopology", "kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.AllowedConsumers", "kubedb.dev/apimachinery/apis/kubedb/v1.Archiver", "kubedb.dev/apimachinery/apis/kubedb/v1.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.ConfigurationSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.MariaDBTopology", "kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"},
 	}
 }
 
@@ -28865,6 +28911,12 @@ func schema_apimachinery_apis_kubedb_v1_MemcachedSpec(ref common.ReferenceCallba
 							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
 						},
 					},
+					"configuration": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Configuration holds the custom config for memcached",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1.ConfigurationSpec"),
+						},
+					},
 					"authSecret": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Database Authentication Secret If specified, this will be used for authentication otherwise default secret will be used.",
@@ -28937,7 +28989,7 @@ func schema_apimachinery_apis_kubedb_v1_MemcachedSpec(ref common.ReferenceCallba
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.VolumeSource", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.VolumeSource", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.ConfigurationSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"},
 	}
 }
 
@@ -28995,6 +29047,11 @@ func schema_apimachinery_apis_kubedb_v1_MongoArbiterNode(ref common.ReferenceCal
 							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
 						},
 					},
+					"configuration": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1.ConfigurationSpec"),
+						},
+					},
 					"podTemplate": {
 						SchemaProps: spec.SchemaProps{
 							Description: "PodTemplate is an optional configuration for pods used to expose database",
@@ -29005,7 +29062,7 @@ func schema_apimachinery_apis_kubedb_v1_MongoArbiterNode(ref common.ReferenceCal
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.ConfigurationSpec"},
 	}
 }
 
@@ -29082,6 +29139,11 @@ func schema_apimachinery_apis_kubedb_v1_MongoDBConfigNode(ref common.ReferenceCa
 							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
 						},
 					},
+					"configuration": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1.ConfigurationSpec"),
+						},
+					},
 					"podTemplate": {
 						SchemaProps: spec.SchemaProps{
 							Description: "PodTemplate is an optional configuration for pods used to expose database",
@@ -29105,7 +29167,7 @@ func schema_apimachinery_apis_kubedb_v1_MongoDBConfigNode(ref common.ReferenceCa
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.EmptyDirVolumeSource", "k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec"},
+			"k8s.io/api/core/v1.EmptyDirVolumeSource", "k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.ConfigurationSpec"},
 	}
 }
 
@@ -29184,6 +29246,11 @@ func schema_apimachinery_apis_kubedb_v1_MongoDBMongosNode(ref common.ReferenceCa
 							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
 						},
 					},
+					"configuration": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1.ConfigurationSpec"),
+						},
+					},
 					"podTemplate": {
 						SchemaProps: spec.SchemaProps{
 							Description: "PodTemplate is an optional configuration for pods used to expose database",
@@ -29195,7 +29262,7 @@ func schema_apimachinery_apis_kubedb_v1_MongoDBMongosNode(ref common.ReferenceCa
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.ConfigurationSpec"},
 	}
 }
 
@@ -29226,6 +29293,11 @@ func schema_apimachinery_apis_kubedb_v1_MongoDBNode(ref common.ReferenceCallback
 							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
 						},
 					},
+					"configuration": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1.ConfigurationSpec"),
+						},
+					},
 					"podTemplate": {
 						SchemaProps: spec.SchemaProps{
 							Description: "PodTemplate is an optional configuration for pods used to expose database",
@@ -29237,7 +29309,7 @@ func schema_apimachinery_apis_kubedb_v1_MongoDBNode(ref common.ReferenceCallback
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.ConfigurationSpec"},
 	}
 }
 
@@ -29305,6 +29377,11 @@ func schema_apimachinery_apis_kubedb_v1_MongoDBShardNode(ref common.ReferenceCal
 							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
 						},
 					},
+					"configuration": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1.ConfigurationSpec"),
+						},
+					},
 					"podTemplate": {
 						SchemaProps: spec.SchemaProps{
 							Description: "PodTemplate is an optional configuration for pods used to expose database",
@@ -29328,7 +29405,7 @@ func schema_apimachinery_apis_kubedb_v1_MongoDBShardNode(ref common.ReferenceCal
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.EmptyDirVolumeSource", "k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec"},
+			"k8s.io/api/core/v1.EmptyDirVolumeSource", "k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.ConfigurationSpec"},
 	}
 }
 
@@ -29465,6 +29542,11 @@ func schema_apimachinery_apis_kubedb_v1_MongoDBSpec(ref common.ReferenceCallback
 							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
 						},
 					},
+					"configuration": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1.ConfigurationSpec"),
+						},
+					},
 					"podTemplate": {
 						SchemaProps: spec.SchemaProps{
 							Description: "PodTemplate is an optional configuration for pods used to expose database",
@@ -29554,7 +29636,7 @@ func schema_apimachinery_apis_kubedb_v1_MongoDBSpec(ref common.ReferenceCallback
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.EmptyDirVolumeSource", "k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.AllowedConsumers", "kubedb.dev/apimachinery/apis/kubedb/v1.Archiver", "kubedb.dev/apimachinery/apis/kubedb/v1.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.MongoArbiterNode", "kubedb.dev/apimachinery/apis/kubedb/v1.MongoDBReplicaSet", "kubedb.dev/apimachinery/apis/kubedb/v1.MongoDBShardingTopology", "kubedb.dev/apimachinery/apis/kubedb/v1.MongoHiddenNode", "kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"},
+			"k8s.io/api/core/v1.EmptyDirVolumeSource", "k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.AllowedConsumers", "kubedb.dev/apimachinery/apis/kubedb/v1.Archiver", "kubedb.dev/apimachinery/apis/kubedb/v1.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.ConfigurationSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.MongoArbiterNode", "kubedb.dev/apimachinery/apis/kubedb/v1.MongoDBReplicaSet", "kubedb.dev/apimachinery/apis/kubedb/v1.MongoDBShardingTopology", "kubedb.dev/apimachinery/apis/kubedb/v1.MongoHiddenNode", "kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"},
 	}
 }
 
@@ -29617,6 +29699,11 @@ func schema_apimachinery_apis_kubedb_v1_MongoHiddenNode(ref common.ReferenceCall
 							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
 						},
 					},
+					"configuration": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1.ConfigurationSpec"),
+						},
+					},
 					"podTemplate": {
 						SchemaProps: spec.SchemaProps{
 							Description: "PodTemplate is an optional configuration for pods used to expose database",
@@ -29643,7 +29730,7 @@ func schema_apimachinery_apis_kubedb_v1_MongoHiddenNode(ref common.ReferenceCall
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.ConfigurationSpec"},
 	}
 }
 
@@ -29890,6 +29977,11 @@ func schema_apimachinery_apis_kubedb_v1_MySQLSpec(ref common.ReferenceCallback) 
 							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
 						},
 					},
+					"configuration": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1.ConfigurationSpec"),
+						},
+					},
 					"podTemplate": {
 						SchemaProps: spec.SchemaProps{
 							Description: "PodTemplate is an optional configuration for pods used to expose database",
@@ -29976,7 +30068,7 @@ func schema_apimachinery_apis_kubedb_v1_MySQLSpec(ref common.ReferenceCallback) 
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.AllowedConsumers", "kubedb.dev/apimachinery/apis/kubedb/v1.Archiver", "kubedb.dev/apimachinery/apis/kubedb/v1.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.MySQLTopology", "kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.AllowedConsumers", "kubedb.dev/apimachinery/apis/kubedb/v1.Archiver", "kubedb.dev/apimachinery/apis/kubedb/v1.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.ConfigurationSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.MySQLTopology", "kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"},
 	}
 }
 
@@ -30359,6 +30451,11 @@ func schema_apimachinery_apis_kubedb_v1_PerconaXtraDBSpec(ref common.ReferenceCa
 							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
 						},
 					},
+					"configuration": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1.ConfigurationSpec"),
+						},
+					},
 					"podTemplate": {
 						SchemaProps: spec.SchemaProps{
 							Description: "PodTemplate is an optional configuration for pods used to expose database",
@@ -30431,7 +30528,7 @@ func schema_apimachinery_apis_kubedb_v1_PerconaXtraDBSpec(ref common.ReferenceCa
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.AllowedConsumers", "kubedb.dev/apimachinery/apis/kubedb/v1.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference", "kubedb.dev/apimachinery/apis/kubedb/v1.SystemUserSecretsSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.AllowedConsumers", "kubedb.dev/apimachinery/apis/kubedb/v1.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.ConfigurationSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference", "kubedb.dev/apimachinery/apis/kubedb/v1.SystemUserSecretsSpec"},
 	}
 }
 
@@ -30650,6 +30747,11 @@ func schema_apimachinery_apis_kubedb_v1_PgBouncerSpec(ref common.ReferenceCallba
 							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
 						},
 					},
+					"configuration": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1.ConfigurationSpec"),
+						},
+					},
 					"init": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Init is used to initialize database",
@@ -30701,7 +30803,7 @@ func schema_apimachinery_apis_kubedb_v1_PgBouncerSpec(ref common.ReferenceCallba
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.ConnectionPoolConfig", "kubedb.dev/apimachinery/apis/kubedb/v1.Database", "kubedb.dev/apimachinery/apis/kubedb/v1.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"},
+			"k8s.io/api/core/v1.LocalObjectReference", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.ConfigurationSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.ConnectionPoolConfig", "kubedb.dev/apimachinery/apis/kubedb/v1.Database", "kubedb.dev/apimachinery/apis/kubedb/v1.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"},
 	}
 }
 
@@ -30871,6 +30973,48 @@ func schema_apimachinery_apis_kubedb_v1_Postgres(ref common.ReferenceCallback) c
 	}
 }
 
+func schema_apimachinery_apis_kubedb_v1_PostgresConfiguration(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"secretName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "SecretName is an optional field to provide custom configuration file for the database (i.e. elasticsearch.yml, mongod.conf ..). If specified, these configurations will be used with default configurations (if any) and applyConfig configurations (if any). configurations from this secret will override default configurations. This secret must be created by user.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"inline": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Inline contains key-value pairs of configurations to be applied to the database. These configurations will override both default configurations and configurations from the config secret (if any).",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"tuning": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1.PostgresTuningConfig"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/kubedb/v1.PostgresTuningConfig"},
+	}
+}
+
 func schema_apimachinery_apis_kubedb_v1_PostgresList(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -30951,9 +31095,9 @@ func schema_apimachinery_apis_kubedb_v1_PostgresReplication(ref common.Reference
 							Format: "int32",
 						},
 					},
-					"forceFailOverAcceptingDataLossAfter": {
+					"forceFailoverAcceptingDataLossAfter": {
 						SchemaProps: spec.SchemaProps{
-							Description: "ForceFailOverAcceptingDataLossAfter is the maximum time to wait before running a force failover process This is helpful for a scenario where the old primary is not available and it has the most updated wal lsn Doing force failover may or may not end up loosing data depending on any wrtie transaction in the range lagged lsn between the new primary and the old primary",
+							Description: "ForceFailoverAcceptingDataLossAfter is the maximum time to wait before running a force failover process This is helpful for a scenario where the old primary is not available and it has the most updated wal lsn Doing force failover may or may not end up loosing data depending on any wrtie transaction in the range lagged lsn between the new primary and the old primary",
 							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Duration"),
 						},
 					},
@@ -31084,6 +31228,11 @@ func schema_apimachinery_apis_kubedb_v1_PostgresSpec(ref common.ReferenceCallbac
 							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
 						},
 					},
+					"configuration": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1.PostgresConfiguration"),
+						},
+					},
 					"podTemplate": {
 						SchemaProps: spec.SchemaProps{
 							Description: "PodTemplate is an optional configuration for pods used to expose database",
@@ -31162,17 +31311,12 @@ func schema_apimachinery_apis_kubedb_v1_PostgresSpec(ref common.ReferenceCallbac
 							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1.PostgresReplication"),
 						},
 					},
-					"tuning": {
-						SchemaProps: spec.SchemaProps{
-							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1.PostgresTuningConfig"),
-						},
-					},
 				},
 				Required: []string{"version"},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.AllowedConsumers", "kubedb.dev/apimachinery/apis/kubedb/v1.ArbiterSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.Archiver", "kubedb.dev/apimachinery/apis/kubedb/v1.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgreLeaderElectionConfig", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgresReplication", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgresTuningConfig", "kubedb.dev/apimachinery/apis/kubedb/v1.RemoteReplicaSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.AllowedConsumers", "kubedb.dev/apimachinery/apis/kubedb/v1.ArbiterSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.Archiver", "kubedb.dev/apimachinery/apis/kubedb/v1.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgreLeaderElectionConfig", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgresConfiguration", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgresReplication", "kubedb.dev/apimachinery/apis/kubedb/v1.RemoteReplicaSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"},
 	}
 }
 
@@ -31230,9 +31374,9 @@ func schema_apimachinery_apis_kubedb_v1_PostgresTuningConfig(ref common.Referenc
 				Description: "PostgresTuningConfig defines configuration for PostgreSQL performance tuning",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
-					"tuningProfile": {
+					"profile": {
 						SchemaProps: spec.SchemaProps{
-							Description: "TuningProfile defines a predefined tuning profile for different workload types. If specified, other tuning parameters will be calculated based on this profile.",
+							Description: "Profile defines a predefined tuning profile for different workload types. If specified, other tuning parameters will be calculated based on this profile.",
 							Type:        []string{"string"},
 							Format:      "",
 						},
@@ -31242,12 +31386,6 @@ func schema_apimachinery_apis_kubedb_v1_PostgresTuningConfig(ref common.Referenc
 							Description: "MaxConnections defines the maximum number of concurrent connections. If not specified, it will be calculated based on available memory and tuning profile.",
 							Type:        []string{"integer"},
 							Format:      "int32",
-						},
-					},
-					"resourcesOverride": {
-						SchemaProps: spec.SchemaProps{
-							Description: "ResourcesOverride allows overriding resource calculations. If specified, these values will be used instead of pod resource limits/requests.",
-							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1.TuningResourcesOverride"),
 						},
 					},
 					"storageType": {
@@ -31267,8 +31405,6 @@ func schema_apimachinery_apis_kubedb_v1_PostgresTuningConfig(ref common.Referenc
 				},
 			},
 		},
-		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/kubedb/v1.TuningResourcesOverride"},
 	}
 }
 
@@ -31367,6 +31503,53 @@ func schema_apimachinery_apis_kubedb_v1_ProxySQLConfiguration(ref common.Referen
 	}
 }
 
+func schema_apimachinery_apis_kubedb_v1_ProxySQLConfigurationSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"init": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Init contains bootstrap-only configuration. This configuration is applied only once during initial deployment. Changes to this field after the database is initialized are ignored.",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1.ProxySQLInitConfiguration"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/kubedb/v1.ProxySQLInitConfiguration"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1_ProxySQLInitConfiguration(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"inline": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Inline contains structured bootstrap configuration. These values always take precedence over ConfigSecret.",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1.ProxySQLConfiguration"),
+						},
+					},
+					"secretName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "a Secret containing raw bootstrap config files for ProxySQL. Allowed keys: AdminVariables.cnf, MySQLVariables.cnf, MySQLUsers.cnf, MySQLQueryRules.cnf. Values are patched verbatim into proxysql.cnf during bootstrap. Inline configuration (init.inline) always takes precedence. These configs are applied only once; invalid formatting may cause startup failure.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/kubedb/v1.ProxySQLConfiguration"},
+	}
+}
+
 func schema_apimachinery_apis_kubedb_v1_ProxySQLList(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -31430,7 +31613,7 @@ func schema_apimachinery_apis_kubedb_v1_ProxySQLSpec(ref common.ReferenceCallbac
 					},
 					"syncUsers": {
 						SchemaProps: spec.SchemaProps{
-							Description: "SyncUsers is a boolean type and when enabled, operator fetches all users created in the backend server to the ProxySQL server . Password changes are also synced in proxysql when it is enabled.",
+							Description: "SyncUsers is a boolean type and when enabled, operator fetches all users created in the backend server to the ProxySQL server. Password changes are also synced in proxysql when it is enabled.",
 							Type:        []string{"boolean"},
 							Format:      "",
 						},
@@ -31439,6 +31622,18 @@ func schema_apimachinery_apis_kubedb_v1_ProxySQLSpec(ref common.ReferenceCallbac
 						SchemaProps: spec.SchemaProps{
 							Description: "InitConfiguration contains information with which the proxysql will bootstrap (only 4 tables are configurable)",
 							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1.ProxySQLConfiguration"),
+						},
+					},
+					"configSecret": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ConfigSecret is an optional field to provide custom configuration file for proxysql. Users can provide a Secret containing raw bootstrap config files for ProxySQL. Allowed keys: AdminVariables.cnf, MySQLVariables.cnf, MySQLUsers.cnf, MySQLQueryRules.cnf. Values are patched verbatim into proxysql.cnf during bootstrap. InitConfiguration (spec.initConfig) takes precedence than this. These configs are applied only once; invalid formatting may cause startup failure.",
+							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
+						},
+					},
+					"configuration": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Configuration is an optional field to provide custom configuration for ProxySQL. If specified, these configurations will be used with default configurations (if any). Configurations from this spec will override default configurations.",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1.ProxySQLConfigurationSpec"),
 						},
 					},
 					"version": {
@@ -31451,7 +31646,7 @@ func schema_apimachinery_apis_kubedb_v1_ProxySQLSpec(ref common.ReferenceCallbac
 					},
 					"replicas": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Number of instances to deploy for ProxySQL. Currently we support only replicas = 1.",
+							Description: "Number of instances to deploy for ProxySQL. If replicas > 1, ProxySQL servers will be clustered.",
 							Type:        []string{"integer"},
 							Format:      "int32",
 						},
@@ -31472,12 +31667,6 @@ func schema_apimachinery_apis_kubedb_v1_ProxySQLSpec(ref common.ReferenceCallbac
 						SchemaProps: spec.SchemaProps{
 							Description: "Monitor is used monitor proxysql instance",
 							Ref:         ref("kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec"),
-						},
-					},
-					"configSecret": {
-						SchemaProps: spec.SchemaProps{
-							Description: "ConfigSecret is an optional field to provide custom configuration file for proxysql (i.e custom-proxysql.cnf). If specified, this file will be used as configuration file otherwise default configuration file will be used.",
-							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
 						},
 					},
 					"podTemplate": {
@@ -31533,7 +31722,7 @@ func schema_apimachinery_apis_kubedb_v1_ProxySQLSpec(ref common.ReferenceCallbac
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.ProxySQLConfiguration", "kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"},
+			"k8s.io/api/core/v1.LocalObjectReference", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.ProxySQLConfiguration", "kubedb.dev/apimachinery/apis/kubedb/v1.ProxySQLConfigurationSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"},
 	}
 }
 
@@ -31736,6 +31925,49 @@ func schema_apimachinery_apis_kubedb_v1_RedisClusterSpec(ref common.ReferenceCal
 		},
 		Dependencies: []string{
 			"kubedb.dev/apimachinery/apis/kubedb/v1.Announce"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1_RedisConfiguration(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"secretName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "SecretName is an optional field to provide custom configuration file for the database (i.e. elasticsearch.yml, mongod.conf ..). If specified, these configurations will be used with default configurations (if any) and applyConfig configurations (if any). configurations from this secret will override default configurations. This secret must be created by user.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"inline": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Inline contains key-value pairs of configurations to be applied to the database. These configurations will override both default configurations and configurations from the config secret (if any).",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"acl": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Redis ACL Configuration",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1.RedisAclSpec"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/kubedb/v1.RedisAclSpec"},
 	}
 }
 
@@ -32077,6 +32309,12 @@ func schema_apimachinery_apis_kubedb_v1_RedisSpec(ref common.ReferenceCallback) 
 			SchemaProps: spec.SchemaProps{
 				Type: []string{"object"},
 				Properties: map[string]spec.Schema{
+					"acl": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Redis ACL Configuration",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1.RedisAclSpec"),
+						},
+					},
 					"autoOps": {
 						SchemaProps: spec.SchemaProps{
 							Description: "AutoOps contains configuration of automatic ops-request-recommendation generation",
@@ -32136,12 +32374,6 @@ func schema_apimachinery_apis_kubedb_v1_RedisSpec(ref common.ReferenceCallback) 
 							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"),
 						},
 					},
-					"acl": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Redis ACL Configuration",
-							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1.RedisAclSpec"),
-						},
-					},
 					"disableAuth": {
 						SchemaProps: spec.SchemaProps{
 							Description: "If disable Auth true then don't create any auth secret",
@@ -32165,6 +32397,11 @@ func schema_apimachinery_apis_kubedb_v1_RedisSpec(ref common.ReferenceCallback) 
 						SchemaProps: spec.SchemaProps{
 							Description: "ConfigSecret is an optional field to provide custom configuration file for database (i.e redis.conf). If specified, this file will be used as configuration file otherwise default configuration file will be used.",
 							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
+						},
+					},
+					"configuration": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1.RedisConfiguration"),
 						},
 					},
 					"podTemplate": {
@@ -32226,7 +32463,7 @@ func schema_apimachinery_apis_kubedb_v1_RedisSpec(ref common.ReferenceCallback) 
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.AllowedConsumers", "kubedb.dev/apimachinery/apis/kubedb/v1.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.RedisAclSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.RedisClusterSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.RedisSentinelRef", "kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.AllowedConsumers", "kubedb.dev/apimachinery/apis/kubedb/v1.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.RedisAclSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.RedisClusterSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.RedisConfiguration", "kubedb.dev/apimachinery/apis/kubedb/v1.RedisSentinelRef", "kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"},
 	}
 }
 
@@ -32652,34 +32889,6 @@ func schema_apimachinery_apis_kubedb_v1_SystemUserSecretsSpec(ref common.Referen
 		},
 		Dependencies: []string{
 			"kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"},
-	}
-}
-
-func schema_apimachinery_apis_kubedb_v1_TuningResourcesOverride(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "TuningResourcesOverride allows overriding resource calculations for tuning",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"memory": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Memory overrides the total memory used for tuning calculations. Format: \"1Gi\", \"512Mi\", etc.",
-							Ref:         ref("k8s.io/apimachinery/pkg/api/resource.Quantity"),
-						},
-					},
-					"cpu": {
-						SchemaProps: spec.SchemaProps{
-							Description: "CPU overrides the CPU count used for tuning calculations.",
-							Type:        []string{"integer"},
-							Format:      "int32",
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/api/resource.Quantity"},
 	}
 }
 

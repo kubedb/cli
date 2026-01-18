@@ -275,7 +275,8 @@ func (i *Ignite) PodLabels(extraLabels ...map[string]string) map[string]string {
 }
 
 func (i *Ignite) ConfigSecretName() string {
-	return meta_util.NameWithSuffix(i.OffshootName(), "config")
+	uid := string(i.UID)
+	return meta_util.NameWithSuffix(i.OffshootName(), uid[len(uid)-6:])
 }
 
 func (i *Ignite) PVCName(alias string) string {
@@ -311,7 +312,8 @@ func (i igniteStatsService) Path() string {
 }
 
 func (i igniteStatsService) Scheme() string {
-	return ""
+	sc := promapi.SchemeHTTP
+	return sc.String()
 }
 
 func (i igniteStatsService) TLSConfig() *promapi.TLSConfig {

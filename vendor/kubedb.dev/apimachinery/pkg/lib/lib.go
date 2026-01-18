@@ -349,7 +349,7 @@ func ResumeBackupConfiguration(KBClient client.Client, stashClient scs.StashV1be
 	kubeStashConditions := make([]kmapi.Condition, 0)
 	var err error
 
-	if kubeStashOperatorExist(KBClient) {
+	if stashOperatorExist(KBClient) {
 		stashConditions, err = resumeStashBackupConfiguration(stashClient, pausedBackups, opsGeneration)
 		if err != nil {
 			return nil, err
