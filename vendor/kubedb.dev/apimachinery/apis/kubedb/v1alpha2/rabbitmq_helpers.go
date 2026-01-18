@@ -189,7 +189,8 @@ func (ks RabbitmqStatsService) Path() string {
 }
 
 func (ks RabbitmqStatsService) Scheme() string {
-	return ""
+	sc := promapi.SchemeHTTP
+	return sc.String()
 }
 
 func (r *RabbitMQ) StatsService() mona.StatsAccessor {
@@ -225,7 +226,8 @@ func (r *RabbitMQ) DefaultPodRoleBindingName() string {
 }
 
 func (r *RabbitMQ) ConfigSecretName() string {
-	return meta_util.NameWithSuffix(r.OffshootName(), "config")
+	uid := string(r.UID)
+	return meta_util.NameWithSuffix(r.OffshootName(), uid[len(uid)-6:])
 }
 
 func (r *RabbitMQ) DefaultUserCredSecretName() string {
@@ -314,6 +316,8 @@ func (r *RabbitMQ) SetDefaults(kc client.Client) {
 	}
 
 	r.SetTLSDefaults()
+
+	r.Spec.Configuration = copyConfigurationField(r.Spec.Configuration, &r.Spec.ConfigSecret)
 
 	r.SetHealthCheckerDefaults()
 	if r.Spec.Monitor != nil {

@@ -81,6 +81,13 @@ spec:
                     x-kubernetes-map-type: atomic
                   removeCustomConfig:
                     type: boolean
+                  restart:
+                    default: auto
+                    enum:
+                    - auto
+                    - "true"
+                    - "false"
+                    type: string
                 type: object
               databaseRef:
                 properties:

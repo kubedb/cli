@@ -217,7 +217,8 @@ func (m mysqlStatsService) Path() string {
 }
 
 func (m mysqlStatsService) Scheme() string {
-	return ""
+	sc := promapi.SchemeHTTP
+	return sc.String()
 }
 
 func (m mysqlStatsService) TLSConfig() *promapi.TLSConfig {

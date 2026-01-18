@@ -124,11 +124,11 @@ type SinglestoreVolumeExpansionSpec struct {
 // SinglestoreCustomConfigurationSpec is the spec for Singlestore reconfiguration
 type SinglestoreCustomConfigurationSpec struct {
 	// Custom Configuration specification for standalone
-	Node *SinglestoreCustomConfiguration `json:"node,omitempty"`
+	Node *ReconfigurationSpec `json:"node,omitempty"`
 	// Custom Configuration specification for Aggregator
-	Aggregator *SinglestoreCustomConfiguration `json:"aggregator,omitempty"`
+	Aggregator *ReconfigurationSpec `json:"aggregator,omitempty"`
 	// Custom Configuration specification for Leaf
-	Leaf *SinglestoreCustomConfiguration `json:"leaf,omitempty"`
+	Leaf *ReconfigurationSpec `json:"leaf,omitempty"`
 }
 
 type SinglestoreCustomConfiguration struct {

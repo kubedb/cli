@@ -61,6 +61,10 @@ type Redis struct {
 }
 
 type RedisSpec struct {
+	// Redis ACL Configuration
+	// +optional
+	Acl *RedisAclSpec `json:"acl,omitempty"`
+
 	// AutoOps contains configuration of automatic ops-request-recommendation generation
 	// +optional
 	AutoOps AutoOpsSpec `json:"autoOps,omitempty"`
@@ -90,10 +94,6 @@ type RedisSpec struct {
 	// +optional
 	AuthSecret *SecretReference `json:"authSecret,omitempty"`
 
-	// Redis ACL Configuration
-	// +optional
-	Acl *RedisAclSpec `json:"acl,omitempty"`
-
 	// If disable Auth true then don't create any auth secret
 	// +optional
 	DisableAuth bool `json:"disableAuth,omitempty"`
@@ -109,6 +109,9 @@ type RedisSpec struct {
 	// ConfigSecret is an optional field to provide custom configuration file for database (i.e redis.conf).
 	// If specified, this file will be used as configuration file otherwise default configuration file will be used.
 	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty"`
+
+	// +optional
+	Configuration *RedisConfiguration `json:"configuration,omitempty"`
 
 	// PodTemplate is an optional configuration for pods used to expose database
 	// +optional
@@ -165,6 +168,14 @@ type RedisClusterSpec struct {
 	// cluster-announce-ip, cluster-announce-port, cluster-announce-bus-port, cluster-announce-tls-port
 	// +optional
 	Announce *Announce `json:"announce,omitempty"`
+}
+
+type RedisConfiguration struct {
+	ConfigurationSpec `json:",inline,omitempty"`
+
+	// Redis ACL Configuration
+	// +optional
+	Acl *RedisAclSpec `json:"acl,omitempty"`
 }
 
 // +kubebuilder:validation:Enum=ip;hostname

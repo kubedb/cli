@@ -149,7 +149,8 @@ func (m mssqlserverStatsService) Path() string {
 }
 
 func (m mssqlserverStatsService) Scheme() string {
-	return ""
+	sc := promapi.SchemeHTTP
+	return sc.String()
 }
 
 func (m mssqlserverStatsService) TLSConfig() *promapi.TLSConfig {
@@ -204,8 +205,11 @@ func (m *MSSQLServer) PodLabel(podTemplate *ofst.PodTemplateSpec) map[string]str
 	return m.offshootLabels(m.OffshootSelectors(), nil)
 }
 
+// ConfigSecretName returns a secret name in the format: {db-cr-name}-{last-6-chars-of-UID}.
+// This secret is used for mounting the config files in the pod.
 func (m *MSSQLServer) ConfigSecretName() string {
-	return meta_util.NameWithSuffix(m.OffshootName(), "config")
+	uid := string(m.UID)
+	return meta_util.NameWithSuffix(m.OffshootName(), uid[len(uid)-6:])
 }
 
 func (m *MSSQLServer) PetSetName() string {
@@ -415,6 +419,8 @@ func (m *MSSQLServer) SetDefaults(kc client.Client) {
 		return
 	}
 
+	m.Spec.Configuration = copyConfigurationField(m.Spec.Configuration, &m.Spec.ConfigSecret)
+
 	m.SetArbiterDefault()
 
 	m.setDefaultContainerSecurityContext(&mssqlVersion, m.Spec.PodTemplate)
@@ -539,7 +545,7 @@ func (m *MSSQLServer) assignDefaultContainerSecurityContext(mssqlVersion *catalo
 func (m *MSSQLServer) setDefaultContainerResourceLimits(podTemplate *ofst.PodTemplateSpec) {
 	dbContainer := coreutil.GetContainerByName(podTemplate.Spec.Containers, kubedb.MSSQLContainerName)
 	if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
-		apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResourcesMemoryIntensiveMSSQLServer)
+		apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResourcesMSSQLServer)
 	}
 
 	initContainer := coreutil.GetContainerByName(podTemplate.Spec.InitContainers, kubedb.MSSQLInitContainerName)

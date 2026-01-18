@@ -70,10 +70,8 @@ type Neo4jSpec struct {
 	// +optional
 	AuthSecret *SecretReference `json:"authSecret,omitempty"`
 
-	// ConfigSecret references a Secret that provides a custom configuration file .
-	// When set, this configuration takes precedence over the operator defaults.
 	// +optional
-	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty"`
+	Configuration *ConfigurationSpec `json:"configuration,omitempty"`
 
 	// PodTemplate customizes the pods running Neo4j (resources, environment variables, probes, affinity, etc.).
 	// +optional

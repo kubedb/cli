@@ -167,7 +167,8 @@ func (p pgbouncerStatsService) Path() string {
 }
 
 func (p pgbouncerStatsService) Scheme() string {
-	return ""
+	sc := promapi.SchemeHTTP
+	return sc.String()
 }
 
 func (p pgbouncerStatsService) TLSConfig() *promapi.TLSConfig {

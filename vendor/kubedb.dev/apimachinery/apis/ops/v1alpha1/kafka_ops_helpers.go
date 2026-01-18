@@ -63,8 +63,8 @@ func (k *KafkaOpsRequest) GetDBRefName() string {
 	return k.Spec.DatabaseRef.Name
 }
 
-func (k *KafkaOpsRequest) GetRequestType() any {
-	return k.Spec.Type
+func (k *KafkaOpsRequest) GetRequestType() string {
+	return string(k.Spec.Type)
 }
 
 func (k *KafkaOpsRequest) GetStatus() OpsRequestStatus {

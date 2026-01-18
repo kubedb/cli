@@ -91,6 +91,24 @@ func Convert_v1alpha2_CoordinatorSpec_To_Slice_v1_Container(in *CoordinatorSpec,
 	return nil
 }
 
+func Convert_v1_ConfigurationSpec_To_v1alpha2_ConfigSecretSpec(in *v1.ConfigurationSpec, out **corev1.LocalObjectReference) {
+	if in == nil {
+		return
+	}
+	*out = &corev1.LocalObjectReference{
+		Name: in.SecretName,
+	}
+}
+
+func Convert_v1alpha2_ConfigSecretSpec_To_v1_ConfigurationSpec(in *corev1.LocalObjectReference, out **v1.ConfigurationSpec) {
+	if in == nil {
+		return
+	}
+	*out = &v1.ConfigurationSpec{
+		SecretName: in.Name,
+	}
+}
+
 func Convert_v1_ElasticsearchNode_To_v1alpha2_ElasticsearchNode(in *v1.ElasticsearchNode, out *ElasticsearchNode, s conversion.Scope) error {
 	out.Replicas = (*int32)(unsafe.Pointer(in.Replicas))
 	out.Suffix = in.Suffix
@@ -985,6 +1003,74 @@ func Convert_v1_ElasticsearchSpec_To_v1alpha2_ElasticsearchSpec(in *v1.Elasticse
 	out.KernelSettings = (*KernelSettings)(unsafe.Pointer(in.KernelSettings))
 	out.HeapSizePercentage = (*int32)(unsafe.Pointer(in.HeapSizePercentage))
 	out.HealthChecker = in.HealthChecker
+	return nil
+}
+
+func Convert_v1_KafkaSpec_To_v1alpha2_KafkaSpec(in *v1.KafkaSpec, out *KafkaSpec, s conversion.Scope) error {
+	if err := Convert_v1_AutoOpsSpec_To_v1alpha2_AutoOpsSpec(&in.AutoOps, &out.AutoOps, s); err != nil {
+		return err
+	}
+	out.Version = in.Version
+	out.Replicas = (*int32)(unsafe.Pointer(in.Replicas))
+	if in.Topology != nil {
+		in, out := &in.Topology, &out.Topology
+		*out = new(KafkaClusterTopology)
+		if err := Convert_v1_KafkaClusterTopology_To_v1alpha2_KafkaClusterTopology(*in, *out, s); err != nil {
+			return err
+		}
+	} else {
+		out.Topology = nil
+	}
+	out.EnableSSL = in.EnableSSL
+	out.BrokerRack = (*BrokerRack)(in.BrokerRack)
+	out.DisableSecurity = in.DisableSecurity
+	out.AuthSecret = (*SecretReference)(unsafe.Pointer(in.AuthSecret))
+	out.StorageType = StorageType(in.StorageType)
+	out.Storage = (*corev1.PersistentVolumeClaimSpec)(unsafe.Pointer(in.Storage))
+	out.Monitor = (*monitoringagentapiapiv1.AgentSpec)(unsafe.Pointer(in.Monitor))
+	out.ConfigSecret = (*corev1.LocalObjectReference)(unsafe.Pointer(in.ConfigSecret))
+	out.CruiseControl = (*KafkaCruiseControl)(unsafe.Pointer(in.CruiseControl))
+	out.PodTemplate = in.PodTemplate
+	out.ServiceTemplates = *(*[]NamedServiceTemplateSpec)(unsafe.Pointer(&in.ServiceTemplates))
+	out.TLS = (*clientgoapiv1.TLSConfig)(unsafe.Pointer(in.TLS))
+	out.Halted = in.Halted
+	out.DeletionPolicy = DeletionPolicy(in.DeletionPolicy)
+	out.HealthChecker = in.HealthChecker
+	return nil
+}
+
+func Convert_v1alpha2_KafkaCruiseControl_To_v1_KafkaCruiseControl(in *KafkaCruiseControl, out *v1.KafkaCruiseControl, s conversion.Scope) error {
+	out.PodTemplate.Spec.Containers = core_util.UpsertContainer(out.PodTemplate.Spec.Containers, corev1.Container{
+		Name:      kubedb.KafkaContainerName,
+		Resources: in.Resources,
+	})
+	if in.ConfigSecret != nil {
+		out.Configuration = &v1.ConfigurationSpec{
+			SecretName: in.ConfigSecret.Name,
+		}
+	}
+	out.Replicas = (*int32)(unsafe.Pointer(in.Replicas))
+	out.Suffix = in.Suffix
+	out.PodTemplate = in.PodTemplate
+	out.BrokerCapacity = (*v1.KafkaBrokerCapacity)(unsafe.Pointer(in.BrokerCapacity))
+
+	return nil
+}
+
+func Convert_v1_KafkaCruiseControl_To_v1alpha2_KafkaCruiseControl(in *v1.KafkaCruiseControl, out *KafkaCruiseControl, s conversion.Scope) error {
+	container := core_util.GetContainerByName(in.PodTemplate.Spec.Containers, kubedb.KafkaContainerName)
+	if container != nil {
+		out.Resources = *(*corev1.ResourceRequirements)(unsafe.Pointer(&container.Resources))
+	}
+	if in.Configuration != nil && in.Configuration.SecretName != "" {
+		out.ConfigSecret = &corev1.LocalObjectReference{
+			Name: in.Configuration.SecretName,
+		}
+	}
+	out.Replicas = (*int32)(unsafe.Pointer(in.Replicas))
+	out.Suffix = in.Suffix
+	out.PodTemplate = in.PodTemplate
+	out.BrokerCapacity = (*KafkaBrokerCapacity)(unsafe.Pointer(in.BrokerCapacity))
 	return nil
 }
 

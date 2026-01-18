@@ -89,6 +89,15 @@ spec:
                     type: string
                 type: object
                 x-kubernetes-map-type: atomic
+              configuration:
+                properties:
+                  inline:
+                    additionalProperties:
+                      type: string
+                    type: object
+                  secretName:
+                    type: string
+                type: object
               cruiseControl:
                 properties:
                   brokerCapacity:
@@ -98,30 +107,15 @@ spec:
                       outBoundNetwork:
                         type: string
                     type: object
-                  configSecret:
+                  configuration:
                     properties:
-                      activeFrom:
-                        format: date-time
+                      inline:
+                        additionalProperties:
+                          type: string
+                        type: object
+                      secretName:
                         type: string
-                      apiGroup:
-                        default: ""
-                        type: string
-                      externallyManaged:
-                        type: boolean
-                      kind:
-                        default: Secret
-                        type: string
-                      name:
-                        type: string
-                      rotateAfter:
-                        type: string
-                      secretStoreName:
-                        type: string
-                    required:
-                    - kind
-                    - name
                     type: object
-                    x-kubernetes-map-type: atomic
                   podTemplate:
                     properties:
                       controller:
@@ -3361,39 +3355,6 @@ spec:
                   replicas:
                     format: int32
                     type: integer
-                  resources:
-                    properties:
-                      claims:
-                        items:
-                          properties:
-                            name:
-                              type: string
-                            request:
-                              type: string
-                          required:
-                          - name
-                          type: object
-                        type: array
-                        x-kubernetes-list-map-keys:
-                        - name
-                        x-kubernetes-list-type: map
-                      limits:
-                        additionalProperties:
-                          anyOf:
-                          - type: integer
-                          - type: string
-                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
-                          x-kubernetes-int-or-string: true
-                        type: object
-                      requests:
-                        additionalProperties:
-                          anyOf:
-                          - type: integer
-                          - type: string
-                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
-                          x-kubernetes-int-or-string: true
-                        type: object
-                    type: object
                   suffix:
                     type: string
                 type: object
@@ -13970,26 +13931,9 @@ spec:
                     type: object
                   configSecret:
                     properties:
-                      activeFrom:
-                        format: date-time
-                        type: string
-                      apiGroup:
+                      name:
                         default: ""
                         type: string
-                      externallyManaged:
-                        type: boolean
-                      kind:
-                        default: Secret
-                        type: string
-                      name:
-                        type: string
-                      rotateAfter:
-                        type: string
-                      secretStoreName:
-                        type: string
-                    required:
-                    - kind
-                    - name
                     type: object
                     x-kubernetes-map-type: atomic
                   podTemplate:

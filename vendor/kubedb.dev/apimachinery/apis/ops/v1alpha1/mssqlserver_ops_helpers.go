@@ -63,8 +63,8 @@ func (r *MSSQLServerOpsRequest) GetDBRefName() string {
 	return r.Spec.DatabaseRef.Name
 }
 
-func (r *MSSQLServerOpsRequest) GetRequestType() any {
-	return r.Spec.Type
+func (r *MSSQLServerOpsRequest) GetRequestType() string {
+	return string(r.Spec.Type)
 }
 
 func (r *MSSQLServerOpsRequest) GetStatus() OpsRequestStatus {

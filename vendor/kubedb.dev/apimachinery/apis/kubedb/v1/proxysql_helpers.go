@@ -113,6 +113,34 @@ func (p ProxySQL) GetAuthSecretName() string {
 	return meta_util.NameWithSuffix(p.OffshootName(), "auth")
 }
 
+func (p ProxySQL) ConfigSecretName() string {
+	uid := string(p.UID)
+	return meta_util.NameWithSuffix(p.OffshootName(), uid[len(uid)-6:])
+}
+
+// HasInitConfigSecretName safely checks if ps.Spec.Configuration.Init.SecretName is set
+func (p *ProxySQL) HasInitConfigSecretName() bool {
+	return p.Spec.Configuration != nil &&
+		p.Spec.Configuration.Init != nil &&
+		p.Spec.Configuration.Init.SecretName != ""
+}
+
+// GetInitConfigInline safely returns p.Spec.Configuration.Init.Inline or nil
+func (p *ProxySQL) GetInitConfigInline() *ProxySQLConfiguration {
+	if p.Spec.Configuration != nil && p.Spec.Configuration.Init != nil {
+		return p.Spec.Configuration.Init.Inline
+	}
+	return nil
+}
+
+// InitConfigSecretName safely returns p.Spec.Configuration.Init.SecretName or empty string
+func (p *ProxySQL) InitConfigSecretName() string {
+	if !p.HasInitConfigSecretName() {
+		return ""
+	}
+	return p.Spec.Configuration.Init.SecretName
+}
+
 func (p ProxySQL) ServiceName() string {
 	return p.OffshootName()
 }
@@ -157,16 +185,13 @@ func (p proxysqlStatsService) ServiceMonitorAdditionalLabels() map[string]string
 	return p.OffshootLabels()
 }
 
-func GetConfigurationSecretName(psName string) string {
-	return meta_util.NameWithSuffix(psName, "configuration")
-}
-
 func (p proxysqlStatsService) Path() string {
 	return kubedb.DefaultStatsPath
 }
 
 func (p proxysqlStatsService) Scheme() string {
-	return ""
+	sc := promapi.SchemeHTTP
+	return sc.String()
 }
 
 func (p proxysqlStatsService) TLSConfig() *promapi.TLSConfig {
@@ -201,6 +226,7 @@ func (p *ProxySQL) SetDefaults(psVersion *v1alpha1.ProxySQLVersion, usesAcme boo
 		p.Spec.AuthSecret.Kind = kubedb.ResourceKindSecret
 	}
 
+	p.copyConfigurationFields()
 	p.setDefaultContainerSecurityContext(psVersion, &p.Spec.PodTemplate)
 
 	p.Spec.Monitor.SetDefaults()
@@ -332,4 +358,32 @@ func (m *ProxySQL) CertificateName(alias ProxySQLCertificateAlias) string {
 func (m *ProxySQL) IsCluster() bool {
 	r := m.Spec.Replicas
 	return *r > 1
+}
+
+func (p *ProxySQL) copyConfigurationFields() {
+	if p.Spec.ConfigSecret == nil && p.Spec.InitConfiguration == nil {
+		return
+	}
+
+	if p.Spec.Configuration == nil {
+		p.Spec.Configuration = &ProxySQLConfigurationSpec{}
+	}
+
+	if p.Spec.Configuration.Init == nil {
+		p.Spec.Configuration.Init = &ProxySQLInitConfiguration{}
+	}
+
+	// Copy deprecated ConfigSecret to Configuration.Init.SecretName
+	if p.Spec.ConfigSecret != nil && p.Spec.Configuration.Init.SecretName == "" {
+		p.Spec.Configuration.Init.SecretName = p.Spec.ConfigSecret.Name
+	}
+
+	// Copy deprecated InitConfiguration to Configuration.Init.Inline
+	if p.Spec.InitConfiguration != nil && p.Spec.Configuration.Init.Inline == nil {
+		p.Spec.Configuration.Init.Inline = p.Spec.InitConfiguration
+	}
+
+	// Clear deprecated fields after copying
+	p.Spec.ConfigSecret = nil
+	p.Spec.InitConfiguration = nil
 }

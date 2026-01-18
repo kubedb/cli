@@ -67,7 +67,7 @@ type MySQLOpsRequestSpec struct {
 	// Specifies information necessary for volume expansion
 	VolumeExpansion *MySQLVolumeExpansionSpec `json:"volumeExpansion,omitempty"`
 	// Specifies information necessary for custom configuration of MySQL
-	Configuration *MySQLCustomConfigurationSpec `json:"configuration,omitempty"`
+	Configuration *ReconfigurationSpec `json:"configuration,omitempty"`
 	// Specifies information necessary for configuring TLS
 	TLS *MySQLTLSSpec `json:"tls,omitempty"`
 	// Specifies information necessary for configuring authSecret of the database
@@ -135,12 +135,6 @@ type MySQLVerticalScalingSpec struct {
 type MySQLVolumeExpansionSpec struct {
 	MySQL *resource.Quantity  `json:"mysql,omitempty"`
 	Mode  VolumeExpansionMode `json:"mode"`
-}
-
-type MySQLCustomConfigurationSpec struct {
-	ConfigSecret       *core.LocalObjectReference `json:"configSecret,omitempty"`
-	ApplyConfig        map[string]string          `json:"applyConfig,omitempty"`
-	RemoveCustomConfig bool                       `json:"removeCustomConfig,omitempty"`
 }
 
 type MySQLTLSSpec struct {

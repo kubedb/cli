@@ -173,7 +173,8 @@ func (ks DruidStatsService) Path() string {
 }
 
 func (ks DruidStatsService) Scheme() string {
-	return ""
+	sc := promapi.SchemeHTTP
+	return sc.String()
 }
 
 func (d *Druid) StatsService() mona.StatsAccessor {
@@ -185,7 +186,8 @@ func (d *Druid) StatsServiceLabels() map[string]string {
 }
 
 func (d *Druid) ConfigSecretName() string {
-	return meta_util.NameWithSuffix(d.OffShootName(), "config")
+	uid := string(d.UID)
+	return meta_util.NameWithSuffix(d.OffShootName(), uid[len(uid)-6:])
 }
 
 func (d *Druid) PetSetName(nodeRole DruidNodeRoleType) string {

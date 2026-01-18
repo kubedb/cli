@@ -28,7 +28,7 @@ import (
 
 	"github.com/Masterminds/semver/v3"
 	"github.com/fatih/structs"
-	v1 "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1"
+	promapi "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1"
 	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -418,10 +418,11 @@ func (fs FerretDBStatsService) Path() string {
 }
 
 func (fs FerretDBStatsService) Scheme() string {
-	return ""
+	sc := promapi.SchemeHTTP
+	return sc.String()
 }
 
-func (fs FerretDBStatsService) TLSConfig() *v1.TLSConfig {
+func (fs FerretDBStatsService) TLSConfig() *promapi.TLSConfig {
 	return nil
 }
 

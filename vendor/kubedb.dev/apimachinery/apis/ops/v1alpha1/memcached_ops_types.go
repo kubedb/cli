@@ -63,7 +63,7 @@ type MemcachedOpsRequestSpec struct {
 	// Specifies information necessary for volume expansion
 	VolumeExpansion *MemcachedVolumeExpansionSpec `json:"volumeExpansion,omitempty"`
 	// Specifies information necessary for custom configuration of Memcached
-	Configuration *MemcachedCustomConfigurationSpec `json:"configuration,omitempty"`
+	Configuration *ReconfigurationSpec `json:"configuration,omitempty"`
 	// Specifies information necessary for configuring TLS
 	TLS *TLSSpec `json:"tls,omitempty"`
 	// Specifies information necessary for configuring authSecret of the database

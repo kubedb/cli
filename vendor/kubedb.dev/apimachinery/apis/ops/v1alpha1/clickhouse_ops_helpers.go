@@ -63,8 +63,8 @@ func (r *ClickHouseOpsRequest) GetDBRefName() string {
 	return r.Spec.DatabaseRef.Name
 }
 
-func (r *ClickHouseOpsRequest) GetRequestType() any {
-	return r.Spec.Type
+func (r *ClickHouseOpsRequest) GetRequestType() string {
+	return string(r.Spec.Type)
 }
 
 func (r *ClickHouseOpsRequest) GetStatus() OpsRequestStatus {

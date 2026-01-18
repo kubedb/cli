@@ -87,7 +87,12 @@ func (z *ZooKeeper) ServiceAccountName() string {
 }
 
 func (z *ZooKeeper) ConfigSecretName() string {
-	return meta_util.NameWithSuffix(z.OffshootName(), "config")
+	uid := string(z.UID)
+	return meta_util.NameWithSuffix(z.OffshootName(), uid[len(uid)-6:])
+}
+
+func (z *ZooKeeper) AddKeyPrefix(key string) string {
+	return meta_util.NameWithPrefix(kubedb.InlineConfigKeyPrefixZZ, key)
 }
 
 func (z *ZooKeeper) PVCName(alias string) string {
@@ -350,7 +355,8 @@ func (z zookeeperStatsService) Path() string {
 }
 
 func (z zookeeperStatsService) Scheme() string {
-	return ""
+	sc := promapi.SchemeHTTP
+	return sc.String()
 }
 
 func (z zookeeperStatsService) TLSConfig() *promapi.TLSConfig {

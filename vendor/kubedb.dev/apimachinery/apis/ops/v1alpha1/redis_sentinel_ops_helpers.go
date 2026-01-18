@@ -67,8 +67,8 @@ func (r *RedisSentinelOpsRequest) GetDBRefName() string {
 	return r.Spec.DatabaseRef.Name
 }
 
-func (r *RedisSentinelOpsRequest) GetRequestType() any {
-	return r.Spec.Type
+func (r *RedisSentinelOpsRequest) GetRequestType() string {
+	return string(r.Spec.Type)
 }
 
 func (r *RedisSentinelOpsRequest) GetStatus() OpsRequestStatus {

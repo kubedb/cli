@@ -106,6 +106,15 @@ spec:
                         type: string
                     type: object
                     x-kubernetes-map-type: atomic
+                  configuration:
+                    properties:
+                      inline:
+                        additionalProperties:
+                          type: string
+                        type: object
+                      secretName:
+                        type: string
+                    type: object
                   podTemplate:
                     properties:
                       controller:
@@ -3402,6 +3411,15 @@ spec:
                     type: string
                 type: object
                 x-kubernetes-map-type: atomic
+              configuration:
+                properties:
+                  inline:
+                    additionalProperties:
+                      type: string
+                    type: object
+                  secretName:
+                    type: string
+                type: object
               deletionPolicy:
                 enum:
                 - Halt
@@ -3453,6 +3471,15 @@ spec:
                         type: string
                     type: object
                     x-kubernetes-map-type: atomic
+                  configuration:
+                    properties:
+                      inline:
+                        additionalProperties:
+                          type: string
+                        type: object
+                      secretName:
+                        type: string
+                    type: object
                   podTemplate:
                     properties:
                       controller:
@@ -11433,6 +11460,15 @@ spec:
                             type: string
                         type: object
                         x-kubernetes-map-type: atomic
+                      configuration:
+                        properties:
+                          inline:
+                            additionalProperties:
+                              type: string
+                            type: object
+                          secretName:
+                            type: string
+                        type: object
                       ephemeralStorage:
                         properties:
                           medium:
@@ -14785,6 +14821,15 @@ spec:
                             type: string
                         type: object
                         x-kubernetes-map-type: atomic
+                      configuration:
+                        properties:
+                          inline:
+                            additionalProperties:
+                              type: string
+                            type: object
+                          secretName:
+                            type: string
+                        type: object
                       podTemplate:
                         properties:
                           controller:
@@ -18038,6 +18083,15 @@ spec:
                             type: string
                         type: object
                         x-kubernetes-map-type: atomic
+                      configuration:
+                        properties:
+                          inline:
+                            additionalProperties:
+                              type: string
+                            type: object
+                          secretName:
+                            type: string
+                        type: object
                       ephemeralStorage:
                         properties:
                           medium:

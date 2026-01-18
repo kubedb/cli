@@ -63,8 +63,8 @@ func (r *CassandraOpsRequest) GetDBRefName() string {
 	return r.Spec.DatabaseRef.Name
 }
 
-func (r *CassandraOpsRequest) GetRequestType() any {
-	return r.Spec.Type
+func (r *CassandraOpsRequest) GetRequestType() string {
+	return string(r.Spec.Type)
 }
 
 func (r *CassandraOpsRequest) GetStatus() OpsRequestStatus {

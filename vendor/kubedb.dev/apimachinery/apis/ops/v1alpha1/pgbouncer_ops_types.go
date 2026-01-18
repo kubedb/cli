@@ -63,7 +63,7 @@ type PgBouncerOpsRequestSpec struct {
 	// Specifies information necessary for vertical scaling
 	VerticalScaling *PgBouncerVerticalScalingSpec `json:"verticalScaling,omitempty"`
 	// Specifies information necessary for custom configuration of PgBouncer
-	Configuration *PgBouncerCustomConfigurationSpec `json:"configuration,omitempty"`
+	Configuration *ReconfigurationSpec `json:"configuration,omitempty"`
 	// Specifies information necessary for configuring TLS
 	TLS *PgBouncerTLSSpec `json:"tls,omitempty"`
 	// Specifies information necessary for configuring authSecret of the database
@@ -97,16 +97,6 @@ type PgBouncerHorizontalScalingSpec struct {
 type PgBouncerVerticalScalingSpec struct {
 	PgBouncer *PodResources       `json:"pgbouncer,omitempty"`
 	Exporter  *ContainerResources `json:"exporter,omitempty"`
-}
-
-type PgBouncerCustomConfigurationSpec struct {
-	PgBouncer *PgBouncerCustomConfiguration `json:"pgbouncer"`
-}
-
-type PgBouncerCustomConfiguration struct {
-	ConfigSecret       *core.LocalObjectReference `json:"configSecret,omitempty"`
-	ApplyConfig        map[string]string          `json:"applyConfig,omitempty"`
-	RemoveCustomConfig bool                       `json:"removeCustomConfig,omitempty"`
 }
 
 type PgBouncerTLSSpec struct {

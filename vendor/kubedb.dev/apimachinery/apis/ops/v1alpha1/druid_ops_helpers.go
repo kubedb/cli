@@ -63,8 +63,8 @@ func (d *DruidOpsRequest) GetDBRefName() string {
 	return d.Spec.DatabaseRef.Name
 }
 
-func (d *DruidOpsRequest) GetRequestType() any {
-	return d.Spec.Type
+func (d *DruidOpsRequest) GetRequestType() string {
+	return string(d.Spec.Type)
 }
 
 func (d *DruidOpsRequest) GetStatus() OpsRequestStatus {

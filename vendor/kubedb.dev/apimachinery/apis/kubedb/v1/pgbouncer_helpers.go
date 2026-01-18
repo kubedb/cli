@@ -145,7 +145,8 @@ func (p PgBouncer) GetPgBouncerFinalConfigSecret(kc client.Client) (*core.Secret
 }
 
 func (p PgBouncer) PgBouncerFinalConfigSecretName() string {
-	return meta_util.NameWithSuffix(p.ServiceName(), "final-config")
+	uid := string(p.UID)
+	return meta_util.NameWithSuffix(p.OffshootName(), uid[len(uid)-6:])
 }
 
 type pgbouncerApp struct {
@@ -189,7 +190,8 @@ func (p pgbouncerStatsService) Path() string {
 }
 
 func (p pgbouncerStatsService) Scheme() string {
-	return ""
+	sc := promapi.SchemeHTTP
+	return sc.String()
 }
 
 func (p pgbouncerStatsService) TLSConfig() *promapi.TLSConfig {
@@ -233,6 +235,8 @@ func (p *PgBouncer) SetDefaults(pgBouncerVersion *catalog.PgBouncerVersion, uses
 	if p.Spec.AuthSecret.Kind == "" {
 		p.Spec.AuthSecret.Kind = kubedb.ResourceKindSecret
 	}
+
+	p.Spec.Configuration = copyConfigurationField(p.Spec.Configuration, &p.Spec.ConfigSecret)
 
 	p.setPgBouncerContainerDefaults(&p.Spec.PodTemplate, pgBouncerVersion)
 	p.setDefaultPodSecurityContext()

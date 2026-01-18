@@ -66,6 +66,10 @@ type MemcachedSpec struct {
 	// If specified, this file will be used as configuration file otherwise default configuration file will be used.
 	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty"`
 
+	// Configuration holds the custom config for memcached
+	// +optional
+	Configuration *ConfigurationSpec `json:"configuration,omitempty"`
+
 	// Database Authentication Secret
 	// If specified, this will be used for authentication otherwise default secret will be used.
 	// +optional

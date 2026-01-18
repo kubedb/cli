@@ -150,6 +150,11 @@ func (in *ConnectClusterSpec) DeepCopyInto(out *ConnectClusterSpec) {
 		*out = new(corev1.LocalObjectReference)
 		**out = **in
 	}
+	if in.Configuration != nil {
+		in, out := &in.Configuration, &out.Configuration
+		*out = new(kubedbv1.ConfigurationSpec)
+		(*in).DeepCopyInto(*out)
+	}
 	in.PodTemplate.DeepCopyInto(&out.PodTemplate)
 	if in.ServiceTemplates != nil {
 		in, out := &in.ServiceTemplates, &out.ServiceTemplates
@@ -273,6 +278,11 @@ func (in *ConnectorSpec) DeepCopyInto(out *ConnectorSpec) {
 		in, out := &in.ConfigSecret, &out.ConfigSecret
 		*out = new(corev1.LocalObjectReference)
 		**out = **in
+	}
+	if in.Configuration != nil {
+		in, out := &in.Configuration, &out.Configuration
+		*out = new(kubedbv1.ConfigurationSpec)
+		(*in).DeepCopyInto(*out)
 	}
 	return
 }

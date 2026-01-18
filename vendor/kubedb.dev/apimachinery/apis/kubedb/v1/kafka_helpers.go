@@ -175,7 +175,8 @@ func (ks kafkaStatsService) Path() string {
 }
 
 func (ks kafkaStatsService) Scheme() string {
-	return ""
+	sc := promapi.SchemeHTTP
+	return sc.String()
 }
 
 func (k *Kafka) StatsService() mona.StatsAccessor {
@@ -220,14 +221,9 @@ func (k *Kafka) NodeRoleSpecificLabelKey(role KafkaNodeRoleType) string {
 	return kubedb.GroupName + "/role-" + string(role)
 }
 
-func (k *Kafka) ConfigSecretName(role KafkaNodeRoleType) string {
-	switch role {
-	case KafkaNodeRoleController:
-		return meta_util.NameWithSuffix(k.OffshootName(), "controller-config")
-	case KafkaNodeRoleBroker:
-		return meta_util.NameWithSuffix(k.OffshootName(), "broker-config")
-	}
-	return meta_util.NameWithSuffix(k.OffshootName(), "config")
+func (k *Kafka) ConfigSecretName() string {
+	uid := string(k.UID)
+	return meta_util.NameWithSuffix(k.OffshootName(), uid[len(uid)-6:])
 }
 
 func (k *Kafka) GetAuthSecretName() string {
@@ -253,10 +249,6 @@ func (k *Kafka) GetPersistentSecrets() []string {
 		secrets = append(secrets, k.Spec.KeystoreCredSecret.Name)
 	}
 	return secrets
-}
-
-func (k *Kafka) CruiseControlConfigSecretName() string {
-	return meta_util.NameWithSuffix(k.OffshootName(), "cruise-control-config")
 }
 
 // CertificateName returns the default certificate name and/or certificate secret name for a certificate alias
@@ -352,6 +344,7 @@ func (k *Kafka) SetDefaults(kc client.Client) {
 	if k.Spec.StorageType == "" {
 		k.Spec.StorageType = StorageTypeDurable
 	}
+	k.Spec.Configuration = copyConfigurationField(k.Spec.Configuration, &k.Spec.ConfigSecret)
 
 	if !k.Spec.DisableSecurity {
 		if k.Spec.AuthSecret == nil {

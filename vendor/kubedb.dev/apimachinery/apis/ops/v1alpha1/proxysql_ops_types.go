@@ -64,7 +64,7 @@ type ProxySQLOpsRequestSpec struct {
 	// Specifies information necessary for vertical scaling
 	VerticalScaling *ProxySQLVerticalScalingSpec `json:"verticalScaling,omitempty"`
 	// Specifies information necessary for custom configuration of ProxySQL
-	Configuration *ProxySQLCustomConfigurationSpec `json:"configuration,omitempty"`
+	Configuration *ProxySQLReconfigurationSpec `json:"configuration,omitempty"`
 	// Specifies information necessary for configuring TLS
 	TLS *TLSSpec `json:"tls,omitempty"`
 	// Specifies information necessary for configuring authSecret of the database
@@ -123,7 +123,7 @@ type ProxySQLOpsRequestList struct {
 	Items []ProxySQLOpsRequest `json:"items,omitempty"`
 }
 
-type ProxySQLCustomConfigurationSpec struct {
+type ProxySQLReconfigurationSpec struct {
 	//+optional
 	MySQLUsers *MySQLUsers `json:"mysqlUsers,omitempty"`
 

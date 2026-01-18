@@ -143,6 +143,10 @@ func (m MariaDB) offshootLabels(selector, override map[string]string) map[string
 	return meta_util.FilterKeys(kubedb.GroupName, selector, meta_util.OverwriteKeys(nil, m.Labels, override))
 }
 
+func (m MariaDB) AddKeyPrefix(key string) string {
+	return meta_util.NameWithPrefix(kubedb.InlineConfigKeyPrefixZZ, key)
+}
+
 func (m MariaDB) ServiceLabels(alias ServiceAlias, extraLabels ...map[string]string) map[string]string {
 	svcTemplate := GetServiceTemplate(m.Spec.ServiceTemplates, alias)
 	return m.offshootLabels(meta_util.OverwriteKeys(m.OffshootSelectors(), extraLabels...), svcTemplate.Labels)
@@ -256,7 +260,8 @@ func (m mariadbStatsService) Path() string {
 }
 
 func (m mariadbStatsService) Scheme() string {
-	return ""
+	sc := promapi.SchemeHTTP
+	return sc.String()
 }
 
 func (m mariadbStatsService) TLSConfig() *promapi.TLSConfig {
@@ -308,6 +313,7 @@ func (m *MariaDB) SetDefaults(mdVersion *v1alpha1.MariaDBVersion) {
 	if m.Spec.Init != nil && m.Spec.Init.Archiver != nil && m.Spec.Init.Archiver.ReplicationStrategy == nil {
 		m.Spec.Init.Archiver.ReplicationStrategy = ptr.To(ReplicationStrategySync)
 	}
+	m.Spec.Configuration = copyConfigurationField(m.Spec.Configuration, &m.Spec.ConfigSecret)
 	m.setDefaultContainerSecurityContext(mdVersion, &m.Spec.PodTemplate)
 	m.setDefaultContainerResourceLimits(&m.Spec.PodTemplate)
 	m.SetTLSDefaults()
@@ -324,6 +330,7 @@ func (m *MariaDB) SetDefaults(mdVersion *v1alpha1.MariaDBVersion) {
 	}
 	if m.IsCluster() && m.IsMariaDBReplication() {
 		m.SetDefaultsMaxscale(mdVersion, m.Spec.Topology.MaxScale)
+		m.Spec.WsrepSSTMethod = GaleraWsrepSSTMethodMariabackup
 	}
 
 	if m.Spec.Init != nil && m.Spec.Init.Archiver != nil {
@@ -577,8 +584,9 @@ func (m *MariaDB) ReplicasAreReady(lister pslister.PetSetLister) (bool, string, 
 	return checkReplicas(lister.PetSets(m.Namespace), labels.SelectorFromSet(m.OffshootLabels()), expectedItems)
 }
 
-func (m *MariaDB) InlineConfigSecretName() string {
-	return meta_util.NameWithSuffix(m.Name, "inline")
+func (m *MariaDB) ConfigSecretName() string {
+	uid := string(m.UID)
+	return meta_util.NameWithSuffix(m.OffshootName(), uid[len(uid)-6:])
 }
 
 func (m *MariaDB) CertMountPath(alias MariaDBCertificateAlias) string {

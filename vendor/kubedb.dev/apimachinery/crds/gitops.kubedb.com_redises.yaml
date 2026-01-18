@@ -173,6 +173,29 @@ spec:
                     type: string
                 type: object
                 x-kubernetes-map-type: atomic
+              configuration:
+                properties:
+                  acl:
+                    properties:
+                      rules:
+                        items:
+                          type: string
+                        type: array
+                      secretRef:
+                        properties:
+                          name:
+                            default: ""
+                            type: string
+                        type: object
+                        x-kubernetes-map-type: atomic
+                    type: object
+                  inline:
+                    additionalProperties:
+                      type: string
+                    type: object
+                  secretName:
+                    type: string
+                type: object
               deletionPolicy:
                 enum:
                 - Halt

@@ -64,7 +64,7 @@ type MongoDBOpsRequestSpec struct {
 	// Specifies information necessary for volume expansion
 	VolumeExpansion *MongoDBVolumeExpansionSpec `json:"volumeExpansion,omitempty"`
 	// Specifies information necessary for custom configuration of MongoDB
-	Configuration *MongoDBCustomConfigurationSpec `json:"configuration,omitempty"`
+	Configuration *MongoDBReconfigurationSpec `json:"configuration,omitempty"`
 	// Specifies information necessary for configuring TLS
 	TLS *TLSSpec `json:"tls,omitempty"`
 	// Specifies information necessary for configuring authSecret of the database
@@ -160,20 +160,14 @@ type MongoDBVolumeExpansionSpec struct {
 	Hidden       *resource.Quantity  `json:"hidden,omitempty"`
 }
 
-type MongoDBCustomConfigurationSpec struct {
-	Standalone   *MongoDBCustomConfiguration `json:"standalone,omitempty"`
-	ReplicaSet   *MongoDBCustomConfiguration `json:"replicaSet,omitempty"`
-	Mongos       *MongoDBCustomConfiguration `json:"mongos,omitempty"`
-	ConfigServer *MongoDBCustomConfiguration `json:"configServer,omitempty"`
-	Shard        *MongoDBCustomConfiguration `json:"shard,omitempty"`
-	Arbiter      *MongoDBCustomConfiguration `json:"arbiter,omitempty"`
-	Hidden       *MongoDBCustomConfiguration `json:"hidden,omitempty"`
-}
-
-type MongoDBCustomConfiguration struct {
-	ConfigSecret       *core.LocalObjectReference `json:"configSecret,omitempty"`
-	ApplyConfig        map[string]string          `json:"applyConfig,omitempty"`
-	RemoveCustomConfig bool                       `json:"removeCustomConfig,omitempty"`
+type MongoDBReconfigurationSpec struct {
+	Standalone   *ReconfigurationSpec `json:"standalone,omitempty"`
+	ReplicaSet   *ReconfigurationSpec `json:"replicaSet,omitempty"`
+	Mongos       *ReconfigurationSpec `json:"mongos,omitempty"`
+	ConfigServer *ReconfigurationSpec `json:"configServer,omitempty"`
+	Shard        *ReconfigurationSpec `json:"shard,omitempty"`
+	Arbiter      *ReconfigurationSpec `json:"arbiter,omitempty"`
+	Hidden       *ReconfigurationSpec `json:"hidden,omitempty"`
 }
 
 type Horizons struct {

@@ -39,6 +39,8 @@ func (k *Connector) Default() {
 	if k.Spec.DeletionPolicy == "" {
 		k.Spec.DeletionPolicy = dbapi.DeletionPolicyDelete
 	}
+
+	k.Spec.Configuration = copyConfigurationField(k.Spec.Configuration, &k.Spec.ConfigSecret)
 }
 
 func (k *Connector) ResourceShortCode() string {

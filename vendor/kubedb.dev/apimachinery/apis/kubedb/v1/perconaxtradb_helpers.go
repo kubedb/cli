@@ -87,6 +87,10 @@ func (p PerconaXtraDB) offshootLabels(selector, override map[string]string) map[
 	return meta_util.FilterKeys(kubedb.GroupName, selector, meta_util.OverwriteKeys(nil, p.Labels, override))
 }
 
+func (m PerconaXtraDB) AddKeyPrefix(key string) string {
+	return meta_util.NameWithPrefix(kubedb.InlineConfigKeyPrefixZZ, key)
+}
+
 func (p PerconaXtraDB) ResourceFQN() string {
 	return fmt.Sprintf("%s.%s", ResourcePluralPerconaXtraDB, kubedb.GroupName)
 }
@@ -189,7 +193,8 @@ func (p perconaXtraDBStatsService) Path() string {
 }
 
 func (p perconaXtraDBStatsService) Scheme() string {
-	return ""
+	sc := promapi.SchemeHTTP
+	return sc.String()
 }
 
 func (p perconaXtraDBStatsService) TLSConfig() *promapi.TLSConfig {
@@ -228,12 +233,14 @@ func (p *PerconaXtraDB) SetDefaults(pVersion *v1alpha1.PerconaXtraDBVersion) {
 		p.Spec.PodTemplate.Spec.ServiceAccountName = p.OffshootName()
 	}
 
+	p.Spec.Configuration = copyConfigurationField(p.Spec.Configuration, &p.Spec.ConfigSecret)
 	// Need to set FSGroup equal to  p.Spec.PodTemplate.Spec.ContainerSecurityContext.RunAsGroup.
 	// So that /var/pv directory have the group permission for the RunAsGroup user GID.
 	// Otherwise, We will get write permission denied.
 	p.setDefaultContainerSecurityContext(pVersion, &p.Spec.PodTemplate)
 	p.setDefaultContainerResourceLimits(&p.Spec.PodTemplate)
 	p.SetTLSDefaults()
+
 	p.Spec.Monitor.SetDefaults()
 	if p.Spec.Monitor != nil && p.Spec.Monitor.Prometheus != nil {
 		if p.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser == nil {
@@ -409,4 +416,9 @@ func (p *PerconaXtraDB) CertMountPath(alias PerconaXtraDBCertificateAlias) strin
 
 func (p *PerconaXtraDB) CertFilePath(certAlias PerconaXtraDBCertificateAlias, certFileName string) string {
 	return filepath.Join(p.CertMountPath(certAlias), certFileName)
+}
+
+func (p *PerconaXtraDB) ConfigSecretName() string {
+	uid := string(p.UID)
+	return meta_util.NameWithSuffix(p.OffshootName(), uid[len(uid)-6:])
 }

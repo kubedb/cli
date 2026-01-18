@@ -63,8 +63,8 @@ func (r *PgpoolOpsRequest) GetDBRefName() string {
 	return r.Spec.DatabaseRef.Name
 }
 
-func (r *PgpoolOpsRequest) GetRequestType() any {
-	return r.Spec.Type
+func (r *PgpoolOpsRequest) GetRequestType() string {
+	return string(r.Spec.Type)
 }
 
 func (r *PgpoolOpsRequest) GetStatus() OpsRequestStatus {

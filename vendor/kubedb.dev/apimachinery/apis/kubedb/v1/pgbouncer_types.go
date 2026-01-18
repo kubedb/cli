@@ -87,6 +87,9 @@ type PgBouncerSpec struct {
 	// If specified, this file will be used as configuration file otherwise default configuration file will be used.
 	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty"`
 
+	// +optional
+	Configuration *ConfigurationSpec `json:"configuration,omitempty"`
+
 	// Init is used to initialize database
 	// +optional
 	Init *InitSpec `json:"init,omitempty"`

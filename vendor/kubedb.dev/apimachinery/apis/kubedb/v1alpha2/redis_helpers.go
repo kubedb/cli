@@ -189,7 +189,8 @@ func (r redisStatsService) Path() string {
 }
 
 func (r redisStatsService) Scheme() string {
-	return ""
+	sc := promapi.SchemeHTTP
+	return sc.String()
 }
 
 func (r redisStatsService) TLSConfig() *promapi.TLSConfig {

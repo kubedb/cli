@@ -590,7 +590,8 @@ func (m mongoDBStatsService) Path() string {
 }
 
 func (m mongoDBStatsService) Scheme() string {
-	return ""
+	sc := promapi.SchemeHTTP
+	return sc.String()
 }
 
 func (m mongoDBStatsService) TLSConfig() *promapi.TLSConfig {
@@ -655,7 +656,6 @@ func (m *MongoDB) SetDefaults(mgVersion *v1alpha1.MongoDBVersion) {
 	}
 
 	m.initializePodTemplates()
-
 	if m.Spec.ShardTopology != nil {
 		m.setPodTemplateDefaultValues(m.Spec.ShardTopology.Mongos.PodTemplate, mgVersion, false)
 		m.setPodTemplateDefaultValues(m.Spec.ShardTopology.Shard.PodTemplate, mgVersion, true)
@@ -677,6 +677,7 @@ func (m *MongoDB) SetDefaults(mgVersion *v1alpha1.MongoDBVersion) {
 		m.setPodTemplateDefaultValues(m.Spec.Hidden.PodTemplate, mgVersion, false)
 	}
 
+	m.copyConfigurationFields()
 	m.SetTLSDefaults()
 	m.SetHealthCheckerDefaults()
 	m.Spec.Monitor.SetDefaults()
@@ -699,6 +700,23 @@ func (m *MongoDB) SetDefaults(mgVersion *v1alpha1.MongoDBVersion) {
 		if m.Spec.Init.Archiver.ManifestRepository != nil && m.Spec.Init.Archiver.ManifestRepository.Namespace == "" {
 			m.Spec.Init.Archiver.ManifestRepository.Namespace = m.GetNamespace()
 		}
+	}
+}
+
+func (m *MongoDB) copyConfigurationFields() {
+	if m.Spec.ShardTopology != nil {
+		m.Spec.ShardTopology.Shard.Configuration = copyConfigurationField(m.Spec.ShardTopology.Shard.Configuration, &m.Spec.ShardTopology.Shard.ConfigSecret)
+		m.Spec.ShardTopology.ConfigServer.Configuration = copyConfigurationField(m.Spec.ShardTopology.ConfigServer.Configuration, &m.Spec.ShardTopology.ConfigServer.ConfigSecret)
+		m.Spec.ShardTopology.Mongos.Configuration = copyConfigurationField(m.Spec.ShardTopology.Mongos.Configuration, &m.Spec.ShardTopology.Mongos.ConfigSecret)
+	} else {
+		m.Spec.Configuration = copyConfigurationField(m.Spec.Configuration, &m.Spec.ConfigSecret)
+	}
+
+	if m.Spec.Arbiter != nil {
+		m.Spec.Arbiter.Configuration = copyConfigurationField(m.Spec.Arbiter.Configuration, &m.Spec.Arbiter.ConfigSecret)
+	}
+	if m.Spec.Hidden != nil {
+		m.Spec.Hidden.Configuration = copyConfigurationField(m.Spec.Hidden.Configuration, &m.Spec.Hidden.ConfigSecret)
 	}
 }
 
@@ -1082,5 +1100,6 @@ func (m *MongoDB) ConfigSecretName(nodeType string) string {
 	if nodeType != "" {
 		nodeType = "-" + nodeType
 	}
-	return m.Name + nodeType + "-config"
+	uid := string(m.UID)
+	return meta_util.NameWithSuffix(m.OffshootName()+nodeType, uid[len(uid)-6:])
 }

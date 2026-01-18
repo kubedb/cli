@@ -63,8 +63,8 @@ func (h *HazelcastOpsRequest) GetDBRefName() string {
 	return h.Spec.DatabaseRef.Name
 }
 
-func (h *HazelcastOpsRequest) GetRequestType() any {
-	return h.Spec.Type
+func (h *HazelcastOpsRequest) GetRequestType() string {
+	return string(h.Spec.Type)
 }
 
 func (h *HazelcastOpsRequest) GetStatus() OpsRequestStatus {

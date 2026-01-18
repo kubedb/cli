@@ -187,7 +187,8 @@ func (p perconaXtraDBStatsService) Path() string {
 }
 
 func (p perconaXtraDBStatsService) Scheme() string {
-	return ""
+	sc := promapi.SchemeHTTP
+	return sc.String()
 }
 
 func (p perconaXtraDBStatsService) TLSConfig() *promapi.TLSConfig {

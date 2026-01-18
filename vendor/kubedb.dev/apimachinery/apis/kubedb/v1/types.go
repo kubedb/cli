@@ -210,6 +210,20 @@ type Age struct {
 	LastUpdateTimestamp metav1.Time `json:"lastUpdateTimestamp,omitempty"`
 }
 
+type ConfigurationSpec struct {
+	// SecretName is an optional field to provide custom configuration file for the database (i.e. elasticsearch.yml, mongod.conf ..).
+	// If specified, these configurations will be used with default configurations (if any) and applyConfig configurations (if any).
+	// configurations from this secret will override default configurations.
+	// This secret must be created by user.
+	// +optional
+	SecretName string `json:"secretName,omitempty"`
+
+	// Inline contains key-value pairs of configurations to be applied to the database.
+	// These configurations will override both default configurations and configurations from the config secret (if any).
+	// +optional
+	Inline map[string]string `json:"inline,omitempty"`
+}
+
 type Archiver struct {
 	// Pause is used to stop the archiver backup for the database
 	// +optional

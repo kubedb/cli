@@ -68,24 +68,26 @@ spec:
                 type: object
               configuration:
                 properties:
-                  pgbouncer:
-                    properties:
-                      applyConfig:
-                        additionalProperties:
-                          type: string
-                        type: object
-                      configSecret:
-                        properties:
-                          name:
-                            default: ""
-                            type: string
-                        type: object
-                        x-kubernetes-map-type: atomic
-                      removeCustomConfig:
-                        type: boolean
+                  applyConfig:
+                    additionalProperties:
+                      type: string
                     type: object
-                required:
-                - pgbouncer
+                  configSecret:
+                    properties:
+                      name:
+                        default: ""
+                        type: string
+                    type: object
+                    x-kubernetes-map-type: atomic
+                  removeCustomConfig:
+                    type: boolean
+                  restart:
+                    default: auto
+                    enum:
+                    - auto
+                    - "true"
+                    - "false"
+                    type: string
                 type: object
               databaseRef:
                 properties:

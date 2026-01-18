@@ -67,8 +67,8 @@ func (e *ElasticsearchOpsRequest) GetDBRefName() string {
 	return e.Spec.DatabaseRef.Name
 }
 
-func (e *ElasticsearchOpsRequest) GetRequestType() any {
-	return e.Spec.Type
+func (e *ElasticsearchOpsRequest) GetRequestType() string {
+	return string(e.Spec.Type)
 }
 
 func (e *ElasticsearchOpsRequest) GetStatus() OpsRequestStatus {

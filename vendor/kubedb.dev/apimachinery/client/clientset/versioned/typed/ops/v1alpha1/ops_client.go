@@ -48,6 +48,7 @@ type OpsV1alpha1Interface interface {
 	PgpoolOpsRequestsGetter
 	PostgresOpsRequestsGetter
 	ProxySQLOpsRequestsGetter
+	QdrantOpsRequestsGetter
 	RabbitMQOpsRequestsGetter
 	RedisOpsRequestsGetter
 	RedisSentinelOpsRequestsGetter
@@ -135,6 +136,10 @@ func (c *OpsV1alpha1Client) PostgresOpsRequests(namespace string) PostgresOpsReq
 
 func (c *OpsV1alpha1Client) ProxySQLOpsRequests(namespace string) ProxySQLOpsRequestInterface {
 	return newProxySQLOpsRequests(c, namespace)
+}
+
+func (c *OpsV1alpha1Client) QdrantOpsRequests(namespace string) QdrantOpsRequestInterface {
+	return newQdrantOpsRequests(c, namespace)
 }
 
 func (c *OpsV1alpha1Client) RabbitMQOpsRequests(namespace string) RabbitMQOpsRequestInterface {

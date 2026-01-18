@@ -187,12 +187,12 @@ type PostgresReplication struct {
 	// +optional
 	MaxSlotWALKeepSizeInMegaBytes *int32 `json:"maxSlotWALKeepSize,omitempty"`
 
-	// ForceFailOverAcceptingDataLossAfter is the maximum time to wait before running a force failover process
+	// ForceFailoverAcceptingDataLossAfter is the maximum time to wait before running a force failover process
 	// This is helpful for a scenario where the old primary is not available and it has the most updated wal lsn
 	// Doing force failover may or may not end up loosing data depending on any wrtie transaction
 	// in the range lagged lsn between the new primary and the old primary
 	// +optional
-	ForceFailOverAcceptingDataLossAfter *metav1.Duration `json:"forceFailOverAcceptingDataLossAfter,omitempty"`
+	ForceFailoverAcceptingDataLossAfter *metav1.Duration `json:"forceFailoverAcceptingDataLossAfter,omitempty"`
 }
 
 // PostgreLeaderElectionConfig contains essential attributes of leader election.

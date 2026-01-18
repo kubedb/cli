@@ -41,6 +41,11 @@ const (
 	PrometheusTokenFile       = "/var/prometheus-data/token.txt"
 	MonitoringAgentAnnotation = GroupName + "/monitoring-agent"
 
+	InlinePropertiesKey     = "inline.properties"
+	InlineConfigKey         = "inline.conf"
+	InlineConfigKeyPrefix   = "inline"
+	InlineConfigKeyPrefixZZ = "zz-inline"
+
 	// distributed const
 	DistributedDatabaseLabel                   = GroupName + "/distributed"
 	DistributedCustomConfigSecretNameSuffix    = "custom-config"
@@ -145,6 +150,8 @@ const (
 	ElasticsearchVolumeCustomConfig              = "custom-config"
 	ElasticsearchVolumeData                      = "data"
 	ElasticsearchVolumeTemp                      = "temp"
+	ElasticsearchConfigFileName                  = "elasticsearch.yml"
+	ElasticsearchScriptFileName                  = "config-merger.sh"
 
 	// Ref:
 	//	- https://www.elastic.co/guide/en/elasticsearch/reference/7.6/heap-size.html#heap-size
@@ -556,11 +563,11 @@ const (
 	PostgresSharedTlsVolumeName      = "certs"
 	PostgresSharedTlsVolumeMountPath = "/tls/certs"
 	PostgresCustomConfigFile         = "user.conf"
-
-	PostgresKeyFileSecretSuffix = "key"
-	PostgresPEMSecretSuffix     = "pem"
-	PostgresDefaultUsername     = "postgres"
-	PostgresPgCoordinatorStatus = "Coordinator/Status"
+	PostgresTuningConfigFile         = "pgtune.conf"
+	PostgresKeyFileSecretSuffix      = "key"
+	PostgresPEMSecretSuffix          = "pem"
+	PostgresDefaultUsername          = "postgres"
+	PostgresPgCoordinatorStatus      = "Coordinator/Status"
 	// to pause the failover for postgres. this is helpful for ops request
 	PostgresPgCoordinatorStatusPause = "Pause"
 	// to resume the failover for postgres. this is helpful for ops request
@@ -1777,6 +1784,7 @@ const (
 
 	Neo4jContainerName     = "neo4j"
 	Neo4jInitContainerName = "neo4j-init"
+	Neo4jConfigFileName    = "neo4j.conf"
 )
 
 // =========================== Cassandra Constants ============================
@@ -2034,13 +2042,13 @@ var (
 	}
 
 	// DefaultResourcesMemoryIntensiveMSSQLServer must be used for Microsoft SQL Server
-	DefaultResourcesMemoryIntensiveMSSQLServer = core.ResourceRequirements{
+	DefaultResourcesMSSQLServer = core.ResourceRequirements{
 		Requests: core.ResourceList{
-			core.ResourceCPU:    resource.MustParse("1"),
-			core.ResourceMemory: resource.MustParse("1.5Gi"),
+			core.ResourceCPU:    resource.MustParse("1.5"),
+			core.ResourceMemory: resource.MustParse("2Gi"),
 		},
 		Limits: core.ResourceList{
-			core.ResourceMemory: resource.MustParse("2Gi"),
+			core.ResourceMemory: resource.MustParse("4Gi"),
 		},
 	}
 
@@ -2225,6 +2233,8 @@ const (
 	QdrantDataDir       = "/qdrant/storage"
 	QdrantConfigVolName = "qdrant-config"
 	QdrantConfigDir     = "/qdrant/config"
+	QdrantTLSVolName    = "tls"
+	QdrantTLSVolDir     = "/tls"
 
 	QdrantConfigFileName = "config.yaml"
 
