@@ -32,6 +32,7 @@ import (
 	kubedbv1 "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1"
 	kubedbv1alpha1 "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha1"
 	kubedbv1alpha2 "kubedb.dev/apimachinery/client/clientset/versioned/typed/kubedb/v1alpha2"
+	migratorv1alpha1 "kubedb.dev/apimachinery/client/clientset/versioned/typed/migrator/v1alpha1"
 	opsv1alpha1 "kubedb.dev/apimachinery/client/clientset/versioned/typed/ops/v1alpha1"
 	postgresv1alpha1 "kubedb.dev/apimachinery/client/clientset/versioned/typed/postgres/v1alpha1"
 	schemav1alpha1 "kubedb.dev/apimachinery/client/clientset/versioned/typed/schema/v1alpha1"
@@ -54,6 +55,7 @@ type Interface interface {
 	KubedbV1alpha1() kubedbv1alpha1.KubedbV1alpha1Interface
 	KubedbV1alpha2() kubedbv1alpha2.KubedbV1alpha2Interface
 	KubedbV1() kubedbv1.KubedbV1Interface
+	MigratorV1alpha1() migratorv1alpha1.MigratorV1alpha1Interface
 	OpsV1alpha1() opsv1alpha1.OpsV1alpha1Interface
 	PostgresV1alpha1() postgresv1alpha1.PostgresV1alpha1Interface
 	SchemaV1alpha1() schemav1alpha1.SchemaV1alpha1Interface
@@ -73,6 +75,7 @@ type Clientset struct {
 	kubedbV1alpha1        *kubedbv1alpha1.KubedbV1alpha1Client
 	kubedbV1alpha2        *kubedbv1alpha2.KubedbV1alpha2Client
 	kubedbV1              *kubedbv1.KubedbV1Client
+	migratorV1alpha1      *migratorv1alpha1.MigratorV1alpha1Client
 	opsV1alpha1           *opsv1alpha1.OpsV1alpha1Client
 	postgresV1alpha1      *postgresv1alpha1.PostgresV1alpha1Client
 	schemaV1alpha1        *schemav1alpha1.SchemaV1alpha1Client
@@ -127,6 +130,11 @@ func (c *Clientset) KubedbV1alpha2() kubedbv1alpha2.KubedbV1alpha2Interface {
 // KubedbV1 retrieves the KubedbV1Client
 func (c *Clientset) KubedbV1() kubedbv1.KubedbV1Interface {
 	return c.kubedbV1
+}
+
+// MigratorV1alpha1 retrieves the MigratorV1alpha1Client
+func (c *Clientset) MigratorV1alpha1() migratorv1alpha1.MigratorV1alpha1Interface {
+	return c.migratorV1alpha1
 }
 
 // OpsV1alpha1 retrieves the OpsV1alpha1Client
@@ -233,6 +241,10 @@ func NewForConfigAndClient(c *rest.Config, httpClient *http.Client) (*Clientset,
 	if err != nil {
 		return nil, err
 	}
+	cs.migratorV1alpha1, err = migratorv1alpha1.NewForConfigAndClient(&configShallowCopy, httpClient)
+	if err != nil {
+		return nil, err
+	}
 	cs.opsV1alpha1, err = opsv1alpha1.NewForConfigAndClient(&configShallowCopy, httpClient)
 	if err != nil {
 		return nil, err
@@ -280,6 +292,7 @@ func New(c rest.Interface) *Clientset {
 	cs.kubedbV1alpha1 = kubedbv1alpha1.New(c)
 	cs.kubedbV1alpha2 = kubedbv1alpha2.New(c)
 	cs.kubedbV1 = kubedbv1.New(c)
+	cs.migratorV1alpha1 = migratorv1alpha1.New(c)
 	cs.opsV1alpha1 = opsv1alpha1.New(c)
 	cs.postgresV1alpha1 = postgresv1alpha1.New(c)
 	cs.schemaV1alpha1 = schemav1alpha1.New(c)

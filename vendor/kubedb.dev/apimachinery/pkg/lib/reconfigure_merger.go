@@ -115,6 +115,10 @@ func (m *ReconfigureMerger) populateList() error {
 }
 
 func (m *ReconfigureMerger) Run() (int, error) {
+	inProgress := m.CheckIfAnyOpsRequestIsProgressing()
+	if inProgress {
+		return RequeueNeeded, nil
+	}
 	skip, pendingReconfigureOps := m.FindPendingReconfigureOpsToMerge()
 	if skip != MergeNeeded {
 		return skip, nil
@@ -138,6 +142,28 @@ func (m *ReconfigureMerger) Run() (int, error) {
 	klog.Infof("mmm %v %v \n", m.currentOps.GetName(), mergedOps.GetName())
 	err = m.EnsureMergedOpsRequest(mergedOps, pendingReconfigureOps)
 	return ContinueGeneral, err
+}
+
+func (m *ReconfigureMerger) CheckIfAnyOpsRequestIsProgressing() bool {
+	if m.currentOps.GetRequestType() != opsapi.Reconfigure {
+		return false
+	}
+	for _, o := range m.opsReqList {
+		req := o.(opsapi.Accessor)
+
+		// Only consider ops for the same database
+		if req.GetDBRefName() != m.currentOps.GetDBRefName() {
+			continue
+		}
+
+		// If any Reconfigure is Progressing (other than current), requeue current request
+		if req.GetStatus().Phase == opsapi.OpsRequestPhaseProgressing && m.currentOps.GetName() != req.GetName() {
+			m.log.Info(fmt.Sprintf("A ops request %s/%s is already progressing for database %s",
+				req.GetObjectMeta().Namespace, req.GetObjectMeta().Name, req.GetDBRefName()))
+			return true
+		}
+	}
+	return false
 }
 
 /*

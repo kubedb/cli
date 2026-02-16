@@ -1,5 +1,5 @@
 /*
-Copyright 2024.
+Copyright AppsCode Inc. and Contributors
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -233,3 +233,21 @@ const (
 	SSLVerificationModeStrict  SSLVerificationMode = "strict"
 	SSLVerificationModeOnce    SSLVerificationMode = "once"
 )
+
+var _ Accessor = &ClickHouse{}
+
+func (m *ClickHouse) GetObjectMeta() metav1.ObjectMeta {
+	return m.ObjectMeta
+}
+
+func (m *ClickHouse) GetConditions() []kmapi.Condition {
+	return m.Status.Conditions
+}
+
+func (m *ClickHouse) SetCondition(cond kmapi.Condition) {
+	m.Status.Conditions = setCondition(m.Status.Conditions, cond)
+}
+
+func (m *ClickHouse) RemoveCondition(typ string) {
+	m.Status.Conditions = removeCondition(m.Status.Conditions, typ)
+}

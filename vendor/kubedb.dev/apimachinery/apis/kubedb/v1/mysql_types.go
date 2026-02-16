@@ -273,3 +273,21 @@ type MySQLList struct {
 	// Items is a list of MySQL TPR objects
 	Items []MySQL `json:"items,omitempty"`
 }
+
+var _ Accessor = &MySQL{}
+
+func (m *MySQL) GetObjectMeta() metav1.ObjectMeta {
+	return m.ObjectMeta
+}
+
+func (m *MySQL) GetConditions() []kmapi.Condition {
+	return m.Status.Conditions
+}
+
+func (m *MySQL) SetCondition(cond kmapi.Condition) {
+	m.Status.Conditions = setCondition(m.Status.Conditions, cond)
+}
+
+func (m *MySQL) RemoveCondition(typ string) {
+	m.Status.Conditions = removeCondition(m.Status.Conditions, typ)
+}

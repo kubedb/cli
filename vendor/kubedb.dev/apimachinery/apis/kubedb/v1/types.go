@@ -22,6 +22,7 @@ import (
 	kmapi "kmodules.xyz/client-go/api/v1"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	ofstv1 "kmodules.xyz/offshoot-api/api/v1"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 type InitSpec struct {
@@ -115,9 +116,10 @@ const (
 type ServiceAlias string
 
 const (
-	PrimaryServiceAlias ServiceAlias = "primary"
-	StandbyServiceAlias ServiceAlias = "standby"
-	StatsServiceAlias   ServiceAlias = "stats"
+	PrimaryServiceAlias     ServiceAlias = "primary"
+	StandbyServiceAlias     ServiceAlias = "standby"
+	StatsServiceAlias       ServiceAlias = "stats"
+	ReadReplicaServiceAlias ServiceAlias = "rr"
 )
 
 // +kubebuilder:validation:Enum=fscopy;clone;sync;none
@@ -262,4 +264,33 @@ type ManifestOptions struct {
 	// +kubebuilder:default=false
 	// +optional
 	InitScript *bool `json:"initScript,omitempty"`
+}
+
+type Accessor interface {
+	GetObjectMeta() metav1.ObjectMeta
+	GetConditions() []kmapi.Condition
+	SetCondition(cond kmapi.Condition)
+	RemoveCondition(typ string)
+	client.Object
+}
+
+func setCondition(conditions []kmapi.Condition, cond kmapi.Condition) []kmapi.Condition {
+	for i, c := range conditions {
+		if c.Type == cond.Type {
+			conditions[i] = cond
+			return conditions
+		}
+	}
+	conditions = append(conditions, cond)
+	return conditions
+}
+
+func removeCondition(conditions []kmapi.Condition, typ string) []kmapi.Condition {
+	for i, c := range conditions {
+		if string(c.Type) == typ {
+			conditions = append(conditions[:i], conditions[i+1:]...)
+			break
+		}
+	}
+	return conditions
 }

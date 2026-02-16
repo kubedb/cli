@@ -40,6 +40,10 @@ const (
 	KibanaStatusEndpoint  = "/api/status"
 	KibanaConfigFileName  = "kibana.yml"
 
+	DashboardsScriptFileName       = "startup.sh"
+	DashboardsVolumeScriptFileName = "dashboard-startup-script"
+	DashboardsVolumeScriptDir      = "/dashboard-script"
+
 	OpensearchDashboardsConfigDir       = "/usr/share/opensearch-dashboards/config"
 	OpensearchDashboardsTempConfigDir   = "/opensearch-dashboards/temp-config"
 	OpensearchDashboardsCustomConfigDir = "/opensearch-dashboards/custom-config"

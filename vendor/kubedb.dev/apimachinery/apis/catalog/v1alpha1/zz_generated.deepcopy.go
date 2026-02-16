@@ -3880,6 +3880,7 @@ func (in *PostgresVersionSpec) DeepCopyInto(out *PostgresVersionSpec) {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
+	out.Migrator = in.Migrator
 	return
 }
 

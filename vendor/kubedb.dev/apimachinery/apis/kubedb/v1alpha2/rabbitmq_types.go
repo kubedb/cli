@@ -167,3 +167,21 @@ type RabbitMQList struct {
 	meta.ListMeta `json:"metadata,omitempty"`
 	Items         []RabbitMQ `json:"items"`
 }
+
+var _ Accessor = &RabbitMQ{}
+
+func (m *RabbitMQ) GetObjectMeta() meta.ObjectMeta {
+	return m.ObjectMeta
+}
+
+func (m *RabbitMQ) GetConditions() []kmapi.Condition {
+	return m.Status.Conditions
+}
+
+func (m *RabbitMQ) SetCondition(cond kmapi.Condition) {
+	m.Status.Conditions = setCondition(m.Status.Conditions, cond)
+}
+
+func (m *RabbitMQ) RemoveCondition(typ string) {
+	m.Status.Conditions = removeCondition(m.Status.Conditions, typ)
+}

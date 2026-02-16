@@ -398,3 +398,21 @@ const (
 	ElasticsearchNodeRoleTypeTransform           ElasticsearchNodeRoleType = "transform"
 	ElasticsearchNodeRoleTypeCoordinating        ElasticsearchNodeRoleType = "coordinating"
 )
+
+var _ Accessor = &Elasticsearch{}
+
+func (m *Elasticsearch) GetObjectMeta() metav1.ObjectMeta {
+	return m.ObjectMeta
+}
+
+func (m *Elasticsearch) GetConditions() []kmapi.Condition {
+	return m.Status.Conditions
+}
+
+func (m *Elasticsearch) SetCondition(cond kmapi.Condition) {
+	m.Status.Conditions = setCondition(m.Status.Conditions, cond)
+}
+
+func (m *Elasticsearch) RemoveCondition(typ string) {
+	m.Status.Conditions = removeCondition(m.Status.Conditions, typ)
+}

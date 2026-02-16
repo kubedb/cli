@@ -6204,6 +6204,17 @@ spec:
                     default: 5
                     format: int32
                     type: integer
+                  logRetentionHistoryLimit:
+                    default: 5
+                    format: int32
+                    type: integer
+                  retentionPeriod:
+                    default: 1y
+                    pattern: ^[1-9][0-9]*[dwmy]$
+                    type: string
+                  retentionSchedule:
+                    default: 0 0 1 * *
+                    type: string
                   runtimeSettings:
                     properties:
                       container:

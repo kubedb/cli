@@ -1,5 +1,5 @@
 /*
-Copyright 2023.
+Copyright AppsCode Inc. and Contributors
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -320,4 +320,22 @@ type MSSQLServerList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
 	Items           []MSSQLServer `json:"items"`
+}
+
+var _ Accessor = &MSSQLServer{}
+
+func (p *MSSQLServer) GetObjectMeta() metav1.ObjectMeta {
+	return p.ObjectMeta
+}
+
+func (p *MSSQLServer) GetConditions() []kmapi.Condition {
+	return p.Status.Conditions
+}
+
+func (p *MSSQLServer) SetCondition(cond kmapi.Condition) {
+	p.Status.Conditions = setCondition(p.Status.Conditions, cond)
+}
+
+func (p *MSSQLServer) RemoveCondition(typ string) {
+	p.Status.Conditions = removeCondition(p.Status.Conditions, typ)
 }

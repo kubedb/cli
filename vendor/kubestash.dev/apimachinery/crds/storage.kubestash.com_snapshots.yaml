@@ -116,6 +116,20 @@ spec:
                                 type: string
                             type: object
                           type: array
+                        lastLogRetentionStats:
+                          items:
+                            properties:
+                              deletedLogCount:
+                                format: int64
+                                type: integer
+                              error:
+                                type: string
+                              lastExecutionTime:
+                                type: string
+                              retentionPeriodApplied:
+                                type: string
+                            type: object
+                          type: array
                         lastSucceededStats:
                           items:
                             properties:

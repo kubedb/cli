@@ -78,7 +78,7 @@ spec:
                 - DoNotTerminate
                 type: string
             required:
-            - configSecret
+            - configuration
             - connectClusterRef
             type: object
           status:
