@@ -242,3 +242,21 @@ type RedisList struct {
 	// Items is a list of Redis TPR objects
 	Items []Redis `json:"items,omitempty"`
 }
+
+var _ Accessor = &Redis{}
+
+func (r *Redis) GetObjectMeta() metav1.ObjectMeta {
+	return r.ObjectMeta
+}
+
+func (r *Redis) GetConditions() []kmapi.Condition {
+	return r.Status.Conditions
+}
+
+func (r *Redis) SetCondition(cond kmapi.Condition) {
+	r.Status.Conditions = setCondition(r.Status.Conditions, cond)
+}
+
+func (r *Redis) RemoveCondition(typ string) {
+	r.Status.Conditions = removeCondition(r.Status.Conditions, typ)
+}

@@ -325,6 +325,11 @@ const (
 	RestartPrimary   = "RestartPrimary"
 	RestartSecondary = "RestartSecondary"
 
+	HorizontallyScaleReadReplica            = "HorizontallyScaleReadReplica"
+	RestartReadReplicas                     = "RestartReadReplicas"
+	UpdateSharedBufferEnvVar                = "UpdateSharedBufferEnvVar"
+	ResumePostgres                          = "ResumePostgres"
+	UpdatePostgresReadReplicaResources      = "UpdatePostgresReadReplicaResources"
 	StartRunScript                          = "StartRunScriptWithRestart"
 	KillRunScript                           = "KillRunScript"
 	StickyLeader                            = "STICKYLEADER" // We want a id(sticky id) to be always leader in raft

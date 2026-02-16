@@ -364,3 +364,21 @@ type MongoDBList struct {
 	// Items is a list of MongoDB TPR objects
 	Items []MongoDB `json:"items,omitempty"`
 }
+
+var _ Accessor = &MongoDB{}
+
+func (m *MongoDB) GetObjectMeta() metav1.ObjectMeta {
+	return m.ObjectMeta
+}
+
+func (m *MongoDB) GetConditions() []kmapi.Condition {
+	return m.Status.Conditions
+}
+
+func (m *MongoDB) SetCondition(cond kmapi.Condition) {
+	m.Status.Conditions = setCondition(m.Status.Conditions, cond)
+}
+
+func (m *MongoDB) RemoveCondition(typ string) {
+	m.Status.Conditions = removeCondition(m.Status.Conditions, typ)
+}

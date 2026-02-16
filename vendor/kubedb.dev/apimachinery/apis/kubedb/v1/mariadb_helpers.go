@@ -114,6 +114,22 @@ func (m MariaDB) OffshootMaxscaleLabels() map[string]string {
 	return m.offshootLabels(m.OffshootMaxscaleSelectors(), nil)
 }
 
+func (m MariaDB) GetPVCRestoreSessionName(ordinal int) string {
+	return fmt.Sprintf("%s-%s-%v-%s", kubedb.DefaultVolumeClaimTemplateName, m.OffshootName(), ordinal, kubedb.MariaDBArchiverPVCRestorerSuffix)
+}
+
+func (m MariaDB) GetBinlogRestoreSidekickName(ordinal int) string {
+	return fmt.Sprintf("%s-%s-%d", m.OffshootName(), kubedb.MariaDBBinlogRestoreSidekickSuffix, ordinal)
+}
+
+func (m MariaDB) GetBinlogRestoreServiceName(ordinal int) string {
+	return fmt.Sprintf("%s-%s-%d", m.OffshootName(), kubedb.MariaDBBinlogRestoreServiceSuffix, ordinal)
+}
+
+func (m MariaDB) OffshootPrimaryServiceExportName() string {
+	return meta_util.NameWithSuffix(m.Name, kubedb.DistributedPrimaryServiceExportSuffix)
+}
+
 func (m MariaDB) PodLabels() map[string]string {
 	return m.offshootLabels(m.OffshootSelectors(), m.Spec.PodTemplate.Labels)
 }
@@ -277,7 +293,11 @@ func (m MariaDB) StatsServiceLabels() map[string]string {
 }
 
 func (m MariaDB) PrimaryServiceDNS() string {
-	return fmt.Sprintf("%s.%s.svc", m.ServiceName(), m.Namespace)
+	if m.Spec.Distributed {
+		return fmt.Sprintf("%s.%s.svc.%s", m.ServiceName(), m.Namespace, kubedb.KubeSliceDomainSuffix)
+	} else {
+		return fmt.Sprintf("%s.%s.svc", m.ServiceName(), m.Namespace)
+	}
 }
 
 func (m *MariaDB) SetDefaults(mdVersion *v1alpha1.MariaDBVersion) {

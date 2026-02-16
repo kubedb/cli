@@ -256,3 +256,21 @@ const (
 	// This is the most secure of the currently provided methods, but it is not supported by older client libraries.
 	PgBouncerClientAuthModeScram PgBouncerClientAuthMode = "scram-sha-256"
 )
+
+var _ Accessor = &PgBouncer{}
+
+func (p *PgBouncer) GetObjectMeta() metav1.ObjectMeta {
+	return p.ObjectMeta
+}
+
+func (p *PgBouncer) GetConditions() []kmapi.Condition {
+	return p.Status.Conditions
+}
+
+func (p *PgBouncer) SetCondition(cond kmapi.Condition) {
+	p.Status.Conditions = setCondition(p.Status.Conditions, cond)
+}
+
+func (p *PgBouncer) RemoveCondition(typ string) {
+	p.Status.Conditions = removeCondition(p.Status.Conditions, typ)
+}

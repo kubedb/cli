@@ -173,3 +173,21 @@ const (
 	CassandraServerCert CassandraCertificateAlias = "server"
 	CassandraClientCert CassandraCertificateAlias = "client"
 )
+
+var _ Accessor = &Cassandra{}
+
+func (m *Cassandra) GetObjectMeta() metav1.ObjectMeta {
+	return m.ObjectMeta
+}
+
+func (m *Cassandra) GetConditions() []kmapi.Condition {
+	return m.Status.Conditions
+}
+
+func (m *Cassandra) SetCondition(cond kmapi.Condition) {
+	m.Status.Conditions = setCondition(m.Status.Conditions, cond)
+}
+
+func (m *Cassandra) RemoveCondition(typ string) {
+	m.Status.Conditions = removeCondition(m.Status.Conditions, typ)
+}

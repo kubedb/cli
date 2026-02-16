@@ -91,7 +91,7 @@ type RedisOpsRequestSpec struct {
 type RedisOpsRequestType string
 
 type RedisTLSSpec struct {
-	*TLSSpec `json:",inline"`
+	TLSSpec `json:",inline"`
 	// This field is only needed in Redis Sentinel Mode when we add or remove TLS. In Redis Sentinel Mode, both redis instances and
 	// sentinel instances either have TLS or don't have TLS. So when want to add TLS to Redis in Sentinel Mode, current sentinel instances don't
 	// have TLS enabled, so we need to give a new Sentinel Reference which has TLS enabled and which will monitor the Redis instances when we

@@ -211,6 +211,10 @@ const (
 	// TypeSnapshotCleanupIncomplete indicates whether Snapshot cleanup incomplete or not
 	TypeSnapshotCleanupIncomplete                   = "SnapshotCleanupIncomplete"
 	ReasonSnapshotCleanupTerminatedBeforeCompletion = "SnapshotCleanupTerminatedBeforeCompletion"
+
+	// TypePodHasBeenInPendingStateForLongerThanExpected indicates that the Pod has been in Pending state for longer than expected
+	TypePodHasBeenInPendingStateForLongerThanExpected   = "PodHasBeenInPendingStateForLongerThanExpected"
+	ReasonPodHasBeenInPendingStateForLongerThanExpected = "PodHasBeenInPendingStateForLongerThanExpected"
 )
 
 //+kubebuilder:object:root=true

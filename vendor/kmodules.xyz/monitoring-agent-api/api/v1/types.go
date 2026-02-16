@@ -74,6 +74,53 @@ type ServiceMonitorSpec struct {
 	// Interval at which metrics should be scraped
 	// +optional
 	Interval string `json:"interval,omitempty"`
+
+	// targetLabels defines the labels which are transferred from the
+	// associated Kubernetes `Service` object onto the ingested metrics.
+	//
+	// +optional
+	TargetLabels []string `json:"targetLabels,omitempty"`
+	// podTargetLabels defines the labels which are transferred from the
+	// associated Kubernetes `Pod` object onto the ingested metrics.
+	//
+	// +optional
+	PodTargetLabels []string `json:"podTargetLabels,omitempty"`
+
+	// endpoints defines the list of endpoints part of this ServiceMonitor.
+	// Defines how to scrape metrics from Kubernetes [Endpoints](https://kubernetes.io/docs/concepts/services-networking/service/#endpoints) objects.
+	// In most cases, an Endpoints object is backed by a Kubernetes [Service](https://kubernetes.io/docs/concepts/services-networking/service/) object with the same name and labels.
+	// +optional
+	Endpoints []Endpoint `json:"endpoints,omitempty"`
+}
+
+// Endpoint defines an endpoint serving Prometheus metrics to be scraped by
+// Prometheus.
+//
+// +k8s:openapi-gen=true
+type Endpoint struct {
+	// port defines the name of the Service port which this endpoint refers to.
+	//
+	// It takes precedence over `targetPort`.
+	// +optional
+	Port string `json:"port,omitempty"`
+
+	// metricRelabelings defines the relabeling rules to apply to the
+	// samples before ingestion.
+	//
+	// +optional
+	MetricRelabelConfigs []promapi.RelabelConfig `json:"metricRelabelings,omitempty"`
+
+	// relabelings defines the relabeling rules to apply the target's
+	// metadata labels.
+	//
+	// The Operator automatically adds relabelings for a few standard Kubernetes fields.
+	//
+	// The original scrape job's name is available via the `__tmp_prometheus_job_name` label.
+	//
+	// More info: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
+	//
+	// +optional
+	RelabelConfigs []promapi.RelabelConfig `json:"relabelings,omitempty"`
 }
 
 type PrometheusExporterSpec struct {

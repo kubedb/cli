@@ -233,6 +233,27 @@ type LogStats struct {
 
 	TotalSucceededCount int64 `json:"totalSucceededCount,omitempty"`
 	LastSucceededStats  []Log `json:"lastSucceededStats,omitempty"`
+
+	LastLogRetentionStats []LogRetentionStatus `json:"lastLogRetentionStats,omitempty"`
+}
+
+type LogRetentionStatus struct {
+	// LastExecutionTime is when the retention cleanup process last ran
+	// (RFC3339 format string).
+	// +optional
+	LastExecutionTime *string `json:"lastExecutionTime,omitempty"`
+
+	// RetentionPeriodApplied is the actual retention period used for this cleanup.
+	// +optional
+	RetentionPeriodApplied string `json:"retentionPeriodApplied,omitempty"`
+
+	// DeletedLogCount indicates how many logs were successfully deleted
+	// +optional
+	DeletedLogCount int64 `json:"deletedLogCount,omitempty"`
+
+	// Error message if this cleanup event failed, empty if succeeded.
+	// +optional
+	Error string `json:"error,omitempty"`
 }
 
 type Log struct {

@@ -46,8 +46,6 @@ type MariaDBExpansion interface{}
 
 type MemcachedExpansion interface{}
 
-type MilvusExpansion interface{}
-
 type MongoDBExpansion interface{}
 
 type MySQLExpansion interface{}

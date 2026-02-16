@@ -19,22 +19,26 @@ package v1alpha2
 import (
 	"context"
 	"fmt"
+	"path/filepath"
 
 	"kubedb.dev/apimachinery/apis"
 	catalog "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
+	promapi "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1"
 	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
+	"k8s.io/utils/ptr"
 	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	coreutil "kmodules.xyz/client-go/core/v1"
 	meta_util "kmodules.xyz/client-go/meta"
 	"kmodules.xyz/client-go/policy/secomp"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
+	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v2"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
@@ -184,6 +188,101 @@ func (q *Qdrant) PodLabels(extraLabels ...map[string]string) map[string]string {
 	return q.offshootLabels(meta_util.OverwriteKeys(q.OffshootSelectors(), extraLabels...), q.Spec.PodTemplate.Labels)
 }
 
+func (q *Qdrant) ServiceLabels(alias ServiceAlias, extraLabels ...map[string]string) map[string]string {
+	svcTemplate := GetServiceTemplate(q.Spec.ServiceTemplates, alias)
+	return q.offshootLabels(meta_util.OverwriteKeys(q.OffshootSelectors(), extraLabels...), svcTemplate.Labels)
+}
+
+type qdrantStatsService struct {
+	*Qdrant
+}
+
+func (q qdrantStatsService) GetNamespace() string {
+	return q.Qdrant.GetNamespace()
+}
+
+func (q qdrantStatsService) ServiceName() string {
+	return q.OffshootName() + "-stats"
+}
+
+func (q qdrantStatsService) ServiceMonitorName() string {
+	return q.ServiceName()
+}
+
+func (q qdrantStatsService) ServiceMonitorAdditionalLabels() map[string]string {
+	return q.OffshootLabels()
+}
+
+func (q qdrantStatsService) Path() string {
+	return kubedb.DefaultStatsPath
+}
+
+func (q qdrantStatsService) Scheme() string {
+	var sc promapi.Scheme
+
+	if q.Spec.TLS == nil {
+		sc = promapi.SchemeHTTP
+	} else {
+		sc = promapi.SchemeHTTPS
+	}
+
+	return sc.String()
+}
+
+func (q qdrantStatsService) TLSConfig() *promapi.TLSConfig {
+	if q.Spec.TLS == nil {
+		return nil
+	}
+
+	tlsConfig := &promapi.TLSConfig{}
+
+	// If client certificate authentication is enabled set cert and key
+	if q.Spec.TLS.Client != nil && *q.Spec.TLS.Client {
+		tlsConfig.Cert = promapi.SecretOrConfigMap{
+			Secret: &core.SecretKeySelector{
+				LocalObjectReference: core.LocalObjectReference{
+					Name: q.GetCertSecretName(QdrantClientCert),
+				},
+				Key: kubedb.QdrantTLSCert,
+			},
+		}
+		tlsConfig.KeySecret = &core.SecretKeySelector{
+			LocalObjectReference: core.LocalObjectReference{
+				Name: q.GetCertSecretName(QdrantClientCert),
+			},
+			Key: kubedb.QdrantTLSKey,
+		}
+	}
+
+	// Always set CA, ServerName, and InsecureSkipVerify when TLS is enabled
+	tlsConfig.CA = promapi.SecretOrConfigMap{
+		Secret: &core.SecretKeySelector{
+			LocalObjectReference: core.LocalObjectReference{
+				Name: q.GetCertSecretName(QdrantClientCert),
+			},
+			Key: kubedb.QdrantTLSCA,
+		},
+	}
+	tlsConfig.InsecureSkipVerify = ptr.To(false)
+	tlsConfig.ServerName = ptr.To(
+		fmt.Sprintf(
+			"%s.%s.svc",
+			q.GetName(),
+			q.Namespace,
+		),
+	)
+
+	return tlsConfig
+}
+
+func (q Qdrant) StatsService() mona.StatsAccessor {
+	return &qdrantStatsService{&q}
+}
+
+func (q Qdrant) StatsServiceLabels() map[string]string {
+	return q.ServiceLabels(StatsServiceAlias, map[string]string{kubedb.LabelRole: kubedb.RoleStats})
+}
+
 func (q *Qdrant) CertificateName(alias QdrantCertificateAlias) string {
 	return meta_util.NameWithSuffix(q.Name, fmt.Sprintf("%s-cert", string(alias)))
 }
@@ -196,6 +295,10 @@ func (q *Qdrant) GetCertSecretName(alias QdrantCertificateAlias) string {
 		}
 	}
 	return q.CertificateName(alias)
+}
+
+func (q *Qdrant) GetTLSFilePath(file string) string {
+	return filepath.Join(kubedb.QdrantTLSVolDir, file)
 }
 
 func (q *Qdrant) SetDefaults(kc client.Client) {

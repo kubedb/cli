@@ -157,6 +157,13 @@ spec:
                 required:
                 - image
                 type: object
+              migrator:
+                properties:
+                  cli:
+                    type: string
+                  statusReporter:
+                    type: string
+                type: object
               podSecurityPolicies:
                 properties:
                   databasePolicyName:

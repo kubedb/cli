@@ -1,5 +1,5 @@
 /*
-Copyright 2025.
+Copyright AppsCode Inc. and Contributors
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -34,16 +34,18 @@ const (
 type MilvusMode string
 
 // Package v1alpha2 contains API Schema definitions for the  v1alpha2 API group.
+
 // +genclient
 // +k8s:openapi-gen=true
-// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 // +kubebuilder:resource:path=milvuses,singular=milvus,shortName=mv,categories={datastore,kubedb,appscode,all}
+
 // +kubebuilder:printcolumn:name="Version",type="string",JSONPath=".spec.version"
 // +kubebuilder:printcolumn:name="Status",type="string",JSONPath=".status.phase"
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
-
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type Milvus struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
@@ -108,12 +110,54 @@ type MilvusSpec struct {
 	HealthChecker kmapi.HealthCheckSpec `json:"healthChecker"`
 }
 
-// +k8s:deepcopy-gen=true
 type MilvusTopology struct {
 	// If set to -
-	// "Standalone", Standalone is required, and Milvus will start a Standalone Mode
-	// "Distributed", DistributedSpec is required, and Milvus will start a Distributed Mode
+	// "Standalone", Milvus will start a Standalone Mode
+	// "Distributed", Milvus will start a Distributed Mode
 	Mode *MilvusMode `json:"mode,omitempty"`
+
+	// Distributed contains information of the Distributed configuration.
+	// Used when Mode is "Distributed".
+	// +optional
+	Distributed *MilvusDistributedSpec `json:"distributed,omitempty"`
+}
+
+type MilvusDistributedSpec struct {
+	// +optional
+	DataNode *MilvusNode `json:"datanode,omitempty"`
+
+	// +optional
+	MixCoord *MilvusNode `json:"mixcoord,omitempty"`
+
+	// +optional
+	QueryNode *MilvusNode `json:"querynode,omitempty"`
+
+	// +optional
+	StreamingNode *MilvusDataNode `json:"streamingnode,omitempty"`
+
+	// +optional
+	Proxy *MilvusNode `json:"proxy,omitempty"`
+}
+
+type MilvusNode struct {
+	// Replicas represents number of replicas for the specific type of node
+	// +optional
+	Replicas *int32 `json:"replicas,omitempty"`
+
+	// PodTemplate is an optional configuration for pods used to expose database
+	// +optional
+	PodTemplate *ofstv2.PodTemplateSpec `json:"podTemplate,omitempty"`
+}
+type MilvusDataNode struct {
+	// MilvusDataNode has all the characteristics of MilvusNode
+	MilvusNode `json:",inline"`
+
+	// StorageType specifies if the storage
+	// of this node is durable (default) or ephemeral.
+	StorageType StorageType `json:"storageType,omitempty"`
+
+	// Storage to specify how storage shall be used.
+	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty"`
 }
 
 // +k8s:deepcopy-gen=true
@@ -176,3 +220,12 @@ type MilvusList struct {
 	metav1.ListMeta `json:"metadata,omitempty"`
 	Items           []Milvus `json:"items"`
 }
+type MilvusNodeRoleType string
+
+const (
+	MilvusNodeRoleDataNode      MilvusNodeRoleType = "datanode"
+	MilvusNodeRoleMixCoord      MilvusNodeRoleType = "mixcoord"
+	MilvusNodeRoleQueryNode     MilvusNodeRoleType = "querynode"
+	MilvusNodeRoleStreamingNode MilvusNodeRoleType = "streamingnode"
+	MilvusNodeRoleProxy         MilvusNodeRoleType = "proxy"
+)

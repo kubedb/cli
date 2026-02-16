@@ -36,8 +36,71 @@ import (
 
 func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenAPIDefinition {
 	return map[string]common.OpenAPIDefinition{
-		"k8s.io/api/apps/v1.ControllerRevision":                                                      schema_k8sio_api_apps_v1_ControllerRevision(ref),
-		"k8s.io/api/apps/v1.ControllerRevisionList":                                                  schema_k8sio_api_apps_v1_ControllerRevisionList(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.APIServerConfig":           schema_pkg_apis_monitoring_v1_APIServerConfig(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.AlertingSpec":              schema_pkg_apis_monitoring_v1_AlertingSpec(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.AlertmanagerConfiguration": schema_pkg_apis_monitoring_v1_AlertmanagerConfiguration(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.AlertmanagerEndpoints":     schema_pkg_apis_monitoring_v1_AlertmanagerEndpoints(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.AlertmanagerLimitsSpec":    schema_pkg_apis_monitoring_v1_AlertmanagerLimitsSpec(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.AlertmanagerList":          schema_pkg_apis_monitoring_v1_AlertmanagerList(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.AlertmanagerSpec":          schema_pkg_apis_monitoring_v1_AlertmanagerSpec(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.AlertmanagerStatus":        schema_pkg_apis_monitoring_v1_AlertmanagerStatus(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.AlertmanagerWebSpec":       schema_pkg_apis_monitoring_v1_AlertmanagerWebSpec(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Argument":                  schema_pkg_apis_monitoring_v1_Argument(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.AzureAD":                   schema_pkg_apis_monitoring_v1_AzureAD(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.AzureOAuth":                schema_pkg_apis_monitoring_v1_AzureOAuth(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.BasicAuth":                 schema_pkg_apis_monitoring_v1_BasicAuth(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ClusterTLSConfig":          schema_pkg_apis_monitoring_v1_ClusterTLSConfig(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ConfigResourceStatus":      schema_pkg_apis_monitoring_v1_ConfigResourceStatus(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Endpoint":                  schema_pkg_apis_monitoring_v1_Endpoint(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ManagedIdentity":           schema_pkg_apis_monitoring_v1_ManagedIdentity(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.MetadataConfig":            schema_pkg_apis_monitoring_v1_MetadataConfig(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.NamespaceSelector":         schema_pkg_apis_monitoring_v1_NamespaceSelector(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.NativeHistogramConfig":     schema_pkg_apis_monitoring_v1_NativeHistogramConfig(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.OAuth2":                    schema_pkg_apis_monitoring_v1_OAuth2(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.OTLPConfig":                schema_pkg_apis_monitoring_v1_OTLPConfig(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.PodMetricsEndpoint":        schema_pkg_apis_monitoring_v1_PodMetricsEndpoint(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.PodMonitorList":            schema_pkg_apis_monitoring_v1_PodMonitorList(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.PodMonitorSpec":            schema_pkg_apis_monitoring_v1_PodMonitorSpec(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ProbeList":                 schema_pkg_apis_monitoring_v1_ProbeList(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ProbeParam":                schema_pkg_apis_monitoring_v1_ProbeParam(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ProbeSpec":                 schema_pkg_apis_monitoring_v1_ProbeSpec(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ProbeTargetIngress":        schema_pkg_apis_monitoring_v1_ProbeTargetIngress(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ProbeTargetStaticConfig":   schema_pkg_apis_monitoring_v1_ProbeTargetStaticConfig(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ProbeTargets":              schema_pkg_apis_monitoring_v1_ProbeTargets(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ProberSpec":                schema_pkg_apis_monitoring_v1_ProberSpec(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.PrometheusList":            schema_pkg_apis_monitoring_v1_PrometheusList(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.PrometheusRuleList":        schema_pkg_apis_monitoring_v1_PrometheusRuleList(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.PrometheusRuleSpec":        schema_pkg_apis_monitoring_v1_PrometheusRuleSpec(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.PrometheusSpec":            schema_pkg_apis_monitoring_v1_PrometheusSpec(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.PrometheusStatus":          schema_pkg_apis_monitoring_v1_PrometheusStatus(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.PrometheusWebSpec":         schema_pkg_apis_monitoring_v1_PrometheusWebSpec(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.QuerySpec":                 schema_pkg_apis_monitoring_v1_QuerySpec(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.QueueConfig":               schema_pkg_apis_monitoring_v1_QueueConfig(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.RelabelConfig":             schema_pkg_apis_monitoring_v1_RelabelConfig(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.RemoteReadSpec":            schema_pkg_apis_monitoring_v1_RemoteReadSpec(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.RemoteWriteSpec":           schema_pkg_apis_monitoring_v1_RemoteWriteSpec(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Rule":                      schema_pkg_apis_monitoring_v1_Rule(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.RuleGroup":                 schema_pkg_apis_monitoring_v1_RuleGroup(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Rules":                     schema_pkg_apis_monitoring_v1_Rules(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.RulesAlert":                schema_pkg_apis_monitoring_v1_RulesAlert(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.SafeAuthorization":         schema_pkg_apis_monitoring_v1_SafeAuthorization(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.SafeTLSConfig":             schema_pkg_apis_monitoring_v1_SafeTLSConfig(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ServiceMonitorList":        schema_pkg_apis_monitoring_v1_ServiceMonitorList(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ServiceMonitorSpec":        schema_pkg_apis_monitoring_v1_ServiceMonitorSpec(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Sigv4":                     schema_pkg_apis_monitoring_v1_Sigv4(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.StorageSpec":               schema_pkg_apis_monitoring_v1_StorageSpec(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.TLSConfig":                 schema_pkg_apis_monitoring_v1_TLSConfig(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ThanosRulerList":           schema_pkg_apis_monitoring_v1_ThanosRulerList(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ThanosRulerSpec":           schema_pkg_apis_monitoring_v1_ThanosRulerSpec(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ThanosRulerStatus":         schema_pkg_apis_monitoring_v1_ThanosRulerStatus(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ThanosRulerWebSpec":        schema_pkg_apis_monitoring_v1_ThanosRulerWebSpec(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ThanosSpec":                schema_pkg_apis_monitoring_v1_ThanosSpec(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.WebHTTPConfig":             schema_pkg_apis_monitoring_v1_WebHTTPConfig(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.WebHTTPHeaders":            schema_pkg_apis_monitoring_v1_WebHTTPHeaders(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.WebTLSConfig":              schema_pkg_apis_monitoring_v1_WebTLSConfig(ref),
+		"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.WorkloadBinding":           schema_pkg_apis_monitoring_v1_WorkloadBinding(ref),
+		"k8s.io/api/apps/v1.ControllerRevision":                                                               schema_k8sio_api_apps_v1_ControllerRevision(ref),
+		"k8s.io/api/apps/v1.ControllerRevisionList":                                                           schema_k8sio_api_apps_v1_ControllerRevisionList(ref),
 		"k8s.io/api/apps/v1.DaemonSet":                                                               schema_k8sio_api_apps_v1_DaemonSet(ref),
 		"k8s.io/api/apps/v1.DaemonSetCondition":                                                      schema_k8sio_api_apps_v1_DaemonSetCondition(ref),
 		"k8s.io/api/apps/v1.DaemonSetList":                                                           schema_k8sio_api_apps_v1_DaemonSetList(ref),
@@ -468,6 +531,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kmodules.xyz/monitoring-agent-api/api/v1.ClientConfig":                                      schema_kmodulesxyz_monitoring_agent_api_api_v1_ClientConfig(ref),
 		"kmodules.xyz/monitoring-agent-api/api/v1.ConnectionSpec":                                    schema_kmodulesxyz_monitoring_agent_api_api_v1_ConnectionSpec(ref),
 		"kmodules.xyz/monitoring-agent-api/api/v1.DashboardSpec":                                     schema_kmodulesxyz_monitoring_agent_api_api_v1_DashboardSpec(ref),
+		"kmodules.xyz/monitoring-agent-api/api/v1.Endpoint":                                          schema_kmodulesxyz_monitoring_agent_api_api_v1_Endpoint(ref),
 		"kmodules.xyz/monitoring-agent-api/api/v1.GrafanaConfig":                                     schema_kmodulesxyz_monitoring_agent_api_api_v1_GrafanaConfig(ref),
 		"kmodules.xyz/monitoring-agent-api/api/v1.GrafanaContext":                                    schema_kmodulesxyz_monitoring_agent_api_api_v1_GrafanaContext(ref),
 		"kmodules.xyz/monitoring-agent-api/api/v1.MonitoringPresets":                                 schema_kmodulesxyz_monitoring_agent_api_api_v1_MonitoringPresets(ref),
@@ -534,6 +598,6687 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kafka/v1alpha1.SchemaRegistrySpec":                             schema_apimachinery_apis_kafka_v1alpha1_SchemaRegistrySpec(ref),
 		"kubedb.dev/apimachinery/apis/kafka/v1alpha1.SchemaRegistryStatus":                           schema_apimachinery_apis_kafka_v1alpha1_SchemaRegistryStatus(ref),
 		"kubedb.dev/apimachinery/apis/kafka/v1alpha1.connectClusterStatsService":                     schema_apimachinery_apis_kafka_v1alpha1_connectClusterStatsService(ref),
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_APIServerConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "APIServerConfig defines how the Prometheus server connects to the Kubernetes API server.\n\nMore info: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#kubernetes_sd_config",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"host": {
+						SchemaProps: spec.SchemaProps{
+							Description: "host defines the Kubernetes API address consisting of a hostname or IP address followed by an optional port number.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"basicAuth": {
+						SchemaProps: spec.SchemaProps{
+							Description: "basicAuth configuration for the API server.\n\nCannot be set at the same time as `authorization`, `bearerToken`, or `bearerTokenFile`.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.BasicAuth"),
+						},
+					},
+					"bearerTokenFile": {
+						SchemaProps: spec.SchemaProps{
+							Description: "bearerTokenFile defines the file to read bearer token for accessing apiserver.\n\nCannot be set at the same time as `basicAuth`, `authorization`, or `bearerToken`.\n\nDeprecated: this will be removed in a future release. Prefer using `authorization`.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"tlsConfig": {
+						SchemaProps: spec.SchemaProps{
+							Description: "tlsConfig to use for the API server.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.TLSConfig"),
+						},
+					},
+					"authorization": {
+						SchemaProps: spec.SchemaProps{
+							Description: "authorization section for the API server.\n\nCannot be set at the same time as `basicAuth`, `bearerToken`, or `bearerTokenFile`.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Authorization"),
+						},
+					},
+					"bearerToken": {
+						SchemaProps: spec.SchemaProps{
+							Description: "bearerToken is deprecated: this will be removed in a future release.\n *Warning: this field shouldn't be used because the token value appears\nin clear-text. Prefer using `authorization`.*",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"proxyUrl": {
+						SchemaProps: spec.SchemaProps{
+							Description: "proxyUrl defines the HTTP proxy server to use.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"noProxy": {
+						SchemaProps: spec.SchemaProps{
+							Description: "noProxy defines a comma-separated string that can contain IPs, CIDR notation, domain names that should be excluded from proxying. IP and domain names can contain port numbers.\n\nIt requires Prometheus >= v2.43.0, Alertmanager >= v0.25.0 or Thanos >= v0.32.0.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"proxyFromEnvironment": {
+						SchemaProps: spec.SchemaProps{
+							Description: "proxyFromEnvironment defines whether to use the proxy configuration defined by environment variables (HTTP_PROXY, HTTPS_PROXY, and NO_PROXY).\n\nIt requires Prometheus >= v2.43.0, Alertmanager >= v0.25.0 or Thanos >= v0.32.0.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"proxyConnectHeader": {
+						SchemaProps: spec.SchemaProps{
+							Description: "proxyConnectHeader optionally specifies headers to send to proxies during CONNECT requests.\n\nIt requires Prometheus >= v2.43.0, Alertmanager >= v0.25.0 or Thanos >= v0.32.0.",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Type: []string{"array"},
+										Items: &spec.SchemaOrArray{
+											Schema: &spec.Schema{
+												SchemaProps: spec.SchemaProps{
+													Default: map[string]interface{}{},
+													Ref:     ref("k8s.io/api/core/v1.SecretKeySelector"),
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"host"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Authorization", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.BasicAuth", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.TLSConfig", "k8s.io/api/core/v1.SecretKeySelector"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_AlertingSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "AlertingSpec defines parameters for alerting configuration of Prometheus servers.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"alertmanagers": {
+						SchemaProps: spec.SchemaProps{
+							Description: "alertmanagers endpoints where Prometheus should send alerts to.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.AlertmanagerEndpoints"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"alertmanagers"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.AlertmanagerEndpoints"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_AlertmanagerConfiguration(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "AlertmanagerConfiguration defines the Alertmanager configuration.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "name defines the name of the AlertmanagerConfig custom resource which is used to generate the Alertmanager configuration. It must be defined in the same namespace as the Alertmanager object. The operator will not enforce a `namespace` label for routes and inhibition rules.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"global": {
+						SchemaProps: spec.SchemaProps{
+							Description: "global defines the global parameters of the Alertmanager configuration.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.AlertmanagerGlobalConfig"),
+						},
+					},
+					"templates": {
+						SchemaProps: spec.SchemaProps{
+							Description: "templates defines the custom notification templates.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.SecretOrConfigMap"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.AlertmanagerGlobalConfig", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.SecretOrConfigMap"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_AlertmanagerEndpoints(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "AlertmanagerEndpoints defines a selection of a single Endpoints object containing Alertmanager IPs to fire alerts against.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"namespace": {
+						SchemaProps: spec.SchemaProps{
+							Description: "namespace of the Endpoints object.\n\nIf not set, the object will be discovered in the namespace of the Prometheus object.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "name of the Endpoints object in the namespace.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"port": {
+						SchemaProps: spec.SchemaProps{
+							Description: "port on which the Alertmanager API is exposed.",
+							Ref:         ref("k8s.io/apimachinery/pkg/util/intstr.IntOrString"),
+						},
+					},
+					"scheme": {
+						SchemaProps: spec.SchemaProps{
+							Description: "scheme defines the HTTP scheme to use when sending alerts.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"pathPrefix": {
+						SchemaProps: spec.SchemaProps{
+							Description: "pathPrefix defines the prefix for the HTTP path alerts are pushed to.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"tlsConfig": {
+						SchemaProps: spec.SchemaProps{
+							Description: "tlsConfig to use for Alertmanager.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.TLSConfig"),
+						},
+					},
+					"basicAuth": {
+						SchemaProps: spec.SchemaProps{
+							Description: "basicAuth configuration for Alertmanager.\n\nCannot be set at the same time as `bearerTokenFile`, `authorization` or `sigv4`.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.BasicAuth"),
+						},
+					},
+					"bearerTokenFile": {
+						SchemaProps: spec.SchemaProps{
+							Description: "bearerTokenFile defines the file to read bearer token for Alertmanager.\n\nCannot be set at the same time as `basicAuth`, `authorization`, or `sigv4`.\n\nDeprecated: this will be removed in a future release. Prefer using `authorization`.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"authorization": {
+						SchemaProps: spec.SchemaProps{
+							Description: "authorization section for Alertmanager.\n\nCannot be set at the same time as `basicAuth`, `bearerTokenFile` or `sigv4`.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.SafeAuthorization"),
+						},
+					},
+					"sigv4": {
+						SchemaProps: spec.SchemaProps{
+							Description: "sigv4 defines AWS's Signature Verification 4 for the URL.\n\nIt requires Prometheus >= v2.48.0.\n\nCannot be set at the same time as `basicAuth`, `bearerTokenFile` or `authorization`.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Sigv4"),
+						},
+					},
+					"proxyUrl": {
+						SchemaProps: spec.SchemaProps{
+							Description: "proxyUrl defines the HTTP proxy server to use.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"noProxy": {
+						SchemaProps: spec.SchemaProps{
+							Description: "noProxy defines a comma-separated string that can contain IPs, CIDR notation, domain names that should be excluded from proxying. IP and domain names can contain port numbers.\n\nIt requires Prometheus >= v2.43.0, Alertmanager >= v0.25.0 or Thanos >= v0.32.0.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"proxyFromEnvironment": {
+						SchemaProps: spec.SchemaProps{
+							Description: "proxyFromEnvironment defines whether to use the proxy configuration defined by environment variables (HTTP_PROXY, HTTPS_PROXY, and NO_PROXY).\n\nIt requires Prometheus >= v2.43.0, Alertmanager >= v0.25.0 or Thanos >= v0.32.0.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"proxyConnectHeader": {
+						SchemaProps: spec.SchemaProps{
+							Description: "proxyConnectHeader optionally specifies headers to send to proxies during CONNECT requests.\n\nIt requires Prometheus >= v2.43.0, Alertmanager >= v0.25.0 or Thanos >= v0.32.0.",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Type: []string{"array"},
+										Items: &spec.SchemaOrArray{
+											Schema: &spec.Schema{
+												SchemaProps: spec.SchemaProps{
+													Default: map[string]interface{}{},
+													Ref:     ref("k8s.io/api/core/v1.SecretKeySelector"),
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "apiVersion defines the version of the Alertmanager API that Prometheus uses to send alerts. It can be \"V1\" or \"V2\". The field has no effect for Prometheus >= v3.0.0 because only the v2 API is supported.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"timeout": {
+						SchemaProps: spec.SchemaProps{
+							Description: "timeout defines a per-target Alertmanager timeout when pushing alerts.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"enableHttp2": {
+						SchemaProps: spec.SchemaProps{
+							Description: "enableHttp2 defines whether to enable HTTP2.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"relabelings": {
+						SchemaProps: spec.SchemaProps{
+							Description: "relabelings defines the relabel configuration applied to the discovered Alertmanagers.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.RelabelConfig"),
+									},
+								},
+							},
+						},
+					},
+					"alertRelabelings": {
+						SchemaProps: spec.SchemaProps{
+							Description: "alertRelabelings defines the relabeling configs applied before sending alerts to a specific Alertmanager. It requires Prometheus >= v2.51.0.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.RelabelConfig"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"name", "port"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.BasicAuth", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.RelabelConfig", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.SafeAuthorization", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Sigv4", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.TLSConfig", "k8s.io/api/core/v1.SecretKeySelector", "k8s.io/apimachinery/pkg/util/intstr.IntOrString"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_AlertmanagerLimitsSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "AlertmanagerLimitsSpec defines the limits command line flags when starting Alertmanager.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"maxSilences": {
+						SchemaProps: spec.SchemaProps{
+							Description: "maxSilences defines the maximum number active and pending silences. This corresponds to the Alertmanager's `--silences.max-silences` flag. It requires Alertmanager >= v0.28.0.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"maxPerSilenceBytes": {
+						SchemaProps: spec.SchemaProps{
+							Description: "maxPerSilenceBytes defines the maximum size of an individual silence as stored on disk. This corresponds to the Alertmanager's `--silences.max-per-silence-bytes` flag. It requires Alertmanager >= v0.28.0.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_AlertmanagerList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "AlertmanagerList is a list of Alertmanagers.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Description: "metadata defines ListMeta as metadata for collection responses.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+						},
+					},
+					"items": {
+						SchemaProps: spec.SchemaProps{
+							Description: "List of Alertmanagers",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Alertmanager"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"items"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Alertmanager", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_AlertmanagerSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "AlertmanagerSpec is a specification of the desired behavior of the Alertmanager cluster. More info: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#spec-and-status",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"podMetadata": {
+						SchemaProps: spec.SchemaProps{
+							Description: "podMetadata defines labels and annotations which are propagated to the Alertmanager pods.\n\nThe following items are reserved and cannot be overridden: * \"alertmanager\" label, set to the name of the Alertmanager instance. * \"app.kubernetes.io/instance\" label, set to the name of the Alertmanager instance. * \"app.kubernetes.io/managed-by\" label, set to \"prometheus-operator\". * \"app.kubernetes.io/name\" label, set to \"alertmanager\". * \"app.kubernetes.io/version\" label, set to the Alertmanager version. * \"kubectl.kubernetes.io/default-container\" annotation, set to \"alertmanager\".",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.EmbeddedObjectMetadata"),
+						},
+					},
+					"image": {
+						SchemaProps: spec.SchemaProps{
+							Description: "image if specified has precedence over baseImage, tag and sha combinations. Specifying the version is still necessary to ensure the Prometheus Operator knows what version of Alertmanager is being configured.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"imagePullPolicy": {
+						SchemaProps: spec.SchemaProps{
+							Description: "imagePullPolicy for the 'alertmanager', 'init-config-reloader' and 'config-reloader' containers. See https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy for more details.\n\nPossible enum values:\n - `\"Always\"` means that kubelet always attempts to pull the latest image. Container will fail If the pull fails.\n - `\"IfNotPresent\"` means that kubelet pulls if the image isn't present on disk. Container will fail if the image isn't present and the pull fails.\n - `\"Never\"` means that kubelet never pulls an image, but only uses a local image. Container will fail if the image isn't present",
+							Type:        []string{"string"},
+							Format:      "",
+							Enum:        []interface{}{"Always", "IfNotPresent", "Never"},
+						},
+					},
+					"version": {
+						SchemaProps: spec.SchemaProps{
+							Description: "version the cluster should be on.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"tag": {
+						SchemaProps: spec.SchemaProps{
+							Description: "tag of Alertmanager container image to be deployed. Defaults to the value of `version`. Version is ignored if Tag is set. Deprecated: use 'image' instead. The image tag can be specified as part of the image URL.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"sha": {
+						SchemaProps: spec.SchemaProps{
+							Description: "sha of Alertmanager container image to be deployed. Defaults to the value of `version`. Similar to a tag, but the SHA explicitly deploys an immutable container image. Version and Tag are ignored if SHA is set. Deprecated: use 'image' instead. The image digest can be specified as part of the image URL.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"baseImage": {
+						SchemaProps: spec.SchemaProps{
+							Description: "baseImage that is used to deploy pods, without tag. Deprecated: use 'image' instead.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"imagePullSecrets": {
+						SchemaProps: spec.SchemaProps{
+							Description: "imagePullSecrets An optional list of references to secrets in the same namespace to use for pulling prometheus and alertmanager images from registries see https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("k8s.io/api/core/v1.LocalObjectReference"),
+									},
+								},
+							},
+						},
+					},
+					"secrets": {
+						SchemaProps: spec.SchemaProps{
+							Description: "secrets is a list of Secrets in the same namespace as the Alertmanager object, which shall be mounted into the Alertmanager Pods. Each Secret is added to the StatefulSet definition as a volume named `secret-<secret-name>`. The Secrets are mounted into `/etc/alertmanager/secrets/<secret-name>` in the 'alertmanager' container.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"configMaps": {
+						SchemaProps: spec.SchemaProps{
+							Description: "configMaps defines a list of ConfigMaps in the same namespace as the Alertmanager object, which shall be mounted into the Alertmanager Pods. Each ConfigMap is added to the StatefulSet definition as a volume named `configmap-<configmap-name>`. The ConfigMaps are mounted into `/etc/alertmanager/configmaps/<configmap-name>` in the 'alertmanager' container.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"configSecret": {
+						SchemaProps: spec.SchemaProps{
+							Description: "configSecret defines the name of a Kubernetes Secret in the same namespace as the Alertmanager object, which contains the configuration for this Alertmanager instance. If empty, it defaults to `alertmanager-<alertmanager-name>`.\n\nThe Alertmanager configuration should be available under the `alertmanager.yaml` key. Additional keys from the original secret are copied to the generated secret and mounted into the `/etc/alertmanager/config` directory in the `alertmanager` container.\n\nIf either the secret or the `alertmanager.yaml` key is missing, the operator provisions a minimal Alertmanager configuration with one empty receiver (effectively dropping alert notifications).",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"logLevel": {
+						SchemaProps: spec.SchemaProps{
+							Description: "logLevel for Alertmanager to be configured with.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"logFormat": {
+						SchemaProps: spec.SchemaProps{
+							Description: "logFormat for Alertmanager to be configured with.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"replicas": {
+						SchemaProps: spec.SchemaProps{
+							Description: "replicas defines the expected size of the alertmanager cluster. The controller will eventually make the size of the running cluster equal to the expected size.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"retention": {
+						SchemaProps: spec.SchemaProps{
+							Description: "retention defines the time duration Alertmanager shall retain data for. Default is '120h', and must match the regular expression `[0-9]+(ms|s|m|h)` (milliseconds seconds minutes hours).",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"storage": {
+						SchemaProps: spec.SchemaProps{
+							Description: "storage defines the definition of how storage will be used by the Alertmanager instances.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.StorageSpec"),
+						},
+					},
+					"volumes": {
+						SchemaProps: spec.SchemaProps{
+							Description: "volumes allows configuration of additional volumes on the output StatefulSet definition. Volumes specified will be appended to other volumes that are generated as a result of StorageSpec objects.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("k8s.io/api/core/v1.Volume"),
+									},
+								},
+							},
+						},
+					},
+					"volumeMounts": {
+						SchemaProps: spec.SchemaProps{
+							Description: "volumeMounts allows configuration of additional VolumeMounts on the output StatefulSet definition. VolumeMounts specified will be appended to other VolumeMounts in the alertmanager container, that are generated as a result of StorageSpec objects.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("k8s.io/api/core/v1.VolumeMount"),
+									},
+								},
+							},
+						},
+					},
+					"persistentVolumeClaimRetentionPolicy": {
+						SchemaProps: spec.SchemaProps{
+							Description: "persistentVolumeClaimRetentionPolicy controls if and how PVCs are deleted during the lifecycle of a StatefulSet. The default behavior is all PVCs are retained. This is an alpha field from kubernetes 1.23 until 1.26 and a beta field from 1.26. It requires enabling the StatefulSetAutoDeletePVC feature gate.",
+							Ref:         ref("k8s.io/api/apps/v1.StatefulSetPersistentVolumeClaimRetentionPolicy"),
+						},
+					},
+					"externalUrl": {
+						SchemaProps: spec.SchemaProps{
+							Description: "externalUrl defines the URL used to access the Alertmanager web service. This is necessary to generate correct URLs. This is necessary if Alertmanager is not served from root of a DNS name.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"routePrefix": {
+						SchemaProps: spec.SchemaProps{
+							Description: "routePrefix Alertmanager registers HTTP handlers for. This is useful, if using ExternalURL and a proxy is rewriting HTTP routes of a request, and the actual ExternalURL is still true, but the server serves requests under a different route prefix. For example for use with `kubectl proxy`.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"paused": {
+						SchemaProps: spec.SchemaProps{
+							Description: "paused if set to true all actions on the underlying managed objects are not going to be performed, except for delete actions.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"nodeSelector": {
+						SchemaProps: spec.SchemaProps{
+							Description: "nodeSelector defines which Nodes the Pods are scheduled on.",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"resources": {
+						SchemaProps: spec.SchemaProps{
+							Description: "resources defines the resource requests and limits of the Pods.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/api/core/v1.ResourceRequirements"),
+						},
+					},
+					"affinity": {
+						SchemaProps: spec.SchemaProps{
+							Description: "affinity defines the pod's scheduling constraints.",
+							Ref:         ref("k8s.io/api/core/v1.Affinity"),
+						},
+					},
+					"tolerations": {
+						SchemaProps: spec.SchemaProps{
+							Description: "tolerations defines the pod's tolerations.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("k8s.io/api/core/v1.Toleration"),
+									},
+								},
+							},
+						},
+					},
+					"topologySpreadConstraints": {
+						SchemaProps: spec.SchemaProps{
+							Description: "topologySpreadConstraints defines the Pod's topology spread constraints.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("k8s.io/api/core/v1.TopologySpreadConstraint"),
+									},
+								},
+							},
+						},
+					},
+					"securityContext": {
+						SchemaProps: spec.SchemaProps{
+							Description: "securityContext holds pod-level security attributes and common container settings. This defaults to the default PodSecurityContext.",
+							Ref:         ref("k8s.io/api/core/v1.PodSecurityContext"),
+						},
+					},
+					"dnsPolicy": {
+						SchemaProps: spec.SchemaProps{
+							Description: "dnsPolicy defines the DNS policy for the pods.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"dnsConfig": {
+						SchemaProps: spec.SchemaProps{
+							Description: "dnsConfig defines the DNS configuration for the pods.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.PodDNSConfig"),
+						},
+					},
+					"enableServiceLinks": {
+						SchemaProps: spec.SchemaProps{
+							Description: "enableServiceLinks defines whether information about services should be injected into pod's environment variables",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"serviceName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "serviceName defines the service name used by the underlying StatefulSet(s) as the governing service. If defined, the Service  must be created before the Alertmanager resource in the same namespace and it must define a selector that matches the pod labels. If empty, the operator will create and manage a headless service named `alertmanager-operated` for Alertmanager resources. When deploying multiple Alertmanager resources in the same namespace, it is recommended to specify a different value for each. See https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#stable-network-id for more details.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"serviceAccountName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "serviceAccountName is the name of the ServiceAccount to use to run the Prometheus Pods.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"listenLocal": {
+						SchemaProps: spec.SchemaProps{
+							Description: "listenLocal defines the Alertmanager server listen on loopback, so that it does not bind against the Pod IP. Note this is only for the Alertmanager UI, not the gossip communication.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"containers": {
+						SchemaProps: spec.SchemaProps{
+							Description: "containers allows injecting additional containers. This is meant to allow adding an authentication proxy to an Alertmanager pod. Containers described here modify an operator generated container if they share the same name and modifications are done via a strategic merge patch. The current container names are: `alertmanager` and `config-reloader`. Overriding containers is entirely outside the scope of what the maintainers will support and by doing so, you accept that this behaviour may break at any time without notice.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("k8s.io/api/core/v1.Container"),
+									},
+								},
+							},
+						},
+					},
+					"initContainers": {
+						SchemaProps: spec.SchemaProps{
+							Description: "initContainers allows adding initContainers to the pod definition. Those can be used to e.g. fetch secrets for injection into the Alertmanager configuration from external sources. Any errors during the execution of an initContainer will lead to a restart of the Pod. More info: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/ InitContainers described here modify an operator generated init containers if they share the same name and modifications are done via a strategic merge patch. The current init container name is: `init-config-reloader`. Overriding init containers is entirely outside the scope of what the maintainers will support and by doing so, you accept that this behaviour may break at any time without notice.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("k8s.io/api/core/v1.Container"),
+									},
+								},
+							},
+						},
+					},
+					"priorityClassName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "priorityClassName assigned to the Pods",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"additionalPeers": {
+						SchemaProps: spec.SchemaProps{
+							Description: "additionalPeers allows injecting a set of additional Alertmanagers to peer with to form a highly available cluster.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"clusterAdvertiseAddress": {
+						SchemaProps: spec.SchemaProps{
+							Description: "clusterAdvertiseAddress defines the explicit address to advertise in cluster. Needs to be provided for non RFC1918 [1] (public) addresses. [1] RFC1918: https://tools.ietf.org/html/rfc1918",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"clusterGossipInterval": {
+						SchemaProps: spec.SchemaProps{
+							Description: "clusterGossipInterval defines the interval between gossip attempts.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"clusterLabel": {
+						SchemaProps: spec.SchemaProps{
+							Description: "clusterLabel defines the identifier that uniquely identifies the Alertmanager cluster. You should only set it when the Alertmanager cluster includes Alertmanager instances which are external to this Alertmanager resource. In practice, the addresses of the external instances are provided via the `.spec.additionalPeers` field.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"clusterPushpullInterval": {
+						SchemaProps: spec.SchemaProps{
+							Description: "clusterPushpullInterval defines the interval between pushpull attempts.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"clusterPeerTimeout": {
+						SchemaProps: spec.SchemaProps{
+							Description: "clusterPeerTimeout defines the timeout for cluster peering.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"portName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "portName defines the port's name for the pods and governing service. Defaults to `web`.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"forceEnableClusterMode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "forceEnableClusterMode ensures Alertmanager does not deactivate the cluster mode when running with a single replica. Use case is e.g. spanning an Alertmanager cluster across Kubernetes clusters with a single replica in each.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"alertmanagerConfigSelector": {
+						SchemaProps: spec.SchemaProps{
+							Description: "alertmanagerConfigSelector defines the selector to be used for to merge and configure Alertmanager with.",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector"),
+						},
+					},
+					"alertmanagerConfigNamespaceSelector": {
+						SchemaProps: spec.SchemaProps{
+							Description: "alertmanagerConfigNamespaceSelector defines the namespaces to be selected for AlertmanagerConfig discovery. If nil, only check own namespace.",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector"),
+						},
+					},
+					"alertmanagerConfigMatcherStrategy": {
+						SchemaProps: spec.SchemaProps{
+							Description: "alertmanagerConfigMatcherStrategy defines how AlertmanagerConfig objects process incoming alerts.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.AlertmanagerConfigMatcherStrategy"),
+						},
+					},
+					"minReadySeconds": {
+						SchemaProps: spec.SchemaProps{
+							Description: "minReadySeconds defines the minimum number of seconds for which a newly created pod should be ready without any of its container crashing for it to be considered available.\n\nIf unset, pods will be considered available as soon as they are ready.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"hostAliases": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-list-map-keys": []interface{}{
+									"ip",
+								},
+								"x-kubernetes-list-type": "map",
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "hostAliases Pods configuration",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.HostAlias"),
+									},
+								},
+							},
+						},
+					},
+					"web": {
+						SchemaProps: spec.SchemaProps{
+							Description: "web defines the web command line flags when starting Alertmanager.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.AlertmanagerWebSpec"),
+						},
+					},
+					"limits": {
+						SchemaProps: spec.SchemaProps{
+							Description: "limits defines the limits command line flags when starting Alertmanager.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.AlertmanagerLimitsSpec"),
+						},
+					},
+					"clusterTLS": {
+						SchemaProps: spec.SchemaProps{
+							Description: "clusterTLS defines the mutual TLS configuration for the Alertmanager cluster's gossip protocol.\n\nIt requires Alertmanager >= 0.24.0.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ClusterTLSConfig"),
+						},
+					},
+					"alertmanagerConfiguration": {
+						SchemaProps: spec.SchemaProps{
+							Description: "alertmanagerConfiguration defines the configuration of Alertmanager.\n\nIf defined, it takes precedence over the `configSecret` field.\n\nThis is an *experimental feature*, it may change in any upcoming release in a breaking way.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.AlertmanagerConfiguration"),
+						},
+					},
+					"automountServiceAccountToken": {
+						SchemaProps: spec.SchemaProps{
+							Description: "automountServiceAccountToken defines whether a service account token should be automatically mounted in the pod. If the service account has `automountServiceAccountToken: true`, set the field to `false` to opt out of automounting API credentials.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"enableFeatures": {
+						SchemaProps: spec.SchemaProps{
+							Description: "enableFeatures defines the Alertmanager's feature flags. By default, no features are enabled. Enabling features which are disabled by default is entirely outside the scope of what the maintainers will support and by doing so, you accept that this behaviour may break at any time without notice.\n\nIt requires Alertmanager >= 0.27.0.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"additionalArgs": {
+						SchemaProps: spec.SchemaProps{
+							Description: "additionalArgs allows setting additional arguments for the 'Alertmanager' container. It is intended for e.g. activating hidden flags which are not supported by the dedicated configuration options yet. The arguments are passed as-is to the Alertmanager container which may cause issues if they are invalid or not supported by the given Alertmanager version.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Argument"),
+									},
+								},
+							},
+						},
+					},
+					"terminationGracePeriodSeconds": {
+						SchemaProps: spec.SchemaProps{
+							Description: "terminationGracePeriodSeconds defines the Optional duration in seconds the pod needs to terminate gracefully. Value must be non-negative integer. The value zero indicates stop immediately via the kill signal (no opportunity to shut down) which may lead to data corruption.\n\nDefaults to 120 seconds.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"hostUsers": {
+						SchemaProps: spec.SchemaProps{
+							Description: "hostUsers supports the user space in Kubernetes.\n\nMore info: https://kubernetes.io/docs/tasks/configure-pod-container/user-namespaces/\n\nThe feature requires at least Kubernetes 1.28 with the `UserNamespacesSupport` feature gate enabled. Starting Kubernetes 1.33, the feature is enabled by default.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.AlertmanagerConfigMatcherStrategy", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.AlertmanagerConfiguration", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.AlertmanagerLimitsSpec", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.AlertmanagerWebSpec", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Argument", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ClusterTLSConfig", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.EmbeddedObjectMetadata", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.HostAlias", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.PodDNSConfig", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.StorageSpec", "k8s.io/api/apps/v1.StatefulSetPersistentVolumeClaimRetentionPolicy", "k8s.io/api/core/v1.Affinity", "k8s.io/api/core/v1.Container", "k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PodSecurityContext", "k8s.io/api/core/v1.ResourceRequirements", "k8s.io/api/core/v1.Toleration", "k8s.io/api/core/v1.TopologySpreadConstraint", "k8s.io/api/core/v1.Volume", "k8s.io/api/core/v1.VolumeMount", "k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_AlertmanagerStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "AlertmanagerStatus is the most recent observed status of the Alertmanager cluster. Read-only. More info: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#spec-and-status",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"paused": {
+						SchemaProps: spec.SchemaProps{
+							Description: "paused defines whether any actions on the underlying managed objects are being performed. Only delete actions will be performed.",
+							Default:     false,
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"replicas": {
+						SchemaProps: spec.SchemaProps{
+							Description: "replicas defines the total number of non-terminated pods targeted by this Alertmanager object (their labels match the selector).",
+							Default:     0,
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"updatedReplicas": {
+						SchemaProps: spec.SchemaProps{
+							Description: "updatedReplicas defines the total number of non-terminated pods targeted by this Alertmanager object that have the desired version spec.",
+							Default:     0,
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"availableReplicas": {
+						SchemaProps: spec.SchemaProps{
+							Description: "availableReplicas defines the total number of available pods (ready for at least minReadySeconds) targeted by this Alertmanager cluster.",
+							Default:     0,
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"unavailableReplicas": {
+						SchemaProps: spec.SchemaProps{
+							Description: "unavailableReplicas defines the total number of unavailable pods targeted by this Alertmanager object.",
+							Default:     0,
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"selector": {
+						SchemaProps: spec.SchemaProps{
+							Description: "selector used to match the pods targeted by this Alertmanager object.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"conditions": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-list-map-keys": []interface{}{
+									"type",
+								},
+								"x-kubernetes-list-type": "map",
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "conditions defines the current state of the Alertmanager object.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Condition"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Condition"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_AlertmanagerWebSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "AlertmanagerWebSpec defines the web command line flags when starting Alertmanager.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"tlsConfig": {
+						SchemaProps: spec.SchemaProps{
+							Description: "tlsConfig defines the TLS parameters for HTTPS.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.WebTLSConfig"),
+						},
+					},
+					"httpConfig": {
+						SchemaProps: spec.SchemaProps{
+							Description: "httpConfig defines HTTP parameters for web server.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.WebHTTPConfig"),
+						},
+					},
+					"getConcurrency": {
+						SchemaProps: spec.SchemaProps{
+							Description: "getConcurrency defines the maximum number of GET requests processed concurrently. This corresponds to the Alertmanager's `--web.get-concurrency` flag.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"timeout": {
+						SchemaProps: spec.SchemaProps{
+							Description: "timeout for HTTP requests. This corresponds to the Alertmanager's `--web.timeout` flag.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.WebHTTPConfig", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.WebTLSConfig"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_Argument(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "Argument as part of the AdditionalArgs list.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "name of the argument, e.g. \"scrape.discovery-reload-interval\".",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"value": {
+						SchemaProps: spec.SchemaProps{
+							Description: "value defines the argument value, e.g. 30s. Can be empty for name-only arguments (e.g. --storage.tsdb.no-lockfile)",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"name"},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_AzureAD(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "AzureAD defines the configuration for remote write's azuread parameters.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"cloud": {
+						SchemaProps: spec.SchemaProps{
+							Description: "cloud defines the Azure Cloud. Options are 'AzurePublic', 'AzureChina', or 'AzureGovernment'.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"managedIdentity": {
+						SchemaProps: spec.SchemaProps{
+							Description: "managedIdentity defines the Azure User-assigned Managed identity. Cannot be set at the same time as `oauth` or `sdk`.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ManagedIdentity"),
+						},
+					},
+					"oauth": {
+						SchemaProps: spec.SchemaProps{
+							Description: "oauth defines the oauth config that is being used to authenticate. Cannot be set at the same time as `managedIdentity` or `sdk`.\n\nIt requires Prometheus >= v2.48.0 or Thanos >= v0.31.0.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.AzureOAuth"),
+						},
+					},
+					"sdk": {
+						SchemaProps: spec.SchemaProps{
+							Description: "sdk defines the Azure SDK config that is being used to authenticate. See https://learn.microsoft.com/en-us/azure/developer/go/azure-sdk-authentication Cannot be set at the same time as `oauth` or `managedIdentity`.\n\nIt requires Prometheus >= v2.52.0 or Thanos >= v0.36.0.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.AzureSDK"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.AzureOAuth", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.AzureSDK", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ManagedIdentity"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_AzureOAuth(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "AzureOAuth defines the Azure OAuth settings.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"clientId": {
+						SchemaProps: spec.SchemaProps{
+							Description: "clientId defines the clientId of the Azure Active Directory application that is being used to authenticate.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"clientSecret": {
+						SchemaProps: spec.SchemaProps{
+							Description: "clientSecret specifies a key of a Secret containing the client secret of the Azure Active Directory application that is being used to authenticate.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/api/core/v1.SecretKeySelector"),
+						},
+					},
+					"tenantId": {
+						SchemaProps: spec.SchemaProps{
+							Description: "tenantId is the tenant ID of the Azure Active Directory application that is being used to authenticate.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"clientId", "clientSecret", "tenantId"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.SecretKeySelector"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_BasicAuth(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "BasicAuth configures HTTP Basic Authentication settings.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"username": {
+						SchemaProps: spec.SchemaProps{
+							Description: "username defines a key of a Secret containing the username for authentication.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/api/core/v1.SecretKeySelector"),
+						},
+					},
+					"password": {
+						SchemaProps: spec.SchemaProps{
+							Description: "password defines a key of a Secret containing the password for authentication.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/api/core/v1.SecretKeySelector"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.SecretKeySelector"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_ClusterTLSConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ClusterTLSConfig defines the mutual TLS configuration for the Alertmanager cluster TLS protocol.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"server": {
+						SchemaProps: spec.SchemaProps{
+							Description: "server defines the server-side configuration for mutual TLS.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.WebTLSConfig"),
+						},
+					},
+					"client": {
+						SchemaProps: spec.SchemaProps{
+							Description: "client defines the client-side configuration for mutual TLS.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.SafeTLSConfig"),
+						},
+					},
+				},
+				Required: []string{"server", "client"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.SafeTLSConfig", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.WebTLSConfig"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_ConfigResourceStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ConfigResourceStatus is the most recent observed status of the Configuration Resource (ServiceMonitor, PodMonitor, Probes, ScrapeConfig, PrometheusRule or AlertmanagerConfig). Read-only. More info: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#spec-and-status",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"bindings": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-list-map-keys": []interface{}{
+									"group",
+									"resource",
+									"name",
+									"namespace",
+								},
+								"x-kubernetes-list-type": "map",
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "bindings defines the list of workload resources (Prometheus, PrometheusAgent, ThanosRuler or Alertmanager) which select the configuration resource.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.WorkloadBinding"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.WorkloadBinding"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_Endpoint(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "Endpoint defines an endpoint serving Prometheus metrics to be scraped by Prometheus.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"port": {
+						SchemaProps: spec.SchemaProps{
+							Description: "port defines the name of the Service port which this endpoint refers to.\n\nIt takes precedence over `targetPort`.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"targetPort": {
+						SchemaProps: spec.SchemaProps{
+							Description: "targetPort defines the name or number of the target port of the `Pod` object behind the Service. The port must be specified with the container's port property.",
+							Ref:         ref("k8s.io/apimachinery/pkg/util/intstr.IntOrString"),
+						},
+					},
+					"path": {
+						SchemaProps: spec.SchemaProps{
+							Description: "path defines the HTTP path from which to scrape for metrics.\n\nIf empty, Prometheus uses the default value (e.g. `/metrics`).",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"scheme": {
+						SchemaProps: spec.SchemaProps{
+							Description: "scheme defines the HTTP scheme to use when scraping the metrics.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"params": {
+						SchemaProps: spec.SchemaProps{
+							Description: "params define optional HTTP URL parameters.",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Type: []string{"array"},
+										Items: &spec.SchemaOrArray{
+											Schema: &spec.Schema{
+												SchemaProps: spec.SchemaProps{
+													Default: "",
+													Type:    []string{"string"},
+													Format:  "",
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+					"interval": {
+						SchemaProps: spec.SchemaProps{
+							Description: "interval at which Prometheus scrapes the metrics from the target.\n\nIf empty, Prometheus uses the global scrape interval.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"scrapeTimeout": {
+						SchemaProps: spec.SchemaProps{
+							Description: "scrapeTimeout defines the timeout after which Prometheus considers the scrape to be failed.\n\nIf empty, Prometheus uses the global scrape timeout unless it is less than the target's scrape interval value in which the latter is used. The value cannot be greater than the scrape interval otherwise the operator will reject the resource.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"tlsConfig": {
+						SchemaProps: spec.SchemaProps{
+							Description: "tlsConfig defines the TLS configuration to use when scraping the target.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.TLSConfig"),
+						},
+					},
+					"bearerTokenFile": {
+						SchemaProps: spec.SchemaProps{
+							Description: "bearerTokenFile defines the file to read bearer token for scraping the target.\n\nDeprecated: use `authorization` instead.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"bearerTokenSecret": {
+						SchemaProps: spec.SchemaProps{
+							Description: "bearerTokenSecret defines a key of a Secret containing the bearer token for scraping targets. The secret needs to be in the same namespace as the ServiceMonitor object and readable by the Prometheus Operator.\n\n\nDeprecated: use `authorization` instead.",
+							Ref:         ref("k8s.io/api/core/v1.SecretKeySelector"),
+						},
+					},
+					"authorization": {
+						SchemaProps: spec.SchemaProps{
+							Description: "authorization configures the Authorization header credentials to use when scraping the target.\n\nCannot be set at the same time as `basicAuth`, or `oauth2`.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.SafeAuthorization"),
+						},
+					},
+					"honorLabels": {
+						SchemaProps: spec.SchemaProps{
+							Description: "honorLabels defines when true the metric's labels when they collide with the target's labels.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"honorTimestamps": {
+						SchemaProps: spec.SchemaProps{
+							Description: "honorTimestamps defines whether Prometheus preserves the timestamps when exposed by the target.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"trackTimestampsStaleness": {
+						SchemaProps: spec.SchemaProps{
+							Description: "trackTimestampsStaleness defines whether Prometheus tracks staleness of the metrics that have an explicit timestamp present in scraped data. Has no effect if `honorTimestamps` is false.\n\nIt requires Prometheus >= v2.48.0.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"basicAuth": {
+						SchemaProps: spec.SchemaProps{
+							Description: "basicAuth defines the Basic Authentication credentials to use when scraping the target.\n\nCannot be set at the same time as `authorization`, or `oauth2`.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.BasicAuth"),
+						},
+					},
+					"oauth2": {
+						SchemaProps: spec.SchemaProps{
+							Description: "oauth2 defines the OAuth2 settings to use when scraping the target.\n\nIt requires Prometheus >= 2.27.0.\n\nCannot be set at the same time as `authorization`, or `basicAuth`.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.OAuth2"),
+						},
+					},
+					"metricRelabelings": {
+						SchemaProps: spec.SchemaProps{
+							Description: "metricRelabelings defines the relabeling rules to apply to the samples before ingestion.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.RelabelConfig"),
+									},
+								},
+							},
+						},
+					},
+					"relabelings": {
+						SchemaProps: spec.SchemaProps{
+							Description: "relabelings defines the relabeling rules to apply the target's metadata labels.\n\nThe Operator automatically adds relabelings for a few standard Kubernetes fields.\n\nThe original scrape job's name is available via the `__tmp_prometheus_job_name` label.\n\nMore info: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.RelabelConfig"),
+									},
+								},
+							},
+						},
+					},
+					"proxyUrl": {
+						SchemaProps: spec.SchemaProps{
+							Description: "proxyUrl defines the HTTP proxy server to use.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"noProxy": {
+						SchemaProps: spec.SchemaProps{
+							Description: "noProxy defines a comma-separated string that can contain IPs, CIDR notation, domain names that should be excluded from proxying. IP and domain names can contain port numbers.\n\nIt requires Prometheus >= v2.43.0, Alertmanager >= v0.25.0 or Thanos >= v0.32.0.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"proxyFromEnvironment": {
+						SchemaProps: spec.SchemaProps{
+							Description: "proxyFromEnvironment defines whether to use the proxy configuration defined by environment variables (HTTP_PROXY, HTTPS_PROXY, and NO_PROXY).\n\nIt requires Prometheus >= v2.43.0, Alertmanager >= v0.25.0 or Thanos >= v0.32.0.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"proxyConnectHeader": {
+						SchemaProps: spec.SchemaProps{
+							Description: "proxyConnectHeader optionally specifies headers to send to proxies during CONNECT requests.\n\nIt requires Prometheus >= v2.43.0, Alertmanager >= v0.25.0 or Thanos >= v0.32.0.",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Type: []string{"array"},
+										Items: &spec.SchemaOrArray{
+											Schema: &spec.Schema{
+												SchemaProps: spec.SchemaProps{
+													Default: map[string]interface{}{},
+													Ref:     ref("k8s.io/api/core/v1.SecretKeySelector"),
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+					"followRedirects": {
+						SchemaProps: spec.SchemaProps{
+							Description: "followRedirects defines whether the scrape requests should follow HTTP 3xx redirects.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"enableHttp2": {
+						SchemaProps: spec.SchemaProps{
+							Description: "enableHttp2 can be used to disable HTTP2 when scraping the target.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"filterRunning": {
+						SchemaProps: spec.SchemaProps{
+							Description: "filterRunning when true, the pods which are not running (e.g. either in Failed or Succeeded state) are dropped during the target discovery.\n\nIf unset, the filtering is enabled.\n\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-phase",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.BasicAuth", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.OAuth2", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.RelabelConfig", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.SafeAuthorization", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.TLSConfig", "k8s.io/api/core/v1.SecretKeySelector", "k8s.io/apimachinery/pkg/util/intstr.IntOrString"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_ManagedIdentity(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ManagedIdentity defines the Azure User-assigned Managed identity.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"clientId": {
+						SchemaProps: spec.SchemaProps{
+							Description: "clientId defines the Azure User-assigned Managed identity.\n\nFor Prometheus >= 3.5.0 and Thanos >= 0.40.0, this field is allowed to be empty to support system-assigned managed identities.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_MetadataConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "MetadataConfig configures the sending of series metadata to the remote storage.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"send": {
+						SchemaProps: spec.SchemaProps{
+							Description: "send defines whether metric metadata is sent to the remote storage or not.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"sendInterval": {
+						SchemaProps: spec.SchemaProps{
+							Description: "sendInterval defines how frequently metric metadata is sent to the remote storage.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"maxSamplesPerSend": {
+						SchemaProps: spec.SchemaProps{
+							Description: "maxSamplesPerSend defines the maximum number of metadata samples per send.\n\nIt requires Prometheus >= v2.29.0.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_NamespaceSelector(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "NamespaceSelector is a selector for selecting either all namespaces or a list of namespaces. If `any` is true, it takes precedence over `matchNames`. If `matchNames` is empty and `any` is false, it means that the objects are selected from the current namespace.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"any": {
+						SchemaProps: spec.SchemaProps{
+							Description: "any defines the boolean describing whether all namespaces are selected in contrast to a list restricting them.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"matchNames": {
+						SchemaProps: spec.SchemaProps{
+							Description: "matchNames defines the list of namespace names to select from.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_NativeHistogramConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "NativeHistogramConfig extends the native histogram configuration settings.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"scrapeClassicHistograms": {
+						SchemaProps: spec.SchemaProps{
+							Description: "scrapeClassicHistograms defines whether to scrape a classic histogram that is also exposed as a native histogram. It requires Prometheus >= v2.45.0.\n\nNotice: `scrapeClassicHistograms` corresponds to the `always_scrape_classic_histograms` field in the Prometheus configuration.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"nativeHistogramBucketLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "nativeHistogramBucketLimit defines ff there are more than this many buckets in a native histogram, buckets will be merged to stay within the limit. It requires Prometheus >= v2.45.0.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"nativeHistogramMinBucketFactor": {
+						SchemaProps: spec.SchemaProps{
+							Description: "nativeHistogramMinBucketFactor defines if the growth factor of one bucket to the next is smaller than this, buckets will be merged to increase the factor sufficiently. It requires Prometheus >= v2.50.0.",
+							Ref:         ref("k8s.io/apimachinery/pkg/api/resource.Quantity"),
+						},
+					},
+					"convertClassicHistogramsToNHCB": {
+						SchemaProps: spec.SchemaProps{
+							Description: "convertClassicHistogramsToNHCB defines whether to convert all scraped classic histograms into a native histogram with custom buckets. It requires Prometheus >= v3.0.0.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/api/resource.Quantity"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_OAuth2(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "OAuth2 configures OAuth2 settings.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"clientId": {
+						SchemaProps: spec.SchemaProps{
+							Description: "clientId defines a key of a Secret or ConfigMap containing the OAuth2 client's ID.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.SecretOrConfigMap"),
+						},
+					},
+					"clientSecret": {
+						SchemaProps: spec.SchemaProps{
+							Description: "clientSecret defines a key of a Secret containing the OAuth2 client's secret.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/api/core/v1.SecretKeySelector"),
+						},
+					},
+					"tokenUrl": {
+						SchemaProps: spec.SchemaProps{
+							Description: "tokenUrl defines the URL to fetch the token from.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"scopes": {
+						SchemaProps: spec.SchemaProps{
+							Description: "scopes defines the OAuth2 scopes used for the token request.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"endpointParams": {
+						SchemaProps: spec.SchemaProps{
+							Description: "endpointParams configures the HTTP parameters to append to the token URL.",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"tlsConfig": {
+						SchemaProps: spec.SchemaProps{
+							Description: "tlsConfig defines the TLS configuration to use when connecting to the OAuth2 server. It requires Prometheus >= v2.43.0.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.SafeTLSConfig"),
+						},
+					},
+					"proxyUrl": {
+						SchemaProps: spec.SchemaProps{
+							Description: "proxyUrl defines the HTTP proxy server to use.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"noProxy": {
+						SchemaProps: spec.SchemaProps{
+							Description: "noProxy defines a comma-separated string that can contain IPs, CIDR notation, domain names that should be excluded from proxying. IP and domain names can contain port numbers.\n\nIt requires Prometheus >= v2.43.0, Alertmanager >= v0.25.0 or Thanos >= v0.32.0.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"proxyFromEnvironment": {
+						SchemaProps: spec.SchemaProps{
+							Description: "proxyFromEnvironment defines whether to use the proxy configuration defined by environment variables (HTTP_PROXY, HTTPS_PROXY, and NO_PROXY).\n\nIt requires Prometheus >= v2.43.0, Alertmanager >= v0.25.0 or Thanos >= v0.32.0.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"proxyConnectHeader": {
+						SchemaProps: spec.SchemaProps{
+							Description: "proxyConnectHeader optionally specifies headers to send to proxies during CONNECT requests.\n\nIt requires Prometheus >= v2.43.0, Alertmanager >= v0.25.0 or Thanos >= v0.32.0.",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Type: []string{"array"},
+										Items: &spec.SchemaOrArray{
+											Schema: &spec.Schema{
+												SchemaProps: spec.SchemaProps{
+													Default: map[string]interface{}{},
+													Ref:     ref("k8s.io/api/core/v1.SecretKeySelector"),
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"clientId", "clientSecret", "tokenUrl"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.SafeTLSConfig", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.SecretOrConfigMap", "k8s.io/api/core/v1.SecretKeySelector"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_OTLPConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "OTLPConfig is the configuration for writing to the OTLP endpoint.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"promoteAllResourceAttributes": {
+						SchemaProps: spec.SchemaProps{
+							Description: "promoteAllResourceAttributes promotes all resource attributes to metric labels except the ones defined in `ignoreResourceAttributes`.\n\nCannot be true when `promoteResourceAttributes` is defined. It requires Prometheus >= v3.5.0.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"ignoreResourceAttributes": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-list-type": "set",
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "ignoreResourceAttributes defines the list of OpenTelemetry resource attributes to ignore when `promoteAllResourceAttributes` is true.\n\nIt requires `promoteAllResourceAttributes` to be true. It requires Prometheus >= v3.5.0.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"promoteResourceAttributes": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-list-type": "set",
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "promoteResourceAttributes defines the list of OpenTelemetry Attributes that should be promoted to metric labels, defaults to none. Cannot be defined when `promoteAllResourceAttributes` is true.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"translationStrategy": {
+						SchemaProps: spec.SchemaProps{
+							Description: "translationStrategy defines how the OTLP receiver endpoint translates the incoming metrics.\n\nIt requires Prometheus >= v3.0.0.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"keepIdentifyingResourceAttributes": {
+						SchemaProps: spec.SchemaProps{
+							Description: "keepIdentifyingResourceAttributes enables adding `service.name`, `service.namespace` and `service.instance.id` resource attributes to the `target_info` metric, on top of converting them into the `instance` and `job` labels.\n\nIt requires Prometheus >= v3.1.0.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"convertHistogramsToNHCB": {
+						SchemaProps: spec.SchemaProps{
+							Description: "convertHistogramsToNHCB defines optional translation of OTLP explicit bucket histograms into native histograms with custom buckets. It requires Prometheus >= v3.4.0.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"promoteScopeMetadata": {
+						SchemaProps: spec.SchemaProps{
+							Description: "promoteScopeMetadata controls whether to promote OpenTelemetry scope metadata (i.e. name, version, schema URL, and attributes) to metric labels. As per the OpenTelemetry specification, the aforementioned scope metadata should be identifying, i.e. made into metric labels. It requires Prometheus >= v3.6.0.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_PodMetricsEndpoint(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "PodMetricsEndpoint defines an endpoint serving Prometheus metrics to be scraped by Prometheus.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"port": {
+						SchemaProps: spec.SchemaProps{
+							Description: "port defines the `Pod` port name which exposes the endpoint.\n\nIf the pod doesn't expose a port with the same name, it will result in no targets being discovered.\n\nIf a `Pod` has multiple `Port`s with the same name (which is not recommended), one target instance per unique port number will be generated.\n\nIt takes precedence over the `portNumber` and `targetPort` fields.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"portNumber": {
+						SchemaProps: spec.SchemaProps{
+							Description: "portNumber defines the `Pod` port number which exposes the endpoint.\n\nThe `Pod` must declare the specified `Port` in its spec or the target will be dropped by Prometheus.\n\nThis cannot be used to enable scraping of an undeclared port. To scrape targets on a port which isn't exposed, you need to use relabeling to override the `__address__` label (but beware of duplicate targets if the `Pod` has other declared ports).\n\nIn practice Prometheus will select targets for which the matches the target's __meta_kubernetes_pod_container_port_number.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"targetPort": {
+						SchemaProps: spec.SchemaProps{
+							Description: "targetPort defines the name or number of the target port of the `Pod` object behind the Service, the port must be specified with container port property.\n\nDeprecated: use 'port' or 'portNumber' instead.",
+							Ref:         ref("k8s.io/apimachinery/pkg/util/intstr.IntOrString"),
+						},
+					},
+					"path": {
+						SchemaProps: spec.SchemaProps{
+							Description: "path defines the HTTP path from which to scrape for metrics.\n\nIf empty, Prometheus uses the default value (e.g. `/metrics`).",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"scheme": {
+						SchemaProps: spec.SchemaProps{
+							Description: "scheme defines the HTTP scheme to use for scraping.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"params": {
+						SchemaProps: spec.SchemaProps{
+							Description: "params define optional HTTP URL parameters.",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Type: []string{"array"},
+										Items: &spec.SchemaOrArray{
+											Schema: &spec.Schema{
+												SchemaProps: spec.SchemaProps{
+													Default: "",
+													Type:    []string{"string"},
+													Format:  "",
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+					"interval": {
+						SchemaProps: spec.SchemaProps{
+							Description: "interval at which Prometheus scrapes the metrics from the target.\n\nIf empty, Prometheus uses the global scrape interval.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"scrapeTimeout": {
+						SchemaProps: spec.SchemaProps{
+							Description: "scrapeTimeout defines the timeout after which Prometheus considers the scrape to be failed.\n\nIf empty, Prometheus uses the global scrape timeout unless it is less than the target's scrape interval value in which the latter is used. The value cannot be greater than the scrape interval otherwise the operator will reject the resource.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"honorLabels": {
+						SchemaProps: spec.SchemaProps{
+							Description: "honorLabels when true preserves the metric's labels when they collide with the target's labels.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"honorTimestamps": {
+						SchemaProps: spec.SchemaProps{
+							Description: "honorTimestamps defines whether Prometheus preserves the timestamps when exposed by the target.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"trackTimestampsStaleness": {
+						SchemaProps: spec.SchemaProps{
+							Description: "trackTimestampsStaleness defines whether Prometheus tracks staleness of the metrics that have an explicit timestamp present in scraped data. Has no effect if `honorTimestamps` is false.\n\nIt requires Prometheus >= v2.48.0.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"metricRelabelings": {
+						SchemaProps: spec.SchemaProps{
+							Description: "metricRelabelings defines the relabeling rules to apply to the samples before ingestion.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.RelabelConfig"),
+									},
+								},
+							},
+						},
+					},
+					"relabelings": {
+						SchemaProps: spec.SchemaProps{
+							Description: "relabelings defines the relabeling rules to apply the target's metadata labels.\n\nThe Operator automatically adds relabelings for a few standard Kubernetes fields.\n\nThe original scrape job's name is available via the `__tmp_prometheus_job_name` label.\n\nMore info: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.RelabelConfig"),
+									},
+								},
+							},
+						},
+					},
+					"filterRunning": {
+						SchemaProps: spec.SchemaProps{
+							Description: "filterRunning when true, the pods which are not running (e.g. either in Failed or Succeeded state) are dropped during the target discovery.\n\nIf unset, the filtering is enabled.\n\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-phase",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"authorization": {
+						SchemaProps: spec.SchemaProps{
+							Description: "authorization configures the Authorization header credentials used by the client.\n\nCannot be set at the same time as `basicAuth`, `bearerTokenSecret` or `oauth2`.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.SafeAuthorization"),
+						},
+					},
+					"basicAuth": {
+						SchemaProps: spec.SchemaProps{
+							Description: "basicAuth defines the Basic Authentication credentials used by the client.\n\nCannot be set at the same time as `authorization`, `bearerTokenSecret` or `oauth2`.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.BasicAuth"),
+						},
+					},
+					"oauth2": {
+						SchemaProps: spec.SchemaProps{
+							Description: "oauth2 defines the OAuth2 settings used by the client.\n\nIt requires Prometheus >= 2.27.0.\n\nCannot be set at the same time as `authorization`, `basicAuth` or `bearerTokenSecret`.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.OAuth2"),
+						},
+					},
+					"bearerTokenSecret": {
+						SchemaProps: spec.SchemaProps{
+							Description: "bearerTokenSecret defines a key of a Secret containing the bearer token used by the client for authentication. The secret needs to be in the same namespace as the custom resource and readable by the Prometheus Operator.\n\nCannot be set at the same time as `authorization`, `basicAuth` or `oauth2`.\n\n\nDeprecated: use `authorization` instead.",
+							Ref:         ref("k8s.io/api/core/v1.SecretKeySelector"),
+						},
+					},
+					"tlsConfig": {
+						SchemaProps: spec.SchemaProps{
+							Description: "tlsConfig defines the TLS configuration used by the client.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.SafeTLSConfig"),
+						},
+					},
+					"proxyUrl": {
+						SchemaProps: spec.SchemaProps{
+							Description: "proxyUrl defines the HTTP proxy server to use.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"noProxy": {
+						SchemaProps: spec.SchemaProps{
+							Description: "noProxy defines a comma-separated string that can contain IPs, CIDR notation, domain names that should be excluded from proxying. IP and domain names can contain port numbers.\n\nIt requires Prometheus >= v2.43.0, Alertmanager >= v0.25.0 or Thanos >= v0.32.0.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"proxyFromEnvironment": {
+						SchemaProps: spec.SchemaProps{
+							Description: "proxyFromEnvironment defines whether to use the proxy configuration defined by environment variables (HTTP_PROXY, HTTPS_PROXY, and NO_PROXY).\n\nIt requires Prometheus >= v2.43.0, Alertmanager >= v0.25.0 or Thanos >= v0.32.0.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"proxyConnectHeader": {
+						SchemaProps: spec.SchemaProps{
+							Description: "proxyConnectHeader optionally specifies headers to send to proxies during CONNECT requests.\n\nIt requires Prometheus >= v2.43.0, Alertmanager >= v0.25.0 or Thanos >= v0.32.0.",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Type: []string{"array"},
+										Items: &spec.SchemaOrArray{
+											Schema: &spec.Schema{
+												SchemaProps: spec.SchemaProps{
+													Default: map[string]interface{}{},
+													Ref:     ref("k8s.io/api/core/v1.SecretKeySelector"),
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+					"followRedirects": {
+						SchemaProps: spec.SchemaProps{
+							Description: "followRedirects defines whether the client should follow HTTP 3xx redirects.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"enableHttp2": {
+						SchemaProps: spec.SchemaProps{
+							Description: "enableHttp2 can be used to disable HTTP2.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.BasicAuth", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.OAuth2", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.RelabelConfig", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.SafeAuthorization", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.SafeTLSConfig", "k8s.io/api/core/v1.SecretKeySelector", "k8s.io/apimachinery/pkg/util/intstr.IntOrString"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_PodMonitorList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "PodMonitorList is a list of PodMonitors.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Description: "metadata defines ListMeta as metadata for collection responses.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+						},
+					},
+					"items": {
+						SchemaProps: spec.SchemaProps{
+							Description: "List of PodMonitors",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.PodMonitor"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"items"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.PodMonitor", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_PodMonitorSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "PodMonitorSpec contains specification parameters for a PodMonitor.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"jobLabel": {
+						SchemaProps: spec.SchemaProps{
+							Description: "jobLabel defines the label to use to retrieve the job name from. `jobLabel` selects the label from the associated Kubernetes `Pod` object which will be used as the `job` label for all metrics.\n\nFor example if `jobLabel` is set to `foo` and the Kubernetes `Pod` object is labeled with `foo: bar`, then Prometheus adds the `job=\"bar\"` label to all ingested metrics.\n\nIf the value of this field is empty, the `job` label of the metrics defaults to the namespace and name of the PodMonitor object (e.g. `<namespace>/<name>`).",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"podTargetLabels": {
+						SchemaProps: spec.SchemaProps{
+							Description: "podTargetLabels defines the labels which are transferred from the associated Kubernetes `Pod` object onto the ingested metrics.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"podMetricsEndpoints": {
+						SchemaProps: spec.SchemaProps{
+							Description: "podMetricsEndpoints defines how to scrape metrics from the selected pods.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.PodMetricsEndpoint"),
+									},
+								},
+							},
+						},
+					},
+					"selector": {
+						SchemaProps: spec.SchemaProps{
+							Description: "selector defines the label selector to select the Kubernetes `Pod` objects to scrape metrics from.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector"),
+						},
+					},
+					"selectorMechanism": {
+						SchemaProps: spec.SchemaProps{
+							Description: "selectorMechanism defines the mechanism used to select the endpoints to scrape. By default, the selection process relies on relabel configurations to filter the discovered targets. Alternatively, you can opt in for role selectors, which may offer better efficiency in large clusters. Which strategy is best for your use case needs to be carefully evaluated.\n\nIt requires Prometheus >= v2.17.0.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"namespaceSelector": {
+						SchemaProps: spec.SchemaProps{
+							Description: "namespaceSelector defines in which namespace(s) Prometheus should discover the pods. By default, the pods are discovered in the same namespace as the `PodMonitor` object but it is possible to select pods across different/all namespaces.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.NamespaceSelector"),
+						},
+					},
+					"sampleLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "sampleLimit defines a per-scrape limit on the number of scraped samples that will be accepted.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"targetLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "targetLimit defines a limit on the number of scraped targets that will be accepted.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"scrapeProtocols": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-list-type": "set",
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "scrapeProtocols defines the protocols to negotiate during a scrape. It tells clients the protocols supported by Prometheus in order of preference (from most to least preferred).\n\nIf unset, Prometheus uses its default value.\n\nIt requires Prometheus >= v2.49.0.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"fallbackScrapeProtocol": {
+						SchemaProps: spec.SchemaProps{
+							Description: "fallbackScrapeProtocol defines the protocol to use if a scrape returns blank, unparseable, or otherwise invalid Content-Type.\n\nIt requires Prometheus >= v3.0.0.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"labelLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "labelLimit defines the per-scrape limit on number of labels that will be accepted for a sample.\n\nIt requires Prometheus >= v2.27.0.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"labelNameLengthLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "labelNameLengthLimit defines the per-scrape limit on length of labels name that will be accepted for a sample.\n\nIt requires Prometheus >= v2.27.0.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"labelValueLengthLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "labelValueLengthLimit defines the per-scrape limit on length of labels value that will be accepted for a sample.\n\nIt requires Prometheus >= v2.27.0.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"scrapeClassicHistograms": {
+						SchemaProps: spec.SchemaProps{
+							Description: "scrapeClassicHistograms defines whether to scrape a classic histogram that is also exposed as a native histogram. It requires Prometheus >= v2.45.0.\n\nNotice: `scrapeClassicHistograms` corresponds to the `always_scrape_classic_histograms` field in the Prometheus configuration.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"nativeHistogramBucketLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "nativeHistogramBucketLimit defines ff there are more than this many buckets in a native histogram, buckets will be merged to stay within the limit. It requires Prometheus >= v2.45.0.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"nativeHistogramMinBucketFactor": {
+						SchemaProps: spec.SchemaProps{
+							Description: "nativeHistogramMinBucketFactor defines if the growth factor of one bucket to the next is smaller than this, buckets will be merged to increase the factor sufficiently. It requires Prometheus >= v2.50.0.",
+							Ref:         ref("k8s.io/apimachinery/pkg/api/resource.Quantity"),
+						},
+					},
+					"convertClassicHistogramsToNHCB": {
+						SchemaProps: spec.SchemaProps{
+							Description: "convertClassicHistogramsToNHCB defines whether to convert all scraped classic histograms into a native histogram with custom buckets. It requires Prometheus >= v3.0.0.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"keepDroppedTargets": {
+						SchemaProps: spec.SchemaProps{
+							Description: "keepDroppedTargets defines the per-scrape limit on the number of targets dropped by relabeling that will be kept in memory. 0 means no limit.\n\nIt requires Prometheus >= v2.47.0.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"attachMetadata": {
+						SchemaProps: spec.SchemaProps{
+							Description: "attachMetadata defines additional metadata which is added to the discovered targets.\n\nIt requires Prometheus >= v2.35.0.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.AttachMetadata"),
+						},
+					},
+					"scrapeClass": {
+						SchemaProps: spec.SchemaProps{
+							Description: "scrapeClass defines the scrape class to apply.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"bodySizeLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "bodySizeLimit when defined specifies a job level limit on the size of uncompressed response body that will be accepted by Prometheus.\n\nIt requires Prometheus >= v2.28.0.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"selector"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.AttachMetadata", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.NamespaceSelector", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.PodMetricsEndpoint", "k8s.io/apimachinery/pkg/api/resource.Quantity", "k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_ProbeList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ProbeList is a list of Probes.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Description: "metadata defines ListMeta as metadata for collection responses.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+						},
+					},
+					"items": {
+						SchemaProps: spec.SchemaProps{
+							Description: "List of Probes",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Probe"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"items"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Probe", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_ProbeParam(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ProbeParam defines specification of extra parameters for a Probe.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "name defines the parameter name",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"values": {
+						SchemaProps: spec.SchemaProps{
+							Description: "values defines the parameter values",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_ProbeSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ProbeSpec contains specification parameters for a Probe.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"jobName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "jobName assigned to scraped metrics by default.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"prober": {
+						SchemaProps: spec.SchemaProps{
+							Description: "prober defines the specification for the prober to use for probing targets. The prober.URL parameter is required. Targets cannot be probed if left empty.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ProberSpec"),
+						},
+					},
+					"module": {
+						SchemaProps: spec.SchemaProps{
+							Description: "module to use for probing specifying how to probe the target. Example module configuring in the blackbox exporter: https://github.com/prometheus/blackbox_exporter/blob/master/example.yml",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"targets": {
+						SchemaProps: spec.SchemaProps{
+							Description: "targets defines a set of static or dynamically discovered targets to probe.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ProbeTargets"),
+						},
+					},
+					"interval": {
+						SchemaProps: spec.SchemaProps{
+							Description: "interval at which targets are probed using the configured prober. If not specified Prometheus' global scrape interval is used.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"scrapeTimeout": {
+						SchemaProps: spec.SchemaProps{
+							Description: "scrapeTimeout defines the timeout for scraping metrics from the Prometheus exporter. If not specified, the Prometheus global scrape timeout is used. The value cannot be greater than the scrape interval otherwise the operator will reject the resource.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"tlsConfig": {
+						SchemaProps: spec.SchemaProps{
+							Description: "tlsConfig defines the TLS configuration to use when scraping the endpoint.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.SafeTLSConfig"),
+						},
+					},
+					"bearerTokenSecret": {
+						SchemaProps: spec.SchemaProps{
+							Description: "bearerTokenSecret defines the secret to mount to read bearer token for scraping targets. The secret needs to be in the same namespace as the probe and accessible by the Prometheus Operator.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/api/core/v1.SecretKeySelector"),
+						},
+					},
+					"basicAuth": {
+						SchemaProps: spec.SchemaProps{
+							Description: "basicAuth allow an endpoint to authenticate over basic authentication. More info: https://prometheus.io/docs/operating/configuration/#endpoint",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.BasicAuth"),
+						},
+					},
+					"oauth2": {
+						SchemaProps: spec.SchemaProps{
+							Description: "oauth2 for the URL. Only valid in Prometheus versions 2.27.0 and newer.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.OAuth2"),
+						},
+					},
+					"metricRelabelings": {
+						SchemaProps: spec.SchemaProps{
+							Description: "metricRelabelings defines the RelabelConfig to apply to samples before ingestion.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.RelabelConfig"),
+									},
+								},
+							},
+						},
+					},
+					"authorization": {
+						SchemaProps: spec.SchemaProps{
+							Description: "authorization section for this endpoint",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.SafeAuthorization"),
+						},
+					},
+					"sampleLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "sampleLimit defines per-scrape limit on number of scraped samples that will be accepted.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"targetLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "targetLimit defines a limit on the number of scraped targets that will be accepted.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"scrapeProtocols": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-list-type": "set",
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "scrapeProtocols defines the protocols to negotiate during a scrape. It tells clients the protocols supported by Prometheus in order of preference (from most to least preferred).\n\nIf unset, Prometheus uses its default value.\n\nIt requires Prometheus >= v2.49.0.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"fallbackScrapeProtocol": {
+						SchemaProps: spec.SchemaProps{
+							Description: "fallbackScrapeProtocol defines the protocol to use if a scrape returns blank, unparseable, or otherwise invalid Content-Type.\n\nIt requires Prometheus >= v3.0.0.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"labelLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "labelLimit defines the per-scrape limit on number of labels that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"labelNameLengthLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "labelNameLengthLimit defines the per-scrape limit on length of labels name that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"labelValueLengthLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "labelValueLengthLimit defines the per-scrape limit on length of labels value that will be accepted for a sample. Only valid in Prometheus versions 2.27.0 and newer.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"scrapeClassicHistograms": {
+						SchemaProps: spec.SchemaProps{
+							Description: "scrapeClassicHistograms defines whether to scrape a classic histogram that is also exposed as a native histogram. It requires Prometheus >= v2.45.0.\n\nNotice: `scrapeClassicHistograms` corresponds to the `always_scrape_classic_histograms` field in the Prometheus configuration.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"nativeHistogramBucketLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "nativeHistogramBucketLimit defines ff there are more than this many buckets in a native histogram, buckets will be merged to stay within the limit. It requires Prometheus >= v2.45.0.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"nativeHistogramMinBucketFactor": {
+						SchemaProps: spec.SchemaProps{
+							Description: "nativeHistogramMinBucketFactor defines if the growth factor of one bucket to the next is smaller than this, buckets will be merged to increase the factor sufficiently. It requires Prometheus >= v2.50.0.",
+							Ref:         ref("k8s.io/apimachinery/pkg/api/resource.Quantity"),
+						},
+					},
+					"convertClassicHistogramsToNHCB": {
+						SchemaProps: spec.SchemaProps{
+							Description: "convertClassicHistogramsToNHCB defines whether to convert all scraped classic histograms into a native histogram with custom buckets. It requires Prometheus >= v3.0.0.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"keepDroppedTargets": {
+						SchemaProps: spec.SchemaProps{
+							Description: "keepDroppedTargets defines the per-scrape limit on the number of targets dropped by relabeling that will be kept in memory. 0 means no limit.\n\nIt requires Prometheus >= v2.47.0.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"scrapeClass": {
+						SchemaProps: spec.SchemaProps{
+							Description: "scrapeClass defines the scrape class to apply.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"params": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-list-map-keys": []interface{}{
+									"name",
+								},
+								"x-kubernetes-list-type": "map",
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "params defines the list of HTTP query parameters for the scrape. Please note that the `.spec.module` field takes precedence over the `module` parameter from this list when both are defined. The module name must be added using Module under ProbeSpec.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ProbeParam"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.BasicAuth", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.OAuth2", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ProbeParam", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ProbeTargets", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ProberSpec", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.RelabelConfig", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.SafeAuthorization", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.SafeTLSConfig", "k8s.io/api/core/v1.SecretKeySelector", "k8s.io/apimachinery/pkg/api/resource.Quantity"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_ProbeTargetIngress(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ProbeTargetIngress defines the set of Ingress objects considered for probing. The operator configures a target for each host/path combination of each ingress object.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"selector": {
+						SchemaProps: spec.SchemaProps{
+							Description: "selector to select the Ingress objects.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector"),
+						},
+					},
+					"namespaceSelector": {
+						SchemaProps: spec.SchemaProps{
+							Description: "namespaceSelector defines from which namespaces to select Ingress objects.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.NamespaceSelector"),
+						},
+					},
+					"relabelingConfigs": {
+						SchemaProps: spec.SchemaProps{
+							Description: "relabelingConfigs to apply to the label set of the target before it gets scraped. The original ingress address is available via the `__tmp_prometheus_ingress_address` label. It can be used to customize the probed URL. The original scrape job's name is available via the `__tmp_prometheus_job_name` label. More info: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.RelabelConfig"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.NamespaceSelector", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.RelabelConfig", "k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_ProbeTargetStaticConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ProbeTargetStaticConfig defines the set of static targets considered for probing.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"static": {
+						SchemaProps: spec.SchemaProps{
+							Description: "static defines the list of hosts to probe.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"labels": {
+						SchemaProps: spec.SchemaProps{
+							Description: "labels defines all labels assigned to all metrics scraped from the targets.",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"relabelingConfigs": {
+						SchemaProps: spec.SchemaProps{
+							Description: "relabelingConfigs defines relabelings to be apply to the label set of the targets before it gets scraped. More info: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.RelabelConfig"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.RelabelConfig"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_ProbeTargets(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ProbeTargets defines how to discover the probed targets. One of the `staticConfig` or `ingress` must be defined. If both are defined, `staticConfig` takes precedence.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"staticConfig": {
+						SchemaProps: spec.SchemaProps{
+							Description: "staticConfig defines the static list of targets to probe and the relabeling configuration. If `ingress` is also defined, `staticConfig` takes precedence. More info: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#static_config.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ProbeTargetStaticConfig"),
+						},
+					},
+					"ingress": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ingress defines the Ingress objects to probe and the relabeling configuration. If `staticConfig` is also defined, `staticConfig` takes precedence.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ProbeTargetIngress"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ProbeTargetIngress", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ProbeTargetStaticConfig"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_ProberSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ProberSpec contains specification parameters for the Prober used for probing.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"url": {
+						SchemaProps: spec.SchemaProps{
+							Description: "url defines the address of the prober.\n\nUnlike what the name indicates, the value should be in the form of `address:port` without any scheme which should be specified in the `scheme` field.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"scheme": {
+						SchemaProps: spec.SchemaProps{
+							Description: "scheme defines the HTTP scheme to use when scraping the prober.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"path": {
+						SchemaProps: spec.SchemaProps{
+							Description: "path to collect metrics from. Defaults to `/probe`.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"proxyUrl": {
+						SchemaProps: spec.SchemaProps{
+							Description: "proxyUrl defines the HTTP proxy server to use.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"noProxy": {
+						SchemaProps: spec.SchemaProps{
+							Description: "noProxy defines a comma-separated string that can contain IPs, CIDR notation, domain names that should be excluded from proxying. IP and domain names can contain port numbers.\n\nIt requires Prometheus >= v2.43.0, Alertmanager >= v0.25.0 or Thanos >= v0.32.0.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"proxyFromEnvironment": {
+						SchemaProps: spec.SchemaProps{
+							Description: "proxyFromEnvironment defines whether to use the proxy configuration defined by environment variables (HTTP_PROXY, HTTPS_PROXY, and NO_PROXY).\n\nIt requires Prometheus >= v2.43.0, Alertmanager >= v0.25.0 or Thanos >= v0.32.0.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"proxyConnectHeader": {
+						SchemaProps: spec.SchemaProps{
+							Description: "proxyConnectHeader optionally specifies headers to send to proxies during CONNECT requests.\n\nIt requires Prometheus >= v2.43.0, Alertmanager >= v0.25.0 or Thanos >= v0.32.0.",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Type: []string{"array"},
+										Items: &spec.SchemaOrArray{
+											Schema: &spec.Schema{
+												SchemaProps: spec.SchemaProps{
+													Default: map[string]interface{}{},
+													Ref:     ref("k8s.io/api/core/v1.SecretKeySelector"),
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"url"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.SecretKeySelector"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_PrometheusList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "PrometheusList is a list of Prometheuses.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Description: "metadata defines ListMeta as metadata for collection responses.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+						},
+					},
+					"items": {
+						SchemaProps: spec.SchemaProps{
+							Description: "List of Prometheuses",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Prometheus"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"items"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Prometheus", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_PrometheusRuleList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "PrometheusRuleList is a list of PrometheusRules.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Description: "metadata defines ListMeta as metadata for collection responses.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+						},
+					},
+					"items": {
+						SchemaProps: spec.SchemaProps{
+							Description: "List of Rules",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.PrometheusRule"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"items"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.PrometheusRule", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_PrometheusRuleSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "PrometheusRuleSpec contains specification parameters for a Rule.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"groups": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-list-map-keys": []interface{}{
+									"name",
+								},
+								"x-kubernetes-list-type": "map",
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "groups defines the content of Prometheus rule file",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.RuleGroup"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.RuleGroup"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_PrometheusSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "PrometheusSpec is a specification of the desired behavior of the Prometheus cluster. More info: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#spec-and-status",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"podMetadata": {
+						SchemaProps: spec.SchemaProps{
+							Description: "podMetadata defines labels and annotations which are propagated to the Prometheus pods.\n\nThe following items are reserved and cannot be overridden: * \"prometheus\" label, set to the name of the Prometheus object. * \"app.kubernetes.io/instance\" label, set to the name of the Prometheus object. * \"app.kubernetes.io/managed-by\" label, set to \"prometheus-operator\". * \"app.kubernetes.io/name\" label, set to \"prometheus\". * \"app.kubernetes.io/version\" label, set to the Prometheus version. * \"operator.prometheus.io/name\" label, set to the name of the Prometheus object. * \"operator.prometheus.io/shard\" label, set to the shard number of the Prometheus object. * \"kubectl.kubernetes.io/default-container\" annotation, set to \"prometheus\".",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.EmbeddedObjectMetadata"),
+						},
+					},
+					"serviceMonitorSelector": {
+						SchemaProps: spec.SchemaProps{
+							Description: "serviceMonitorSelector defines the serviceMonitors to be selected for target discovery. An empty label selector matches all objects. A null label selector matches no objects.\n\nIf `spec.serviceMonitorSelector`, `spec.podMonitorSelector`, `spec.probeSelector` and `spec.scrapeConfigSelector` are null, the Prometheus configuration is unmanaged. The Prometheus operator will ensure that the Prometheus configuration's Secret exists, but it is the responsibility of the user to provide the raw gzipped Prometheus configuration under the `prometheus.yaml.gz` key. This behavior is *deprecated* and will be removed in the next major version of the custom resource definition. It is recommended to use `spec.additionalScrapeConfigs` instead.",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector"),
+						},
+					},
+					"serviceMonitorNamespaceSelector": {
+						SchemaProps: spec.SchemaProps{
+							Description: "serviceMonitorNamespaceSelector defines the namespaces to match for ServicedMonitors discovery. An empty label selector matches all namespaces. A null label selector (default value) matches the current namespace only.",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector"),
+						},
+					},
+					"podMonitorSelector": {
+						SchemaProps: spec.SchemaProps{
+							Description: "podMonitorSelector defines the podMonitors to be selected for target discovery. An empty label selector matches all objects. A null label selector matches no objects.\n\nIf `spec.serviceMonitorSelector`, `spec.podMonitorSelector`, `spec.probeSelector` and `spec.scrapeConfigSelector` are null, the Prometheus configuration is unmanaged. The Prometheus operator will ensure that the Prometheus configuration's Secret exists, but it is the responsibility of the user to provide the raw gzipped Prometheus configuration under the `prometheus.yaml.gz` key. This behavior is *deprecated* and will be removed in the next major version of the custom resource definition. It is recommended to use `spec.additionalScrapeConfigs` instead.",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector"),
+						},
+					},
+					"podMonitorNamespaceSelector": {
+						SchemaProps: spec.SchemaProps{
+							Description: "podMonitorNamespaceSelector defines the namespaces to match for PodMonitors discovery. An empty label selector matches all namespaces. A null label selector (default value) matches the current namespace only.",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector"),
+						},
+					},
+					"probeSelector": {
+						SchemaProps: spec.SchemaProps{
+							Description: "probeSelector defines the probes to be selected for target discovery. An empty label selector matches all objects. A null label selector matches no objects.\n\nIf `spec.serviceMonitorSelector`, `spec.podMonitorSelector`, `spec.probeSelector` and `spec.scrapeConfigSelector` are null, the Prometheus configuration is unmanaged. The Prometheus operator will ensure that the Prometheus configuration's Secret exists, but it is the responsibility of the user to provide the raw gzipped Prometheus configuration under the `prometheus.yaml.gz` key. This behavior is *deprecated* and will be removed in the next major version of the custom resource definition. It is recommended to use `spec.additionalScrapeConfigs` instead.",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector"),
+						},
+					},
+					"probeNamespaceSelector": {
+						SchemaProps: spec.SchemaProps{
+							Description: "probeNamespaceSelector defines the namespaces to match for Probe discovery. An empty label selector matches all namespaces. A null label selector matches the current namespace only.",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector"),
+						},
+					},
+					"scrapeConfigSelector": {
+						SchemaProps: spec.SchemaProps{
+							Description: "scrapeConfigSelector defines the scrapeConfigs to be selected for target discovery. An empty label selector matches all objects. A null label selector matches no objects.\n\nIf `spec.serviceMonitorSelector`, `spec.podMonitorSelector`, `spec.probeSelector` and `spec.scrapeConfigSelector` are null, the Prometheus configuration is unmanaged. The Prometheus operator will ensure that the Prometheus configuration's Secret exists, but it is the responsibility of the user to provide the raw gzipped Prometheus configuration under the `prometheus.yaml.gz` key. This behavior is *deprecated* and will be removed in the next major version of the custom resource definition. It is recommended to use `spec.additionalScrapeConfigs` instead.\n\nNote that the ScrapeConfig custom resource definition is currently at Alpha level.",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector"),
+						},
+					},
+					"scrapeConfigNamespaceSelector": {
+						SchemaProps: spec.SchemaProps{
+							Description: "scrapeConfigNamespaceSelector defines the namespaces to match for ScrapeConfig discovery. An empty label selector matches all namespaces. A null label selector matches the current namespace only.\n\nNote that the ScrapeConfig custom resource definition is currently at Alpha level.",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector"),
+						},
+					},
+					"version": {
+						SchemaProps: spec.SchemaProps{
+							Description: "version of Prometheus being deployed. The operator uses this information to generate the Prometheus StatefulSet + configuration files.\n\nIf not specified, the operator assumes the latest upstream version of Prometheus available at the time when the version of the operator was released.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"paused": {
+						SchemaProps: spec.SchemaProps{
+							Description: "paused defines when a Prometheus deployment is paused, no actions except for deletion will be performed on the underlying objects.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"image": {
+						SchemaProps: spec.SchemaProps{
+							Description: "image defines the container image name for Prometheus. If specified, it takes precedence over the `spec.baseImage`, `spec.tag` and `spec.sha` fields.\n\nSpecifying `spec.version` is still necessary to ensure the Prometheus Operator knows which version of Prometheus is being configured.\n\nIf neither `spec.image` nor `spec.baseImage` are defined, the operator will use the latest upstream version of Prometheus available at the time when the operator was released.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"imagePullPolicy": {
+						SchemaProps: spec.SchemaProps{
+							Description: "imagePullPolicy defines the image pull policy for the 'prometheus', 'init-config-reloader' and 'config-reloader' containers. See https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy for more details.\n\nPossible enum values:\n - `\"Always\"` means that kubelet always attempts to pull the latest image. Container will fail If the pull fails.\n - `\"IfNotPresent\"` means that kubelet pulls if the image isn't present on disk. Container will fail if the image isn't present and the pull fails.\n - `\"Never\"` means that kubelet never pulls an image, but only uses a local image. Container will fail if the image isn't present",
+							Type:        []string{"string"},
+							Format:      "",
+							Enum:        []interface{}{"Always", "IfNotPresent", "Never"},
+						},
+					},
+					"imagePullSecrets": {
+						SchemaProps: spec.SchemaProps{
+							Description: "imagePullSecrets defines an optional list of references to Secrets in the same namespace to use for pulling images from registries. See http://kubernetes.io/docs/user-guide/images#specifying-imagepullsecrets-on-a-pod",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("k8s.io/api/core/v1.LocalObjectReference"),
+									},
+								},
+							},
+						},
+					},
+					"replicas": {
+						SchemaProps: spec.SchemaProps{
+							Description: "replicas defines the number of replicas of each shard to deploy for a Prometheus deployment. `spec.replicas` multiplied by `spec.shards` is the total number of Pods created.\n\nDefault: 1",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"shards": {
+						SchemaProps: spec.SchemaProps{
+							Description: "shards defines the number of shards to distribute the scraped targets onto.\n\n`spec.replicas` multiplied by `spec.shards` is the total number of Pods being created.\n\nWhen not defined, the operator assumes only one shard.\n\nNote that scaling down shards will not reshard data onto the remaining instances, it must be manually moved. Increasing shards will not reshard data either but it will continue to be available from the same instances. To query globally, use either * Thanos sidecar + querier for query federation and Thanos Ruler for rules. * Remote-write to send metrics to a central location.\n\nBy default, the sharding of targets is performed on: * The `__address__` target's metadata label for PodMonitor, ServiceMonitor and ScrapeConfig resources. * The `__param_target__` label for Probe resources.\n\nUsers can define their own sharding implementation by setting the `__tmp_hash` label during the target discovery with relabeling configuration (either in the monitoring resources or via scrape class).\n\nYou can also disable sharding on a specific target by setting the `__tmp_disable_sharding` label with relabeling configuration. When the label value isn't empty, all Prometheus shards will scrape the target.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"replicaExternalLabelName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "replicaExternalLabelName defines the name of Prometheus external label used to denote the replica name. The external label will _not_ be added when the field is set to the empty string (`\"\"`).\n\nDefault: \"prometheus_replica\"",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"prometheusExternalLabelName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "prometheusExternalLabelName defines the name of Prometheus external label used to denote the Prometheus instance name. The external label will _not_ be added when the field is set to the empty string (`\"\"`).\n\nDefault: \"prometheus\"",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"logLevel": {
+						SchemaProps: spec.SchemaProps{
+							Description: "logLevel for Prometheus and the config-reloader sidecar.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"logFormat": {
+						SchemaProps: spec.SchemaProps{
+							Description: "logFormat for Log level for Prometheus and the config-reloader sidecar.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"scrapeInterval": {
+						SchemaProps: spec.SchemaProps{
+							Description: "scrapeInterval defines interval between consecutive scrapes.\n\nDefault: \"30s\"",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"scrapeTimeout": {
+						SchemaProps: spec.SchemaProps{
+							Description: "scrapeTimeout defines the number of seconds to wait until a scrape request times out. The value cannot be greater than the scrape interval otherwise the operator will reject the resource.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"scrapeProtocols": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-list-type": "set",
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "scrapeProtocols defines the protocols to negotiate during a scrape. It tells clients the protocols supported by Prometheus in order of preference (from most to least preferred).\n\nIf unset, Prometheus uses its default value.\n\nIt requires Prometheus >= v2.49.0.\n\n`PrometheusText1.0.0` requires Prometheus >= v3.0.0.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"externalLabels": {
+						SchemaProps: spec.SchemaProps{
+							Description: "externalLabels defines the labels to add to any time series or alerts when communicating with external systems (federation, remote storage, Alertmanager). Labels defined by `spec.replicaExternalLabelName` and `spec.prometheusExternalLabelName` take precedence over this list.",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"enableRemoteWriteReceiver": {
+						SchemaProps: spec.SchemaProps{
+							Description: "enableRemoteWriteReceiver defines the Prometheus to be used as a receiver for the Prometheus remote write protocol.\n\nWARNING: This is not considered an efficient way of ingesting samples. Use it with caution for specific low-volume use cases. It is not suitable for replacing the ingestion via scraping and turning Prometheus into a push-based metrics collection system. For more information see https://prometheus.io/docs/prometheus/latest/querying/api/#remote-write-receiver\n\nIt requires Prometheus >= v2.33.0.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"enableOTLPReceiver": {
+						SchemaProps: spec.SchemaProps{
+							Description: "enableOTLPReceiver defines the Prometheus to be used as a receiver for the OTLP Metrics protocol.\n\nNote that the OTLP receiver endpoint is automatically enabled if `.spec.otlpConfig` is defined.\n\nIt requires Prometheus >= v2.47.0.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"remoteWriteReceiverMessageVersions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "remoteWriteReceiverMessageVersions list of the protobuf message versions to accept when receiving the remote writes.\n\nIt requires Prometheus >= v2.54.0.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"enableFeatures": {
+						SchemaProps: spec.SchemaProps{
+							Description: "enableFeatures enables access to Prometheus feature flags. By default, no features are enabled.\n\nEnabling features which are disabled by default is entirely outside the scope of what the maintainers will support and by doing so, you accept that this behaviour may break at any time without notice.\n\nFor more information see https://prometheus.io/docs/prometheus/latest/feature_flags/",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"externalUrl": {
+						SchemaProps: spec.SchemaProps{
+							Description: "externalUrl defines the external URL under which the Prometheus service is externally available. This is necessary to generate correct URLs (for instance if Prometheus is accessible behind an Ingress resource).",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"routePrefix": {
+						SchemaProps: spec.SchemaProps{
+							Description: "routePrefix defines the route prefix Prometheus registers HTTP handlers for.\n\nThis is useful when using `spec.externalURL`, and a proxy is rewriting HTTP routes of a request, and the actual ExternalURL is still true, but the server serves requests under a different route prefix. For example for use with `kubectl proxy`.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"storage": {
+						SchemaProps: spec.SchemaProps{
+							Description: "storage defines the storage used by Prometheus.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.StorageSpec"),
+						},
+					},
+					"volumes": {
+						SchemaProps: spec.SchemaProps{
+							Description: "volumes allows the configuration of additional volumes on the output StatefulSet definition. Volumes specified will be appended to other volumes that are generated as a result of StorageSpec objects.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("k8s.io/api/core/v1.Volume"),
+									},
+								},
+							},
+						},
+					},
+					"volumeMounts": {
+						SchemaProps: spec.SchemaProps{
+							Description: "volumeMounts allows the configuration of additional VolumeMounts.\n\nVolumeMounts will be appended to other VolumeMounts in the 'prometheus' container, that are generated as a result of StorageSpec objects.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("k8s.io/api/core/v1.VolumeMount"),
+									},
+								},
+							},
+						},
+					},
+					"persistentVolumeClaimRetentionPolicy": {
+						SchemaProps: spec.SchemaProps{
+							Description: "persistentVolumeClaimRetentionPolicy defines the field controls if and how PVCs are deleted during the lifecycle of a StatefulSet. The default behavior is all PVCs are retained. This is an alpha field from kubernetes 1.23 until 1.26 and a beta field from 1.26. It requires enabling the StatefulSetAutoDeletePVC feature gate.",
+							Ref:         ref("k8s.io/api/apps/v1.StatefulSetPersistentVolumeClaimRetentionPolicy"),
+						},
+					},
+					"web": {
+						SchemaProps: spec.SchemaProps{
+							Description: "web defines the configuration of the Prometheus web server.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.PrometheusWebSpec"),
+						},
+					},
+					"resources": {
+						SchemaProps: spec.SchemaProps{
+							Description: "resources defines the resources requests and limits of the 'prometheus' container.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/api/core/v1.ResourceRequirements"),
+						},
+					},
+					"nodeSelector": {
+						SchemaProps: spec.SchemaProps{
+							Description: "nodeSelector defines on which Nodes the Pods are scheduled.",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"serviceAccountName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "serviceAccountName is the name of the ServiceAccount to use to run the Prometheus Pods.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"automountServiceAccountToken": {
+						SchemaProps: spec.SchemaProps{
+							Description: "automountServiceAccountToken defines whether a service account token should be automatically mounted in the pod. If the field isn't set, the operator mounts the service account token by default.\n\n**Warning:** be aware that by default, Prometheus requires the service account token for Kubernetes service discovery. It is possible to use strategic merge patch to project the service account token into the 'prometheus' container.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"secrets": {
+						SchemaProps: spec.SchemaProps{
+							Description: "secrets defines a list of Secrets in the same namespace as the Prometheus object, which shall be mounted into the Prometheus Pods. Each Secret is added to the StatefulSet definition as a volume named `secret-<secret-name>`. The Secrets are mounted into /etc/prometheus/secrets/<secret-name> in the 'prometheus' container.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"configMaps": {
+						SchemaProps: spec.SchemaProps{
+							Description: "configMaps defines a list of ConfigMaps in the same namespace as the Prometheus object, which shall be mounted into the Prometheus Pods. Each ConfigMap is added to the StatefulSet definition as a volume named `configmap-<configmap-name>`. The ConfigMaps are mounted into /etc/prometheus/configmaps/<configmap-name> in the 'prometheus' container.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"affinity": {
+						SchemaProps: spec.SchemaProps{
+							Description: "affinity defines the Pods' affinity scheduling rules if specified.",
+							Ref:         ref("k8s.io/api/core/v1.Affinity"),
+						},
+					},
+					"tolerations": {
+						SchemaProps: spec.SchemaProps{
+							Description: "tolerations defines the Pods' tolerations if specified.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("k8s.io/api/core/v1.Toleration"),
+									},
+								},
+							},
+						},
+					},
+					"topologySpreadConstraints": {
+						SchemaProps: spec.SchemaProps{
+							Description: "topologySpreadConstraints defines the pod's topology spread constraints if specified.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.TopologySpreadConstraint"),
+									},
+								},
+							},
+						},
+					},
+					"remoteWrite": {
+						SchemaProps: spec.SchemaProps{
+							Description: "remoteWrite defines the list of remote write configurations.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.RemoteWriteSpec"),
+									},
+								},
+							},
+						},
+					},
+					"otlp": {
+						SchemaProps: spec.SchemaProps{
+							Description: "otlp defines the settings related to the OTLP receiver feature. It requires Prometheus >= v2.55.0.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.OTLPConfig"),
+						},
+					},
+					"securityContext": {
+						SchemaProps: spec.SchemaProps{
+							Description: "securityContext holds pod-level security attributes and common container settings. This defaults to the default PodSecurityContext.",
+							Ref:         ref("k8s.io/api/core/v1.PodSecurityContext"),
+						},
+					},
+					"dnsPolicy": {
+						SchemaProps: spec.SchemaProps{
+							Description: "dnsPolicy defines the DNS policy for the pods.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"dnsConfig": {
+						SchemaProps: spec.SchemaProps{
+							Description: "dnsConfig defines the DNS configuration for the pods.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.PodDNSConfig"),
+						},
+					},
+					"listenLocal": {
+						SchemaProps: spec.SchemaProps{
+							Description: "listenLocal when true, the Prometheus server listens on the loopback address instead of the Pod IP's address.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"enableServiceLinks": {
+						SchemaProps: spec.SchemaProps{
+							Description: "enableServiceLinks defines whether information about services should be injected into pod's environment variables",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"containers": {
+						SchemaProps: spec.SchemaProps{
+							Description: "containers allows injecting additional containers or modifying operator generated containers. This can be used to allow adding an authentication proxy to the Pods or to change the behavior of an operator generated container. Containers described here modify an operator generated container if they share the same name and modifications are done via a strategic merge patch.\n\nThe names of containers managed by the operator are: * `prometheus` * `config-reloader` * `thanos-sidecar`\n\nOverriding containers is entirely outside the scope of what the maintainers will support and by doing so, you accept that this behaviour may break at any time without notice.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("k8s.io/api/core/v1.Container"),
+									},
+								},
+							},
+						},
+					},
+					"initContainers": {
+						SchemaProps: spec.SchemaProps{
+							Description: "initContainers allows injecting initContainers to the Pod definition. Those can be used to e.g.  fetch secrets for injection into the Prometheus configuration from external sources. Any errors during the execution of an initContainer will lead to a restart of the Pod. More info: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/ InitContainers described here modify an operator generated init containers if they share the same name and modifications are done via a strategic merge patch.\n\nThe names of init container name managed by the operator are: * `init-config-reloader`.\n\nOverriding init containers is entirely outside the scope of what the maintainers will support and by doing so, you accept that this behaviour may break at any time without notice.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("k8s.io/api/core/v1.Container"),
+									},
+								},
+							},
+						},
+					},
+					"additionalScrapeConfigs": {
+						SchemaProps: spec.SchemaProps{
+							Description: "additionalScrapeConfigs allows specifying a key of a Secret containing additional Prometheus scrape configurations. Scrape configurations specified are appended to the configurations generated by the Prometheus Operator. Job configurations specified must have the form as specified in the official Prometheus documentation: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config. As scrape configs are appended, the user is responsible to make sure it is valid. Note that using this feature may expose the possibility to break upgrades of Prometheus. It is advised to review Prometheus release notes to ensure that no incompatible scrape configs are going to break Prometheus after the upgrade.",
+							Ref:         ref("k8s.io/api/core/v1.SecretKeySelector"),
+						},
+					},
+					"apiserverConfig": {
+						SchemaProps: spec.SchemaProps{
+							Description: "apiserverConfig allows specifying a host and auth methods to access the Kuberntees API server. If null, Prometheus is assumed to run inside of the cluster: it will discover the API servers automatically and use the Pod's CA certificate and bearer token file at /var/run/secrets/kubernetes.io/serviceaccount/.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.APIServerConfig"),
+						},
+					},
+					"priorityClassName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "priorityClassName assigned to the Pods.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"portName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "portName used for the pods and governing service. Default: \"web\"",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"arbitraryFSAccessThroughSMs": {
+						SchemaProps: spec.SchemaProps{
+							Description: "arbitraryFSAccessThroughSMs when true, ServiceMonitor, PodMonitor and Probe object are forbidden to reference arbitrary files on the file system of the 'prometheus' container. When a ServiceMonitor's endpoint specifies a `bearerTokenFile` value (e.g.  '/var/run/secrets/kubernetes.io/serviceaccount/token'), a malicious target can get access to the Prometheus service account's token in the Prometheus' scrape request. Setting `spec.arbitraryFSAccessThroughSM` to 'true' would prevent the attack. Users should instead provide the credentials using the `spec.bearerTokenSecret` field.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ArbitraryFSAccessThroughSMsConfig"),
+						},
+					},
+					"overrideHonorLabels": {
+						SchemaProps: spec.SchemaProps{
+							Description: "overrideHonorLabels when true, Prometheus resolves label conflicts by renaming the labels in the scraped data\n to “exported_” for all targets created from ServiceMonitor, PodMonitor and\nScrapeConfig objects. Otherwise the HonorLabels field of the service or pod monitor applies. In practice,`OverrideHonorLabels:true` enforces `honorLabels:false` for all ServiceMonitor, PodMonitor and ScrapeConfig objects.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"overrideHonorTimestamps": {
+						SchemaProps: spec.SchemaProps{
+							Description: "overrideHonorTimestamps when true, Prometheus ignores the timestamps for all the targets created from service and pod monitors. Otherwise the HonorTimestamps field of the service or pod monitor applies.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"ignoreNamespaceSelectors": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ignoreNamespaceSelectors when true, `spec.namespaceSelector` from all PodMonitor, ServiceMonitor and Probe objects will be ignored. They will only discover targets within the namespace of the PodMonitor, ServiceMonitor and Probe object.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"enforcedNamespaceLabel": {
+						SchemaProps: spec.SchemaProps{
+							Description: "enforcedNamespaceLabel when not empty, a label will be added to:\n\n1. All metrics scraped from `ServiceMonitor`, `PodMonitor`, `Probe` and `ScrapeConfig` objects. 2. All metrics generated from recording rules defined in `PrometheusRule` objects. 3. All alerts generated from alerting rules defined in `PrometheusRule` objects. 4. All vector selectors of PromQL expressions defined in `PrometheusRule` objects.\n\nThe label will not added for objects referenced in `spec.excludedFromEnforcement`.\n\nThe label's name is this field's value. The label's value is the namespace of the `ServiceMonitor`, `PodMonitor`, `Probe`, `PrometheusRule` or `ScrapeConfig` object.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"enforcedSampleLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "enforcedSampleLimit when defined specifies a global limit on the number of scraped samples that will be accepted. This overrides any `spec.sampleLimit` set by ServiceMonitor, PodMonitor, Probe objects unless `spec.sampleLimit` is greater than zero and less than `spec.enforcedSampleLimit`.\n\nIt is meant to be used by admins to keep the overall number of samples/series under a desired limit.\n\nWhen both `enforcedSampleLimit` and `sampleLimit` are defined and greater than zero, the following rules apply: * Scrape objects without a defined sampleLimit value will inherit the global sampleLimit value (Prometheus >= 2.45.0) or the enforcedSampleLimit value (Prometheus < v2.45.0).\n  If Prometheus version is >= 2.45.0 and the `enforcedSampleLimit` is greater than the `sampleLimit`, the `sampleLimit` will be set to `enforcedSampleLimit`.\n* Scrape objects with a sampleLimit value less than or equal to enforcedSampleLimit keep their specific value. * Scrape objects with a sampleLimit value greater than enforcedSampleLimit are set to enforcedSampleLimit.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"enforcedTargetLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "enforcedTargetLimit when defined specifies a global limit on the number of scraped targets. The value overrides any `spec.targetLimit` set by ServiceMonitor, PodMonitor, Probe objects unless `spec.targetLimit` is greater than zero and less than `spec.enforcedTargetLimit`.\n\nIt is meant to be used by admins to to keep the overall number of targets under a desired limit.\n\nWhen both `enforcedTargetLimit` and `targetLimit` are defined and greater than zero, the following rules apply: * Scrape objects without a defined targetLimit value will inherit the global targetLimit value (Prometheus >= 2.45.0) or the enforcedTargetLimit value (Prometheus < v2.45.0).\n  If Prometheus version is >= 2.45.0 and the `enforcedTargetLimit` is greater than the `targetLimit`, the `targetLimit` will be set to `enforcedTargetLimit`.\n* Scrape objects with a targetLimit value less than or equal to enforcedTargetLimit keep their specific value. * Scrape objects with a targetLimit value greater than enforcedTargetLimit are set to enforcedTargetLimit.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"enforcedLabelLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "enforcedLabelLimit when defined specifies a global limit on the number of labels per sample. The value overrides any `spec.labelLimit` set by ServiceMonitor, PodMonitor, Probe objects unless `spec.labelLimit` is greater than zero and less than `spec.enforcedLabelLimit`.\n\nIt requires Prometheus >= v2.27.0.\n\nWhen both `enforcedLabelLimit` and `labelLimit` are defined and greater than zero, the following rules apply: * Scrape objects without a defined labelLimit value will inherit the global labelLimit value (Prometheus >= 2.45.0) or the enforcedLabelLimit value (Prometheus < v2.45.0).\n  If Prometheus version is >= 2.45.0 and the `enforcedLabelLimit` is greater than the `labelLimit`, the `labelLimit` will be set to `enforcedLabelLimit`.\n* Scrape objects with a labelLimit value less than or equal to enforcedLabelLimit keep their specific value. * Scrape objects with a labelLimit value greater than enforcedLabelLimit are set to enforcedLabelLimit.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"enforcedLabelNameLengthLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "enforcedLabelNameLengthLimit when defined specifies a global limit on the length of labels name per sample. The value overrides any `spec.labelNameLengthLimit` set by ServiceMonitor, PodMonitor, Probe objects unless `spec.labelNameLengthLimit` is greater than zero and less than `spec.enforcedLabelNameLengthLimit`.\n\nIt requires Prometheus >= v2.27.0.\n\nWhen both `enforcedLabelNameLengthLimit` and `labelNameLengthLimit` are defined and greater than zero, the following rules apply: * Scrape objects without a defined labelNameLengthLimit value will inherit the global labelNameLengthLimit value (Prometheus >= 2.45.0) or the enforcedLabelNameLengthLimit value (Prometheus < v2.45.0).\n  If Prometheus version is >= 2.45.0 and the `enforcedLabelNameLengthLimit` is greater than the `labelNameLengthLimit`, the `labelNameLengthLimit` will be set to `enforcedLabelNameLengthLimit`.\n* Scrape objects with a labelNameLengthLimit value less than or equal to enforcedLabelNameLengthLimit keep their specific value. * Scrape objects with a labelNameLengthLimit value greater than enforcedLabelNameLengthLimit are set to enforcedLabelNameLengthLimit.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"enforcedLabelValueLengthLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "enforcedLabelValueLengthLimit when not null defines a global limit on the length of labels value per sample. The value overrides any `spec.labelValueLengthLimit` set by ServiceMonitor, PodMonitor, Probe objects unless `spec.labelValueLengthLimit` is greater than zero and less than `spec.enforcedLabelValueLengthLimit`.\n\nIt requires Prometheus >= v2.27.0.\n\nWhen both `enforcedLabelValueLengthLimit` and `labelValueLengthLimit` are defined and greater than zero, the following rules apply: * Scrape objects without a defined labelValueLengthLimit value will inherit the global labelValueLengthLimit value (Prometheus >= 2.45.0) or the enforcedLabelValueLengthLimit value (Prometheus < v2.45.0).\n  If Prometheus version is >= 2.45.0 and the `enforcedLabelValueLengthLimit` is greater than the `labelValueLengthLimit`, the `labelValueLengthLimit` will be set to `enforcedLabelValueLengthLimit`.\n* Scrape objects with a labelValueLengthLimit value less than or equal to enforcedLabelValueLengthLimit keep their specific value. * Scrape objects with a labelValueLengthLimit value greater than enforcedLabelValueLengthLimit are set to enforcedLabelValueLengthLimit.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"enforcedKeepDroppedTargets": {
+						SchemaProps: spec.SchemaProps{
+							Description: "enforcedKeepDroppedTargets when defined specifies a global limit on the number of targets dropped by relabeling that will be kept in memory. The value overrides any `spec.keepDroppedTargets` set by ServiceMonitor, PodMonitor, Probe objects unless `spec.keepDroppedTargets` is greater than zero and less than `spec.enforcedKeepDroppedTargets`.\n\nIt requires Prometheus >= v2.47.0.\n\nWhen both `enforcedKeepDroppedTargets` and `keepDroppedTargets` are defined and greater than zero, the following rules apply: * Scrape objects without a defined keepDroppedTargets value will inherit the global keepDroppedTargets value (Prometheus >= 2.45.0) or the enforcedKeepDroppedTargets value (Prometheus < v2.45.0).\n  If Prometheus version is >= 2.45.0 and the `enforcedKeepDroppedTargets` is greater than the `keepDroppedTargets`, the `keepDroppedTargets` will be set to `enforcedKeepDroppedTargets`.\n* Scrape objects with a keepDroppedTargets value less than or equal to enforcedKeepDroppedTargets keep their specific value. * Scrape objects with a keepDroppedTargets value greater than enforcedKeepDroppedTargets are set to enforcedKeepDroppedTargets.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"enforcedBodySizeLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "enforcedBodySizeLimit when defined specifies a global limit on the size of uncompressed response body that will be accepted by Prometheus. Targets responding with a body larger than this many bytes will cause the scrape to fail.\n\nIt requires Prometheus >= v2.28.0.\n\nWhen both `enforcedBodySizeLimit` and `bodySizeLimit` are defined and greater than zero, the following rules apply: * Scrape objects without a defined bodySizeLimit value will inherit the global bodySizeLimit value (Prometheus >= 2.45.0) or the enforcedBodySizeLimit value (Prometheus < v2.45.0).\n  If Prometheus version is >= 2.45.0 and the `enforcedBodySizeLimit` is greater than the `bodySizeLimit`, the `bodySizeLimit` will be set to `enforcedBodySizeLimit`.\n* Scrape objects with a bodySizeLimit value less than or equal to enforcedBodySizeLimit keep their specific value. * Scrape objects with a bodySizeLimit value greater than enforcedBodySizeLimit are set to enforcedBodySizeLimit.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"nameValidationScheme": {
+						SchemaProps: spec.SchemaProps{
+							Description: "nameValidationScheme defines the validation scheme for metric and label names.\n\nIt requires Prometheus >= v2.55.0.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"nameEscapingScheme": {
+						SchemaProps: spec.SchemaProps{
+							Description: "nameEscapingScheme defines the character escaping scheme that will be requested when scraping for metric and label names that do not conform to the legacy Prometheus character set.\n\nIt requires Prometheus >= v3.4.0.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"convertClassicHistogramsToNHCB": {
+						SchemaProps: spec.SchemaProps{
+							Description: "convertClassicHistogramsToNHCB defines whether to convert all scraped classic histograms into a native histogram with custom buckets.\n\nIt requires Prometheus >= v3.4.0.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"scrapeClassicHistograms": {
+						SchemaProps: spec.SchemaProps{
+							Description: "scrapeClassicHistograms defines whether to scrape a classic histogram that is also exposed as a native histogram.\n\nNotice: `scrapeClassicHistograms` corresponds to the `always_scrape_classic_histograms` field in the Prometheus configuration.\n\nIt requires Prometheus >= v3.5.0.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"minReadySeconds": {
+						SchemaProps: spec.SchemaProps{
+							Description: "minReadySeconds defines the minimum number of seconds for which a newly created Pod should be ready without any of its container crashing for it to be considered available.\n\nIf unset, pods will be considered available as soon as they are ready.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"hostAliases": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-list-map-keys": []interface{}{
+									"ip",
+								},
+								"x-kubernetes-list-type": "map",
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "hostAliases defines the optional list of hosts and IPs that will be injected into the Pod's hosts file if specified.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.HostAlias"),
+									},
+								},
+							},
+						},
+					},
+					"additionalArgs": {
+						SchemaProps: spec.SchemaProps{
+							Description: "additionalArgs allows setting additional arguments for the 'prometheus' container.\n\nIt is intended for e.g. activating hidden flags which are not supported by the dedicated configuration options yet. The arguments are passed as-is to the Prometheus container which may cause issues if they are invalid or not supported by the given Prometheus version.\n\nIn case of an argument conflict (e.g. an argument which is already set by the operator itself) or when providing an invalid argument, the reconciliation will fail and an error will be logged.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Argument"),
+									},
+								},
+							},
+						},
+					},
+					"walCompression": {
+						SchemaProps: spec.SchemaProps{
+							Description: "walCompression defines the compression of the write-ahead log (WAL) using Snappy.\n\nWAL compression is enabled by default for Prometheus >= 2.20.0\n\nRequires Prometheus v2.11.0 and above.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"excludedFromEnforcement": {
+						SchemaProps: spec.SchemaProps{
+							Description: "excludedFromEnforcement defines the list of references to PodMonitor, ServiceMonitor, Probe and PrometheusRule objects to be excluded from enforcing a namespace label of origin.\n\nIt is only applicable if `spec.enforcedNamespaceLabel` set to true.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ObjectReference"),
+									},
+								},
+							},
+						},
+					},
+					"hostNetwork": {
+						SchemaProps: spec.SchemaProps{
+							Description: "hostNetwork defines the host's network namespace if true.\n\nMake sure to understand the security implications if you want to enable it (https://kubernetes.io/docs/concepts/configuration/overview/ ).\n\nWhen hostNetwork is enabled, this will set the DNS policy to `ClusterFirstWithHostNet` automatically (unless `.spec.DNSPolicy` is set to a different value).",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"podTargetLabels": {
+						SchemaProps: spec.SchemaProps{
+							Description: "podTargetLabels are appended to the `spec.podTargetLabels` field of all PodMonitor and ServiceMonitor objects.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"tracingConfig": {
+						SchemaProps: spec.SchemaProps{
+							Description: "tracingConfig defines tracing in Prometheus.\n\nThis is an *experimental feature*, it may change in any upcoming release in a breaking way.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.PrometheusTracingConfig"),
+						},
+					},
+					"bodySizeLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "bodySizeLimit defines per-scrape on response body size. Only valid in Prometheus versions 2.45.0 and newer.\n\nNote that the global limit only applies to scrape objects that don't specify an explicit limit value. If you want to enforce a maximum limit for all scrape objects, refer to enforcedBodySizeLimit.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"sampleLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "sampleLimit defines per-scrape limit on number of scraped samples that will be accepted. Only valid in Prometheus versions 2.45.0 and newer.\n\nNote that the global limit only applies to scrape objects that don't specify an explicit limit value. If you want to enforce a maximum limit for all scrape objects, refer to enforcedSampleLimit.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"targetLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "targetLimit defines a limit on the number of scraped targets that will be accepted. Only valid in Prometheus versions 2.45.0 and newer.\n\nNote that the global limit only applies to scrape objects that don't specify an explicit limit value. If you want to enforce a maximum limit for all scrape objects, refer to enforcedTargetLimit.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"labelLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "labelLimit defines per-scrape limit on number of labels that will be accepted for a sample. Only valid in Prometheus versions 2.45.0 and newer.\n\nNote that the global limit only applies to scrape objects that don't specify an explicit limit value. If you want to enforce a maximum limit for all scrape objects, refer to enforcedLabelLimit.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"labelNameLengthLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "labelNameLengthLimit defines the per-scrape limit on length of labels name that will be accepted for a sample. Only valid in Prometheus versions 2.45.0 and newer.\n\nNote that the global limit only applies to scrape objects that don't specify an explicit limit value. If you want to enforce a maximum limit for all scrape objects, refer to enforcedLabelNameLengthLimit.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"labelValueLengthLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "labelValueLengthLimit defines the per-scrape limit on length of labels value that will be accepted for a sample. Only valid in Prometheus versions 2.45.0 and newer.\n\nNote that the global limit only applies to scrape objects that don't specify an explicit limit value. If you want to enforce a maximum limit for all scrape objects, refer to enforcedLabelValueLengthLimit.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"keepDroppedTargets": {
+						SchemaProps: spec.SchemaProps{
+							Description: "keepDroppedTargets defines the per-scrape limit on the number of targets dropped by relabeling that will be kept in memory. 0 means no limit.\n\nIt requires Prometheus >= v2.47.0.\n\nNote that the global limit only applies to scrape objects that don't specify an explicit limit value. If you want to enforce a maximum limit for all scrape objects, refer to enforcedKeepDroppedTargets.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"reloadStrategy": {
+						SchemaProps: spec.SchemaProps{
+							Description: "reloadStrategy defines the strategy used to reload the Prometheus configuration. If not specified, the configuration is reloaded using the /-/reload HTTP endpoint.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"maximumStartupDurationSeconds": {
+						SchemaProps: spec.SchemaProps{
+							Description: "maximumStartupDurationSeconds defines the maximum time that the `prometheus` container's startup probe will wait before being considered failed. The startup probe will return success after the WAL replay is complete. If set, the value should be greater than 60 (seconds). Otherwise it will be equal to 900 seconds (15 minutes).",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"scrapeClasses": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-list-map-keys": []interface{}{
+									"name",
+								},
+								"x-kubernetes-list-type": "map",
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "scrapeClasses defines the list of scrape classes to expose to scraping objects such as PodMonitors, ServiceMonitors, Probes and ScrapeConfigs.\n\nThis is an *experimental feature*, it may change in any upcoming release in a breaking way.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ScrapeClass"),
+									},
+								},
+							},
+						},
+					},
+					"serviceDiscoveryRole": {
+						SchemaProps: spec.SchemaProps{
+							Description: "serviceDiscoveryRole defines the service discovery role used to discover targets from `ServiceMonitor` objects and Alertmanager endpoints.\n\nIf set, the value should be either \"Endpoints\" or \"EndpointSlice\". If unset, the operator assumes the \"Endpoints\" role.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"tsdb": {
+						SchemaProps: spec.SchemaProps{
+							Description: "tsdb defines the runtime reloadable configuration of the timeseries database(TSDB). It requires Prometheus >= v2.39.0 or PrometheusAgent >= v2.54.0.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.TSDBSpec"),
+						},
+					},
+					"scrapeFailureLogFile": {
+						SchemaProps: spec.SchemaProps{
+							Description: "scrapeFailureLogFile defines the file to which scrape failures are logged. Reloading the configuration will reopen the file.\n\nIf the filename has an empty path, e.g. 'file.log', The Prometheus Pods will mount the file into an emptyDir volume at `/var/log/prometheus`. If a full path is provided, e.g. '/var/log/prometheus/file.log', you must mount a volume in the specified directory and it must be writable. It requires Prometheus >= v2.55.0.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"serviceName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "serviceName defines the name of the service name used by the underlying StatefulSet(s) as the governing service. If defined, the Service  must be created before the Prometheus/PrometheusAgent resource in the same namespace and it must define a selector that matches the pod labels. If empty, the operator will create and manage a headless service named `prometheus-operated` for Prometheus resources, or `prometheus-agent-operated` for PrometheusAgent resources. When deploying multiple Prometheus/PrometheusAgent resources in the same namespace, it is recommended to specify a different value for each. See https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#stable-network-id for more details.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"runtime": {
+						SchemaProps: spec.SchemaProps{
+							Description: "runtime defines the values for the Prometheus process behavior",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.RuntimeConfig"),
+						},
+					},
+					"terminationGracePeriodSeconds": {
+						SchemaProps: spec.SchemaProps{
+							Description: "terminationGracePeriodSeconds defines the optional duration in seconds the pod needs to terminate gracefully. Value must be non-negative integer. The value zero indicates stop immediately via the kill signal (no opportunity to shut down) which may lead to data corruption.\n\nDefaults to 600 seconds.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"hostUsers": {
+						SchemaProps: spec.SchemaProps{
+							Description: "hostUsers supports the user space in Kubernetes.\n\nMore info: https://kubernetes.io/docs/tasks/configure-pod-container/user-namespaces/\n\nThe feature requires at least Kubernetes 1.28 with the `UserNamespacesSupport` feature gate enabled. Starting Kubernetes 1.33, the feature is enabled by default.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"baseImage": {
+						SchemaProps: spec.SchemaProps{
+							Description: "baseImage is deprecated: use 'spec.image' instead.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"tag": {
+						SchemaProps: spec.SchemaProps{
+							Description: "tag is deprecated: use 'spec.image' instead. The image's tag can be specified as part of the image name.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"sha": {
+						SchemaProps: spec.SchemaProps{
+							Description: "sha is deprecated: use 'spec.image' instead. The image's digest can be specified as part of the image name.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"retention": {
+						SchemaProps: spec.SchemaProps{
+							Description: "retention defines how long to retain the Prometheus data.\n\nDefault: \"24h\" if `spec.retention` and `spec.retentionSize` are empty.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"retentionSize": {
+						SchemaProps: spec.SchemaProps{
+							Description: "retentionSize defines the maximum number of bytes used by the Prometheus data.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"shardRetentionPolicy": {
+						SchemaProps: spec.SchemaProps{
+							Description: "shardRetentionPolicy defines the retention policy for the Prometheus shards. (Alpha) Using this field requires the 'PrometheusShardRetentionPolicy' feature gate to be enabled.\n\nThe final goals for this feature can be seen at https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/proposals/202310-shard-autoscaling.md#graceful-scale-down-of-prometheus-servers, however, the feature is not yet fully implemented in this PR. The limitation being: * Retention duration is not settable, for now, shards are retained forever.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ShardRetentionPolicy"),
+						},
+					},
+					"disableCompaction": {
+						SchemaProps: spec.SchemaProps{
+							Description: "disableCompaction when true, the Prometheus compaction is disabled. When `spec.thanos.objectStorageConfig` or `spec.objectStorageConfigFile` are defined, the operator automatically disables block compaction to avoid race conditions during block uploads (as the Thanos documentation recommends).",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"rules": {
+						SchemaProps: spec.SchemaProps{
+							Description: "rules defines the configuration of the Prometheus rules' engine.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Rules"),
+						},
+					},
+					"prometheusRulesExcludedFromEnforce": {
+						SchemaProps: spec.SchemaProps{
+							Description: "prometheusRulesExcludedFromEnforce defines the list of PrometheusRule objects to which the namespace label enforcement doesn't apply. This is only relevant when `spec.enforcedNamespaceLabel` is set to true. Deprecated: use `spec.excludedFromEnforcement` instead.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.PrometheusRuleExcludeConfig"),
+									},
+								},
+							},
+						},
+					},
+					"ruleSelector": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ruleSelector defines the prometheusRule objects to be selected for rule evaluation. An empty label selector matches all objects. A null label selector matches no objects.",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector"),
+						},
+					},
+					"ruleNamespaceSelector": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ruleNamespaceSelector defines the namespaces to match for PrometheusRule discovery. An empty label selector matches all namespaces. A null label selector matches the current namespace only.",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector"),
+						},
+					},
+					"query": {
+						SchemaProps: spec.SchemaProps{
+							Description: "query defines the configuration of the Prometheus query service.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.QuerySpec"),
+						},
+					},
+					"alerting": {
+						SchemaProps: spec.SchemaProps{
+							Description: "alerting defines the settings related to Alertmanager.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.AlertingSpec"),
+						},
+					},
+					"additionalAlertRelabelConfigs": {
+						SchemaProps: spec.SchemaProps{
+							Description: "additionalAlertRelabelConfigs defines a key of a Secret containing additional Prometheus alert relabel configurations. The alert relabel configurations are appended to the configuration generated by the Prometheus Operator. They must be formatted according to the official Prometheus documentation:\n\nhttps://prometheus.io/docs/prometheus/latest/configuration/configuration/#alert_relabel_configs\n\nThe user is responsible for making sure that the configurations are valid\n\nNote that using this feature may expose the possibility to break upgrades of Prometheus. It is advised to review Prometheus release notes to ensure that no incompatible alert relabel configs are going to break Prometheus after the upgrade.",
+							Ref:         ref("k8s.io/api/core/v1.SecretKeySelector"),
+						},
+					},
+					"additionalAlertManagerConfigs": {
+						SchemaProps: spec.SchemaProps{
+							Description: "additionalAlertManagerConfigs defines a key of a Secret containing additional Prometheus Alertmanager configurations. The Alertmanager configurations are appended to the configuration generated by the Prometheus Operator. They must be formatted according to the official Prometheus documentation:\n\nhttps://prometheus.io/docs/prometheus/latest/configuration/configuration/#alertmanager_config\n\nThe user is responsible for making sure that the configurations are valid\n\nNote that using this feature may expose the possibility to break upgrades of Prometheus. It is advised to review Prometheus release notes to ensure that no incompatible AlertManager configs are going to break Prometheus after the upgrade.",
+							Ref:         ref("k8s.io/api/core/v1.SecretKeySelector"),
+						},
+					},
+					"remoteRead": {
+						SchemaProps: spec.SchemaProps{
+							Description: "remoteRead defines the list of remote read configurations.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.RemoteReadSpec"),
+									},
+								},
+							},
+						},
+					},
+					"thanos": {
+						SchemaProps: spec.SchemaProps{
+							Description: "thanos defines the configuration of the optional Thanos sidecar.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ThanosSpec"),
+						},
+					},
+					"queryLogFile": {
+						SchemaProps: spec.SchemaProps{
+							Description: "queryLogFile specifies where the file to which PromQL queries are logged.\n\nIf the filename has an empty path, e.g. 'query.log', The Prometheus Pods will mount the file into an emptyDir volume at `/var/log/prometheus`. If a full path is provided, e.g. '/var/log/prometheus/query.log', you must mount a volume in the specified directory and it must be writable. This is because the prometheus container runs with a read-only root filesystem for security reasons. Alternatively, the location can be set to a standard I/O stream, e.g. `/dev/stdout`, to log query information to the default Prometheus log stream.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"allowOverlappingBlocks": {
+						SchemaProps: spec.SchemaProps{
+							Description: "allowOverlappingBlocks enables vertical compaction and vertical query merge in Prometheus.\n\nDeprecated: this flag has no effect for Prometheus >= 2.39.0 where overlapping blocks are enabled by default.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"exemplars": {
+						SchemaProps: spec.SchemaProps{
+							Description: "exemplars related settings that are runtime reloadable. It requires to enable the `exemplar-storage` feature flag to be effective.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Exemplars"),
+						},
+					},
+					"evaluationInterval": {
+						SchemaProps: spec.SchemaProps{
+							Description: "evaluationInterval defines the interval between rule evaluations. Default: \"30s\"",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"ruleQueryOffset": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ruleQueryOffset defines the offset the rule evaluation timestamp of this particular group by the specified duration into the past. It requires Prometheus >= v2.53.0.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"enableAdminAPI": {
+						SchemaProps: spec.SchemaProps{
+							Description: "enableAdminAPI defines access to the Prometheus web admin API.\n\nWARNING: Enabling the admin APIs enables mutating endpoints, to delete data, shutdown Prometheus, and more. Enabling this should be done with care and the user is advised to add additional authentication authorization via a proxy to ensure only clients authorized to perform these actions can do so.\n\nFor more information: https://prometheus.io/docs/prometheus/latest/querying/api/#tsdb-admin-apis",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.APIServerConfig", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.AlertingSpec", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ArbitraryFSAccessThroughSMsConfig", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Argument", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.EmbeddedObjectMetadata", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Exemplars", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.HostAlias", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.OTLPConfig", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ObjectReference", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.PodDNSConfig", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.PrometheusRuleExcludeConfig", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.PrometheusTracingConfig", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.PrometheusWebSpec", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.QuerySpec", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.RemoteReadSpec", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.RemoteWriteSpec", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Rules", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.RuntimeConfig", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ScrapeClass", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ShardRetentionPolicy", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.StorageSpec", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.TSDBSpec", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ThanosSpec", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.TopologySpreadConstraint", "k8s.io/api/apps/v1.StatefulSetPersistentVolumeClaimRetentionPolicy", "k8s.io/api/core/v1.Affinity", "k8s.io/api/core/v1.Container", "k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PodSecurityContext", "k8s.io/api/core/v1.ResourceRequirements", "k8s.io/api/core/v1.SecretKeySelector", "k8s.io/api/core/v1.Toleration", "k8s.io/api/core/v1.Volume", "k8s.io/api/core/v1.VolumeMount", "k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_PrometheusStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "PrometheusStatus is the most recent observed status of the Prometheus cluster. More info: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#spec-and-status",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"paused": {
+						SchemaProps: spec.SchemaProps{
+							Description: "paused defines whether any actions on the underlying managed objects are being performed. Only delete actions will be performed.",
+							Default:     false,
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"replicas": {
+						SchemaProps: spec.SchemaProps{
+							Description: "replicas defines the total number of non-terminated pods targeted by this Prometheus deployment (their labels match the selector).",
+							Default:     0,
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"updatedReplicas": {
+						SchemaProps: spec.SchemaProps{
+							Description: "updatedReplicas defines the total number of non-terminated pods targeted by this Prometheus deployment that have the desired version spec.",
+							Default:     0,
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"availableReplicas": {
+						SchemaProps: spec.SchemaProps{
+							Description: "availableReplicas defines the total number of available pods (ready for at least minReadySeconds) targeted by this Prometheus deployment.",
+							Default:     0,
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"unavailableReplicas": {
+						SchemaProps: spec.SchemaProps{
+							Description: "unavailableReplicas defines the total number of unavailable pods targeted by this Prometheus deployment.",
+							Default:     0,
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"conditions": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-list-map-keys": []interface{}{
+									"type",
+								},
+								"x-kubernetes-list-type": "map",
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "conditions defines the current state of the Prometheus deployment.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Condition"),
+									},
+								},
+							},
+						},
+					},
+					"shardStatuses": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-list-map-keys": []interface{}{
+									"shardID",
+								},
+								"x-kubernetes-list-type": "map",
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "shardStatuses defines the list has one entry per shard. Each entry provides a summary of the shard status.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ShardStatus"),
+									},
+								},
+							},
+						},
+					},
+					"shards": {
+						SchemaProps: spec.SchemaProps{
+							Description: "shards defines the most recently observed number of shards.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"selector": {
+						SchemaProps: spec.SchemaProps{
+							Description: "selector used to match the pods targeted by this Prometheus resource.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Condition", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ShardStatus"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_PrometheusWebSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "PrometheusWebSpec defines the configuration of the Prometheus web server.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"tlsConfig": {
+						SchemaProps: spec.SchemaProps{
+							Description: "tlsConfig defines the TLS parameters for HTTPS.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.WebTLSConfig"),
+						},
+					},
+					"httpConfig": {
+						SchemaProps: spec.SchemaProps{
+							Description: "httpConfig defines HTTP parameters for web server.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.WebHTTPConfig"),
+						},
+					},
+					"pageTitle": {
+						SchemaProps: spec.SchemaProps{
+							Description: "pageTitle defines the prometheus web page title.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"maxConnections": {
+						SchemaProps: spec.SchemaProps{
+							Description: "maxConnections defines the maximum number of simultaneous connections A zero value means that Prometheus doesn't accept any incoming connection.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.WebHTTPConfig", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.WebTLSConfig"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_QuerySpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "QuerySpec defines the query command line flags when starting Prometheus.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"lookbackDelta": {
+						SchemaProps: spec.SchemaProps{
+							Description: "lookbackDelta defines the delta difference allowed for retrieving metrics during expression evaluations.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"maxConcurrency": {
+						SchemaProps: spec.SchemaProps{
+							Description: "maxConcurrency defines the number of concurrent queries that can be run at once.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"maxSamples": {
+						SchemaProps: spec.SchemaProps{
+							Description: "maxSamples defines the maximum number of samples a single query can load into memory. Note that queries will fail if they would load more samples than this into memory, so this also limits the number of samples a query can return.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"timeout": {
+						SchemaProps: spec.SchemaProps{
+							Description: "timeout defines the maximum time a query may take before being aborted.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_QueueConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "QueueConfig allows the tuning of remote write's queue_config parameters. This object is referenced in the RemoteWriteSpec object.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"capacity": {
+						SchemaProps: spec.SchemaProps{
+							Description: "capacity defines the number of samples to buffer per shard before we start dropping them.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"minShards": {
+						SchemaProps: spec.SchemaProps{
+							Description: "minShards defines the minimum number of shards, i.e. amount of concurrency.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"maxShards": {
+						SchemaProps: spec.SchemaProps{
+							Description: "maxShards defines the maximum number of shards, i.e. amount of concurrency.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"maxSamplesPerSend": {
+						SchemaProps: spec.SchemaProps{
+							Description: "maxSamplesPerSend defines the maximum number of samples per send.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"batchSendDeadline": {
+						SchemaProps: spec.SchemaProps{
+							Description: "batchSendDeadline defines the maximum time a sample will wait in buffer.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"maxRetries": {
+						SchemaProps: spec.SchemaProps{
+							Description: "maxRetries defines the maximum number of times to retry a batch on recoverable errors.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"minBackoff": {
+						SchemaProps: spec.SchemaProps{
+							Description: "minBackoff defines the initial retry delay. Gets doubled for every retry.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"maxBackoff": {
+						SchemaProps: spec.SchemaProps{
+							Description: "maxBackoff defines the maximum retry delay.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"retryOnRateLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "retryOnRateLimit defines the retry upon receiving a 429 status code from the remote-write storage.\n\nThis is an *experimental feature*, it may change in any upcoming release in a breaking way.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"sampleAgeLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "sampleAgeLimit drops samples older than the limit. It requires Prometheus >= v2.50.0 or Thanos >= v0.32.0.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_RelabelConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "RelabelConfig allows dynamic rewriting of the label set for targets, alerts, scraped samples and remote write samples.\n\nMore info: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"sourceLabels": {
+						SchemaProps: spec.SchemaProps{
+							Description: "sourceLabels defines the source labels select values from existing labels. Their content is concatenated using the configured Separator and matched against the configured regular expression.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"separator": {
+						SchemaProps: spec.SchemaProps{
+							Description: "separator defines the string between concatenated SourceLabels.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"targetLabel": {
+						SchemaProps: spec.SchemaProps{
+							Description: "targetLabel defines the label to which the resulting string is written in a replacement.\n\nIt is mandatory for `Replace`, `HashMod`, `Lowercase`, `Uppercase`, `KeepEqual` and `DropEqual` actions.\n\nRegex capture groups are available.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"regex": {
+						SchemaProps: spec.SchemaProps{
+							Description: "regex defines the regular expression against which the extracted value is matched.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"modulus": {
+						SchemaProps: spec.SchemaProps{
+							Description: "modulus to take of the hash of the source label values.\n\nOnly applicable when the action is `HashMod`.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"replacement": {
+						SchemaProps: spec.SchemaProps{
+							Description: "replacement value against which a Replace action is performed if the regular expression matches.\n\nRegex capture groups are available.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"action": {
+						SchemaProps: spec.SchemaProps{
+							Description: "action to perform based on the regex matching.\n\n`Uppercase` and `Lowercase` actions require Prometheus >= v2.36.0. `DropEqual` and `KeepEqual` actions require Prometheus >= v2.41.0.\n\nDefault: \"Replace\"",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_RemoteReadSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "RemoteReadSpec defines the configuration for Prometheus to read back samples from a remote endpoint.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"url": {
+						SchemaProps: spec.SchemaProps{
+							Description: "url defines the URL of the endpoint to query from.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "name of the remote read queue, it must be unique if specified. The name is used in metrics and logging in order to differentiate read configurations.\n\nIt requires Prometheus >= v2.15.0.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"requiredMatchers": {
+						SchemaProps: spec.SchemaProps{
+							Description: "requiredMatchers defines an optional list of equality matchers which have to be present in a selector to query the remote read endpoint.",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"remoteTimeout": {
+						SchemaProps: spec.SchemaProps{
+							Description: "remoteTimeout defines the timeout for requests to the remote read endpoint.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"headers": {
+						SchemaProps: spec.SchemaProps{
+							Description: "headers defines the custom HTTP headers to be sent along with each remote read request. Be aware that headers that are set by Prometheus itself can't be overwritten. Only valid in Prometheus versions 2.26.0 and newer.",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"readRecent": {
+						SchemaProps: spec.SchemaProps{
+							Description: "readRecent defines whether reads should be made for queries for time ranges that the local storage should have complete data for.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"oauth2": {
+						SchemaProps: spec.SchemaProps{
+							Description: "oauth2 configuration for the URL.\n\nIt requires Prometheus >= v2.27.0.\n\nCannot be set at the same time as `authorization`, or `basicAuth`.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.OAuth2"),
+						},
+					},
+					"basicAuth": {
+						SchemaProps: spec.SchemaProps{
+							Description: "basicAuth configuration for the URL.\n\nCannot be set at the same time as `authorization`, or `oauth2`.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.BasicAuth"),
+						},
+					},
+					"bearerTokenFile": {
+						SchemaProps: spec.SchemaProps{
+							Description: "bearerTokenFile defines the file from which to read the bearer token for the URL.\n\nDeprecated: this will be removed in a future release. Prefer using `authorization`.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"authorization": {
+						SchemaProps: spec.SchemaProps{
+							Description: "authorization section for the URL.\n\nIt requires Prometheus >= v2.26.0.\n\nCannot be set at the same time as `basicAuth`, or `oauth2`.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Authorization"),
+						},
+					},
+					"bearerToken": {
+						SchemaProps: spec.SchemaProps{
+							Description: "bearerToken is deprecated: this will be removed in a future release. *Warning: this field shouldn't be used because the token value appears in clear-text. Prefer using `authorization`.*",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"tlsConfig": {
+						SchemaProps: spec.SchemaProps{
+							Description: "tlsConfig to use for the URL.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.TLSConfig"),
+						},
+					},
+					"proxyUrl": {
+						SchemaProps: spec.SchemaProps{
+							Description: "proxyUrl defines the HTTP proxy server to use.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"noProxy": {
+						SchemaProps: spec.SchemaProps{
+							Description: "noProxy defines a comma-separated string that can contain IPs, CIDR notation, domain names that should be excluded from proxying. IP and domain names can contain port numbers.\n\nIt requires Prometheus >= v2.43.0, Alertmanager >= v0.25.0 or Thanos >= v0.32.0.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"proxyFromEnvironment": {
+						SchemaProps: spec.SchemaProps{
+							Description: "proxyFromEnvironment defines whether to use the proxy configuration defined by environment variables (HTTP_PROXY, HTTPS_PROXY, and NO_PROXY).\n\nIt requires Prometheus >= v2.43.0, Alertmanager >= v0.25.0 or Thanos >= v0.32.0.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"proxyConnectHeader": {
+						SchemaProps: spec.SchemaProps{
+							Description: "proxyConnectHeader optionally specifies headers to send to proxies during CONNECT requests.\n\nIt requires Prometheus >= v2.43.0, Alertmanager >= v0.25.0 or Thanos >= v0.32.0.",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Type: []string{"array"},
+										Items: &spec.SchemaOrArray{
+											Schema: &spec.Schema{
+												SchemaProps: spec.SchemaProps{
+													Default: map[string]interface{}{},
+													Ref:     ref("k8s.io/api/core/v1.SecretKeySelector"),
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+					"followRedirects": {
+						SchemaProps: spec.SchemaProps{
+							Description: "followRedirects defines whether HTTP requests follow HTTP 3xx redirects.\n\nIt requires Prometheus >= v2.26.0.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"filterExternalLabels": {
+						SchemaProps: spec.SchemaProps{
+							Description: "filterExternalLabels defines whether to use the external labels as selectors for the remote read endpoint.\n\nIt requires Prometheus >= v2.34.0.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"url"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Authorization", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.BasicAuth", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.OAuth2", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.TLSConfig", "k8s.io/api/core/v1.SecretKeySelector"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_RemoteWriteSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "RemoteWriteSpec defines the configuration to write samples from Prometheus to a remote endpoint.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"url": {
+						SchemaProps: spec.SchemaProps{
+							Description: "url defines the URL of the endpoint to send samples to.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "name of the remote write queue, it must be unique if specified. The name is used in metrics and logging in order to differentiate queues.\n\nIt requires Prometheus >= v2.15.0 or Thanos >= 0.24.0.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"messageVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "messageVersion defines the Remote Write message's version to use when writing to the endpoint.\n\n`Version1.0` corresponds to the `prometheus.WriteRequest` protobuf message introduced in Remote Write 1.0. `Version2.0` corresponds to the `io.prometheus.write.v2.Request` protobuf message introduced in Remote Write 2.0.\n\nWhen `Version2.0` is selected, Prometheus will automatically be configured to append the metadata of scraped metrics to the WAL.\n\nBefore setting this field, consult with your remote storage provider what message version it supports.\n\nIt requires Prometheus >= v2.54.0 or Thanos >= v0.37.0.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"sendExemplars": {
+						SchemaProps: spec.SchemaProps{
+							Description: "sendExemplars enables sending of exemplars over remote write. Note that exemplar-storage itself must be enabled using the `spec.enableFeatures` option for exemplars to be scraped in the first place.\n\nIt requires Prometheus >= v2.27.0 or Thanos >= v0.24.0.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"sendNativeHistograms": {
+						SchemaProps: spec.SchemaProps{
+							Description: "sendNativeHistograms enables sending of native histograms, also known as sparse histograms over remote write.\n\nIt requires Prometheus >= v2.40.0 or Thanos >= v0.30.0.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"remoteTimeout": {
+						SchemaProps: spec.SchemaProps{
+							Description: "remoteTimeout defines the timeout for requests to the remote write endpoint.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"headers": {
+						SchemaProps: spec.SchemaProps{
+							Description: "headers defines the custom HTTP headers to be sent along with each remote write request. Be aware that headers that are set by Prometheus itself can't be overwritten.\n\nIt requires Prometheus >= v2.25.0 or Thanos >= v0.24.0.",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"writeRelabelConfigs": {
+						SchemaProps: spec.SchemaProps{
+							Description: "writeRelabelConfigs defines the list of remote write relabel configurations.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.RelabelConfig"),
+									},
+								},
+							},
+						},
+					},
+					"oauth2": {
+						SchemaProps: spec.SchemaProps{
+							Description: "oauth2 configuration for the URL.\n\nIt requires Prometheus >= v2.27.0 or Thanos >= v0.24.0.\n\nCannot be set at the same time as `sigv4`, `authorization`, `basicAuth`, or `azureAd`.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.OAuth2"),
+						},
+					},
+					"basicAuth": {
+						SchemaProps: spec.SchemaProps{
+							Description: "basicAuth configuration for the URL.\n\nCannot be set at the same time as `sigv4`, `authorization`, `oauth2`, or `azureAd`.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.BasicAuth"),
+						},
+					},
+					"bearerTokenFile": {
+						SchemaProps: spec.SchemaProps{
+							Description: "bearerTokenFile defines the file from which to read bearer token for the URL.\n\nDeprecated: this will be removed in a future release. Prefer using `authorization`.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"authorization": {
+						SchemaProps: spec.SchemaProps{
+							Description: "authorization section for the URL.\n\nIt requires Prometheus >= v2.26.0 or Thanos >= v0.24.0.\n\nCannot be set at the same time as `sigv4`, `basicAuth`, `oauth2`, or `azureAd`.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Authorization"),
+						},
+					},
+					"sigv4": {
+						SchemaProps: spec.SchemaProps{
+							Description: "sigv4 defines the AWS's Signature Verification 4 for the URL.\n\nIt requires Prometheus >= v2.26.0 or Thanos >= v0.24.0.\n\nCannot be set at the same time as `authorization`, `basicAuth`, `oauth2`, or `azureAd`.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Sigv4"),
+						},
+					},
+					"azureAd": {
+						SchemaProps: spec.SchemaProps{
+							Description: "azureAd for the URL.\n\nIt requires Prometheus >= v2.45.0 or Thanos >= v0.31.0.\n\nCannot be set at the same time as `authorization`, `basicAuth`, `oauth2`, or `sigv4`.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.AzureAD"),
+						},
+					},
+					"bearerToken": {
+						SchemaProps: spec.SchemaProps{
+							Description: "bearerToken is deprecated: this will be removed in a future release. *Warning: this field shouldn't be used because the token value appears in clear-text. Prefer using `authorization`.*",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"tlsConfig": {
+						SchemaProps: spec.SchemaProps{
+							Description: "tlsConfig to use for the URL.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.TLSConfig"),
+						},
+					},
+					"proxyUrl": {
+						SchemaProps: spec.SchemaProps{
+							Description: "proxyUrl defines the HTTP proxy server to use.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"noProxy": {
+						SchemaProps: spec.SchemaProps{
+							Description: "noProxy defines a comma-separated string that can contain IPs, CIDR notation, domain names that should be excluded from proxying. IP and domain names can contain port numbers.\n\nIt requires Prometheus >= v2.43.0, Alertmanager >= v0.25.0 or Thanos >= v0.32.0.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"proxyFromEnvironment": {
+						SchemaProps: spec.SchemaProps{
+							Description: "proxyFromEnvironment defines whether to use the proxy configuration defined by environment variables (HTTP_PROXY, HTTPS_PROXY, and NO_PROXY).\n\nIt requires Prometheus >= v2.43.0, Alertmanager >= v0.25.0 or Thanos >= v0.32.0.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"proxyConnectHeader": {
+						SchemaProps: spec.SchemaProps{
+							Description: "proxyConnectHeader optionally specifies headers to send to proxies during CONNECT requests.\n\nIt requires Prometheus >= v2.43.0, Alertmanager >= v0.25.0 or Thanos >= v0.32.0.",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Type: []string{"array"},
+										Items: &spec.SchemaOrArray{
+											Schema: &spec.Schema{
+												SchemaProps: spec.SchemaProps{
+													Default: map[string]interface{}{},
+													Ref:     ref("k8s.io/api/core/v1.SecretKeySelector"),
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+					"followRedirects": {
+						SchemaProps: spec.SchemaProps{
+							Description: "followRedirects defines whether HTTP requests follow HTTP 3xx redirects.\n\nIt requires Prometheus >= v2.26.0 or Thanos >= v0.24.0.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"queueConfig": {
+						SchemaProps: spec.SchemaProps{
+							Description: "queueConfig allows tuning of the remote write queue parameters.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.QueueConfig"),
+						},
+					},
+					"metadataConfig": {
+						SchemaProps: spec.SchemaProps{
+							Description: "metadataConfig defines how to send a series metadata to the remote storage.\n\nWhen the field is empty, **no metadata** is sent. But when the field is null, metadata is sent.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.MetadataConfig"),
+						},
+					},
+					"enableHTTP2": {
+						SchemaProps: spec.SchemaProps{
+							Description: "enableHTTP2 defines whether to enable HTTP2.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"roundRobinDNS": {
+						SchemaProps: spec.SchemaProps{
+							Description: "roundRobinDNS controls the DNS resolution behavior for remote-write connections. When enabled:\n  - The remote-write mechanism will resolve the hostname via DNS.\n  - It will randomly select one of the resolved IP addresses and connect to it.\n\nWhen disabled (default behavior):\n  - The Go standard library will handle hostname resolution.\n  - It will attempt connections to each resolved IP address sequentially.\n\nNote: The connection timeout applies to the entire resolution and connection process.\n\n\tIf disabled, the timeout is distributed across all connection attempts.\n\nIt requires Prometheus >= v3.1.0 or Thanos >= v0.38.0.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"url"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Authorization", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.AzureAD", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.BasicAuth", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.MetadataConfig", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.OAuth2", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.QueueConfig", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.RelabelConfig", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Sigv4", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.TLSConfig", "k8s.io/api/core/v1.SecretKeySelector"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_Rule(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "Rule describes an alerting or recording rule See Prometheus documentation: [alerting](https://www.prometheus.io/docs/prometheus/latest/configuration/alerting_rules/) or [recording](https://www.prometheus.io/docs/prometheus/latest/configuration/recording_rules/#recording-rules) rule",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"record": {
+						SchemaProps: spec.SchemaProps{
+							Description: "record defines the name of the time series to output to. Must be a valid metric name. Only one of `record` and `alert` must be set.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"alert": {
+						SchemaProps: spec.SchemaProps{
+							Description: "alert defines the name of the alert. Must be a valid label value. Only one of `record` and `alert` must be set.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"expr": {
+						SchemaProps: spec.SchemaProps{
+							Description: "expr defines the PromQL expression to evaluate.",
+							Ref:         ref("k8s.io/apimachinery/pkg/util/intstr.IntOrString"),
+						},
+					},
+					"for": {
+						SchemaProps: spec.SchemaProps{
+							Description: "for defines how alerts are considered firing once they have been returned for this long.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"keep_firing_for": {
+						SchemaProps: spec.SchemaProps{
+							Description: "keep_firing_for defines how long an alert will continue firing after the condition that triggered it has cleared.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"labels": {
+						SchemaProps: spec.SchemaProps{
+							Description: "labels defines labels to add or overwrite.",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"annotations": {
+						SchemaProps: spec.SchemaProps{
+							Description: "annotations defines annotations to add to each alert. Only valid for alerting rules.",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"expr"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/util/intstr.IntOrString"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_RuleGroup(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "RuleGroup is a list of sequentially evaluated recording and alerting rules.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "name defines the name of the rule group.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"labels": {
+						SchemaProps: spec.SchemaProps{
+							Description: "labels define the labels to add or overwrite before storing the result for its rules. The labels defined at the rule level take precedence.\n\nIt requires Prometheus >= 3.0.0. The field is ignored for Thanos Ruler.",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"interval": {
+						SchemaProps: spec.SchemaProps{
+							Description: "interval defines how often rules in the group are evaluated.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"query_offset": {
+						SchemaProps: spec.SchemaProps{
+							Description: "query_offset defines the offset the rule evaluation timestamp of this particular group by the specified duration into the past.\n\nIt requires Prometheus >= v2.53.0. It is not supported for ThanosRuler.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"rules": {
+						SchemaProps: spec.SchemaProps{
+							Description: "rules defines the list of alerting and recording rules.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Rule"),
+									},
+								},
+							},
+						},
+					},
+					"partial_response_strategy": {
+						SchemaProps: spec.SchemaProps{
+							Description: "partial_response_strategy is only used by ThanosRuler and will be ignored by Prometheus instances. More info: https://github.com/thanos-io/thanos/blob/main/docs/components/rule.md#partial-response",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"limit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "limit defines the number of alerts an alerting rule and series a recording rule can produce. Limit is supported starting with Prometheus >= 2.31 and Thanos Ruler >= 0.24.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+				},
+				Required: []string{"name"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Rule"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_Rules(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"alert": {
+						SchemaProps: spec.SchemaProps{
+							Description: "alert defines the parameters of the Prometheus rules' engine.\n\nAny update to these parameters trigger a restart of the pods.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.RulesAlert"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.RulesAlert"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_RulesAlert(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"forOutageTolerance": {
+						SchemaProps: spec.SchemaProps{
+							Description: "forOutageTolerance defines the max time to tolerate prometheus outage for restoring 'for' state of alert.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"forGracePeriod": {
+						SchemaProps: spec.SchemaProps{
+							Description: "forGracePeriod defines the minimum duration between alert and restored 'for' state.\n\nThis is maintained only for alerts with a configured 'for' time greater than the grace period.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"resendDelay": {
+						SchemaProps: spec.SchemaProps{
+							Description: "resendDelay defines the minimum amount of time to wait before resending an alert to Alertmanager.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_SafeAuthorization(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "SafeAuthorization specifies a subset of the Authorization struct, that is safe for use because it doesn't provide access to the Prometheus container's filesystem.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"type": {
+						SchemaProps: spec.SchemaProps{
+							Description: "type defines the authentication type. The value is case-insensitive.\n\n\"Basic\" is not a supported value.\n\nDefault: \"Bearer\"",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"credentials": {
+						SchemaProps: spec.SchemaProps{
+							Description: "credentials defines a key of a Secret in the namespace that contains the credentials for authentication.",
+							Ref:         ref("k8s.io/api/core/v1.SecretKeySelector"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.SecretKeySelector"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_SafeTLSConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "SafeTLSConfig specifies safe TLS configuration parameters.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"ca": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ca defines the Certificate authority used when verifying server certificates.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.SecretOrConfigMap"),
+						},
+					},
+					"cert": {
+						SchemaProps: spec.SchemaProps{
+							Description: "cert defines the Client certificate to present when doing client-authentication.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.SecretOrConfigMap"),
+						},
+					},
+					"keySecret": {
+						SchemaProps: spec.SchemaProps{
+							Description: "keySecret defines the Secret containing the client key file for the targets.",
+							Ref:         ref("k8s.io/api/core/v1.SecretKeySelector"),
+						},
+					},
+					"serverName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "serverName is used to verify the hostname for the targets.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"insecureSkipVerify": {
+						SchemaProps: spec.SchemaProps{
+							Description: "insecureSkipVerify defines how to disable target certificate validation.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"minVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "minVersion defines the minimum acceptable TLS version.\n\nIt requires Prometheus >= v2.35.0 or Thanos >= v0.28.0.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"maxVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "maxVersion defines the maximum acceptable TLS version.\n\nIt requires Prometheus >= v2.41.0 or Thanos >= v0.31.0.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.SecretOrConfigMap", "k8s.io/api/core/v1.SecretKeySelector"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_ServiceMonitorList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ServiceMonitorList is a list of ServiceMonitors.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Description: "metadata defines ListMeta as metadata for collection responses.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+						},
+					},
+					"items": {
+						SchemaProps: spec.SchemaProps{
+							Description: "List of ServiceMonitors",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ServiceMonitor"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"items"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ServiceMonitor", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_ServiceMonitorSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ServiceMonitorSpec defines the specification parameters for a ServiceMonitor.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"jobLabel": {
+						SchemaProps: spec.SchemaProps{
+							Description: "jobLabel selects the label from the associated Kubernetes `Service` object which will be used as the `job` label for all metrics.\n\nFor example if `jobLabel` is set to `foo` and the Kubernetes `Service` object is labeled with `foo: bar`, then Prometheus adds the `job=\"bar\"` label to all ingested metrics.\n\nIf the value of this field is empty or if the label doesn't exist for the given Service, the `job` label of the metrics defaults to the name of the associated Kubernetes `Service`.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"targetLabels": {
+						SchemaProps: spec.SchemaProps{
+							Description: "targetLabels defines the labels which are transferred from the associated Kubernetes `Service` object onto the ingested metrics.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"podTargetLabels": {
+						SchemaProps: spec.SchemaProps{
+							Description: "podTargetLabels defines the labels which are transferred from the associated Kubernetes `Pod` object onto the ingested metrics.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"endpoints": {
+						SchemaProps: spec.SchemaProps{
+							Description: "endpoints defines the list of endpoints part of this ServiceMonitor. Defines how to scrape metrics from Kubernetes [Endpoints](https://kubernetes.io/docs/concepts/services-networking/service/#endpoints) objects. In most cases, an Endpoints object is backed by a Kubernetes [Service](https://kubernetes.io/docs/concepts/services-networking/service/) object with the same name and labels.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Endpoint"),
+									},
+								},
+							},
+						},
+					},
+					"selector": {
+						SchemaProps: spec.SchemaProps{
+							Description: "selector defines the label selector to select the Kubernetes `Endpoints` objects to scrape metrics from.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector"),
+						},
+					},
+					"selectorMechanism": {
+						SchemaProps: spec.SchemaProps{
+							Description: "selectorMechanism defines the mechanism used to select the endpoints to scrape. By default, the selection process relies on relabel configurations to filter the discovered targets. Alternatively, you can opt in for role selectors, which may offer better efficiency in large clusters. Which strategy is best for your use case needs to be carefully evaluated.\n\nIt requires Prometheus >= v2.17.0.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"namespaceSelector": {
+						SchemaProps: spec.SchemaProps{
+							Description: "namespaceSelector defines in which namespace(s) Prometheus should discover the services. By default, the services are discovered in the same namespace as the `ServiceMonitor` object but it is possible to select pods across different/all namespaces.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.NamespaceSelector"),
+						},
+					},
+					"sampleLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "sampleLimit defines a per-scrape limit on the number of scraped samples that will be accepted.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"scrapeProtocols": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-list-type": "set",
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "scrapeProtocols defines the protocols to negotiate during a scrape. It tells clients the protocols supported by Prometheus in order of preference (from most to least preferred).\n\nIf unset, Prometheus uses its default value.\n\nIt requires Prometheus >= v2.49.0.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"fallbackScrapeProtocol": {
+						SchemaProps: spec.SchemaProps{
+							Description: "fallbackScrapeProtocol defines the protocol to use if a scrape returns blank, unparseable, or otherwise invalid Content-Type.\n\nIt requires Prometheus >= v3.0.0.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"targetLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "targetLimit defines a limit on the number of scraped targets that will be accepted.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"labelLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "labelLimit defines the per-scrape limit on number of labels that will be accepted for a sample.\n\nIt requires Prometheus >= v2.27.0.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"labelNameLengthLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "labelNameLengthLimit defines the per-scrape limit on length of labels name that will be accepted for a sample.\n\nIt requires Prometheus >= v2.27.0.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"labelValueLengthLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "labelValueLengthLimit defines the per-scrape limit on length of labels value that will be accepted for a sample.\n\nIt requires Prometheus >= v2.27.0.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"scrapeClassicHistograms": {
+						SchemaProps: spec.SchemaProps{
+							Description: "scrapeClassicHistograms defines whether to scrape a classic histogram that is also exposed as a native histogram. It requires Prometheus >= v2.45.0.\n\nNotice: `scrapeClassicHistograms` corresponds to the `always_scrape_classic_histograms` field in the Prometheus configuration.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"nativeHistogramBucketLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "nativeHistogramBucketLimit defines ff there are more than this many buckets in a native histogram, buckets will be merged to stay within the limit. It requires Prometheus >= v2.45.0.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"nativeHistogramMinBucketFactor": {
+						SchemaProps: spec.SchemaProps{
+							Description: "nativeHistogramMinBucketFactor defines if the growth factor of one bucket to the next is smaller than this, buckets will be merged to increase the factor sufficiently. It requires Prometheus >= v2.50.0.",
+							Ref:         ref("k8s.io/apimachinery/pkg/api/resource.Quantity"),
+						},
+					},
+					"convertClassicHistogramsToNHCB": {
+						SchemaProps: spec.SchemaProps{
+							Description: "convertClassicHistogramsToNHCB defines whether to convert all scraped classic histograms into a native histogram with custom buckets. It requires Prometheus >= v3.0.0.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"keepDroppedTargets": {
+						SchemaProps: spec.SchemaProps{
+							Description: "keepDroppedTargets defines the per-scrape limit on the number of targets dropped by relabeling that will be kept in memory. 0 means no limit.\n\nIt requires Prometheus >= v2.47.0.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"attachMetadata": {
+						SchemaProps: spec.SchemaProps{
+							Description: "attachMetadata defines additional metadata which is added to the discovered targets.\n\nIt requires Prometheus >= v2.37.0.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.AttachMetadata"),
+						},
+					},
+					"scrapeClass": {
+						SchemaProps: spec.SchemaProps{
+							Description: "scrapeClass defines the scrape class to apply.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"bodySizeLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "bodySizeLimit when defined, bodySizeLimit specifies a job level limit on the size of uncompressed response body that will be accepted by Prometheus.\n\nIt requires Prometheus >= v2.28.0.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"serviceDiscoveryRole": {
+						SchemaProps: spec.SchemaProps{
+							Description: "serviceDiscoveryRole defines the service discovery role used to discover targets.\n\nIf set, the value should be either \"Endpoints\" or \"EndpointSlice\". Otherwise it defaults to the value defined in the Prometheus/PrometheusAgent resource.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"endpoints", "selector"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.AttachMetadata", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Endpoint", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.NamespaceSelector", "k8s.io/apimachinery/pkg/api/resource.Quantity", "k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_Sigv4(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "Sigv4 defines AWS's Signature Verification 4 signing process to sign requests.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"region": {
+						SchemaProps: spec.SchemaProps{
+							Description: "region defines the AWS region. If blank, the region from the default credentials chain used.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"accessKey": {
+						SchemaProps: spec.SchemaProps{
+							Description: "accessKey defines the AWS API key. If not specified, the environment variable `AWS_ACCESS_KEY_ID` is used.",
+							Ref:         ref("k8s.io/api/core/v1.SecretKeySelector"),
+						},
+					},
+					"secretKey": {
+						SchemaProps: spec.SchemaProps{
+							Description: "secretKey defines the AWS API secret. If not specified, the environment variable `AWS_SECRET_ACCESS_KEY` is used.",
+							Ref:         ref("k8s.io/api/core/v1.SecretKeySelector"),
+						},
+					},
+					"profile": {
+						SchemaProps: spec.SchemaProps{
+							Description: "profile defines the named AWS profile used to authenticate.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"roleArn": {
+						SchemaProps: spec.SchemaProps{
+							Description: "roleArn defines the named AWS profile used to authenticate.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"useFIPSSTSEndpoint": {
+						SchemaProps: spec.SchemaProps{
+							Description: "useFIPSSTSEndpoint defines the FIPS mode for the AWS STS endpoint. It requires Prometheus >= v2.54.0.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.SecretKeySelector"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_StorageSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "StorageSpec defines the configured storage for a group Prometheus servers. If no storage option is specified, then by default an [EmptyDir](https://kubernetes.io/docs/concepts/storage/volumes/#emptydir) will be used.\n\nIf multiple storage options are specified, priority will be given as follows:\n 1. emptyDir\n 2. ephemeral\n 3. volumeClaimTemplate",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"disableMountSubPath": {
+						SchemaProps: spec.SchemaProps{
+							Description: "disableMountSubPath deprecated: subPath usage will be removed in a future release.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"emptyDir": {
+						SchemaProps: spec.SchemaProps{
+							Description: "emptyDir to be used by the StatefulSet. If specified, it takes precedence over `ephemeral` and `volumeClaimTemplate`. More info: https://kubernetes.io/docs/concepts/storage/volumes/#emptydir",
+							Ref:         ref("k8s.io/api/core/v1.EmptyDirVolumeSource"),
+						},
+					},
+					"ephemeral": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ephemeral to be used by the StatefulSet. This is a beta field in k8s 1.21 and GA in 1.15. For lower versions, starting with k8s 1.19, it requires enabling the GenericEphemeralVolume feature gate. More info: https://kubernetes.io/docs/concepts/storage/ephemeral-volumes/#generic-ephemeral-volumes",
+							Ref:         ref("k8s.io/api/core/v1.EphemeralVolumeSource"),
+						},
+					},
+					"volumeClaimTemplate": {
+						SchemaProps: spec.SchemaProps{
+							Description: "volumeClaimTemplate defines the PVC spec to be used by the Prometheus StatefulSets. The easiest way to use a volume that cannot be automatically provisioned is to use a label selector alongside manually created PersistentVolumes.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.EmbeddedPersistentVolumeClaim"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.EmbeddedPersistentVolumeClaim", "k8s.io/api/core/v1.EmptyDirVolumeSource", "k8s.io/api/core/v1.EphemeralVolumeSource"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_TLSConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "TLSConfig extends the safe TLS configuration with file parameters.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"ca": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ca defines the Certificate authority used when verifying server certificates.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.SecretOrConfigMap"),
+						},
+					},
+					"cert": {
+						SchemaProps: spec.SchemaProps{
+							Description: "cert defines the Client certificate to present when doing client-authentication.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.SecretOrConfigMap"),
+						},
+					},
+					"keySecret": {
+						SchemaProps: spec.SchemaProps{
+							Description: "keySecret defines the Secret containing the client key file for the targets.",
+							Ref:         ref("k8s.io/api/core/v1.SecretKeySelector"),
+						},
+					},
+					"serverName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "serverName is used to verify the hostname for the targets.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"insecureSkipVerify": {
+						SchemaProps: spec.SchemaProps{
+							Description: "insecureSkipVerify defines how to disable target certificate validation.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"minVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "minVersion defines the minimum acceptable TLS version.\n\nIt requires Prometheus >= v2.35.0 or Thanos >= v0.28.0.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"maxVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "maxVersion defines the maximum acceptable TLS version.\n\nIt requires Prometheus >= v2.41.0 or Thanos >= v0.31.0.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"caFile": {
+						SchemaProps: spec.SchemaProps{
+							Description: "caFile defines the path to the CA cert in the Prometheus container to use for the targets.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"certFile": {
+						SchemaProps: spec.SchemaProps{
+							Description: "certFile defines the path to the client cert file in the Prometheus container for the targets.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"keyFile": {
+						SchemaProps: spec.SchemaProps{
+							Description: "keyFile defines the path to the client key file in the Prometheus container for the targets.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.SecretOrConfigMap", "k8s.io/api/core/v1.SecretKeySelector"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_ThanosRulerList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ThanosRulerList is a list of ThanosRulers.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Description: "metadata defines ListMeta as metadata for collection responses.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+						},
+					},
+					"items": {
+						SchemaProps: spec.SchemaProps{
+							Description: "List of Prometheuses",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ThanosRuler"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"items"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ThanosRuler", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_ThanosRulerSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ThanosRulerSpec is a specification of the desired behavior of the ThanosRuler. More info: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#spec-and-status",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"version": {
+						SchemaProps: spec.SchemaProps{
+							Description: "version of Thanos to be deployed.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"podMetadata": {
+						SchemaProps: spec.SchemaProps{
+							Description: "podMetadata defines labels and annotations which are propagated to the ThanosRuler pods.\n\nThe following items are reserved and cannot be overridden: * \"app.kubernetes.io/name\" label, set to \"thanos-ruler\". * \"app.kubernetes.io/managed-by\" label, set to \"prometheus-operator\". * \"app.kubernetes.io/instance\" label, set to the name of the ThanosRuler instance. * \"thanos-ruler\" label, set to the name of the ThanosRuler instance. * \"kubectl.kubernetes.io/default-container\" annotation, set to \"thanos-ruler\".",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.EmbeddedObjectMetadata"),
+						},
+					},
+					"image": {
+						SchemaProps: spec.SchemaProps{
+							Description: "image defines Thanos container image URL.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"imagePullPolicy": {
+						SchemaProps: spec.SchemaProps{
+							Description: "imagePullPolicy defines for the 'thanos', 'init-config-reloader' and 'config-reloader' containers. See https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy for more details.\n\nPossible enum values:\n - `\"Always\"` means that kubelet always attempts to pull the latest image. Container will fail If the pull fails.\n - `\"IfNotPresent\"` means that kubelet pulls if the image isn't present on disk. Container will fail if the image isn't present and the pull fails.\n - `\"Never\"` means that kubelet never pulls an image, but only uses a local image. Container will fail if the image isn't present",
+							Type:        []string{"string"},
+							Format:      "",
+							Enum:        []interface{}{"Always", "IfNotPresent", "Never"},
+						},
+					},
+					"imagePullSecrets": {
+						SchemaProps: spec.SchemaProps{
+							Description: "imagePullSecrets defines an optional list of references to secrets in the same namespace to use for pulling thanos images from registries see http://kubernetes.io/docs/user-guide/images#specifying-imagepullsecrets-on-a-pod",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("k8s.io/api/core/v1.LocalObjectReference"),
+									},
+								},
+							},
+						},
+					},
+					"paused": {
+						SchemaProps: spec.SchemaProps{
+							Description: "paused defines when a ThanosRuler deployment is paused, no actions except for deletion will be performed on the underlying objects.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"replicas": {
+						SchemaProps: spec.SchemaProps{
+							Description: "replicas defines the number of thanos ruler instances to deploy.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"nodeSelector": {
+						SchemaProps: spec.SchemaProps{
+							Description: "nodeSelector defines which Nodes the Pods are scheduled on.",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"resources": {
+						SchemaProps: spec.SchemaProps{
+							Description: "resources defines the resource requirements for single Pods. If not provided, no requests/limits will be set",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/api/core/v1.ResourceRequirements"),
+						},
+					},
+					"affinity": {
+						SchemaProps: spec.SchemaProps{
+							Description: "affinity defines when specified, the pod's scheduling constraints.",
+							Ref:         ref("k8s.io/api/core/v1.Affinity"),
+						},
+					},
+					"tolerations": {
+						SchemaProps: spec.SchemaProps{
+							Description: "tolerations defines when specified, the pod's tolerations.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("k8s.io/api/core/v1.Toleration"),
+									},
+								},
+							},
+						},
+					},
+					"topologySpreadConstraints": {
+						SchemaProps: spec.SchemaProps{
+							Description: "topologySpreadConstraints defines the pod's topology spread constraints.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("k8s.io/api/core/v1.TopologySpreadConstraint"),
+									},
+								},
+							},
+						},
+					},
+					"securityContext": {
+						SchemaProps: spec.SchemaProps{
+							Description: "securityContext defines the pod-level security attributes and common container settings. This defaults to the default PodSecurityContext.",
+							Ref:         ref("k8s.io/api/core/v1.PodSecurityContext"),
+						},
+					},
+					"dnsPolicy": {
+						SchemaProps: spec.SchemaProps{
+							Description: "dnsPolicy defines the DNS policy for the pods.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"dnsConfig": {
+						SchemaProps: spec.SchemaProps{
+							Description: "dnsConfig defines Defines the DNS configuration for the pods.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.PodDNSConfig"),
+						},
+					},
+					"enableServiceLinks": {
+						SchemaProps: spec.SchemaProps{
+							Description: "enableServiceLinks defines whether information about services should be injected into pod's environment variables",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"priorityClassName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "priorityClassName defines the priority class assigned to the Pods",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"serviceName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "serviceName defines the name of the service name used by the underlying StatefulSet(s) as the governing service. If defined, the Service  must be created before the ThanosRuler resource in the same namespace and it must define a selector that matches the pod labels. If empty, the operator will create and manage a headless service named `thanos-ruler-operated` for ThanosRuler resources. When deploying multiple ThanosRuler resources in the same namespace, it is recommended to specify a different value for each. See https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#stable-network-id for more details.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"serviceAccountName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "serviceAccountName defines the name of the ServiceAccount to use to run the Thanos Ruler Pods.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"storage": {
+						SchemaProps: spec.SchemaProps{
+							Description: "storage defines the specification of how storage shall be used.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.StorageSpec"),
+						},
+					},
+					"volumes": {
+						SchemaProps: spec.SchemaProps{
+							Description: "volumes defines how configuration of additional volumes on the output StatefulSet definition. Volumes specified will be appended to other volumes that are generated as a result of StorageSpec objects.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("k8s.io/api/core/v1.Volume"),
+									},
+								},
+							},
+						},
+					},
+					"volumeMounts": {
+						SchemaProps: spec.SchemaProps{
+							Description: "volumeMounts defines how the configuration of additional VolumeMounts on the output StatefulSet definition. VolumeMounts specified will be appended to other VolumeMounts in the ruler container, that are generated as a result of StorageSpec objects.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("k8s.io/api/core/v1.VolumeMount"),
+									},
+								},
+							},
+						},
+					},
+					"objectStorageConfig": {
+						SchemaProps: spec.SchemaProps{
+							Description: "objectStorageConfig defines the configuration format is defined at https://thanos.io/tip/thanos/storage.md/#configuring-access-to-object-storage\n\nThe operator performs no validation of the configuration.\n\n`objectStorageConfigFile` takes precedence over this field.",
+							Ref:         ref("k8s.io/api/core/v1.SecretKeySelector"),
+						},
+					},
+					"objectStorageConfigFile": {
+						SchemaProps: spec.SchemaProps{
+							Description: "objectStorageConfigFile defines the path of the object storage configuration file.\n\nThe configuration format is defined at https://thanos.io/tip/thanos/storage.md/#configuring-access-to-object-storage\n\nThe operator performs no validation of the configuration file.\n\nThis field takes precedence over `objectStorageConfig`.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"listenLocal": {
+						SchemaProps: spec.SchemaProps{
+							Description: "listenLocal defines the Thanos ruler listen on loopback, so that it does not bind against the Pod IP.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"queryEndpoints": {
+						SchemaProps: spec.SchemaProps{
+							Description: "queryEndpoints defines the list of Thanos Query endpoints from which to query metrics.\n\nFor Thanos >= v0.11.0, it is recommended to use `queryConfig` instead.\n\n`queryConfig` takes precedence over this field.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"queryConfig": {
+						SchemaProps: spec.SchemaProps{
+							Description: "queryConfig defines the list of Thanos Query endpoints from which to query metrics.\n\nThe configuration format is defined at https://thanos.io/tip/components/rule.md/#query-api\n\nIt requires Thanos >= v0.11.0.\n\nThe operator performs no validation of the configuration.\n\nThis field takes precedence over `queryEndpoints`.",
+							Ref:         ref("k8s.io/api/core/v1.SecretKeySelector"),
+						},
+					},
+					"alertmanagersUrl": {
+						SchemaProps: spec.SchemaProps{
+							Description: "alertmanagersUrl defines the list of Alertmanager endpoints to send alerts to.\n\nFor Thanos >= v0.10.0, it is recommended to use `alertmanagersConfig` instead.\n\n`alertmanagersConfig` takes precedence over this field.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"alertmanagersConfig": {
+						SchemaProps: spec.SchemaProps{
+							Description: "alertmanagersConfig defines the list of Alertmanager endpoints to send alerts to.\n\nThe configuration format is defined at https://thanos.io/tip/components/rule.md/#alertmanager.\n\nIt requires Thanos >= v0.10.0.\n\nThe operator performs no validation of the configuration.\n\nThis field takes precedence over `alertmanagersUrl`.",
+							Ref:         ref("k8s.io/api/core/v1.SecretKeySelector"),
+						},
+					},
+					"ruleSelector": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ruleSelector defines the PrometheusRule objects to be selected for rule evaluation. An empty label selector matches all objects. A null label selector matches no objects.",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector"),
+						},
+					},
+					"ruleNamespaceSelector": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ruleNamespaceSelector defines the namespaces to be selected for Rules discovery. If unspecified, only the same namespace as the ThanosRuler object is in is used.",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector"),
+						},
+					},
+					"enforcedNamespaceLabel": {
+						SchemaProps: spec.SchemaProps{
+							Description: "enforcedNamespaceLabel enforces adding a namespace label of origin for each alert and metric that is user created. The label value will always be the namespace of the object that is being created.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"excludedFromEnforcement": {
+						SchemaProps: spec.SchemaProps{
+							Description: "excludedFromEnforcement defines the list of references to PrometheusRule objects to be excluded from enforcing a namespace label of origin. Applies only if enforcedNamespaceLabel set to true.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ObjectReference"),
+									},
+								},
+							},
+						},
+					},
+					"prometheusRulesExcludedFromEnforce": {
+						SchemaProps: spec.SchemaProps{
+							Description: "prometheusRulesExcludedFromEnforce defines a list of Prometheus rules to be excluded from enforcing of adding namespace labels. Works only if enforcedNamespaceLabel set to true. Make sure both ruleNamespace and ruleName are set for each pair Deprecated: use excludedFromEnforcement instead.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.PrometheusRuleExcludeConfig"),
+									},
+								},
+							},
+						},
+					},
+					"logLevel": {
+						SchemaProps: spec.SchemaProps{
+							Description: "logLevel for ThanosRuler to be configured with.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"logFormat": {
+						SchemaProps: spec.SchemaProps{
+							Description: "logFormat for ThanosRuler to be configured with.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"portName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "portName defines the port name used for the pods and governing service. Defaults to `web`.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"evaluationInterval": {
+						SchemaProps: spec.SchemaProps{
+							Description: "evaluationInterval defines the interval between consecutive evaluations.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"resendDelay": {
+						SchemaProps: spec.SchemaProps{
+							Description: "resendDelay defines the minimum amount of time to wait before resending an alert to Alertmanager.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"ruleOutageTolerance": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ruleOutageTolerance defines the max time to tolerate prometheus outage for restoring \"for\" state of alert. It requires Thanos >= v0.30.0.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"ruleQueryOffset": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ruleQueryOffset defines the default rule group's query offset duration to use. It requires Thanos >= v0.38.0.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"ruleConcurrentEval": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ruleConcurrentEval defines how many rules can be evaluated concurrently. It requires Thanos >= v0.37.0.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"ruleGracePeriod": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ruleGracePeriod defines the minimum duration between alert and restored \"for\" state. This is maintained only for alerts with configured \"for\" time greater than grace period. It requires Thanos >= v0.30.0.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"retention": {
+						SchemaProps: spec.SchemaProps{
+							Description: "retention defines the time duration ThanosRuler shall retain data for. Default is '24h', and must match the regular expression `[0-9]+(ms|s|m|h|d|w|y)` (milliseconds seconds minutes hours days weeks years).\n\nThe field has no effect when remote-write is configured since the Ruler operates in stateless mode.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"containers": {
+						SchemaProps: spec.SchemaProps{
+							Description: "containers allows injecting additional containers or modifying operator generated containers. This can be used to allow adding an authentication proxy to a ThanosRuler pod or to change the behavior of an operator generated container. Containers described here modify an operator generated container if they share the same name and modifications are done via a strategic merge patch. The current container names are: `thanos-ruler` and `config-reloader`. Overriding containers is entirely outside the scope of what the maintainers will support and by doing so, you accept that this behaviour may break at any time without notice.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("k8s.io/api/core/v1.Container"),
+									},
+								},
+							},
+						},
+					},
+					"initContainers": {
+						SchemaProps: spec.SchemaProps{
+							Description: "initContainers allows adding initContainers to the pod definition. Those can be used to e.g. fetch secrets for injection into the ThanosRuler configuration from external sources. Any errors during the execution of an initContainer will lead to a restart of the Pod. More info: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/ Using initContainers for any use case other then secret fetching is entirely outside the scope of what the maintainers will support and by doing so, you accept that this behaviour may break at any time without notice.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("k8s.io/api/core/v1.Container"),
+									},
+								},
+							},
+						},
+					},
+					"tracingConfig": {
+						SchemaProps: spec.SchemaProps{
+							Description: "tracingConfig defines the tracing configuration.\n\nThe configuration format is defined at https://thanos.io/tip/thanos/tracing.md/#configuration\n\nThis is an *experimental feature*, it may change in any upcoming release in a breaking way.\n\nThe operator performs no validation of the configuration.\n\n`tracingConfigFile` takes precedence over this field.",
+							Ref:         ref("k8s.io/api/core/v1.SecretKeySelector"),
+						},
+					},
+					"tracingConfigFile": {
+						SchemaProps: spec.SchemaProps{
+							Description: "tracingConfigFile defines the path of the tracing configuration file.\n\nThe configuration format is defined at https://thanos.io/tip/thanos/tracing.md/#configuration\n\nThis is an *experimental feature*, it may change in any upcoming release in a breaking way.\n\nThe operator performs no validation of the configuration file.\n\nThis field takes precedence over `tracingConfig`.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"labels": {
+						SchemaProps: spec.SchemaProps{
+							Description: "labels defines the external label pairs of the ThanosRuler resource.\n\nA default replica label `thanos_ruler_replica` will be always added as a label with the value of the pod's name.",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"alertDropLabels": {
+						SchemaProps: spec.SchemaProps{
+							Description: "alertDropLabels defines the label names which should be dropped in Thanos Ruler alerts.\n\nThe replica label `thanos_ruler_replica` will always be dropped from the alerts.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"externalPrefix": {
+						SchemaProps: spec.SchemaProps{
+							Description: "externalPrefix defines the Thanos Ruler instances will be available under. This is necessary to generate correct URLs. This is necessary if Thanos Ruler is not served from root of a DNS name.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"routePrefix": {
+						SchemaProps: spec.SchemaProps{
+							Description: "routePrefix defines the route prefix ThanosRuler registers HTTP handlers for. This allows thanos UI to be served on a sub-path.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"grpcServerTlsConfig": {
+						SchemaProps: spec.SchemaProps{
+							Description: "grpcServerTlsConfig defines the gRPC server from which Thanos Querier reads recorded rule data. Note: Currently only the CAFile, CertFile, and KeyFile fields are supported. Maps to the '--grpc-server-tls-*' CLI args.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.TLSConfig"),
+						},
+					},
+					"alertQueryUrl": {
+						SchemaProps: spec.SchemaProps{
+							Description: "alertQueryUrl defines how Thanos Ruler will set in the 'Source' field of all alerts. Maps to the '--alert.query-url' CLI arg.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"minReadySeconds": {
+						SchemaProps: spec.SchemaProps{
+							Description: "minReadySeconds defines the minimum number of seconds for which a newly created pod should be ready without any of its container crashing for it to be considered available.\n\nIf unset, pods will be considered available as soon as they are ready.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"alertRelabelConfigs": {
+						SchemaProps: spec.SchemaProps{
+							Description: "alertRelabelConfigs defines the alert relabeling in Thanos Ruler.\n\nAlert relabel configuration must have the form as specified in the official Prometheus documentation: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#alert_relabel_configs\n\nThe operator performs no validation of the configuration.\n\n`alertRelabelConfigFile` takes precedence over this field.",
+							Ref:         ref("k8s.io/api/core/v1.SecretKeySelector"),
+						},
+					},
+					"alertRelabelConfigFile": {
+						SchemaProps: spec.SchemaProps{
+							Description: "alertRelabelConfigFile defines the path to the alert relabeling configuration file.\n\nAlert relabel configuration must have the form as specified in the official Prometheus documentation: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#alert_relabel_configs\n\nThe operator performs no validation of the configuration file.\n\nThis field takes precedence over `alertRelabelConfig`.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"hostAliases": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-list-map-keys": []interface{}{
+									"ip",
+								},
+								"x-kubernetes-list-type": "map",
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "hostAliases defines pods' hostAliases configuration",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.HostAlias"),
+									},
+								},
+							},
+						},
+					},
+					"additionalArgs": {
+						SchemaProps: spec.SchemaProps{
+							Description: "additionalArgs defines how to add additional arguments for the ThanosRuler container. It is intended for e.g. activating hidden flags which are not supported by the dedicated configuration options yet. The arguments are passed as-is to the ThanosRuler container which may cause issues if they are invalid or not supported by the given ThanosRuler version. In case of an argument conflict (e.g. an argument which is already set by the operator itself) or when providing an invalid argument the reconciliation will fail and an error will be logged.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Argument"),
+									},
+								},
+							},
+						},
+					},
+					"web": {
+						SchemaProps: spec.SchemaProps{
+							Description: "web defines the configuration of the ThanosRuler web server.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ThanosRulerWebSpec"),
+						},
+					},
+					"remoteWrite": {
+						SchemaProps: spec.SchemaProps{
+							Description: "remoteWrite defines the list of remote write configurations.\n\nWhen the list isn't empty, the ruler is configured with stateless mode.\n\nIt requires Thanos >= 0.24.0.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.RemoteWriteSpec"),
+									},
+								},
+							},
+						},
+					},
+					"terminationGracePeriodSeconds": {
+						SchemaProps: spec.SchemaProps{
+							Description: "terminationGracePeriodSeconds defines the optional duration in seconds the pod needs to terminate gracefully. Value must be non-negative integer. The value zero indicates stop immediately via the kill signal (no opportunity to shut down) which may lead to data corruption.\n\nDefaults to 120 seconds.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"enableFeatures": {
+						SchemaProps: spec.SchemaProps{
+							Description: "enableFeatures defines how to setup Thanos Ruler feature flags. By default, no features are enabled.\n\nEnabling features which are disabled by default is entirely outside the scope of what the maintainers will support and by doing so, you accept that this behaviour may break at any time without notice.\n\nFor more information see https://thanos.io/tip/components/rule.md/\n\nIt requires Thanos >= 0.39.0.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"hostUsers": {
+						SchemaProps: spec.SchemaProps{
+							Description: "hostUsers supports the user space in Kubernetes.\n\nMore info: https://kubernetes.io/docs/tasks/configure-pod-container/user-namespaces/\n\nThe feature requires at least Kubernetes 1.28 with the `UserNamespacesSupport` feature gate enabled. Starting Kubernetes 1.33, the feature is enabled by default.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Argument", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.EmbeddedObjectMetadata", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.HostAlias", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ObjectReference", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.PodDNSConfig", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.PrometheusRuleExcludeConfig", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.RemoteWriteSpec", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.StorageSpec", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.TLSConfig", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ThanosRulerWebSpec", "k8s.io/api/core/v1.Affinity", "k8s.io/api/core/v1.Container", "k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PodSecurityContext", "k8s.io/api/core/v1.ResourceRequirements", "k8s.io/api/core/v1.SecretKeySelector", "k8s.io/api/core/v1.Toleration", "k8s.io/api/core/v1.TopologySpreadConstraint", "k8s.io/api/core/v1.Volume", "k8s.io/api/core/v1.VolumeMount", "k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_ThanosRulerStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ThanosRulerStatus is the most recent observed status of the ThanosRuler. Read-only. More info: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#spec-and-status",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"paused": {
+						SchemaProps: spec.SchemaProps{
+							Description: "paused defines whether any actions on the underlying managed objects are being performed. Only delete actions will be performed.",
+							Default:     false,
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"replicas": {
+						SchemaProps: spec.SchemaProps{
+							Description: "replicas defines the total number of non-terminated pods targeted by this ThanosRuler deployment (their labels match the selector).",
+							Default:     0,
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"updatedReplicas": {
+						SchemaProps: spec.SchemaProps{
+							Description: "updatedReplicas defines the total number of non-terminated pods targeted by this ThanosRuler deployment that have the desired version spec.",
+							Default:     0,
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"availableReplicas": {
+						SchemaProps: spec.SchemaProps{
+							Description: "availableReplicas defines the total number of available pods (ready for at least minReadySeconds) targeted by this ThanosRuler deployment.",
+							Default:     0,
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"unavailableReplicas": {
+						SchemaProps: spec.SchemaProps{
+							Description: "unavailableReplicas defines the total number of unavailable pods targeted by this ThanosRuler deployment.",
+							Default:     0,
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"conditions": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-list-map-keys": []interface{}{
+									"type",
+								},
+								"x-kubernetes-list-type": "map",
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "conditions defines the current state of the ThanosRuler object.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Condition"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Condition"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_ThanosRulerWebSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ThanosRulerWebSpec defines the configuration of the ThanosRuler web server.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"tlsConfig": {
+						SchemaProps: spec.SchemaProps{
+							Description: "tlsConfig defines the TLS parameters for HTTPS.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.WebTLSConfig"),
+						},
+					},
+					"httpConfig": {
+						SchemaProps: spec.SchemaProps{
+							Description: "httpConfig defines HTTP parameters for web server.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.WebHTTPConfig"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.WebHTTPConfig", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.WebTLSConfig"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_ThanosSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ThanosSpec defines the configuration of the Thanos sidecar.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"image": {
+						SchemaProps: spec.SchemaProps{
+							Description: "image defines the container image name for Thanos. If specified, it takes precedence over the `spec.thanos.baseImage`, `spec.thanos.tag` and `spec.thanos.sha` fields.\n\nSpecifying `spec.thanos.version` is still necessary to ensure the Prometheus Operator knows which version of Thanos is being configured.\n\nIf neither `spec.thanos.image` nor `spec.thanos.baseImage` are defined, the operator will use the latest upstream version of Thanos available at the time when the operator was released.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"version": {
+						SchemaProps: spec.SchemaProps{
+							Description: "version of Thanos being deployed. The operator uses this information to generate the Prometheus StatefulSet + configuration files.\n\nIf not specified, the operator assumes the latest upstream release of Thanos available at the time when the version of the operator was released.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"tag": {
+						SchemaProps: spec.SchemaProps{
+							Description: "tag is deprecated: use 'image' instead. The image's tag can be specified as as part of the image name.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"sha": {
+						SchemaProps: spec.SchemaProps{
+							Description: "sha is deprecated: use 'image' instead.  The image digest can be specified as part of the image name.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"baseImage": {
+						SchemaProps: spec.SchemaProps{
+							Description: "baseImage is deprecated: use 'image' instead.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"resources": {
+						SchemaProps: spec.SchemaProps{
+							Description: "resources defines the resources requests and limits of the Thanos sidecar.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/api/core/v1.ResourceRequirements"),
+						},
+					},
+					"objectStorageConfig": {
+						SchemaProps: spec.SchemaProps{
+							Description: "objectStorageConfig defines the Thanos sidecar's configuration to upload TSDB blocks to object storage.\n\nMore info: https://thanos.io/tip/thanos/storage.md/\n\nobjectStorageConfigFile takes precedence over this field.",
+							Ref:         ref("k8s.io/api/core/v1.SecretKeySelector"),
+						},
+					},
+					"objectStorageConfigFile": {
+						SchemaProps: spec.SchemaProps{
+							Description: "objectStorageConfigFile defines the Thanos sidecar's configuration file to upload TSDB blocks to object storage.\n\nMore info: https://thanos.io/tip/thanos/storage.md/\n\nThis field takes precedence over objectStorageConfig.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"listenLocal": {
+						SchemaProps: spec.SchemaProps{
+							Description: "listenLocal is deprecated: use `grpcListenLocal` and `httpListenLocal` instead.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"grpcListenLocal": {
+						SchemaProps: spec.SchemaProps{
+							Description: "grpcListenLocal defines when true, the Thanos sidecar listens on the loopback interface instead of the Pod IP's address for the gRPC endpoints.\n\nIt has no effect if `listenLocal` is true.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"httpListenLocal": {
+						SchemaProps: spec.SchemaProps{
+							Description: "httpListenLocal when true, the Thanos sidecar listens on the loopback interface instead of the Pod IP's address for the HTTP endpoints.\n\nIt has no effect if `listenLocal` is true.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"tracingConfig": {
+						SchemaProps: spec.SchemaProps{
+							Description: "tracingConfig defines the tracing configuration for the Thanos sidecar.\n\n`tracingConfigFile` takes precedence over this field.\n\nMore info: https://thanos.io/tip/thanos/tracing.md/\n\nThis is an *experimental feature*, it may change in any upcoming release in a breaking way.",
+							Ref:         ref("k8s.io/api/core/v1.SecretKeySelector"),
+						},
+					},
+					"tracingConfigFile": {
+						SchemaProps: spec.SchemaProps{
+							Description: "tracingConfigFile defines the tracing configuration file for the Thanos sidecar.\n\nThis field takes precedence over `tracingConfig`.\n\nMore info: https://thanos.io/tip/thanos/tracing.md/\n\nThis is an *experimental feature*, it may change in any upcoming release in a breaking way.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"grpcServerTlsConfig": {
+						SchemaProps: spec.SchemaProps{
+							Description: "grpcServerTlsConfig defines the TLS parameters for the gRPC server providing the StoreAPI.\n\nNote: Currently only the `caFile`, `certFile`, and `keyFile` fields are supported.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.TLSConfig"),
+						},
+					},
+					"logLevel": {
+						SchemaProps: spec.SchemaProps{
+							Description: "logLevel for the Thanos sidecar.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"logFormat": {
+						SchemaProps: spec.SchemaProps{
+							Description: "logFormat for the Thanos sidecar.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"minTime": {
+						SchemaProps: spec.SchemaProps{
+							Description: "minTime defines the start of time range limit served by the Thanos sidecar's StoreAPI. The field's value should be a constant time in RFC3339 format or a time duration relative to current time, such as -1d or 2h45m. Valid duration units are ms, s, m, h, d, w, y.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"blockSize": {
+						SchemaProps: spec.SchemaProps{
+							Description: "blockSize controls the size of TSDB blocks produced by Prometheus. The default value is 2h to match the upstream Prometheus defaults.\n\nWARNING: Changing the block duration can impact the performance and efficiency of the entire Prometheus/Thanos stack due to how it interacts with memory and Thanos compactors. It is recommended to keep this value set to a multiple of 120 times your longest scrape or rule interval. For example, 30s * 120 = 1h.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"readyTimeout": {
+						SchemaProps: spec.SchemaProps{
+							Description: "readyTimeout defines the maximum time that the Thanos sidecar will wait for Prometheus to start.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"getConfigInterval": {
+						SchemaProps: spec.SchemaProps{
+							Description: "getConfigInterval defines how often to retrieve the Prometheus configuration.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"getConfigTimeout": {
+						SchemaProps: spec.SchemaProps{
+							Description: "getConfigTimeout defines the maximum time to wait when retrieving the Prometheus configuration.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"volumeMounts": {
+						SchemaProps: spec.SchemaProps{
+							Description: "volumeMounts allows configuration of additional VolumeMounts for Thanos. VolumeMounts specified will be appended to other VolumeMounts in the 'thanos-sidecar' container.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("k8s.io/api/core/v1.VolumeMount"),
+									},
+								},
+							},
+						},
+					},
+					"additionalArgs": {
+						SchemaProps: spec.SchemaProps{
+							Description: "additionalArgs allows setting additional arguments for the Thanos container. The arguments are passed as-is to the Thanos container which may cause issues if they are invalid or not supported the given Thanos version. In case of an argument conflict (e.g. an argument which is already set by the operator itself) or when providing an invalid argument, the reconciliation will fail and an error will be logged.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Argument"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.Argument", "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.TLSConfig", "k8s.io/api/core/v1.ResourceRequirements", "k8s.io/api/core/v1.SecretKeySelector", "k8s.io/api/core/v1.VolumeMount"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_WebHTTPConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "WebHTTPConfig defines HTTP parameters for web server.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"http2": {
+						SchemaProps: spec.SchemaProps{
+							Description: "http2 enable HTTP/2 support. Note that HTTP/2 is only supported with TLS. When TLSConfig is not configured, HTTP/2 will be disabled. Whenever the value of the field changes, a rolling update will be triggered.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"headers": {
+						SchemaProps: spec.SchemaProps{
+							Description: "headers defines a list of headers that can be added to HTTP responses.",
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.WebHTTPHeaders"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.WebHTTPHeaders"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_WebHTTPHeaders(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "WebHTTPHeaders defines the list of headers that can be added to HTTP responses.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"contentSecurityPolicy": {
+						SchemaProps: spec.SchemaProps{
+							Description: "contentSecurityPolicy defines the Content-Security-Policy header to HTTP responses. Unset if blank.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"xFrameOptions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "xFrameOptions defines the X-Frame-Options header to HTTP responses. Unset if blank. Accepted values are deny and sameorigin. https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"xContentTypeOptions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "xContentTypeOptions defines the X-Content-Type-Options header to HTTP responses. Unset if blank. Accepted value is nosniff. https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"xXSSProtection": {
+						SchemaProps: spec.SchemaProps{
+							Description: "xXSSProtection defines the X-XSS-Protection header to all responses. Unset if blank. https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"strictTransportSecurity": {
+						SchemaProps: spec.SchemaProps{
+							Description: "strictTransportSecurity defines the Strict-Transport-Security header to HTTP responses. Unset if blank. Please make sure that you use this with care as this header might force browsers to load Prometheus and the other applications hosted on the same domain and subdomains over HTTPS. https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_WebTLSConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "WebTLSConfig defines the TLS parameters for HTTPS.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"cert": {
+						SchemaProps: spec.SchemaProps{
+							Description: "cert defines the Secret or ConfigMap containing the TLS certificate for the web server.\n\nEither `keySecret` or `keyFile` must be defined.\n\nIt is mutually exclusive with `certFile`.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.SecretOrConfigMap"),
+						},
+					},
+					"certFile": {
+						SchemaProps: spec.SchemaProps{
+							Description: "certFile defines the path to the TLS certificate file in the container for the web server.\n\nEither `keySecret` or `keyFile` must be defined.\n\nIt is mutually exclusive with `cert`.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"keySecret": {
+						SchemaProps: spec.SchemaProps{
+							Description: "keySecret defines the secret containing the TLS private key for the web server.\n\nEither `cert` or `certFile` must be defined.\n\nIt is mutually exclusive with `keyFile`.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/api/core/v1.SecretKeySelector"),
+						},
+					},
+					"keyFile": {
+						SchemaProps: spec.SchemaProps{
+							Description: "keyFile defines the path to the TLS private key file in the container for the web server.\n\nIf defined, either `cert` or `certFile` must be defined.\n\nIt is mutually exclusive with `keySecret`.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"client_ca": {
+						SchemaProps: spec.SchemaProps{
+							Description: "client_ca defines the Secret or ConfigMap containing the CA certificate for client certificate authentication to the server.\n\nIt is mutually exclusive with `clientCAFile`.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.SecretOrConfigMap"),
+						},
+					},
+					"clientCAFile": {
+						SchemaProps: spec.SchemaProps{
+							Description: "clientCAFile defines the path to the CA certificate file for client certificate authentication to the server.\n\nIt is mutually exclusive with `client_ca`.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"clientAuthType": {
+						SchemaProps: spec.SchemaProps{
+							Description: "clientAuthType defines the server policy for client TLS authentication.\n\nFor more detail on clientAuth options: https://golang.org/pkg/crypto/tls/#ClientAuthType",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"minVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "minVersion defines the minimum TLS version that is acceptable.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"maxVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "maxVersion defines the Maximum TLS version that is acceptable.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"cipherSuites": {
+						SchemaProps: spec.SchemaProps{
+							Description: "cipherSuites defines the list of supported cipher suites for TLS versions up to TLS 1.2.\n\nIf not defined, the Go default cipher suites are used. Available cipher suites are documented in the Go documentation: https://golang.org/pkg/crypto/tls/#pkg-constants",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"preferServerCipherSuites": {
+						SchemaProps: spec.SchemaProps{
+							Description: "preferServerCipherSuites defines whether the server selects the client's most preferred cipher suite, or the server's most preferred cipher suite.\n\nIf true then the server's preference, as expressed in the order of elements in cipherSuites, is used.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"curvePreferences": {
+						SchemaProps: spec.SchemaProps{
+							Description: "curvePreferences defines elliptic curves that will be used in an ECDHE handshake, in preference order.\n\nAvailable curves are documented in the Go documentation: https://golang.org/pkg/crypto/tls/#CurveID",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.SecretOrConfigMap", "k8s.io/api/core/v1.SecretKeySelector"},
+	}
+}
+
+func schema_pkg_apis_monitoring_v1_WorkloadBinding(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "WorkloadBinding is a link between a configuration resource and a workload resource.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"group": {
+						SchemaProps: spec.SchemaProps{
+							Description: "group defines the group of the referenced resource.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"resource": {
+						SchemaProps: spec.SchemaProps{
+							Description: "resource defines the type of resource being referenced (e.g. Prometheus, PrometheusAgent, ThanosRuler or Alertmanager).",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "name defines the name of the referenced object.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"namespace": {
+						SchemaProps: spec.SchemaProps{
+							Description: "namespace defines the namespace of the referenced object.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"conditions": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-list-map-keys": []interface{}{
+									"type",
+								},
+								"x-kubernetes-list-type": "map",
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "conditions defines the current state of the configuration resource when bound to the referenced Workload object.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ConfigResourceCondition"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"group", "resource", "name", "namespace"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.ConfigResourceCondition"},
 	}
 }
 
@@ -23728,6 +30473,56 @@ func schema_kmodulesxyz_monitoring_agent_api_api_v1_DashboardSpec(ref common.Ref
 	}
 }
 
+func schema_kmodulesxyz_monitoring_agent_api_api_v1_Endpoint(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "Endpoint defines an endpoint serving Prometheus metrics to be scraped by Prometheus.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"port": {
+						SchemaProps: spec.SchemaProps{
+							Description: "port defines the name of the Service port which this endpoint refers to.\n\nIt takes precedence over `targetPort`.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metricRelabelings": {
+						SchemaProps: spec.SchemaProps{
+							Description: "metricRelabelings defines the relabeling rules to apply to the samples before ingestion.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.RelabelConfig"),
+									},
+								},
+							},
+						},
+					},
+					"relabelings": {
+						SchemaProps: spec.SchemaProps{
+							Description: "relabelings defines the relabeling rules to apply the target's metadata labels.\n\nThe Operator automatically adds relabelings for a few standard Kubernetes fields.\n\nThe original scrape job's name is available via the `__tmp_prometheus_job_name` label.\n\nMore info: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.RelabelConfig"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1.RelabelConfig"},
+	}
+}
+
 func schema_kmodulesxyz_monitoring_agent_api_api_v1_GrafanaConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -24209,9 +31004,55 @@ func schema_kmodulesxyz_monitoring_agent_api_api_v1_ServiceMonitorSpec(ref commo
 							Format:      "",
 						},
 					},
+					"targetLabels": {
+						SchemaProps: spec.SchemaProps{
+							Description: "targetLabels defines the labels which are transferred from the associated Kubernetes `Service` object onto the ingested metrics.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"podTargetLabels": {
+						SchemaProps: spec.SchemaProps{
+							Description: "podTargetLabels defines the labels which are transferred from the associated Kubernetes `Pod` object onto the ingested metrics.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"endpoints": {
+						SchemaProps: spec.SchemaProps{
+							Description: "endpoints defines the list of endpoints part of this ServiceMonitor. Defines how to scrape metrics from Kubernetes [Endpoints](https://kubernetes.io/docs/concepts/services-networking/service/#endpoints) objects. In most cases, an Endpoints object is backed by a Kubernetes [Service](https://kubernetes.io/docs/concepts/services-networking/service/) object with the same name and labels.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kmodules.xyz/monitoring-agent-api/api/v1.Endpoint"),
+									},
+								},
+							},
+						},
+					},
 				},
 			},
 		},
+		Dependencies: []string{
+			"kmodules.xyz/monitoring-agent-api/api/v1.Endpoint"},
 	}
 }
 
@@ -26874,13 +33715,14 @@ func schema_apimachinery_apis_kafka_v1alpha1_ConnectorSpec(ref common.ReferenceC
 					},
 					"configSecret": {
 						SchemaProps: spec.SchemaProps{
-							Description: "ConfigSecret is a required field to provide configuration file for Connector to create connectors for Kafka connect cluster(i.e connector.properties).",
+							Description: "ConfigSecret is deprecated and will be removed in a future release. Use `configuration` instead.",
 							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
 						},
 					},
 					"configuration": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1.ConfigurationSpec"),
+							Description: "Configuration is a required field to provide a configuration file for Connector to create connectors for Kafka connect cluster(i.e. connector.properties).",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1.ConfigurationSpec"),
 						},
 					},
 					"deletionPolicy": {
@@ -26891,7 +33733,7 @@ func schema_apimachinery_apis_kafka_v1alpha1_ConnectorSpec(ref common.ReferenceC
 						},
 					},
 				},
-				Required: []string{"connectClusterRef", "configSecret"},
+				Required: []string{"connectClusterRef", "configuration"},
 			},
 		},
 		Dependencies: []string{

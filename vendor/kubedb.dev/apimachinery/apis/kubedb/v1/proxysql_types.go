@@ -246,3 +246,21 @@ type ProxySQLList struct {
 	// Items is a list of ProxySQL TPR objects
 	Items []ProxySQL `json:"items,omitempty"`
 }
+
+var _ Accessor = &ProxySQL{}
+
+func (m *ProxySQL) GetObjectMeta() metav1.ObjectMeta {
+	return m.ObjectMeta
+}
+
+func (m *ProxySQL) GetConditions() []kmapi.Condition {
+	return m.Status.Conditions
+}
+
+func (m *ProxySQL) SetCondition(cond kmapi.Condition) {
+	m.Status.Conditions = setCondition(m.Status.Conditions, cond)
+}
+
+func (m *ProxySQL) RemoveCondition(typ string) {
+	m.Status.Conditions = removeCondition(m.Status.Conditions, typ)
+}

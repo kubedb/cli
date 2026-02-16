@@ -423,6 +423,15 @@ func (k *Kafka) SetDefaults(kc client.Client) {
 		k.SetTLSDefaults()
 	}
 	k.SetHealthCheckerDefaults()
+
+	if k.Spec.TieredStorage != nil {
+		if k.Spec.TieredStorage.StorageManagerClassPath == "" {
+			k.Spec.TieredStorage.StorageManagerClassPath = fmt.Sprintf("%s/*", kubedb.KafkaTieredStoragePluginDir)
+		}
+		if k.Spec.TieredStorage.StorageManagerClassName == "" {
+			k.Spec.TieredStorage.StorageManagerClassName = kubedb.KafkaAivenTieredStorageClassName
+		}
+	}
 }
 
 func (k *Kafka) setDefaultContainerSecurityContext(kfVersion *catalog.KafkaVersion, podTemplate *ofst.PodTemplateSpec) {
@@ -590,4 +599,11 @@ func (k *Kafka) KafkaSaslListenerProtocolConfigKey(protocol string, mechanism st
 
 func (k *Kafka) KafkaEnabledSASLMechanismsKey(protocol string) string {
 	return fmt.Sprintf("listener.name.%s.sasl.enabled.mechanisms", strings.ToLower(protocol))
+}
+
+func (k *Kafka) GetKafkaBrokerCounts() int {
+	if k.Spec.Topology != nil {
+		return int(*k.Spec.Topology.Broker.Replicas)
+	}
+	return int(*k.Spec.Replicas)
 }

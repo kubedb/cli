@@ -206,3 +206,21 @@ const (
 	// to Send the client cert and client key certificate for authentication.
 	PgpoolClientAuthModeCert PgpoolClientAuthMode = "cert"
 )
+
+var _ Accessor = &Pgpool{}
+
+func (p *Pgpool) GetObjectMeta() meta.ObjectMeta {
+	return p.ObjectMeta
+}
+
+func (p *Pgpool) GetConditions() []kmapi.Condition {
+	return p.Status.Conditions
+}
+
+func (p *Pgpool) SetCondition(cond kmapi.Condition) {
+	p.Status.Conditions = setCondition(p.Status.Conditions, cond)
+}
+
+func (p *Pgpool) RemoveCondition(typ string) {
+	p.Status.Conditions = removeCondition(p.Status.Conditions, typ)
+}

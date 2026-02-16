@@ -129,3 +129,21 @@ const (
 	ResourceSingularRedisSentinel = "redissentinel"
 	ResourcePluralRedisSentinel   = "redissentinels"
 )
+
+var _ Accessor = &RedisSentinel{}
+
+func (rs *RedisSentinel) GetObjectMeta() metav1.ObjectMeta {
+	return rs.ObjectMeta
+}
+
+func (rs *RedisSentinel) GetConditions() []kmapi.Condition {
+	return rs.Status.Conditions
+}
+
+func (rs *RedisSentinel) SetCondition(cond kmapi.Condition) {
+	rs.Status.Conditions = setCondition(rs.Status.Conditions, cond)
+}
+
+func (rs *RedisSentinel) RemoveCondition(typ string) {
+	rs.Status.Conditions = removeCondition(rs.Status.Conditions, typ)
+}

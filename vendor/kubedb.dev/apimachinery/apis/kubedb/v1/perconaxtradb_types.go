@@ -161,3 +161,21 @@ type PerconaXtraDBList struct {
 	// Items is a list of PerconaXtraDB TPR objects
 	Items []PerconaXtraDB `json:"items,omitempty"`
 }
+
+var _ Accessor = &PerconaXtraDB{}
+
+func (m *PerconaXtraDB) GetObjectMeta() metav1.ObjectMeta {
+	return m.ObjectMeta
+}
+
+func (m *PerconaXtraDB) GetConditions() []kmapi.Condition {
+	return m.Status.Conditions
+}
+
+func (m *PerconaXtraDB) SetCondition(cond kmapi.Condition) {
+	m.Status.Conditions = setCondition(m.Status.Conditions, cond)
+}
+
+func (m *PerconaXtraDB) RemoveCondition(typ string) {
+	m.Status.Conditions = removeCondition(m.Status.Conditions, typ)
+}

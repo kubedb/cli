@@ -153,3 +153,21 @@ type MemcachedList struct {
 	// Items is a list of Memcached TPR objects
 	Items []Memcached `json:"items,omitempty"`
 }
+
+var _ Accessor = &Memcached{}
+
+func (m *Memcached) GetObjectMeta() metav1.ObjectMeta {
+	return m.ObjectMeta
+}
+
+func (m *Memcached) GetConditions() []kmapi.Condition {
+	return m.Status.Conditions
+}
+
+func (m *Memcached) SetCondition(cond kmapi.Condition) {
+	m.Status.Conditions = setCondition(m.Status.Conditions, cond)
+}
+
+func (m *Memcached) RemoveCondition(typ string) {
+	m.Status.Conditions = removeCondition(m.Status.Conditions, typ)
+}

@@ -2155,6 +2155,7 @@ func autoConvert_v1_KafkaSpec_To_v1alpha2_KafkaSpec(in *v1.KafkaSpec, out *Kafka
 	} else {
 		out.Topology = nil
 	}
+	// WARNING: in.TieredStorage requires manual conversion: does not exist in peer-type
 	out.StorageType = StorageType(in.StorageType)
 	out.Storage = (*corev1.PersistentVolumeClaimSpec)(unsafe.Pointer(in.Storage))
 	out.EnableSSL = in.EnableSSL
@@ -3855,6 +3856,7 @@ func autoConvert_v1_PostgresSpec_To_v1alpha2_PostgresSpec(in *v1.PostgresSpec, o
 	out.Archiver = (*Archiver)(unsafe.Pointer(in.Archiver))
 	out.Arbiter = (*ArbiterSpec)(unsafe.Pointer(in.Arbiter))
 	out.Replication = (*PostgresReplication)(unsafe.Pointer(in.Replication))
+	// WARNING: in.ReadReplicas requires manual conversion: does not exist in peer-type
 	return nil
 }
 
