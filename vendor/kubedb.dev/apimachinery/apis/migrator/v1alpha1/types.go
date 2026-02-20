@@ -58,8 +58,16 @@ type ConnectionInfo struct {
 type DBMigratorImages struct {
 	// CLI specifies the migrator CLI image
 	// +optional
-	CLI string `json:"cli,omitempty"`
+	CLI DBMigratorCLI `json:"cli"`
 	// StatusReporter is the sidecar image used to report migration progress
 	// +optional
-	StatusReporter string `json:"statusReporter,omitempty"`
+	StatusReporter DBMigratorStatusReporter `json:"statusReporter"`
+}
+
+type DBMigratorCLI struct {
+	Image string `json:"image"`
+}
+
+type DBMigratorStatusReporter struct {
+	Image string `json:"image"`
 }

@@ -46,6 +46,8 @@ type MongoDBOpsRequestExpansion interface{}
 
 type MySQLOpsRequestExpansion interface{}
 
+type Neo4jOpsRequestExpansion interface{}
+
 type PerconaXtraDBOpsRequestExpansion interface{}
 
 type PgBouncerOpsRequestExpansion interface{}

@@ -282,8 +282,8 @@ func isAlreadyMerged(currentReq opsapi.Accessor, pendingReconfigureOps []opsapi.
 		for _, cond := range req.GetStatus().Conditions {
 			if cond.Type == MergedFromOps && cond.Status == metav1.ConditionTrue {
 				// The message contains comma-separated list of original ops names
-				opsNames := strings.Split(cond.Message, ", ")
-				for _, name := range opsNames {
+				opsNames := strings.SplitSeq(cond.Message, ", ")
+				for name := range opsNames {
 					if strings.TrimSpace(name) == currentReq.GetObjectMeta().Name {
 						return true, req.GetObjectMeta().Name
 					}

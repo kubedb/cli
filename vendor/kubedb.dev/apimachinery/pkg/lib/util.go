@@ -21,6 +21,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"slices"
 	"strconv"
 	"strings"
 
@@ -90,10 +91,8 @@ func GetDistributedPodNamespace(kbClient client.Client, ppName, podName string) 
 	splitString := strings.Split(podName, "-")
 	ordinal, _ := strconv.Atoi(splitString[len(splitString)-1])
 	for i := 0; i < len(pp.Spec.ClusterSpreadConstraint.DistributionRules); i++ {
-		for _, ordinalIndex := range pp.Spec.ClusterSpreadConstraint.DistributionRules[i].ReplicaIndices {
-			if ordinalIndex == int32(ordinal) {
-				return pp.Spec.ClusterSpreadConstraint.DistributionRules[i].ClusterName, nil
-			}
+		if slices.Contains(pp.Spec.ClusterSpreadConstraint.DistributionRules[i].ReplicaIndices, int32(ordinal)) {
+			return pp.Spec.ClusterSpreadConstraint.DistributionRules[i].ClusterName, nil
 		}
 	}
 	return "", fmt.Errorf("no cluster found for the given ordinal %v", ordinal)
@@ -279,12 +278,7 @@ func CheckManifestWorkPodReady(mw *ocmapi.ManifestWork, log *logr.Logger) bool {
 }
 
 func IsOpsTypeSupported(supportedTypes []string, curOpsType string) bool {
-	for _, s := range supportedTypes {
-		if s == curOpsType {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(supportedTypes, curOpsType)
 }
 
 func stashOperatorExist(KBClient client.Client) bool {

@@ -21,20 +21,24 @@ import (
 	"fmt"
 	"slices"
 
+	"kubedb.dev/apimachinery/apis"
 	catalog "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
+	promapi "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1"
 	core "k8s.io/api/core/v1"
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/klog/v2"
 	"k8s.io/utils/ptr"
+	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	coreutil "kmodules.xyz/client-go/core/v1"
 	meta_util "kmodules.xyz/client-go/meta"
 	"kmodules.xyz/client-go/policy/secomp"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
+	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v2"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
@@ -52,6 +56,13 @@ func (r *Neo4j) GetAuthSecretName() string {
 		return r.Spec.AuthSecret.Name
 	}
 	return meta_util.NameWithSuffix(r.OffshootName(), "auth")
+}
+
+func (r *Neo4j) GetKeystoreSecretName() string {
+	if r.Spec.TLS.KeystoreCredSecret != nil && r.Spec.TLS.KeystoreCredSecret.Name != "" {
+		return r.Spec.TLS.KeystoreCredSecret.Name
+	}
+	return meta_util.NameWithSuffix(r.OffshootName(), "keystore-cred")
 }
 
 func (r *Neo4j) OffshootName() string {
@@ -131,6 +142,53 @@ func (r *Neo4j) SetDefaults(kc client.Client) {
 	}
 
 	r.setDefaultContainerSecurityContext(&neoVersion, &r.Spec.PodTemplate)
+	r.SetHealthCheckerDefaults()
+
+	if r.Spec.Monitor != nil {
+		if r.Spec.Monitor.Prometheus == nil {
+			r.Spec.Monitor.Prometheus = &mona.PrometheusSpec{}
+		}
+		if r.Spec.Monitor.Prometheus.Exporter.Port == 0 {
+			r.Spec.Monitor.Prometheus.Exporter.Port = kubedb.Neo4jExporterPort
+		}
+		r.Spec.Monitor.SetDefaults()
+		if r.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser == nil {
+			r.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser = neoVersion.Spec.SecurityContext.RunAsUser
+		}
+		if r.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup == nil {
+			r.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup = neoVersion.Spec.SecurityContext.RunAsUser
+		}
+	}
+
+	r.SetTLSDefaults()
+
+	dbContainer := coreutil.GetContainerByName(r.Spec.PodTemplate.Spec.Containers, kubedb.Neo4jContainerName)
+	if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
+		apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResourcesNeo4j)
+	}
+}
+
+func (r *Neo4j) SetTLSDefaults() {
+	if r.Spec.TLS == nil || r.Spec.TLS.IssuerRef == nil {
+		return
+	}
+	if r.Spec.TLS.HTTP == nil {
+		r.Spec.TLS.HTTP = &ProtocolTLSConfig{
+			Mode: TLSModeTLS,
+		}
+	}
+	if r.Spec.TLS.Bolt == nil {
+		r.Spec.TLS.Bolt = &ProtocolTLSConfig{
+			Mode: TLSModeTLS,
+		}
+	}
+	if r.Spec.TLS.Cluster == nil {
+		r.Spec.TLS.HTTP = &ProtocolTLSConfig{
+			Mode: TLSModeMTLS,
+		}
+	}
+	r.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(r.Spec.TLS.Certificates, string(Neo4jCertificateTypeServer), r.CertificateName(Neo4jCertificateTypeServer))
+	r.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(r.Spec.TLS.Certificates, string(Neo4jCertificateTypeClient), r.CertificateName(Neo4jCertificateTypeClient))
 }
 
 func (r *Neo4j) setDefaultContainerSecurityContext(neoVersion *catalog.Neo4jVersion, podTemplate *ofst.PodTemplateSpec) {
@@ -143,6 +201,7 @@ func (r *Neo4j) setDefaultContainerSecurityContext(neoVersion *catalog.Neo4jVers
 	if podTemplate.Spec.SecurityContext.FSGroup == nil {
 		podTemplate.Spec.SecurityContext.FSGroup = neoVersion.Spec.SecurityContext.RunAsUser
 	}
+
 	container := coreutil.GetContainerByName(podTemplate.Spec.Containers, kubedb.Neo4jContainerName)
 	if container == nil {
 		container = &core.Container{
@@ -150,6 +209,7 @@ func (r *Neo4j) setDefaultContainerSecurityContext(neoVersion *catalog.Neo4jVers
 		}
 		podTemplate.Spec.Containers = coreutil.UpsertContainer(podTemplate.Spec.Containers, *container)
 	}
+
 	if container.SecurityContext == nil {
 		container.SecurityContext = &core.SecurityContext{}
 	}
@@ -235,7 +295,10 @@ func (r *Neo4j) AppBindingMeta() appcat.AppBindingMeta {
 }
 
 func (r *Neo4j) GetConnectionScheme() string {
-	scheme := "http" // TODO:()
+	scheme := "http"
+	if r.Spec.TLS != nil && r.Spec.TLS.HTTP.Mode != TLSModeDisabled {
+		scheme = "https"
+	}
 	return scheme
 }
 
@@ -249,4 +312,69 @@ func (r *Neo4j) SetHealthCheckerDefaults() {
 	if r.Spec.HealthChecker.FailureThreshold == nil {
 		r.Spec.HealthChecker.FailureThreshold = ptr.To(int32(3))
 	}
+}
+
+func (r *Neo4j) ServiceLabels(alias ServiceAlias, extraLabels ...map[string]string) map[string]string {
+	svcTemplate := GetServiceTemplate(r.Spec.ServiceTemplates, alias)
+	return r.offshootLabels(meta_util.OverwriteKeys(r.OffshootSelectors(), extraLabels...), svcTemplate.Labels)
+}
+
+type neo4jStatsService struct {
+	*Neo4j
+}
+
+func (r neo4jStatsService) GetNamespace() string {
+	return r.Neo4j.GetNamespace()
+}
+
+func (r neo4jStatsService) ServiceName() string {
+	return r.OffshootName() + "-stats"
+}
+
+func (r neo4jStatsService) ServiceMonitorName() string {
+	return r.ServiceName()
+}
+
+func (r neo4jStatsService) ServiceMonitorAdditionalLabels() map[string]string {
+	return r.OffshootLabels()
+}
+
+func (r neo4jStatsService) Path() string {
+	return kubedb.DefaultStatsPath
+}
+
+func (r neo4jStatsService) Scheme() string {
+	scheme := "http"
+	if r.Spec.TLS != nil && r.Spec.TLS.HTTP.Mode != TLSModeDisabled {
+		scheme = "https"
+	}
+	return scheme
+}
+
+func (r neo4jStatsService) TLSConfig() *promapi.TLSConfig {
+	return nil
+}
+
+func (r *Neo4j) StatsService() mona.StatsAccessor {
+	return &neo4jStatsService{r}
+}
+
+func (r *Neo4j) StatsServiceLabels() map[string]string {
+	return r.ServiceLabels(StatsServiceAlias, map[string]string{kubedb.LabelRole: kubedb.RoleStats})
+}
+
+// GetCertSecretName returns the secret name for a certificate alias if any,
+// otherwise returns default certificate secret name for the given alias.
+func (r *Neo4j) GetCertSecretName(alias Neo4jCertificateType) string {
+	if r.Spec.TLS != nil {
+		name, ok := kmapi.GetCertificateSecretName(r.Spec.TLS.Certificates, string(alias))
+		if ok {
+			return name
+		}
+	}
+	return r.CertificateName(alias)
+}
+
+func (r *Neo4j) CertificateName(alias Neo4jCertificateType) string {
+	return meta_util.NameWithSuffix(r.Name, fmt.Sprintf("%s-cert", string(alias)))
 }
