@@ -82,6 +82,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&MSSQLServerOpsRequestList{},
 		&MySQLOpsRequest{},
 		&MySQLOpsRequestList{},
+		&Neo4jOpsRequest{},
+		&Neo4jOpsRequestList{},
 		&PerconaXtraDBOpsRequest{},
 		&PerconaXtraDBOpsRequestList{},
 		&PgBouncerOpsRequest{},

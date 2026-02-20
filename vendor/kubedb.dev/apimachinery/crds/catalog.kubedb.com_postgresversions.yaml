@@ -160,9 +160,19 @@ spec:
               migrator:
                 properties:
                   cli:
-                    type: string
+                    properties:
+                      image:
+                        type: string
+                    required:
+                    - image
+                    type: object
                   statusReporter:
-                    type: string
+                    properties:
+                      image:
+                        type: string
+                    required:
+                    - image
+                    type: object
                 type: object
               podSecurityPolicies:
                 properties:

@@ -139,16 +139,16 @@ func (s *Solr) Append(opt map[string]string) string {
 	}
 	sort.Strings(key)
 	fl := 0
-	as := ""
+	var as strings.Builder
 	for _, x := range key {
 		if fl == 1 {
-			as += " "
+			as.WriteString(" ")
 		}
-		as += fmt.Sprintf("%s=%s", x, opt[x])
+		as.WriteString(fmt.Sprintf("%s=%s", x, opt[x]))
 		fl = 1
 
 	}
-	return as
+	return as.String()
 }
 
 func (s *Solr) OffshootName() string {

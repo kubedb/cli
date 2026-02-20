@@ -19,6 +19,7 @@ package lib
 import (
 	"context"
 	"fmt"
+	"slices"
 	"sort"
 	"strings"
 	"time"
@@ -107,12 +108,7 @@ func (s *skipper) SkipOpsReq() (bool, error) {
 var ExcludedFromSkipperLogic = []string{"Reconfigure"} // Skip Reconfigure ops requests - they are handled by ReconfigureMerger
 
 func isInExcludeList(s string) bool {
-	for _, ex := range ExcludedFromSkipperLogic {
-		if s == ex {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(ExcludedFromSkipperLogic, s)
 }
 
 func (s *skipper) getOldestOpsAfterSkipping(opsMap map[string][]client.Object) (metav1.ObjectMeta, error) {

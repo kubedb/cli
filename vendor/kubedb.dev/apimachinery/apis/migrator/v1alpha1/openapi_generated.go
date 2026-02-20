@@ -577,7 +577,9 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kmodules.xyz/offshoot-api/api/v1.Volume":                                                    schema_kmodulesxyz_offshoot_api_api_v1_Volume(ref),
 		"kmodules.xyz/offshoot-api/api/v1.VolumeSource":                                              schema_kmodulesxyz_offshoot_api_api_v1_VolumeSource(ref),
 		"kubedb.dev/apimachinery/apis/migrator/v1alpha1.ConnectionInfo":                              schema_apimachinery_apis_migrator_v1alpha1_ConnectionInfo(ref),
+		"kubedb.dev/apimachinery/apis/migrator/v1alpha1.DBMigratorCLI":                               schema_apimachinery_apis_migrator_v1alpha1_DBMigratorCLI(ref),
 		"kubedb.dev/apimachinery/apis/migrator/v1alpha1.DBMigratorImages":                            schema_apimachinery_apis_migrator_v1alpha1_DBMigratorImages(ref),
+		"kubedb.dev/apimachinery/apis/migrator/v1alpha1.DBMigratorStatusReporter":                    schema_apimachinery_apis_migrator_v1alpha1_DBMigratorStatusReporter(ref),
 		"kubedb.dev/apimachinery/apis/migrator/v1alpha1.JobDefaults":                                 schema_apimachinery_apis_migrator_v1alpha1_JobDefaults(ref),
 		"kubedb.dev/apimachinery/apis/migrator/v1alpha1.LogicalReplication":                          schema_apimachinery_apis_migrator_v1alpha1_LogicalReplication(ref),
 		"kubedb.dev/apimachinery/apis/migrator/v1alpha1.MigrationConfig":                             schema_apimachinery_apis_migrator_v1alpha1_MigrationConfig(ref),
@@ -33349,6 +33351,26 @@ func schema_apimachinery_apis_migrator_v1alpha1_ConnectionInfo(ref common.Refere
 	}
 }
 
+func schema_apimachinery_apis_migrator_v1alpha1_DBMigratorCLI(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"image": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+				},
+				Required: []string{"image"},
+			},
+		},
+	}
+}
+
 func schema_apimachinery_apis_migrator_v1alpha1_DBMigratorImages(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -33358,18 +33380,40 @@ func schema_apimachinery_apis_migrator_v1alpha1_DBMigratorImages(ref common.Refe
 					"cli": {
 						SchemaProps: spec.SchemaProps{
 							Description: "CLI specifies the migrator CLI image",
-							Type:        []string{"string"},
-							Format:      "",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kubedb.dev/apimachinery/apis/migrator/v1alpha1.DBMigratorCLI"),
 						},
 					},
 					"statusReporter": {
 						SchemaProps: spec.SchemaProps{
 							Description: "StatusReporter is the sidecar image used to report migration progress",
-							Type:        []string{"string"},
-							Format:      "",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kubedb.dev/apimachinery/apis/migrator/v1alpha1.DBMigratorStatusReporter"),
 						},
 					},
 				},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/migrator/v1alpha1.DBMigratorCLI", "kubedb.dev/apimachinery/apis/migrator/v1alpha1.DBMigratorStatusReporter"},
+	}
+}
+
+func schema_apimachinery_apis_migrator_v1alpha1_DBMigratorStatusReporter(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"image": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+				},
+				Required: []string{"image"},
 			},
 		},
 	}

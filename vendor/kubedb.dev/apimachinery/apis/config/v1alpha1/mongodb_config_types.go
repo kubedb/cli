@@ -31,7 +31,7 @@ const (
 // https://www.vaultproject.io/api/secret/databases/index.html
 // https://www.vaultproject.io/api/secret/databases/mongodb.html#configure-connection
 type MongoDBConfiguration struct {
-	metav1.TypeMeta `json:",inline,omitempty"`
+	metav1.TypeMeta `json:",inline"`
 
 	// ConfigServer is the dsn of config server of mongodb sharding. The dsn includes the port no too.
 	ConfigServer string `json:"configServer,omitempty"`
@@ -44,5 +44,5 @@ type MongoDBConfiguration struct {
 
 	// Stash defines backup and restore task definitions.
 	// +optional
-	Stash appcat.StashAddonSpec `json:"stash,omitempty"`
+	Stash appcat.StashAddonSpec `json:"stash"`
 }

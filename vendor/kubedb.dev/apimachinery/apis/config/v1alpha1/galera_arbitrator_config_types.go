@@ -33,7 +33,7 @@ const (
 //
 //	https://galeracluster.com/library/documentation/backup-cluster.html
 type GaleraArbitratorConfiguration struct {
-	metav1.TypeMeta `json:",inline,omitempty"`
+	metav1.TypeMeta `json:",inline"`
 
 	// Address denotes the logical name of the galera cluster. It is
 	// used as the value of the variable named "wsrep_cluster_name"
@@ -56,5 +56,5 @@ type GaleraArbitratorConfiguration struct {
 
 	// Stash defines backup and restore task definitions.
 	// +optional
-	Stash appcat.StashAddonSpec `json:"stash,omitempty"`
+	Stash appcat.StashAddonSpec `json:"stash"`
 }

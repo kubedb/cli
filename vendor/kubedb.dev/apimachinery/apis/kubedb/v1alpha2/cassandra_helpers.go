@@ -459,7 +459,7 @@ func (r *Cassandra) GetSeed() string {
 	}
 	for _, rack := range r.Spec.Topology.Rack {
 		rackCount := min(*rack.Replicas, 3)
-		for i := int32(0); i < rackCount; i++ {
+		for i := range rackCount {
 			current_seed := fmt.Sprintf("%s-rack-%s-%d.%s-rack-%s-pods.%s.svc", name, rack.Name, i, name, rack.Name, namespace)
 			seed += current_seed + " , "
 		}

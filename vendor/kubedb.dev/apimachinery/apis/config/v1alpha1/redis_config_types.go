@@ -30,7 +30,7 @@ const (
 
 // RedisConfiguration defines a Redis appBinding configuration.
 type RedisConfiguration struct {
-	metav1.TypeMeta `json:",inline,omitempty"`
+	metav1.TypeMeta `json:",inline"`
 
 	// ClientCertSecret is the client secret name which needs to provide when the Redis client need to authenticate with client key and cert.
 	// It will be used when `tls-auth-clients` value is set to `required` or `yes`.
@@ -39,5 +39,5 @@ type RedisConfiguration struct {
 
 	// Stash defines backup and restore task definitions.
 	// +optional
-	Stash appcat.StashAddonSpec `json:"stash,omitempty"`
+	Stash appcat.StashAddonSpec `json:"stash"`
 }

@@ -19,6 +19,7 @@ package v1alpha2
 import (
 	"context"
 	"fmt"
+	"slices"
 
 	"kubedb.dev/apimachinery/apis/kubedb"
 
@@ -142,10 +143,8 @@ func GetDatabasePodsByPetSetLister(db metav1.Object, psLister pslister.PetSetLis
 // Upsert elements to string slice
 func upsertStringSlice(inSlice []string, values ...string) []string {
 	upsert := func(m string) {
-		for _, v := range inSlice {
-			if v == m {
-				return
-			}
+		if slices.Contains(inSlice, m) {
+			return
 		}
 		inSlice = append(inSlice, m)
 	}

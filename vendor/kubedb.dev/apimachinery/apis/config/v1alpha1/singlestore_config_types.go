@@ -29,7 +29,7 @@ const (
 
 // SinglestoreConfiguration defines a Singlestore appBinding configuration.
 type SinglestoreConfiguration struct {
-	metav1.TypeMeta `json:",inline,omitempty"`
+	metav1.TypeMeta `json:",inline"`
 
 	// ReplicaSets contains the dns of each replicaset of sharding. The DSNs are in key-value pair, where
 	// the keys are host-0, host-1 etc, and the values are DSN of each replicaset. If there is no sharding
@@ -41,5 +41,5 @@ type SinglestoreConfiguration struct {
 
 	// Stash defines backup and restore task definitions.
 	// +optional
-	Stash appcat.StashAddonSpec `json:"stash,omitempty"`
+	Stash appcat.StashAddonSpec `json:"stash"`
 }

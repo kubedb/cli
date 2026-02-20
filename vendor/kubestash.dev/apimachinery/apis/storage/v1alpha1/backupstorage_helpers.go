@@ -17,16 +17,22 @@ limitations under the License.
 package v1alpha1
 
 import (
+	"context"
+	"fmt"
+
 	"kubestash.dev/apimachinery/apis"
 	"kubestash.dev/apimachinery/crds"
 
+	"gomodules.xyz/restic"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/klog/v2"
+	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	cutil "kmodules.xyz/client-go/conditions"
 	"kmodules.xyz/client-go/meta"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 func (BackupStorage) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
@@ -91,4 +97,77 @@ func (b *BackupStorage) LocalNetworkVolume() bool {
 		return true
 	}
 	return false
+}
+
+// NewBackupStorageResolver creates a StorageConfigResolver that resolves storage configuration
+// from a BackupStorage custom resource. This is the default resolver for the kubestash project.
+func NewBackupStorageResolver(kbClient client.Client, bsRef *kmapi.ObjectReference) restic.StorageConfigResolver {
+	return func(backend *restic.Backend) error {
+		bs := &BackupStorage{
+			ObjectMeta: metav1.ObjectMeta{
+				Name:      bsRef.Name,
+				Namespace: bsRef.Namespace,
+			},
+		}
+
+		if err := kbClient.Get(context.Background(), client.ObjectKeyFromObject(bs), bs); err != nil {
+			return fmt.Errorf("failed to get BackupStorage %s/%s: %w", bsRef.Namespace, bsRef.Name, err)
+		}
+		var storageSecretName string
+		switch {
+		case bs.Spec.Storage.S3 != nil:
+			s3 := bs.Spec.Storage.S3
+			storageSecretName = s3.SecretName
+			backend.StorageConfig = &restic.StorageConfig{
+				Provider:       string(ProviderS3),
+				Bucket:         s3.Bucket,
+				Endpoint:       s3.Endpoint,
+				Region:         s3.Region,
+				Prefix:         s3.Prefix,
+				InsecureTLS:    s3.InsecureTLS,
+				MaxConnections: s3.MaxConnections,
+			}
+		case bs.Spec.Storage.GCS != nil:
+			gcs := bs.Spec.Storage.GCS
+			storageSecretName = gcs.SecretName
+			backend.StorageConfig = &restic.StorageConfig{
+				Provider:       string(ProviderGCS),
+				Bucket:         gcs.Bucket,
+				Prefix:         gcs.Prefix,
+				MaxConnections: gcs.MaxConnections,
+			}
+		case bs.Spec.Storage.Azure != nil:
+			azure := bs.Spec.Storage.Azure
+			storageSecretName = azure.SecretName
+			backend.StorageConfig = &restic.StorageConfig{
+				Provider:            string(ProviderAzure),
+				Bucket:              azure.Container,
+				Prefix:              azure.Prefix,
+				AzureStorageAccount: azure.StorageAccount,
+				MaxConnections:      azure.MaxConnections,
+			}
+		case bs.Spec.Storage.Local != nil:
+			local := bs.Spec.Storage.Local
+			backend.StorageConfig = &restic.StorageConfig{
+				Provider:       string(ProviderLocal),
+				Bucket:         local.MountPath,
+				Prefix:         local.SubPath,
+				MaxConnections: local.MaxConnections,
+			}
+			if backend.MountPath != "" {
+				backend.Bucket = backend.MountPath
+			}
+		default:
+			return fmt.Errorf("no storage backend configured in BackupStorage %s/%s", bsRef.Namespace, bsRef.Name)
+		}
+
+		if storageSecretName != "" {
+			secret := &core.Secret{}
+			if err := kbClient.Get(context.Background(), client.ObjectKey{Name: storageSecretName, Namespace: bsRef.Namespace}, secret); err != nil {
+				return fmt.Errorf("failed to get storage Secret %s/%s: %w", bsRef.Namespace, storageSecretName, err)
+			}
+			backend.StorageSecret = secret
+		}
+		return nil
+	}
 }

@@ -234,7 +234,7 @@ func (m *Milvus) MetaStorageEndpoints() []string {
 	size := m.Spec.MetaStorage.Size
 
 	endpoints := make([]string, size)
-	for i := 0; i < size; i++ {
+	for i := range size {
 		endpoints[i] = fmt.Sprintf(
 			"http://%s-%d.%s.%s.svc.cluster.local:%d",
 			m.EtcdServiceName(), i,
