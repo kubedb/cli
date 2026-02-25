@@ -57,8 +57,8 @@ type SinglestoreVersionSpec struct {
 
 	// Database Image
 	DB SinglestoreVersionDatabase `json:"db"`
-	// +optional
-	Coordinator SinglestoreCoordinator `json:"coordinator,omitempty"`
+	// Coordinator Image
+	Coordinator SinglestoreCoordinator `json:"coordinator"`
 	// +optional
 	Standalone SinglestoreStandaloneVersionDatabase `json:"standalone,omitempty"`
 	// +optional

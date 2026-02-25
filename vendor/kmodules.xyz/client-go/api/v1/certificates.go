@@ -261,7 +261,7 @@ func RemoveCertificate(certificates []CertificateSpec, alias string) []Certifica
 type stringSetMerger struct{}
 
 func (t stringSetMerger) Transformer(typ reflect.Type) func(dst, src reflect.Value) error {
-	if typ == reflect.TypeOf([]string{}) {
+	if typ == reflect.TypeFor[[]string]() {
 		return func(dst, src reflect.Value) error {
 			if dst.CanSet() {
 				if dst.Len() <= 1 && src.Len() == 0 {

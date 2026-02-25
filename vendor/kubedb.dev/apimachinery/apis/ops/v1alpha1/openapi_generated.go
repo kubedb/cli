@@ -715,6 +715,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.Neo4jOpsRequest":                                  schema_apimachinery_apis_ops_v1alpha1_Neo4jOpsRequest(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.Neo4jOpsRequestList":                              schema_apimachinery_apis_ops_v1alpha1_Neo4jOpsRequestList(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.Neo4jOpsRequestSpec":                              schema_apimachinery_apis_ops_v1alpha1_Neo4jOpsRequestSpec(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.Neo4jTLSSpec":                                     schema_apimachinery_apis_ops_v1alpha1_Neo4jTLSSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.OpsRequestStatus":                                 schema_apimachinery_apis_ops_v1alpha1_OpsRequestStatus(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBCustomConfigurationSpec":             schema_apimachinery_apis_ops_v1alpha1_PerconaXtraDBCustomConfigurationSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBHorizontalScalingSpec":               schema_apimachinery_apis_ops_v1alpha1_PerconaXtraDBHorizontalScalingSpec(ref),
@@ -28967,8 +28968,9 @@ func schema_kmodulesxyz_client_go_api_v1_ClusterClaimFeatures(ref common.Referen
 				Properties: map[string]spec.Schema{
 					"enabledFeatures": {
 						SchemaProps: spec.SchemaProps{
-							Type: []string{"array"},
-							Items: &spec.SchemaOrArray{
+							Type: []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: "",
@@ -39217,6 +39219,12 @@ func schema_apimachinery_apis_ops_v1alpha1_Neo4jOpsRequestSpec(ref common.Refere
 							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec"),
 						},
 					},
+					"tls": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies information necessary for configuring TLS",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.Neo4jTLSSpec"),
+						},
+					},
 					"timeout": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.",
@@ -39241,7 +39249,76 @@ func schema_apimachinery_apis_ops_v1alpha1_Neo4jOpsRequestSpec(ref common.Refere
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.Neo4jTLSSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec"},
+	}
+}
+
+func schema_apimachinery_apis_ops_v1alpha1_Neo4jTLSSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"issuerRef": {
+						SchemaProps: spec.SchemaProps{
+							Description: "IssuerRef is a reference to a Certificate Issuer.",
+							Ref:         ref("k8s.io/api/core/v1.TypedLocalObjectReference"),
+						},
+					},
+					"certificates": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Certificate provides server and/or client certificate options used by application pods. These options are passed to a cert-manager Certificate object. xref: https://github.com/jetstack/cert-manager/blob/v0.16.0/pkg/apis/certmanager/v1beta1/types_certificate.go#L82-L162",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kmodules.xyz/client-go/api/v1.CertificateSpec"),
+									},
+								},
+							},
+						},
+					},
+					"bolt": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ProtocolTLSConfig"),
+						},
+					},
+					"http": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ProtocolTLSConfig"),
+						},
+					},
+					"cluster": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ProtocolTLSConfig"),
+						},
+					},
+					"keystoreCredSecret": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Keystore encryption secret",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"),
+						},
+					},
+					"rotateCertificates": {
+						SchemaProps: spec.SchemaProps{
+							Description: "RotateCertificates tells operator to initiate certificate rotation",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"remove": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Remove tells operator to remove TLS configuration",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.TypedLocalObjectReference", "kmodules.xyz/client-go/api/v1.CertificateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ProtocolTLSConfig", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"},
 	}
 }
 

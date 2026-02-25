@@ -66,7 +66,7 @@ type RedisVersionSpec struct {
 	// Exporter Image
 	Exporter RedisVersionExporter `json:"exporter"`
 	// Coordinator Image
-	Coordinator RedisVersionCoordinator `json:"coordinator,omitempty"`
+	Coordinator RedisVersionCoordinator `json:"coordinator"`
 	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
 	// +optional
 	Deprecated bool `json:"deprecated,omitempty"`

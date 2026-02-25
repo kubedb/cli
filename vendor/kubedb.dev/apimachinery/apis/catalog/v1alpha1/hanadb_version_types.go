@@ -49,13 +49,10 @@ type HanaDBVersion struct {
 type HanaDBVersionSpec struct {
 	// Version
 	Version string `json:"version"`
-
-	// EndOfLife refers if this version reached into its end of the life or not, based on https://endoflife.date/
-	// +optional
-	EndOfLife bool `json:"endOfLife"`
-
 	// Database Image
 	DB HanaDatabase `json:"db"`
+	// Coordinator Image
+	Coordinator HanaDBCoordinator `json:"coordinator"`
 	// Deprecated versions usable but considered as obsolete and best avoided typically superseded
 	Deprecated bool `json:"deprecated,omitempty"`
 	// SecurityContext is for the additional config for the DB container
@@ -75,6 +72,11 @@ type HanaDBSecurityContext struct {
 
 // HanaDBVersionDatabase is the HanaDB Database image
 type HanaDatabase struct {
+	Image string `json:"image"`
+}
+
+// HanaDBCoordinator is the HanaDB coordinator Container image
+type HanaDBCoordinator struct {
 	Image string `json:"image"`
 }
 

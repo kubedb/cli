@@ -124,8 +124,10 @@ func (in *ClusterClaimFeatures) DeepCopyInto(out *ClusterClaimFeatures) {
 	*out = *in
 	if in.EnabledFeatures != nil {
 		in, out := &in.EnabledFeatures, &out.EnabledFeatures
-		*out = make([]string, len(*in))
-		copy(*out, *in)
+		*out = make(map[string]string, len(*in))
+		for key, val := range *in {
+			(*out)[key] = val
+		}
 	}
 	if in.ExternallyManagedFeatures != nil {
 		in, out := &in.ExternallyManagedFeatures, &out.ExternallyManagedFeatures

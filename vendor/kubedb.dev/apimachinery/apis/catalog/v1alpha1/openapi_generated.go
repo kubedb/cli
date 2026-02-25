@@ -632,6 +632,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.FullBackup":                                   schema_apimachinery_apis_catalog_v1alpha1_FullBackup(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.FullBackupRestore":                            schema_apimachinery_apis_catalog_v1alpha1_FullBackupRestore(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.GitSyncer":                                    schema_apimachinery_apis_catalog_v1alpha1_GitSyncer(ref),
+		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.HanaDBCoordinator":                            schema_apimachinery_apis_catalog_v1alpha1_HanaDBCoordinator(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.HanaDBSecurityContext":                        schema_apimachinery_apis_catalog_v1alpha1_HanaDBSecurityContext(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.HanaDBVersion":                                schema_apimachinery_apis_catalog_v1alpha1_HanaDBVersion(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.HanaDBVersionList":                            schema_apimachinery_apis_catalog_v1alpha1_HanaDBVersionList(ref),
@@ -28946,8 +28947,9 @@ func schema_kmodulesxyz_client_go_api_v1_ClusterClaimFeatures(ref common.Referen
 				Properties: map[string]spec.Schema{
 					"enabledFeatures": {
 						SchemaProps: spec.SchemaProps{
-							Type: []string{"array"},
-							Items: &spec.SchemaOrArray{
+							Type: []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: "",
@@ -34484,7 +34486,7 @@ func schema_apimachinery_apis_catalog_v1alpha1_DB2VersionSpec(ref common.Referen
 						},
 					},
 				},
-				Required: []string{"version", "db"},
+				Required: []string{"version", "db", "coordinator"},
 			},
 		},
 		Dependencies: []string{
@@ -35562,6 +35564,27 @@ func schema_apimachinery_apis_catalog_v1alpha1_GitSyncer(ref common.ReferenceCal
 	}
 }
 
+func schema_apimachinery_apis_catalog_v1alpha1_HanaDBCoordinator(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "HanaDBCoordinator is the HanaDB coordinator Container image",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"image": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+				},
+				Required: []string{"image"},
+			},
+		},
+	}
+}
+
 func schema_apimachinery_apis_catalog_v1alpha1_HanaDBSecurityContext(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -35691,19 +35714,18 @@ func schema_apimachinery_apis_catalog_v1alpha1_HanaDBVersionSpec(ref common.Refe
 							Format:      "",
 						},
 					},
-					"endOfLife": {
-						SchemaProps: spec.SchemaProps{
-							Description: "EndOfLife refers if this version reached into its end of the life or not, based on https://endoflife.date/",
-							Default:     false,
-							Type:        []string{"boolean"},
-							Format:      "",
-						},
-					},
 					"db": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Database Image",
 							Default:     map[string]interface{}{},
 							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.HanaDatabase"),
+						},
+					},
+					"coordinator": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Coordinator Image",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.HanaDBCoordinator"),
 						},
 					},
 					"deprecated": {
@@ -35741,11 +35763,11 @@ func schema_apimachinery_apis_catalog_v1alpha1_HanaDBVersionSpec(ref common.Refe
 						},
 					},
 				},
-				Required: []string{"version", "db"},
+				Required: []string{"version", "db", "coordinator"},
 			},
 		},
 		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/catalog/v1alpha1.ChartInfo", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.HanaDBSecurityContext", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.HanaDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints"},
+			"kubedb.dev/apimachinery/apis/catalog/v1alpha1.ChartInfo", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.HanaDBCoordinator", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.HanaDBSecurityContext", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.HanaDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints"},
 	}
 }
 
@@ -36886,7 +36908,7 @@ func schema_apimachinery_apis_catalog_v1alpha1_MSSQLServerVersionSpec(ref common
 						},
 					},
 				},
-				Required: []string{"version", "db", "exporter", "initContainer"},
+				Required: []string{"version", "db", "coordinator", "exporter", "initContainer"},
 			},
 		},
 		Dependencies: []string{
@@ -37278,7 +37300,7 @@ func schema_apimachinery_apis_catalog_v1alpha1_MariaDBVersionSpec(ref common.Ref
 						},
 					},
 				},
-				Required: []string{"version", "db", "exporter", "initContainer", "podSecurityPolicies"},
+				Required: []string{"version", "db", "exporter", "coordinator", "initContainer", "podSecurityPolicies"},
 			},
 		},
 		Dependencies: []string{
@@ -38530,7 +38552,7 @@ func schema_apimachinery_apis_catalog_v1alpha1_MySQLVersionSpec(ref common.Refer
 						},
 					},
 				},
-				Required: []string{"version", "db", "exporter", "initContainer", "podSecurityPolicies"},
+				Required: []string{"version", "db", "exporter", "coordinator", "initContainer", "podSecurityPolicies"},
 			},
 		},
 		Dependencies: []string{
@@ -39068,7 +39090,7 @@ func schema_apimachinery_apis_catalog_v1alpha1_OracleVersionSpec(ref common.Refe
 						},
 					},
 				},
-				Required: []string{"version", "db", "exporter"},
+				Required: []string{"version", "db", "exporter", "coordinator"},
 			},
 		},
 		Dependencies: []string{
@@ -39376,7 +39398,7 @@ func schema_apimachinery_apis_catalog_v1alpha1_PerconaXtraDBVersionSpec(ref comm
 						},
 					},
 				},
-				Required: []string{"version", "db", "exporter", "initContainer", "podSecurityPolicies"},
+				Required: []string{"version", "db", "exporter", "coordinator", "initContainer", "podSecurityPolicies"},
 			},
 		},
 		Dependencies: []string{
@@ -40273,7 +40295,7 @@ func schema_apimachinery_apis_catalog_v1alpha1_PostgresVersionSpec(ref common.Re
 						},
 					},
 				},
-				Required: []string{"version", "db", "exporter", "podSecurityPolicies"},
+				Required: []string{"version", "db", "exporter", "coordinator", "podSecurityPolicies"},
 			},
 		},
 		Dependencies: []string{
@@ -41241,7 +41263,7 @@ func schema_apimachinery_apis_catalog_v1alpha1_RedisVersionSpec(ref common.Refer
 						},
 					},
 				},
-				Required: []string{"version", "db", "exporter", "podSecurityPolicies"},
+				Required: []string{"version", "db", "exporter", "coordinator", "podSecurityPolicies"},
 			},
 		},
 		Dependencies: []string{
@@ -41703,8 +41725,9 @@ func schema_apimachinery_apis_catalog_v1alpha1_SinglestoreVersionSpec(ref common
 					},
 					"coordinator": {
 						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.SinglestoreCoordinator"),
+							Description: "Coordinator Image",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.SinglestoreCoordinator"),
 						},
 					},
 					"standalone": {
@@ -41748,7 +41771,7 @@ func schema_apimachinery_apis_catalog_v1alpha1_SinglestoreVersionSpec(ref common
 						},
 					},
 				},
-				Required: []string{"version", "db"},
+				Required: []string{"version", "db", "coordinator"},
 			},
 		},
 		Dependencies: []string{
@@ -42495,7 +42518,7 @@ func schema_apimachinery_apis_catalog_v1alpha1_ZooKeeperVersionSpec(ref common.R
 						},
 					},
 				},
-				Required: []string{"version", "db"},
+				Required: []string{"version", "db", "coordinator"},
 			},
 		},
 		Dependencies: []string{

@@ -100,7 +100,7 @@ message CertificateSpec {
 }
 
 message ClusterClaimFeatures {
-  repeated string enabledFeatures = 1;
+  map<string, string> enabledFeatures = 1;
 
   repeated string externallyManagedFeatures = 2;
 

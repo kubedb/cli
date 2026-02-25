@@ -69,7 +69,7 @@ type PostgresVersionSpec struct {
 	// Exporter Image
 	Exporter PostgresVersionExporter `json:"exporter"`
 	// Coordinator Image
-	Coordinator PostgresVersionCoordinator `json:"coordinator,omitempty"`
+	Coordinator PostgresVersionCoordinator `json:"coordinator"`
 	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
 	// +optional
 	Deprecated bool `json:"deprecated,omitempty"`
@@ -152,7 +152,7 @@ type PostgresSecurityContext struct {
 	RunAsAnyNonRoot bool `json:"runAsAnyNonRoot,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=Official;TimescaleDB;PostGIS;KubeDB;DocumentDB;PostgreSQL
+// +kubebuilder:validation:Enum=Official;TimescaleDB;PostGIS;KubeDB;DocumentDB;PostgreSQL;Percona
 type PostgresDistro string
 
 const (
@@ -161,4 +161,5 @@ const (
 	PostgresDistroPostGIS     PostgresDistro = "PostGIS"
 	PostgresDistroKubeDB      PostgresDistro = "KubeDB"
 	PostgresDistroDocumentDB  PostgresDistro = "DocumentDB"
+	PostgresDistroPercona     PostgresDistro = "Percona"
 )

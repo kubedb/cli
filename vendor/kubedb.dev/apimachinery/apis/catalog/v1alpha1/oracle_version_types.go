@@ -66,7 +66,7 @@ type OracleVersionSpec struct {
 	// Exporter Image
 	Exporter OracleVersionExporter `json:"exporter"`
 	// Coordinator Image
-	Coordinator OracleVersionCoordinator `json:"coordinator,omitempty"`
+	Coordinator OracleVersionCoordinator `json:"coordinator"`
 	// DataGuard Images
 	DataGuard OracleDataGuard `json:"dataGuard,omitempty"`
 

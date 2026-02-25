@@ -21,6 +21,7 @@ import (
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
 )
 
@@ -143,7 +144,43 @@ type ClusterClaimInfo struct {
 }
 
 type ClusterClaimFeatures struct {
-	EnabledFeatures           []string `json:"enabledFeatures,omitempty" protobuf:"bytes,1,rep,name=enabledFeatures"`
-	ExternallyManagedFeatures []string `json:"externallyManagedFeatures,omitempty" protobuf:"bytes,2,rep,name=externallyManagedFeatures"`
-	DisabledFeatures          []string `json:"disabledFeatures,omitempty" protobuf:"bytes,3,rep,name=disabledFeatures"`
+	EnabledFeatures           map[string]string `json:"enabledFeatures,omitempty" protobuf:"bytes,1,opt,name=enabledFeatures"`
+	ExternallyManagedFeatures []string          `json:"externallyManagedFeatures,omitempty" protobuf:"bytes,2,opt,name=externallyManagedFeatures"`
+	DisabledFeatures          []string          `json:"disabledFeatures,omitempty" protobuf:"bytes,3,opt,name=disabledFeatures"`
+}
+
+func (f *ClusterClaimFeatures) UnmarshalJSON(data []byte) error {
+	aux := &struct {
+		EnabledFeatures           any      `json:"enabledFeatures,omitempty"`
+		ExternallyManagedFeatures []string `json:"externallyManagedFeatures,omitempty"`
+		DisabledFeatures          []string `json:"disabledFeatures,omitempty"`
+	}{}
+
+	if err := json.Unmarshal(data, aux); err != nil {
+		return err
+	}
+
+	f.EnabledFeatures = toStringMap(aux.EnabledFeatures)
+	f.ExternallyManagedFeatures = aux.ExternallyManagedFeatures
+	f.DisabledFeatures = aux.DisabledFeatures
+	return nil
+}
+
+func toStringMap(v any) map[string]string {
+	result := make(map[string]string)
+	switch val := v.(type) {
+	case []any:
+		for _, item := range val {
+			if str, ok := item.(string); ok {
+				result[str] = ""
+			}
+		}
+	case map[string]any:
+		for k, item := range val {
+			if str, ok := item.(string); ok {
+				result[k] = str
+			}
+		}
+	}
+	return result
 }

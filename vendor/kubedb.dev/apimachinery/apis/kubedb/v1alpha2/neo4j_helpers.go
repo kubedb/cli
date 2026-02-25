@@ -183,7 +183,7 @@ func (r *Neo4j) SetTLSDefaults() {
 		}
 	}
 	if r.Spec.TLS.Cluster == nil {
-		r.Spec.TLS.HTTP = &ProtocolTLSConfig{
+		r.Spec.TLS.Cluster = &ProtocolTLSConfig{
 			Mode: TLSModeMTLS,
 		}
 	}

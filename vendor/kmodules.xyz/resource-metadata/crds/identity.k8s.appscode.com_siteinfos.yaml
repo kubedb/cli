@@ -125,6 +125,21 @@ spec:
                 items:
                   type: string
                 type: array
+              features:
+                properties:
+                  disabledFeatures:
+                    items:
+                      type: string
+                    type: array
+                  enabledFeatures:
+                    additionalProperties:
+                      type: string
+                    type: object
+                  externallyManagedFeatures:
+                    items:
+                      type: string
+                    type: array
+                type: object
               nodeStats:
                 properties:
                   allocatable:

@@ -98,6 +98,7 @@ spec:
               version:
                 type: string
             required:
+            - coordinator
             - db
             - version
             type: object

@@ -17,6 +17,8 @@ limitations under the License.
 package conditions
 
 import (
+	"slices"
+
 	kmapi "kmodules.xyz/client-go/api/v1"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -135,13 +137,7 @@ func summary(from Getter, options ...MergeOption) *kmapi.Condition {
 		}
 
 		if mergeOpt.conditionTypes != nil {
-			found := false
-			for _, t := range mergeOpt.conditionTypes {
-				if c.Type == t {
-					found = true
-					break
-				}
-			}
+			found := slices.Contains(mergeOpt.conditionTypes, c.Type)
 			if !found {
 				continue
 			}
@@ -157,13 +153,7 @@ func summary(from Getter, options ...MergeOption) *kmapi.Condition {
 	// in scope are included in this subset or not.
 	if mergeOpt.addStepCounterIfOnlyConditionTypes != nil {
 		for _, c := range conditionsInScope {
-			found := false
-			for _, t := range mergeOpt.addStepCounterIfOnlyConditionTypes {
-				if c.Type == t {
-					found = true
-					break
-				}
-			}
+			found := slices.Contains(mergeOpt.addStepCounterIfOnlyConditionTypes, c.Type)
 			if !found {
 				mergeOpt.addStepCounter = false
 				break

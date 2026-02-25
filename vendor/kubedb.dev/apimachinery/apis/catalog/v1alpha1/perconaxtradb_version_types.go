@@ -62,7 +62,7 @@ type PerconaXtraDBVersionSpec struct {
 	// Exporter Image
 	Exporter PerconaXtraDBVersionExporter `json:"exporter"`
 	// Coordinator Image
-	Coordinator PerconaXtraDBVersionCoordinator `json:"coordinator,omitempty"`
+	Coordinator PerconaXtraDBVersionCoordinator `json:"coordinator"`
 	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
 	// +optional
 	Deprecated bool `json:"deprecated,omitempty"`
