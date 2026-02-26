@@ -35061,12 +35061,6 @@ func schema_apimachinery_apis_catalog_v1alpha1_ElasticsearchVersionSpec(ref comm
 							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints"),
 						},
 					},
-					"gitSyncer": {
-						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.GitSyncer"),
-						},
-					},
 					"ui": {
 						SchemaProps: spec.SchemaProps{
 							Type: []string{"array"},
@@ -35085,7 +35079,7 @@ func schema_apimachinery_apis_catalog_v1alpha1_ElasticsearchVersionSpec(ref comm
 			},
 		},
 		Dependencies: []string{
-			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ChartInfo", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchDashboardVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchSecurityContext", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchVersionDashboardInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchVersionInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchVersionPodSecurityPolicy", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.GitSyncer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints"},
+			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ChartInfo", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchDashboardVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchSecurityContext", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchVersionDashboardInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchVersionInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ElasticsearchVersionPodSecurityPolicy", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints"},
 	}
 }
 
@@ -36592,13 +36586,6 @@ func schema_apimachinery_apis_catalog_v1alpha1_KafkaVersionSpec(ref common.Refer
 							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.KafkaVersionPodSecurityPolicy"),
 						},
 					},
-					"stash": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Stash defines backup and restore task definitions.",
-							Default:     map[string]interface{}{},
-							Ref:         ref("kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec"),
-						},
-					},
 					"updateConstraints": {
 						SchemaProps: spec.SchemaProps{
 							Description: "update constraints",
@@ -36631,7 +36618,7 @@ func schema_apimachinery_apis_catalog_v1alpha1_KafkaVersionSpec(ref common.Refer
 			},
 		},
 		Dependencies: []string{
-			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ChartInfo", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ConnectClusterVersion", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.CruiseControlVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.KafkaInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.KafkaVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.KafkaVersionPodSecurityPolicy", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.SecurityContext", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints"},
+			"kubedb.dev/apimachinery/apis/catalog/v1alpha1.ChartInfo", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ConnectClusterVersion", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.CruiseControlVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.KafkaInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.KafkaVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.KafkaVersionPodSecurityPolicy", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.SecurityContext", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints"},
 	}
 }
 
@@ -36866,13 +36853,6 @@ func schema_apimachinery_apis_catalog_v1alpha1_MSSQLServerVersionSpec(ref common
 							Format:      "",
 						},
 					},
-					"stash": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Stash defines backup and restore task definitions.",
-							Default:     map[string]interface{}{},
-							Ref:         ref("kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec"),
-						},
-					},
 					"securityContext": {
 						SchemaProps: spec.SchemaProps{
 							Description: "SecurityContext is for the additional config for the DB container",
@@ -36912,7 +36892,7 @@ func schema_apimachinery_apis_catalog_v1alpha1_MSSQLServerVersionSpec(ref common
 			},
 		},
 		Dependencies: []string{
-			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ArchiverSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ChartInfo", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MSSQLServerCoordinator", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MSSQLServerDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MSSQLServerInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MSSQLServerVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.SecurityContext", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints"},
+			"kubedb.dev/apimachinery/apis/catalog/v1alpha1.ArchiverSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ChartInfo", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MSSQLServerCoordinator", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MSSQLServerDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MSSQLServerInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.MSSQLServerVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.SecurityContext", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints"},
 	}
 }
 
@@ -42462,20 +42442,6 @@ func schema_apimachinery_apis_catalog_v1alpha1_ZooKeeperVersionSpec(ref common.R
 							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.ZooKeeperVersionDatabase"),
 						},
 					},
-					"exporter": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Exporter Image",
-							Default:     map[string]interface{}{},
-							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.ZooKeeperVersionExporter"),
-						},
-					},
-					"coordinator": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Coordinator Image",
-							Default:     map[string]interface{}{},
-							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.ZooKeeperVersionCoordinator"),
-						},
-					},
 					"deprecated": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.",
@@ -42488,13 +42454,6 @@ func schema_apimachinery_apis_catalog_v1alpha1_ZooKeeperVersionSpec(ref common.R
 							Description: "PSP names",
 							Default:     map[string]interface{}{},
 							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.ZooKeeperVersionPodSecurityPolicy"),
-						},
-					},
-					"stash": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Stash defines backup and restore task definitions.",
-							Default:     map[string]interface{}{},
-							Ref:         ref("kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec"),
 						},
 					},
 					"updateConstraints": {
@@ -42511,17 +42470,11 @@ func schema_apimachinery_apis_catalog_v1alpha1_ZooKeeperVersionSpec(ref common.R
 							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.SecurityContext"),
 						},
 					},
-					"gitSyncer": {
-						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.GitSyncer"),
-						},
-					},
 				},
-				Required: []string{"version", "db", "coordinator"},
+				Required: []string{"version", "initContainer", "db"},
 			},
 		},
 		Dependencies: []string{
-			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.GitSyncer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.SecurityContext", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ZooKeeperVersionCoordinator", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ZooKeeperVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ZooKeeperVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ZooKeeperVersionInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ZooKeeperVersionPodSecurityPolicy"},
+			"kubedb.dev/apimachinery/apis/catalog/v1alpha1.SecurityContext", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ZooKeeperVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ZooKeeperVersionInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ZooKeeperVersionPodSecurityPolicy"},
 	}
 }
