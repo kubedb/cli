@@ -83,7 +83,7 @@ type SnapshotStats struct {
 	// ProcessingTime indicates time taken to process the target data
 	ProcessingTime string `json:"processingTime,omitempty"`
 	// FileStats shows statistics of files of this snapshot
-	FileStats FileStats `json:"fileStats,omitempty"`
+	FileStats FileStats `json:"fileStats"`
 }
 
 type FileStats struct {

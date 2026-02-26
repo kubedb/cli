@@ -23,6 +23,7 @@ import (
 
 	core "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/errors"
+	"k8s.io/klog/v2"
 	storage "kmodules.xyz/objectstore-api/api/v1"
 )
 
@@ -131,9 +132,13 @@ func (w *ResticWrapper) exportSecretKey(secret *core.Secret, key string, require
 }
 
 func (w *ResticWrapper) setEnvFromSecretIfExists(envs map[string]string, secret *core.Secret, key string, required bool) error {
-	if required && secret == nil {
-		return fmt.Errorf("storage Secret is Required")
+	if secret == nil {
+		if required {
+			return fmt.Errorf("key %s is required but storage Secret is not provided", key)
+		}
+		return nil
 	}
+	klog.Infof("Setting environment variable %s from secret %s\n", key, secret.Name)
 	v, ok := secret.Data[key]
 	if !ok {
 		if required {

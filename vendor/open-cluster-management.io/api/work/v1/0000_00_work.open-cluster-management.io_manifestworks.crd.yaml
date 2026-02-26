@@ -269,6 +269,14 @@ spec:
                         - type
                         type: object
                       type: array
+                    feedbackScrapeType:
+                      default: Poll
+                      description: FeedbackScrapeType represents the way to monitor
+                        resource, it could be Poll or Watch
+                      enum:
+                      - Poll
+                      - Watch
+                      type: string
                     resourceIdentifier:
                       description: |-
                         ResourceIdentifier represents the group, resource, name and namespace of a resoure.
@@ -453,6 +461,9 @@ spec:
                   - type
                   type: object
                 type: array
+                x-kubernetes-list-map-keys:
+                - type
+                x-kubernetes-list-type: map
               resourceStatus:
                 description: |-
                   ResourceStatus represents the status of each resource in manifestwork deployed on a
@@ -532,6 +543,9 @@ spec:
                             - type
                             type: object
                           type: array
+                          x-kubernetes-list-map-keys:
+                          - type
+                          x-kubernetes-list-type: map
                         resourceMeta:
                           description: ResourceMeta represents the group, version,
                             kind, name and namespace of a resoure.
