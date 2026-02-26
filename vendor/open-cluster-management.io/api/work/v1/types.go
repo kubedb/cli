@@ -117,6 +117,12 @@ type ManifestConfigOption struct {
 	// +listMapKey:=condition
 	// +optional
 	ConditionRules []ConditionRule `json:"conditionRules,omitempty"`
+
+	// FeedbackScrapeType represents the way to monitor resource, it could be Poll or Watch
+	// +kubebuilder:validation:Enum=Poll;Watch
+	// +kubebuilder:default=Poll
+	// +optional
+	FeedbackScrapeType FeedbackScrapeType `json:"feedbackScrapeType,omitempty"`
 }
 
 // +kubebuilder:validation:XValidation:rule="self.type != 'CEL' || self.condition != \"\"",message="Condition is required for CEL rules"
@@ -166,6 +172,17 @@ const (
 
 	// CelConditionExpressionsType enables user defined rules to set the status of the condition
 	CelConditionExpressionsType ConditionRuleType = "CEL"
+)
+
+// FeedbackScrapeType represents the type of method to monitor resource and feedback
+type FeedbackScrapeType string
+
+const (
+	// FeedbackPollType indicates checking resource in polling way
+	FeedbackPollType FeedbackScrapeType = "Poll"
+
+	// FeedbackWatchType indicates watching resource
+	FeedbackWatchType FeedbackScrapeType = "Watch"
 )
 
 // ManifestWorkExecutor is the executor that applies the resources to the managed cluster. i.e. the
@@ -470,6 +487,8 @@ type ManifestWorkStatus struct {
 	// 3. Available represents workload in ManifestWork exists on the managed cluster.
 	// 4. Degraded represents the current state of workload does not match the desired
 	// state for a certain period.
+	// +listType=map
+	// +listMapKey=type
 	Conditions []metav1.Condition `json:"conditions,omitempty"`
 
 	// ResourceStatus represents the status of each resource in manifestwork deployed on a
@@ -538,6 +557,8 @@ type ManifestCondition struct {
 
 	// Conditions represents the conditions of this resource on a managed cluster.
 	// +required
+	// +listType=map
+	// +listMapKey=type
 	Conditions []metav1.Condition `json:"conditions"`
 }
 

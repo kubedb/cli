@@ -18,6 +18,7 @@ package restic
 
 import (
 	"fmt"
+	"maps"
 	"os"
 	"path/filepath"
 	"sort"
@@ -234,9 +235,7 @@ func (w *ResticWrapper) Copy() *ResticWrapper {
 		out.sh = shell.NewSession()
 
 		// set values in.sh to out.sh
-		for k, v := range w.sh.Env {
-			out.sh.Env[k] = v
-		}
+		maps.Copy(out.sh.Env, w.sh.Env)
 		// don't use same stdin, stdout, stderr for each instant to avoid data race.
 		// out.sh.Stdin = in.sh.Stdin
 		// out.sh.Stdout = in.sh.Stdout
