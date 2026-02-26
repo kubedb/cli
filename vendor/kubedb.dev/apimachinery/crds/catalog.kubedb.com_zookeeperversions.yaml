@@ -45,13 +45,6 @@ spec:
             type: object
           spec:
             properties:
-              coordinator:
-                properties:
-                  image:
-                    type: string
-                required:
-                - image
-                type: object
               db:
                 properties:
                   image:
@@ -63,20 +56,6 @@ spec:
                 type: boolean
               endOfLife:
                 type: boolean
-              exporter:
-                properties:
-                  image:
-                    type: string
-                required:
-                - image
-                type: object
-              gitSyncer:
-                properties:
-                  image:
-                    type: string
-                required:
-                - image
-                type: object
               initContainer:
                 properties:
                   image:
@@ -97,53 +76,6 @@ spec:
                     format: int64
                     type: integer
                 type: object
-              stash:
-                properties:
-                  addon:
-                    properties:
-                      backupTask:
-                        properties:
-                          name:
-                            type: string
-                          params:
-                            items:
-                              properties:
-                                name:
-                                  type: string
-                                value:
-                                  type: string
-                              required:
-                              - name
-                              - value
-                              type: object
-                            type: array
-                        required:
-                        - name
-                        type: object
-                      restoreTask:
-                        properties:
-                          name:
-                            type: string
-                          params:
-                            items:
-                              properties:
-                                name:
-                                  type: string
-                                value:
-                                  type: string
-                              required:
-                              - name
-                              - value
-                              type: object
-                            type: array
-                        required:
-                        - name
-                        type: object
-                    required:
-                    - backupTask
-                    - restoreTask
-                    type: object
-                type: object
               updateConstraints:
                 properties:
                   allowlist:
@@ -158,8 +90,8 @@ spec:
               version:
                 type: string
             required:
-            - coordinator
             - db
+            - initContainer
             - version
             type: object
         type: object

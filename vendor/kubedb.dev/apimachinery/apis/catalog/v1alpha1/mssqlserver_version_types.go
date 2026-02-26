@@ -18,7 +18,6 @@ package v1alpha1
 
 import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 )
 
 const (
@@ -57,25 +56,30 @@ type MSSQLServerVersionSpec struct {
 
 	// Database Image
 	DB MSSQLServerDatabase `json:"db"`
+
 	// Coordinator Image
 	Coordinator MSSQLServerCoordinator `json:"coordinator"`
+
 	// Exporter Image
 	Exporter MSSQLServerVersionExporter `json:"exporter"`
+
 	// Init container Image
 	InitContainer MSSQLServerInitContainer `json:"initContainer"`
+
 	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
 	// +optional
 	Deprecated bool `json:"deprecated,omitempty"`
-	// Stash defines backup and restore task definitions.
-	// +optional
-	Stash appcat.StashAddonSpec `json:"stash,omitempty"`
+
 	// SecurityContext is for the additional config for the DB container
 	// +optional
 	SecurityContext SecurityContext `json:"securityContext"`
+
 	// update constraints
 	UpdateConstraints UpdateConstraints `json:"updateConstraints,omitempty"`
+
 	// Archiver defines the walg & kube-stash-addon related specifications
 	Archiver ArchiverSpec `json:"archiver,omitempty"`
+
 	// +optional
 	UI []ChartInfo `json:"ui,omitempty"`
 }

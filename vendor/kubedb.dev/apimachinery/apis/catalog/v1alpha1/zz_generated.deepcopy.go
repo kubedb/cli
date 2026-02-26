@@ -917,7 +917,6 @@ func (in *ElasticsearchVersionSpec) DeepCopyInto(out *ElasticsearchVersionSpec) 
 	in.Stash.DeepCopyInto(&out.Stash)
 	in.SecurityContext.DeepCopyInto(&out.SecurityContext)
 	in.UpdateConstraints.DeepCopyInto(&out.UpdateConstraints)
-	out.GitSyncer = in.GitSyncer
 	if in.UI != nil {
 		in, out := &in.UI, &out.UI
 		*out = make([]ChartInfo, len(*in))
@@ -1814,7 +1813,6 @@ func (in *KafkaVersionSpec) DeepCopyInto(out *KafkaVersionSpec) {
 	out.ConnectCluster = in.ConnectCluster
 	out.CruiseControl = in.CruiseControl
 	out.PodSecurityPolicies = in.PodSecurityPolicies
-	in.Stash.DeepCopyInto(&out.Stash)
 	in.UpdateConstraints.DeepCopyInto(&out.UpdateConstraints)
 	in.SecurityContext.DeepCopyInto(&out.SecurityContext)
 	if in.UI != nil {
@@ -1968,7 +1966,6 @@ func (in *MSSQLServerVersionSpec) DeepCopyInto(out *MSSQLServerVersionSpec) {
 	out.Coordinator = in.Coordinator
 	out.Exporter = in.Exporter
 	out.InitContainer = in.InitContainer
-	in.Stash.DeepCopyInto(&out.Stash)
 	in.SecurityContext.DeepCopyInto(&out.SecurityContext)
 	in.UpdateConstraints.DeepCopyInto(&out.UpdateConstraints)
 	out.Archiver = in.Archiver
@@ -5182,13 +5179,9 @@ func (in *ZooKeeperVersionSpec) DeepCopyInto(out *ZooKeeperVersionSpec) {
 	*out = *in
 	out.InitContainer = in.InitContainer
 	out.DB = in.DB
-	out.Exporter = in.Exporter
-	out.Coordinator = in.Coordinator
 	out.PodSecurityPolicies = in.PodSecurityPolicies
-	in.Stash.DeepCopyInto(&out.Stash)
 	in.UpdateConstraints.DeepCopyInto(&out.UpdateConstraints)
 	in.SecurityContext.DeepCopyInto(&out.SecurityContext)
-	out.GitSyncer = in.GitSyncer
 	return
 }
 
