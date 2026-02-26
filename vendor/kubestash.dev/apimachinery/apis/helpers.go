@@ -17,6 +17,7 @@ limitations under the License.
 package apis
 
 import (
+	"maps"
 	"sync"
 
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -44,8 +45,6 @@ func UpsertLabels(oldLabels, newLabels map[string]string) map[string]string {
 	if oldLabels == nil {
 		oldLabels = make(map[string]string, len(newLabels))
 	}
-	for k, v := range newLabels {
-		oldLabels[k] = v
-	}
+	maps.Copy(oldLabels, newLabels)
 	return oldLabels
 }

@@ -115,8 +115,8 @@ func NewObjectID(obj client.Object) *ObjectID {
 func ParseObjectID(key OID) (*ObjectID, error) {
 	var id ObjectID
 
-	chunks := strings.Split(string(key), ",")
-	for _, chunk := range chunks {
+	chunks := strings.SplitSeq(string(key), ",")
+	for chunk := range chunks {
 		parts := strings.FieldsFunc(chunk, func(r rune) bool {
 			return r == '=' || unicode.IsSpace(r)
 		})
@@ -166,8 +166,8 @@ func ObjectIDMap(key OID) (map[string]any, error) {
 		"name":      "",
 	}
 
-	chunks := strings.Split(string(key), ",")
-	for _, chunk := range chunks {
+	chunks := strings.SplitSeq(string(key), ",")
+	for chunk := range chunks {
 		parts := strings.FieldsFunc(chunk, func(r rune) bool {
 			return r == '=' || unicode.IsSpace(r)
 		})

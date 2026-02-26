@@ -174,7 +174,7 @@ func StringToQuantityHookFunc() mapstructure.DecodeHookFunc {
 		if f.Kind() != reflect.String {
 			return data, nil
 		}
-		if t != reflect.TypeOf(resource.Quantity{}) {
+		if t != reflect.TypeFor[resource.Quantity]() {
 			return data, nil
 		}
 

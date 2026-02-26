@@ -58,8 +58,7 @@ type MSSQLServerVersionSpec struct {
 	// Database Image
 	DB MSSQLServerDatabase `json:"db"`
 	// Coordinator Image
-	// +optional
-	Coordinator MSSQLServerCoordinator `json:"coordinator,omitempty"`
+	Coordinator MSSQLServerCoordinator `json:"coordinator"`
 	// Exporter Image
 	Exporter MSSQLServerVersionExporter `json:"exporter"`
 	// Init container Image

@@ -3520,6 +3520,24 @@ spec:
                     - Standalone
                     - SystemReplication
                     type: string
+                  systemReplication:
+                    properties:
+                      operationMode:
+                        default: logreplay
+                        enum:
+                        - logreplay
+                        - delta_datashipping
+                        - logreplay_readaccess
+                        type: string
+                      replicationMode:
+                        default: sync
+                        enum:
+                        - sync
+                        - syncmem
+                        - async
+                        - fullsync
+                        type: string
+                    type: object
                 type: object
               version:
                 type: string

@@ -17,6 +17,7 @@ limitations under the License.
 package v1
 
 import (
+	"slices"
 	"sort"
 
 	"kmodules.xyz/client-go/meta"
@@ -31,22 +32,15 @@ import (
 var json = jsoniter.ConfigFastest
 
 func AddFinalizer(m metav1.ObjectMeta, finalizer string) metav1.ObjectMeta {
-	for _, name := range m.Finalizers {
-		if name == finalizer {
-			return m
-		}
+	if slices.Contains(m.Finalizers, finalizer) {
+		return m
 	}
 	m.Finalizers = append(m.Finalizers, finalizer)
 	return m
 }
 
 func HasFinalizer(m metav1.ObjectMeta, finalizer string) bool {
-	for _, name := range m.Finalizers {
-		if name == finalizer {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(m.Finalizers, finalizer)
 }
 
 func RemoveFinalizer(m metav1.ObjectMeta, finalizer string) metav1.ObjectMeta {

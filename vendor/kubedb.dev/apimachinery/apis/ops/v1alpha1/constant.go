@@ -131,6 +131,7 @@ const (
 
 // Reload
 const (
+	ReloadTLS           = "ReloadTLS"
 	ReloadPods          = "ReloadPods"
 	ReloadPodsSucceeded = "ReloadPodsSucceeded"
 	ReloadPodsFailed    = "ReloadPodsFailed"

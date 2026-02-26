@@ -19,6 +19,7 @@ package v1
 import (
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 
 	"kubedb.dev/apimachinery/apis"
@@ -89,6 +90,15 @@ func (p Postgres) ReadReplicaOffshootSelectors() map[string]string {
 func (p Postgres) ReadReplicaSingleGroupOffshootSelectors(groupName string) map[string]string {
 	sel := p.ReadReplicaOffshootSelectors()
 	sel[kubedb.PostgresDatabaseReadReplicaLabelKey] = groupName
+	return sel
+}
+
+func (p Postgres) GlobalSelectors() map[string]string {
+	sel := map[string]string{
+		meta_util.NameLabelKey:      p.ResourceFQN(),
+		meta_util.InstanceLabelKey:  p.Name,
+		meta_util.ManagedByLabelKey: kubedb.GroupName,
+	}
 	return sel
 }
 
@@ -373,20 +383,21 @@ func (p *Postgres) SetDefaults(postgresVersion *catalog.PostgresVersion) {
 		}
 	}
 
+	majorVersion := getOrExtractMajorPgVersion(postgresVersion)
+
 	if p.Spec.TLS != nil {
 		if p.Spec.SSLMode == "" {
 			p.Spec.SSLMode = PostgresSSLModeVerifyFull
-		}
-		if p.Spec.ClientAuthMode == "" {
-			p.Spec.ClientAuthMode = ClientAuthModeMD5
 		}
 	} else {
 		if p.Spec.SSLMode == "" {
 			p.Spec.SSLMode = PostgresSSLModeDisable
 		}
-		if p.Spec.ClientAuthMode == "" {
-			p.Spec.ClientAuthMode = ClientAuthModeMD5
-		}
+	}
+	if p.Spec.ClientAuthMode == "" && majorVersion < 18 {
+		p.Spec.ClientAuthMode = ClientAuthModeMD5
+	} else if p.Spec.ClientAuthMode == "" {
+		p.Spec.ClientAuthMode = ClientAuthModeScram
 	}
 
 	p.updateConfigurationFieldIfNeeded()
@@ -413,7 +424,7 @@ func (p *Postgres) SetDefaults(postgresVersion *catalog.PostgresVersion) {
 		}
 	}
 	if p.Spec.Init != nil && p.Spec.Init.Archiver != nil && p.Spec.Init.Archiver.ReplicationStrategy == nil {
-		p.Spec.Init.Archiver.ReplicationStrategy = ptr.To(ReplicationStrategyNone)
+		p.Spec.Init.Archiver.ReplicationStrategy = ptr.To(ReplicationStrategySync)
 	}
 
 	if p.Spec.Init != nil && p.Spec.Init.Archiver != nil {
@@ -437,6 +448,22 @@ func getMajorPgVersion(postgresVersion *catalog.PostgresVersion) (uint64, error)
 	return ver.Major(), nil
 }
 
+func getOrExtractMajorPgVersion(postgresVersion *catalog.PostgresVersion) uint64 {
+	ver, err := getMajorPgVersion(postgresVersion)
+	if err == nil {
+		return ver
+	}
+	verSlice := strings.Split(postgresVersion.Spec.Version, ".")
+	if len(verSlice) == 0 {
+		return uint64(0)
+	}
+	version, err := strconv.Atoi(verSlice[0])
+	if err != nil {
+		return uint64(0)
+	}
+	return uint64(version)
+}
+
 func (p *Postgres) defaultReadReplicaSpec(rr *ReadReplicaSpec) {
 	if rr.Replicas == nil {
 		rr.Replicas = pointer.Int32P(1)
@@ -450,14 +477,15 @@ func (p *Postgres) defaultReadReplicaSpec(rr *ReadReplicaSpec) {
 }
 
 func (p *Postgres) updateConfigurationFieldIfNeeded() {
+	if p.Spec.Configuration != nil && p.Spec.ConfigSecret != nil && p.Spec.Configuration.SecretName == p.Spec.ConfigSecret.Name {
+		p.Spec.ConfigSecret = nil
+	}
 	if p.Spec.Configuration == nil && p.Spec.ConfigSecret != nil {
 		p.Spec.Configuration = &PostgresConfiguration{
 			ConfigurationSpec: ConfigurationSpec{SecretName: p.Spec.ConfigSecret.Name},
 		}
-		p.Spec.ConfigSecret = nil
 	} else if p.Spec.ConfigSecret != nil && p.Spec.Configuration != nil && p.Spec.Configuration.SecretName == "" {
 		p.Spec.Configuration.SecretName = p.Spec.ConfigSecret.Name
-		p.Spec.ConfigSecret = nil
 	}
 }
 

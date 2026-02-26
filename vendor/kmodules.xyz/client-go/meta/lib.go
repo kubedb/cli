@@ -18,6 +18,7 @@ package meta
 
 import (
 	"fmt"
+	"maps"
 	"reflect"
 	"strings"
 
@@ -131,9 +132,7 @@ func OverwriteKeys(out map[string]string, ins ...map[string]string) map[string]s
 	}
 
 	for _, in := range ins {
-		for k, v := range in {
-			out[k] = v
-		}
+		maps.Copy(out, in)
 	}
 	return out
 }
@@ -196,20 +195,6 @@ func ValidCronJobNameWithSuffix(name, suffix string) string {
 
 func ValidCronJobNameWithPrefixNSuffix(prefix, name, suffix string) string {
 	return ValidNameWithPrefixNSuffix(prefix, name, suffix, MaxCronJobNameLength)
-}
-
-func min(x, y int) int {
-	if x < y {
-		return x
-	}
-	return y
-}
-
-func max(x, y int) int {
-	if x > y {
-		return x
-	}
-	return y
 }
 
 func IsOfficialType(group string) bool {

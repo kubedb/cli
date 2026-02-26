@@ -66,7 +66,7 @@ type ZooKeeperVersionSpec struct {
 	// +optional
 	Exporter ZooKeeperVersionExporter `json:"exporter"`
 	// Coordinator Image
-	Coordinator ZooKeeperVersionCoordinator `json:"coordinator,omitempty"`
+	Coordinator ZooKeeperVersionCoordinator `json:"coordinator"`
 	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
 	// +optional
 	Deprecated bool `json:"deprecated,omitempty"`

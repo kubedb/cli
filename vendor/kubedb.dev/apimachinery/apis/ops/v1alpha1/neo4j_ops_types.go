@@ -18,6 +18,8 @@ limitations under the License.
 package v1alpha1
 
 import (
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -56,6 +58,8 @@ type Neo4jOpsRequestSpec struct {
 	Type Neo4jOpsRequestType `json:"type"`
 	// Specifies information necessary for restarting database
 	Restart *RestartSpec `json:"restart,omitempty"`
+	// Specifies information necessary for configuring TLS
+	TLS *Neo4jTLSSpec `json:"tls,omitempty"`
 	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
 	Timeout *metav1.Duration `json:"timeout,omitempty"`
 	// ApplyOption is to control the execution of OpsRequest depending on the database state.
@@ -65,8 +69,22 @@ type Neo4jOpsRequestSpec struct {
 	MaxRetries int32 `json:"maxRetries,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=Restart;
-// ENUM(Restart)
+type Neo4jTLSSpec struct {
+	// Neo4jTLSSpec contains updated tls configurations for client and server.
+	// +optional
+	dbapi.Neo4jTLSConfig `json:",inline,omitempty"`
+
+	// RotateCertificates tells operator to initiate certificate rotation
+	// +optional
+	RotateCertificates bool `json:"rotateCertificates,omitempty"`
+
+	// Remove tells operator to remove TLS configuration
+	// +optional
+	Remove bool `json:"remove,omitempty"`
+}
+
+// +kubebuilder:validation:Enum=Restart;ReconfigureTLS
+// ENUM(Restart,ReconfigureTLS)
 type Neo4jOpsRequestType string
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

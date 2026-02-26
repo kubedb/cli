@@ -65,8 +65,7 @@ type MySQLVersionSpec struct {
 	// Exporter Image
 	Exporter MySQLVersionExporter `json:"exporter"`
 	// Coordinator Image
-	// +optional
-	Coordinator MySQLVersionCoordinator `json:"coordinator,omitempty"`
+	Coordinator MySQLVersionCoordinator `json:"coordinator"`
 	// ReplicationModeDetector Image
 	// +optional
 	ReplicationModeDetector ReplicationModeDetector `json:"replicationModeDetector,omitempty"`

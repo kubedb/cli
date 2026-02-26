@@ -65,7 +65,7 @@ type MariaDBVersionSpec struct {
 	// Exporter Image
 	Exporter MariaDBVersionExporter `json:"exporter"`
 	// Coordinator Image
-	Coordinator MariaDBVersionCoordinator `json:"coordinator,omitempty"`
+	Coordinator MariaDBVersionCoordinator `json:"coordinator"`
 	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
 	// +optional
 	Deprecated bool `json:"deprecated,omitempty"`

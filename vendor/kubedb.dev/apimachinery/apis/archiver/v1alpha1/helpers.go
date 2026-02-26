@@ -17,8 +17,12 @@ limitations under the License.
 package v1alpha1
 
 import (
+	"encoding/json"
+	"fmt"
+
 	"kubedb.dev/apimachinery/crds"
 
+	"k8s.io/apimachinery/pkg/runtime"
 	"kmodules.xyz/client-go/apiextensions"
 )
 
@@ -54,4 +58,28 @@ func SetDefaultLogBackupOptions(log *LogBackupOptions) *LogBackupOptions {
 		}
 	}
 	return log
+}
+
+func GetValueFromExtraArgs(args map[string]runtime.RawExtension, key string, valType any) (any, error) {
+	var err error
+	if val, ok := args[key]; ok {
+		err = json.Unmarshal(val.Raw, &valType)
+		if err != nil {
+			return nil, fmt.Errorf("failed to parse value for key %s from extra arg maps. Reason: %w", key, err)
+		}
+		return valType, nil
+	}
+
+	return nil, fmt.Errorf("key %s not found in extra arg maps", key)
+}
+
+func SetKeyValueToExtraArgs(args map[string]runtime.RawExtension, key string, value any) error {
+	jsonVal, err := json.Marshal(value)
+	if err != nil {
+		return fmt.Errorf("failed to marshal value for key %s to json. Reason: %w", key, err)
+	}
+	args[key] = runtime.RawExtension{
+		Raw: jsonVal,
+	}
+	return nil
 }

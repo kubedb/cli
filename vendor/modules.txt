@@ -2548,7 +2548,7 @@ kmodules.xyz/apiversion
 # kmodules.xyz/cert-manager-util v0.29.0
 ## explicit; go 1.21.5
 kmodules.xyz/cert-manager-util/certmanager/v1
-# kmodules.xyz/client-go v0.34.2
+# kmodules.xyz/client-go v0.34.3
 ## explicit; go 1.24.0
 kmodules.xyz/client-go
 kmodules.xyz/client-go/api/v1
@@ -2566,6 +2566,7 @@ kmodules.xyz/client-go/policy/secomp
 kmodules.xyz/client-go/policy/v1
 kmodules.xyz/client-go/policy/v1beta1
 kmodules.xyz/client-go/tools/exec
+kmodules.xyz/client-go/tools/healthchecker
 kmodules.xyz/client-go/tools/portforward
 # kmodules.xyz/custom-resources v0.34.0
 ## explicit; go 1.24.0
@@ -2593,12 +2594,12 @@ kmodules.xyz/offshoot-api/util
 # kmodules.xyz/prober v0.34.0
 ## explicit; go 1.24.0
 kmodules.xyz/prober/api/v1
-# kmodules.xyz/resource-metadata v0.42.1
+# kmodules.xyz/resource-metadata v0.42.4
 ## explicit; go 1.25
 kmodules.xyz/resource-metadata/apis/node
 kmodules.xyz/resource-metadata/apis/node/v1alpha1
 kmodules.xyz/resource-metadata/crds
-# kubedb.dev/apimachinery v0.61.0-rc.1
+# kubedb.dev/apimachinery v0.61.0
 ## explicit; go 1.25.0
 kubedb.dev/apimachinery/apis
 kubedb.dev/apimachinery/apis/archiver/v1alpha1
@@ -2647,7 +2648,9 @@ kubedb.dev/apimachinery/crds
 kubedb.dev/apimachinery/pkg/double_optin
 kubedb.dev/apimachinery/pkg/factory
 kubedb.dev/apimachinery/pkg/lib
-# kubedb.dev/db-client-go v0.16.0-rc.1
+kubedb.dev/apimachinery/pkg/utils
+kubedb.dev/apimachinery/pkg/utils/raft
+# kubedb.dev/db-client-go v0.16.0
 ## explicit; go 1.25.5
 kubedb.dev/db-client-go/elasticsearch
 kubedb.dev/db-client-go/redis
@@ -2672,7 +2675,7 @@ kubeops.dev/petset/crds
 kubeops.dev/sidekick/apis/apps
 kubeops.dev/sidekick/apis/apps/v1alpha1
 kubeops.dev/sidekick/crds
-# kubestash.dev/apimachinery v0.24.0-rc.0
+# kubestash.dev/apimachinery v0.24.0
 ## explicit; go 1.25.0
 kubestash.dev/apimachinery/apis
 kubestash.dev/apimachinery/apis/core/v1alpha1
