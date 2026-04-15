@@ -18,6 +18,10 @@ limitations under the License.
 package v1alpha1
 
 import (
+	api "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+
+	core "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -49,8 +53,79 @@ type QdrantOpsRequest struct {
 
 // QdrantOpsRequestSpec is the spec for QdrantOpsRequest
 type QdrantOpsRequestSpec struct {
+	// Specifies the Qdrant reference
+	DatabaseRef core.LocalObjectReference `json:"databaseRef"`
+	// Specifies the ops request type: UpdateVersion, HorizontalScaling, VerticalScaling etc.
+	Type QdrantOpsRequestType `json:"type"`
+	// Specifies information necessary for upgrading qdrant
+	UpdateVersion *QdrantUpdateVersionSpec `json:"updateVersion,omitempty"`
+	// Specifies information necessary for horizontal scaling
+	HorizontalScaling *QdrantHorizontalScalingSpec `json:"horizontalScaling,omitempty"`
+	// Specifies information necessary for vertical scaling
+	VerticalScaling *QdrantVerticalScalingSpec `json:"verticalScaling,omitempty"`
+	// Specifies information necessary for volume expansion
+	VolumeExpansion *QdrantVolumeExpansionSpec `json:"volumeExpansion,omitempty"`
+	// Specifies information necessary for custom configuration of qdrant
+	Configuration *ReconfigurationSpec `json:"configuration,omitempty"`
 	// Specifies information necessary for configuring TLS
-	TLS *TLSSpec `json:"tls,omitempty"`
+	TLS *QdrantTLSSpec `json:"tls,omitempty"`
+	// Specifies information necessary for configuring authSecret of the database
+	Authentication *AuthSpec `json:"authentication,omitempty"`
+	// Specifies information necessary for restarting database
+	Restart *RestartSpec `json:"restart,omitempty"`
+	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
+	Timeout *metav1.Duration `json:"timeout,omitempty"`
+	// ApplyOption is to control the execution of OpsRequest depending on the database state.
+	// +kubebuilder:default="IfReady"
+	Apply ApplyOption `json:"apply,omitempty"`
+	// +kubebuilder:default=1
+	MaxRetries int32 `json:"maxRetries,omitempty"`
+}
+
+// +kubebuilder:validation:Enum=UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS;RotateAuth
+// ENUM(UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Restart, Reconfigure, ReconfigureTLS, RotateAuth)
+type QdrantOpsRequestType string
+
+// QdrantUpdateVersionSpec contains the update version information of a qdrant cluster
+type QdrantUpdateVersionSpec struct {
+	// Specifies the target version name from catalog
+	TargetVersion string `json:"targetVersion,omitempty"`
+}
+
+// QdrantReplicaReadinessCriteria is the criteria for checking readiness of a Qdrant pod
+// after updating, horizontal scaling etc.
+type QdrantReplicaReadinessCriteria struct{}
+
+// QdrantHorizontalScalingSpec contains the horizontal scaling information of a Qdrant cluster
+type QdrantHorizontalScalingSpec struct {
+	// Number of node
+	Node *int32 `json:"node,omitempty"`
+}
+
+// QdrantVerticalScalingSpec contains the vertical scaling information of a Qdrant cluster
+type QdrantVerticalScalingSpec struct {
+	// Resource spec for nodes
+	Node *PodResources `json:"node,omitempty"`
+}
+
+// QdrantVolumeExpansionSpec is the spec for Qdrant volume expansion
+type QdrantVolumeExpansionSpec struct {
+	Mode VolumeExpansionMode `json:"mode"`
+	// volume specification for nodes
+	Node *resource.Quantity `json:"node,omitempty"`
+}
+
+type QdrantTLSSpec struct {
+	// +optional
+	api.QdrantTLSConfig `json:",inline,omitempty"`
+
+	// RotateCertificates tells operator to initiate certificate rotation
+	// +optional
+	RotateCertificates bool `json:"rotateCertificates,omitempty"`
+
+	// Remove tells operator to remove TLS configuration
+	// +optional
+	Remove bool `json:"remove,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

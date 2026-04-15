@@ -107,6 +107,7 @@ type MSSQLServerVerticalScalingSpec struct {
 	MSSQLServer *PodResources       `json:"mssqlserver,omitempty"`
 	Exporter    *ContainerResources `json:"exporter,omitempty"`
 	Coordinator *ContainerResources `json:"coordinator,omitempty"`
+	Arbiter     *PodResources       `json:"arbiter,omitempty"`
 }
 
 // MSSQLServerVolumeExpansionSpec is the spec for MSSQLServer volume expansion

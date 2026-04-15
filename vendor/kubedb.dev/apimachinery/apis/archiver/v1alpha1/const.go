@@ -87,3 +87,10 @@ const (
 	ExtraArgsKeyStorage      string = "Storage"
 	ExtraArgsKeyLogBackupOpt string = "LogBackupOpt"
 )
+
+const (
+	// TypeInitialBackupSucceeded indicates whether the initial backup session has succeeded or not.
+	TypeInitialBackupSucceeded                      = "InitialBackupSucceeded"
+	ReasonSuccessfullyCompletedInitialBackupSession = "SuccessfullyCompletedInitialBackup"
+	ReasonFailedToCompleteInitialBackupSession      = "FailedToCompleteInitialBackup"
+)

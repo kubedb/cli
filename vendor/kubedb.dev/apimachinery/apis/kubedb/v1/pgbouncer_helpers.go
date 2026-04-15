@@ -256,7 +256,7 @@ func (p *PgBouncer) SetDefaults(pgBouncerVersion *catalog.PgBouncerVersion, uses
 		}
 	}
 	dbContainer := core_util.GetContainerByName(p.Spec.PodTemplate.Spec.Containers, ResourceSingularPgBouncer)
-	if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
+	if dbContainer != nil {
 		apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResourcesMemoryIntensive)
 	}
 }
@@ -271,9 +271,7 @@ func (p *PgBouncer) setPgBouncerContainerDefaults(podTemplate *ofstv2.PodTemplat
 }
 
 func (p *PgBouncer) setContainerDefaultResources(container *core.Container, defaultResources core.ResourceRequirements) {
-	if container.Resources.Requests == nil && container.Resources.Limits == nil {
-		apis.SetDefaultResourceLimits(&container.Resources, defaultResources)
-	}
+	apis.SetDefaultResourceLimits(&container.Resources, defaultResources)
 }
 
 func (p *PgBouncer) SetTLSDefaults(usesAcme bool) {

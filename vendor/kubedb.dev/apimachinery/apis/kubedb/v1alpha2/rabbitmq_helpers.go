@@ -311,7 +311,7 @@ func (r *RabbitMQ) SetDefaults(kc client.Client) {
 	r.setDefaultContainerSecurityContext(&rmVersion, &r.Spec.PodTemplate)
 
 	dbContainer := coreutil.GetContainerByName(r.Spec.PodTemplate.Spec.Containers, kubedb.RabbitMQContainerName)
-	if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
+	if dbContainer != nil {
 		apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResources)
 	}
 

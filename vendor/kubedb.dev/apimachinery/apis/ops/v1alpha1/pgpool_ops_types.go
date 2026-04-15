@@ -63,7 +63,7 @@ type PgpoolOpsRequestSpec struct {
 	// Specifies information necessary for vertical scaling
 	VerticalScaling *PgpoolVerticalScalingSpec `json:"verticalScaling,omitempty"`
 	// Specifies information necessary for custom configuration of Pgpool
-	Configuration *ReconfigurationSpec `json:"configuration,omitempty"`
+	Configuration *PgpoolCustomConfigurationSpec `json:"configuration,omitempty"`
 	// Specifies information necessary for configuring TLS
 	TLS *PgpoolTLSSpec `json:"tls,omitempty"`
 	// Specifies information necessary for configuring authSecret of the database
@@ -105,6 +105,19 @@ type PgpoolUpdateVersionSpec struct {
 type PgpoolHorizontalScalingSpec struct {
 	// Number of node
 	Node *int32 `json:"node,omitempty"`
+}
+
+type PgpoolBackendConfigurationSpec struct {
+	// Sync specifies the list of backends that should be synced with the database.
+	Sync []v1alpha2.PgpoolLoadBalancingSpec `json:"sync,omitempty"`
+
+	// Delete specifies the list of backends that should be removed from the database.
+	Delete []string `json:"delete,omitempty"`
+}
+
+type PgpoolCustomConfigurationSpec struct {
+	*ReconfigurationSpec `json:",inline,omitempty"`
+	Backend              *PgpoolBackendConfigurationSpec `json:"backend,omitempty"`
 }
 
 // PgpoolVerticalScalingSpec contains the vertical scaling information of a Pgpool cluster

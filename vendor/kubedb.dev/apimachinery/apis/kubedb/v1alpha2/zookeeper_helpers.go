@@ -227,7 +227,7 @@ func (z *ZooKeeper) SetDefaults(kc client.Client) {
 	z.setDefaultContainerSecurityContext(&zkVersion, &z.Spec.PodTemplate)
 
 	dbContainer := coreutil.GetContainerByName(z.Spec.PodTemplate.Spec.Containers, kubedb.ZooKeeperContainerName)
-	if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
+	if dbContainer != nil {
 		apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResources)
 	}
 

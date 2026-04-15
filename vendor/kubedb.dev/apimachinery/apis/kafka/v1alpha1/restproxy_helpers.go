@@ -177,7 +177,7 @@ func (k *RestProxy) SetDefaults(kc client.Client) {
 	k.setDefaultContainerSecurityContext(&ksrVersion, &k.Spec.PodTemplate)
 
 	dbContainer := coreutil.GetContainerByName(k.Spec.PodTemplate.Spec.Containers, RestProxyContainerName)
-	if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
+	if dbContainer != nil {
 		apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResources)
 	}
 

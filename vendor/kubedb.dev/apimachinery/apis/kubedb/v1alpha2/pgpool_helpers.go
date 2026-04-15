@@ -350,7 +350,7 @@ func (p *Pgpool) assignContainerSecurityContext(ppVersion *catalog.PgpoolVersion
 
 func (p *Pgpool) setContainerResourceLimits(podTemplate *ofst.PodTemplateSpec) {
 	ppContainer := core_util.GetContainerByName(podTemplate.Spec.Containers, kubedb.PgpoolContainerName)
-	if ppContainer != nil && (ppContainer.Resources.Requests == nil && ppContainer.Resources.Limits == nil) {
+	if ppContainer != nil {
 		apis.SetDefaultResourceLimits(&ppContainer.Resources, kubedb.DefaultResources)
 	}
 }

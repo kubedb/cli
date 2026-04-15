@@ -80,7 +80,13 @@ func (q QdrantApp) Type() appcat.AppType {
 }
 
 func (q *Qdrant) GetConnectionScheme() string {
-	scheme := "grpc"
+	var scheme string
+	if q.Spec.TLS == nil {
+		scheme = "http"
+	} else {
+		scheme = "https"
+	}
+
 	return scheme
 }
 
@@ -115,13 +121,12 @@ func (q *Qdrant) ServiceDNS() string {
 	return fmt.Sprintf("%s.%s.svc", q.ServiceName(), q.Namespace)
 }
 
-func (q *Qdrant) GetPodAddress(i int) string {
-	return fmt.Sprintf("%s-%d.%s.%s.svc:%d",
+func (q *Qdrant) PodDNS(ordinal string) string {
+	return fmt.Sprintf("%s-%s.%s.%s.svc",
 		q.OffshootName(),
-		i,
+		ordinal,
 		q.GoverningServiceName(),
 		q.Namespace,
-		kubedb.QdrantHTTPPort,
 	)
 }
 
@@ -413,7 +418,7 @@ func (q *Qdrant) assignDefaultContainerSecurityContext(qdVersion *catalog.Qdrant
 
 func (q *Qdrant) setDefaultContainerResourceLimits(podTemplate *ofst.PodTemplateSpec) {
 	dbContainer := coreutil.GetContainerByName(podTemplate.Spec.Containers, kubedb.QdrantContainerName)
-	if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
+	if dbContainer != nil {
 		apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResources)
 	}
 }

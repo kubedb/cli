@@ -39,6 +39,7 @@ func SetDefaultResourceLimits(req *core.ResourceRequirements, defaultResources c
 	// if request is set,
 	//		- limit set:
 	//			- return max(limit,request)
+	//      return request
 	// else if limit set:
 	//		- return limit
 	// else
@@ -57,14 +58,12 @@ func SetDefaultResourceLimits(req *core.ResourceRequirements, defaultResources c
 		return defaultValue
 	}
 
-	// if request is not set,
-	//		- if limit exists:
-	//				- copy limit
-	//		- else
-	//				- set default
-	// else
-	// 		- return request
-	// endif
+	// if request is set,
+	//     return request
+	//
+	// if limit exists:
+	//		return limit
+	//	return default
 	calRequest := func(name core.ResourceName, defaultValue resource.Quantity, originalLimit resource.Quantity) resource.Quantity {
 		if r, ok := req.Requests[name]; ok {
 			return r
@@ -97,5 +96,15 @@ func SetDefaultResourceLimits(req *core.ResourceRequirements, defaultResources c
 	// Calculate requests after limits
 	for r := range defaultResources.Requests {
 		req.Requests[r] = calRequest(r, defaultResources.Requests[r], originalLimits[r])
+	}
+
+	// Ensure resource limit is greater than or equal to request
+	for res, resReq := range req.Requests {
+		if resLim, limExists := req.Limits[res]; limExists {
+			if resLim.Cmp(resReq) <= 0 {
+				// Request is higher or equal, set limit to match request
+				req.Limits[res] = resReq
+			}
+		}
 	}
 }

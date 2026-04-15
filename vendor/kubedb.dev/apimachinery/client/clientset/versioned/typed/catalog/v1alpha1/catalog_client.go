@@ -32,6 +32,7 @@ type CatalogV1alpha1Interface interface {
 	CassandraVersionsGetter
 	ClickHouseVersionsGetter
 	DB2VersionsGetter
+	DocumentDBVersionsGetter
 	DruidVersionsGetter
 	ElasticsearchVersionsGetter
 	EtcdVersionsGetter
@@ -78,6 +79,10 @@ func (c *CatalogV1alpha1Client) ClickHouseVersions() ClickHouseVersionInterface 
 
 func (c *CatalogV1alpha1Client) DB2Versions() DB2VersionInterface {
 	return newDB2Versions(c)
+}
+
+func (c *CatalogV1alpha1Client) DocumentDBVersions() DocumentDBVersionInterface {
+	return newDocumentDBVersions(c)
 }
 
 func (c *CatalogV1alpha1Client) DruidVersions() DruidVersionInterface {

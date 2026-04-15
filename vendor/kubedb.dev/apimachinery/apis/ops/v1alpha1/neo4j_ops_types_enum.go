@@ -15,6 +15,14 @@ const (
 	Neo4jOpsRequestTypeRestart Neo4jOpsRequestType = "Restart"
 	// Neo4jOpsRequestTypeReconfigureTLS is a Neo4jOpsRequestType of type ReconfigureTLS.
 	Neo4jOpsRequestTypeReconfigureTLS Neo4jOpsRequestType = "ReconfigureTLS"
+	// Neo4jOpsRequestTypeRotateAuth is a Neo4jOpsRequestType of type RotateAuth.
+	Neo4jOpsRequestTypeRotateAuth Neo4jOpsRequestType = "RotateAuth"
+	// Neo4jOpsRequestTypeReconfigure is a Neo4jOpsRequestType of type Reconfigure.
+	Neo4jOpsRequestTypeReconfigure Neo4jOpsRequestType = "Reconfigure"
+	// Neo4jOpsRequestTypeHorizontalScaling is a Neo4jOpsRequestType of type HorizontalScaling.
+	Neo4jOpsRequestTypeHorizontalScaling Neo4jOpsRequestType = "HorizontalScaling"
+	// Neo4jOpsRequestTypeVerticalScaling is a Neo4jOpsRequestType of type VerticalScaling.
+	Neo4jOpsRequestTypeVerticalScaling Neo4jOpsRequestType = "VerticalScaling"
 )
 
 var ErrInvalidNeo4jOpsRequestType = fmt.Errorf("not a valid Neo4jOpsRequestType, try [%s]", strings.Join(_Neo4jOpsRequestTypeNames, ", "))
@@ -22,6 +30,10 @@ var ErrInvalidNeo4jOpsRequestType = fmt.Errorf("not a valid Neo4jOpsRequestType,
 var _Neo4jOpsRequestTypeNames = []string{
 	string(Neo4jOpsRequestTypeRestart),
 	string(Neo4jOpsRequestTypeReconfigureTLS),
+	string(Neo4jOpsRequestTypeRotateAuth),
+	string(Neo4jOpsRequestTypeReconfigure),
+	string(Neo4jOpsRequestTypeHorizontalScaling),
+	string(Neo4jOpsRequestTypeVerticalScaling),
 }
 
 // Neo4jOpsRequestTypeNames returns a list of possible string values of Neo4jOpsRequestType.
@@ -36,6 +48,10 @@ func Neo4jOpsRequestTypeValues() []Neo4jOpsRequestType {
 	return []Neo4jOpsRequestType{
 		Neo4jOpsRequestTypeRestart,
 		Neo4jOpsRequestTypeReconfigureTLS,
+		Neo4jOpsRequestTypeRotateAuth,
+		Neo4jOpsRequestTypeReconfigure,
+		Neo4jOpsRequestTypeHorizontalScaling,
+		Neo4jOpsRequestTypeVerticalScaling,
 	}
 }
 
@@ -52,8 +68,12 @@ func (x Neo4jOpsRequestType) IsValid() bool {
 }
 
 var _Neo4jOpsRequestTypeValue = map[string]Neo4jOpsRequestType{
-	"Restart":        Neo4jOpsRequestTypeRestart,
-	"ReconfigureTLS": Neo4jOpsRequestTypeReconfigureTLS,
+	"Restart":           Neo4jOpsRequestTypeRestart,
+	"ReconfigureTLS":    Neo4jOpsRequestTypeReconfigureTLS,
+	"RotateAuth":        Neo4jOpsRequestTypeRotateAuth,
+	"Reconfigure":       Neo4jOpsRequestTypeReconfigure,
+	"HorizontalScaling": Neo4jOpsRequestTypeHorizontalScaling,
+	"VerticalScaling":   Neo4jOpsRequestTypeVerticalScaling,
 }
 
 // ParseNeo4jOpsRequestType attempts to convert a string to a Neo4jOpsRequestType.

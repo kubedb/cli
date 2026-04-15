@@ -60,6 +60,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&ClickHouseVersionList{},
 		&DB2Version{},
 		&DB2VersionList{},
+		&DocumentDBVersion{},
+		&DocumentDBVersionList{},
 		&DruidVersion{},
 		&DruidVersionList{},
 		&ElasticsearchVersion{},

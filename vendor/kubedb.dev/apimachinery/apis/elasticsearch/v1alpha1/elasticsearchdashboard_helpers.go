@@ -307,17 +307,6 @@ func (ed *ElasticsearchDashboard) SetDefaults(kc client.Client) {
 }
 
 func (ed *ElasticsearchDashboard) setDefaultContainerSecurityContext(esVersion catalog.ElasticsearchVersion, podTemplate *ofst.PodTemplateSpec) {
-	initContainer := coreutil.GetContainerByName(podTemplate.Spec.InitContainers, kubedb.ElasticsearchInitConfigMergerContainerName)
-	if initContainer == nil {
-		initContainer = &core.Container{
-			Name: kubedb.ElasticsearchInitConfigMergerContainerName,
-		}
-	}
-	if initContainer.SecurityContext == nil {
-		initContainer.SecurityContext = &core.SecurityContext{}
-	}
-	ed.assignDefaultContainerSecurityContext(esVersion, initContainer.SecurityContext)
-	podTemplate.Spec.InitContainers = coreutil.UpsertContainer(podTemplate.Spec.InitContainers, *initContainer)
 	container := coreutil.GetContainerByName(podTemplate.Spec.Containers, kubedb.ElasticsearchContainerName)
 	if container == nil {
 		container = &core.Container{
@@ -333,13 +322,8 @@ func (ed *ElasticsearchDashboard) setDefaultContainerSecurityContext(esVersion c
 
 func (ed *ElasticsearchDashboard) setDefaultContainerResourceLimits(podTemplate *ofst.PodTemplateSpec) {
 	container := coreutil.GetContainerByName(podTemplate.Spec.Containers, kubedb.ElasticsearchContainerName)
-	if container != nil && (container.Resources.Requests == nil && container.Resources.Limits == nil) {
+	if container != nil {
 		apis.SetDefaultResourceLimits(&container.Resources, kubedb.DefaultResources)
-	}
-
-	initContainer := coreutil.GetContainerByName(podTemplate.Spec.InitContainers, kubedb.ElasticsearchInitConfigMergerContainerName)
-	if initContainer != nil && (initContainer.Resources.Requests == nil && initContainer.Resources.Limits == nil) {
-		apis.SetDefaultResourceLimits(&initContainer.Resources, kubedb.DefaultInitContainerResource)
 	}
 }
 

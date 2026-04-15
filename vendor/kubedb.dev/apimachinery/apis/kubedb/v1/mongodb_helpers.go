@@ -833,9 +833,7 @@ func (m *MongoDB) assignDefaultContainerSecurityContext(mgVersion *v1alpha1.Mong
 }
 
 func (m *MongoDB) setContainerDefaultResources(container *core.Container, defaultResources core.ResourceRequirements) {
-	if container.Resources.Requests == nil && container.Resources.Limits == nil {
-		apis.SetDefaultResourceLimits(&container.Resources, defaultResources)
-	}
+	apis.SetDefaultResourceLimits(&container.Resources, defaultResources)
 }
 
 func (m *MongoDB) SetHealthCheckerDefaults() {
