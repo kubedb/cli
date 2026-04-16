@@ -482,7 +482,7 @@ func (s *Solr) assignDefaultContainerSecurityContext(slVersion *catalog.SolrVers
 
 func (s *Solr) setDefaultContainerResourceLimits(podTemplate *ofst.PodTemplateSpec) {
 	dbContainer := coreutil.GetContainerByName(podTemplate.Spec.Containers, kubedb.SolrContainerName)
-	if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
+	if dbContainer != nil {
 		apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResourcesCoreAndMemoryIntensiveSolr)
 	}
 

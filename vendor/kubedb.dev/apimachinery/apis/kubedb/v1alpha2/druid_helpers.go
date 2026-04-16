@@ -727,7 +727,7 @@ func (d *Druid) assignDefaultContainerSecurityContext(druidVersion *catalog.Drui
 
 func (d *Druid) setDefaultContainerResourceLimits(podTemplate *ofst.PodTemplateSpec, nodeRole DruidNodeRoleType) {
 	dbContainer := coreutil.GetContainerByName(podTemplate.Spec.Containers, kubedb.DruidContainerName)
-	if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
+	if dbContainer != nil {
 		if nodeRole == DruidNodeRoleMiddleManagers {
 			apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResourcesMemoryIntensiveDruid)
 		} else {

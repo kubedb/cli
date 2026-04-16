@@ -24,6 +24,8 @@ type ClickHouseExpansion interface{}
 
 type DB2Expansion interface{}
 
+type DocumentDBExpansion interface{}
+
 type DruidExpansion interface{}
 
 type ElasticsearchExpansion interface{}

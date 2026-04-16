@@ -35,6 +35,7 @@ import (
 	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	metautil "kmodules.xyz/client-go/meta"
+	"kmodules.xyz/client-go/policy/secomp"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v2"
@@ -255,7 +256,8 @@ func (o *Oracle) ObserverPetSetName() string {
 }
 
 func (o *Oracle) ConfigSecretName() string {
-	return metautil.NameWithSuffix(o.OffshootName(), "config")
+	uid := string(o.UID)
+	return metautil.NameWithSuffix(o.OffshootName(), uid[len(uid)-6:])
 }
 
 func (o *Oracle) IsStandalone() bool {
@@ -318,6 +320,7 @@ func (o *Oracle) SetDefaults(kc client.Client) {
 
 	if o.Spec.Mode == OracleModeDataGuard {
 		o.SetDataGuardDefaults()
+		o.SetDefaultPodSecurityContext(o.Spec.DataGuard.Observer.PodTemplate, oraVersion)
 		o.SetObserverInitContainerDefaults(o.Spec.DataGuard.Observer.PodTemplate, oraVersion)
 		o.SetOracleObserverContainerDefaults(o.Spec.DataGuard.Observer.PodTemplate, oraVersion)
 	}
@@ -364,9 +367,11 @@ func (o *Oracle) initializePodTemplates() {
 		if o.Spec.DataGuard == nil {
 			o.Spec.DataGuard = &DataGuardSpec{}
 		}
+
 		if o.Spec.DataGuard.Observer == nil {
 			o.Spec.DataGuard.Observer = &ObserverSpec{}
 		}
+
 		if o.Spec.DataGuard.Observer.PodTemplate == nil {
 			o.Spec.DataGuard.Observer.PodTemplate = new(ofst.PodTemplateSpec)
 		}
@@ -380,7 +385,6 @@ func (o *Oracle) SetDefaultPodSecurityContext(podTemplate *ofst.PodTemplateSpec,
 	if podTemplate == nil {
 		return
 	}
-
 	if podTemplate.Spec.SecurityContext == nil {
 		podTemplate.Spec.SecurityContext = &core.PodSecurityContext{}
 	}
@@ -440,18 +444,37 @@ func (o *Oracle) SetCoordinatorContainerDefaults(podTemplate *ofst.PodTemplateSp
 	o.setContainerDefaultResources(container, *kubedb.CoordinatorDefaultResources.DeepCopy())
 }
 
-func (o *Oracle) setContainerDefaultSecurityContext(container *core.Container, _ *catalog.OracleVersion) {
+func (o *Oracle) setContainerDefaultSecurityContext(container *core.Container, oraVersion *catalog.OracleVersion) {
 	if container.SecurityContext == nil {
 		container.SecurityContext = &core.SecurityContext{}
 	}
 	// TODO: Check what part of security context make oracle fail to run
-	// o.assignDefaultContainerSecurityContext(container.SecurityContext, oraVersion)
+	o.assignDefaultContainerSecurityContext(container.SecurityContext, oraVersion)
+}
+
+func (p *Oracle) assignDefaultContainerSecurityContext(sc *core.SecurityContext, oraVersion *catalog.OracleVersion) {
+	// TODO: worked after removing sc.AllowPrivilegeEscalation
+	if sc.Capabilities == nil {
+		sc.Capabilities = &core.Capabilities{
+			Drop: []core.Capability{"ALL"},
+		}
+	}
+	if sc.RunAsNonRoot == nil {
+		sc.RunAsNonRoot = pointer.BoolP(true)
+	}
+	if sc.RunAsUser == nil {
+		sc.RunAsUser = oraVersion.Spec.SecurityContext.RunAsUser
+	}
+	if sc.RunAsGroup == nil {
+		sc.RunAsGroup = oraVersion.Spec.SecurityContext.RunAsUser
+	}
+	if sc.SeccompProfile == nil {
+		sc.SeccompProfile = secomp.DefaultSeccompProfile()
+	}
 }
 
 func (o *Oracle) setContainerDefaultResources(container *core.Container, defaultResources core.ResourceRequirements) {
-	if container.Resources.Requests == nil && container.Resources.Limits == nil {
-		apis.SetDefaultResourceLimits(&container.Resources, defaultResources)
-	}
+	apis.SetDefaultResourceLimits(&container.Resources, defaultResources)
 }
 
 func (o *Oracle) SetDataGuardDefaults() {

@@ -166,6 +166,11 @@ type OracleSpec struct {
 	// Listener is for Oracle Net Listener
 	// +optional
 	Listener *ListenerSpec `json:"listener,omitempty"`
+
+	// Init is used to initialize database
+	// +optional
+	Init *InitSpec `json:"init,omitempty"`
+
 	// Monitor is used monitor database instance
 	// +optional
 	Monitor *mona.AgentSpec `json:"monitor,omitempty"`

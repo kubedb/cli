@@ -354,7 +354,7 @@ func (r *Cassandra) SetDefaults(kc client.Client) {
 			}
 
 			dbContainer := coreutil.GetContainerByName(rack.PodTemplate.Spec.Containers, kubedb.CassandraContainerName)
-			if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
+			if dbContainer != nil {
 				apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResources)
 			}
 			r.setDefaultContainerSecurityContext(&casVersion, rack.PodTemplate)
@@ -374,7 +374,7 @@ func (r *Cassandra) SetDefaults(kc client.Client) {
 		}
 		r.setDefaultContainerSecurityContext(&casVersion, r.Spec.PodTemplate)
 		dbContainer := coreutil.GetContainerByName(r.Spec.PodTemplate.Spec.Containers, kubedb.CassandraContainerName)
-		if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
+		if dbContainer != nil {
 			apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResources)
 		}
 		r.SetHealthCheckerDefaults()

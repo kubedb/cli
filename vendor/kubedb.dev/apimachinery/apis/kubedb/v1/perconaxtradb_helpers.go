@@ -325,7 +325,7 @@ func (p *PerconaXtraDB) assignDefaultContainerSecurityContext(pVersion *v1alpha1
 
 func (p *PerconaXtraDB) setDefaultContainerResourceLimits(podTemplate *ofstv2.PodTemplateSpec) {
 	dbContainer := core_util.GetContainerByName(podTemplate.Spec.Containers, kubedb.PerconaXtraDBContainerName)
-	if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
+	if dbContainer != nil {
 		apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResources)
 	}
 

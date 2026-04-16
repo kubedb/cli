@@ -577,9 +577,7 @@ func (p *Postgres) setContainerDefaultSecurityContext(container *core.Container,
 }
 
 func (p *Postgres) setContainerDefaultResources(container *core.Container, defaultResources core.ResourceRequirements) {
-	if container.Resources.Requests == nil && container.Resources.Limits == nil {
-		apis.SetDefaultResourceLimits(&container.Resources, defaultResources)
-	}
+	apis.SetDefaultResourceLimits(&container.Resources, defaultResources)
 }
 
 func (p *Postgres) assignDefaultContainerSecurityContext(sc *core.SecurityContext, pgVersion *catalog.PostgresVersion) {

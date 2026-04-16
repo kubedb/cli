@@ -387,7 +387,7 @@ func (k *Kafka) SetDefaults(kc client.Client) {
 			k.setDefaultContainerSecurityContext(&kfVersion, &k.Spec.Topology.Controller.PodTemplate)
 
 			dbContainer := coreutil.GetContainerByName(k.Spec.Topology.Controller.PodTemplate.Spec.Containers, kubedb.KafkaContainerName)
-			if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
+			if dbContainer != nil {
 				apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResourcesMemoryIntensive)
 			}
 		}
@@ -402,7 +402,7 @@ func (k *Kafka) SetDefaults(kc client.Client) {
 			k.setDefaultContainerSecurityContext(&kfVersion, &k.Spec.Topology.Broker.PodTemplate)
 
 			dbContainer := coreutil.GetContainerByName(k.Spec.Topology.Broker.PodTemplate.Spec.Containers, kubedb.KafkaContainerName)
-			if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
+			if dbContainer != nil {
 				apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResourcesMemoryIntensive)
 			}
 		}
@@ -413,7 +413,7 @@ func (k *Kafka) SetDefaults(kc client.Client) {
 		k.setDefaultContainerSecurityContext(&kfVersion, &k.Spec.PodTemplate)
 
 		dbContainer := coreutil.GetContainerByName(k.Spec.PodTemplate.Spec.Containers, kubedb.KafkaContainerName)
-		if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
+		if dbContainer != nil {
 			apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResourcesMemoryIntensive)
 		}
 	}

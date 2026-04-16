@@ -520,7 +520,7 @@ func (m *MariaDB) assignMaxscaleDefaultContainerSecurityContext(mdVersion *v1alp
 
 func (m *MariaDB) setDefaultContainerResourceLimits(podTemplate *ofstv2.PodTemplateSpec) {
 	dbContainer := core_util.GetContainerByName(podTemplate.Spec.Containers, kubedb.MariaDBContainerName)
-	if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
+	if dbContainer != nil {
 		apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResources)
 	}
 
@@ -538,7 +538,7 @@ func (m *MariaDB) setDefaultContainerResourceLimits(podTemplate *ofstv2.PodTempl
 
 func (m *MariaDB) setMaxscaleDefaultContainerResourceLimits(podTemplate *ofstv2.PodTemplateSpec) {
 	dbContainer := core_util.GetContainerByName(podTemplate.Spec.Containers, kubedb.MaxscaleContainerName)
-	if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
+	if dbContainer != nil {
 		apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultInitContainerResource)
 	}
 

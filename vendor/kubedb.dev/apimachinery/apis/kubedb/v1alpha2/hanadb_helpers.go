@@ -487,6 +487,19 @@ func (h *HanaDB) SetHealthCheckerDefaults() {
 	}
 }
 
+func (h *HanaDB) SetArbiterDefault() {
+	replicas := int32(0)
+	if h.Spec.Replicas != nil {
+		replicas = *h.Spec.Replicas
+	}
+	if h.IsCluster() && replicas%2 == 0 && h.Spec.Arbiter == nil {
+		h.Spec.Arbiter = &ArbiterSpec{
+			Resources: core.ResourceRequirements{},
+		}
+		apis.SetDefaultResourceLimits(&h.Spec.Arbiter.Resources, kubedb.DefaultArbiter(false))
+	}
+}
+
 func (h *HanaDB) SetDefaults(kc client.Client) {
 	if h == nil {
 		return
@@ -516,6 +529,7 @@ func (h *HanaDB) SetDefaults(kc client.Client) {
 			h.Spec.Replicas = pointer.Int32P(1)
 		}
 	}
+
 	if h.IsSystemReplication() {
 		if h.Spec.Topology.SystemReplication == nil {
 			h.Spec.Topology.SystemReplication = &HanaDBSystemReplicationSpec{}
@@ -528,11 +542,29 @@ func (h *HanaDB) SetDefaults(kc client.Client) {
 		}
 	}
 
+	h.SetArbiterDefault()
+
 	h.setDefaultContainerSecurityContext(&hanadbVersion, h.Spec.PodTemplate)
 
 	h.SetHealthCheckerDefaults()
 
 	h.setDefaultContainerResourceLimits(h.Spec.PodTemplate)
+
+	if h.Spec.Monitor != nil {
+		if h.Spec.Monitor.Prometheus == nil {
+			h.Spec.Monitor.Prometheus = &mona.PrometheusSpec{}
+		}
+		if h.Spec.Monitor.Prometheus.Exporter.Port == 0 {
+			h.Spec.Monitor.Prometheus.Exporter.Port = kubedb.HanaDBExporterPort
+		}
+		h.Spec.Monitor.SetDefaults()
+		if h.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser == nil {
+			h.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsUser = hanadbVersion.Spec.SecurityContext.RunAsUser
+		}
+		if h.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup == nil {
+			h.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup = hanadbVersion.Spec.SecurityContext.RunAsGroup
+		}
+	}
 }
 
 func (h *HanaDB) setDefaultContainerSecurityContext(hanadbVersion *catalog.HanaDBVersion, podTemplate *ofst.PodTemplateSpec) {
@@ -587,8 +619,15 @@ func (h *HanaDB) assignDefaultContainerSecurityContext(hanadbVersion *catalog.Ha
 
 func (h *HanaDB) setDefaultContainerResourceLimits(podTemplate *ofst.PodTemplateSpec) {
 	dbContainer := coreutil.GetContainerByName(podTemplate.Spec.Containers, kubedb.HanaDBContainerName)
-	if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
+	if dbContainer != nil {
 		apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResourcesHanaDB)
+	}
+
+	if h.IsCluster() {
+		coordinatorContainer := coreutil.GetContainerByName(podTemplate.Spec.Containers, kubedb.HanaDBCoordinatorContainerName)
+		if coordinatorContainer != nil && (coordinatorContainer.Resources.Requests == nil && coordinatorContainer.Resources.Limits == nil) {
+			apis.SetDefaultResourceLimits(&coordinatorContainer.Resources, kubedb.CoordinatorDefaultResources)
+		}
 	}
 }
 

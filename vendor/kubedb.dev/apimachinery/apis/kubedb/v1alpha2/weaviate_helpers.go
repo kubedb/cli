@@ -186,7 +186,7 @@ func (w *Weaviate) SetDefaults(kc client.Client) {
 	w.setDefaultContainerSecurityContext(&wvVersion, &w.Spec.PodTemplate)
 
 	dbContainer := coreutil.GetContainerByName(w.Spec.PodTemplate.Spec.Containers, kubedb.WeaviateContainerName)
-	if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
+	if dbContainer != nil {
 		apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResources)
 	}
 

@@ -55,10 +55,12 @@ func (h HanaDBVersion) ResourcePlural() string {
 
 func (h HanaDBVersion) ValidateSpecs() error {
 	if h.Spec.Version == "" ||
-		h.Spec.DB.Image == "" {
+		h.Spec.DB.Image == "" ||
+		h.Spec.Exporter.Image == "" {
 		fields := []string{
 			"spec.version",
 			"spec.db.image",
+			"spec.exporter.image",
 		}
 		return fmt.Errorf("atleast one of the following specs is not set for HanaDBVersion %q: %s", h.Name, strings.Join(fields, ", "))
 	}

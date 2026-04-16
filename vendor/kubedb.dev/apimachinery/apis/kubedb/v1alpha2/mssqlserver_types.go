@@ -90,29 +90,21 @@ type MSSQLServer struct {
 
 // MSSQLServerSpec defines the desired state of MSSQLServer
 type MSSQLServerSpec struct {
-	// AutoOps contains configuration of automatic ops-request-recommendation generation
+	// Arbiter controls spec for arbiter pods
 	// +optional
-	AutoOps AutoOpsSpec `json:"autoOps,omitempty"`
+	Arbiter *ArbiterSpec `json:"arbiter,omitempty"`
 
-	// Version of MSSQLServer to be deployed.
-	Version string `json:"version"`
-
-	// Number of instances to deploy for a MSSQLServer database. In case of MSSQLServer Availability Group.
-	Replicas *int32 `json:"replicas,omitempty"`
-
-	// MSSQLServer cluster topology
+	// Archiver controls database backup using Archiver CR
 	// +optional
-	Topology *MSSQLServerTopology `json:"topology,omitempty"`
-
-	// StorageType can be durable (default) or ephemeral
-	StorageType StorageType `json:"storageType,omitempty"`
-
-	// Storage spec to specify how storage shall be used.
-	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty"`
+	Archiver *Archiver `json:"archiver,omitempty"`
 
 	// Database authentication secret
 	// +optional
 	AuthSecret *SecretReference `json:"authSecret,omitempty"`
+
+	// AutoOps contains configuration of automatic ops-request-recommendation generation
+	// +optional
+	AutoOps AutoOpsSpec `json:"autoOps,omitempty"`
 
 	// ConfigSecret is an optional field to provide a custom configuration file for the database (i.e., mssql.conf).
 	// If specified, this file will be used as a configuration file, otherwise a default configuration file will be used.
@@ -122,45 +114,53 @@ type MSSQLServerSpec struct {
 	// +optional
 	Configuration *ConfigurationSpec `json:"configuration,omitempty"`
 
-	// Init is used to initialize a database
+	// DeletionPolicy controls the delete operation for database
 	// +optional
-	Init *InitSpec `json:"init,omitempty"`
-
-	// PodTemplate is an optional configuration for pods used to expose database
-	// +optional
-	PodTemplate *ofst.PodTemplateSpec `json:"podTemplate,omitempty"`
-
-	// TLS contains tls configurations for client and server.
-	TLS *MSSQLServerTLSConfig `json:"tls,omitempty"`
-
-	// ServiceTemplates is an optional configuration for services used to expose database
-	// +optional
-	ServiceTemplates []NamedServiceTemplateSpec `json:"serviceTemplates,omitempty"`
+	DeletionPolicy DeletionPolicy `json:"deletionPolicy,omitempty"`
 
 	// Indicates that the database is halted and all offshoot Kubernetes resources except PVCs are deleted.
 	// +optional
 	Halted bool `json:"halted,omitempty"`
-
-	// DeletionPolicy controls the delete operation for database
-	// +optional
-	DeletionPolicy DeletionPolicy `json:"deletionPolicy,omitempty"`
 
 	// HealthChecker defines attributes of the health checker
 	// +optional
 	// +kubebuilder:default={periodSeconds: 10, timeoutSeconds: 10, failureThreshold: 1}
 	HealthChecker kmapi.HealthCheckSpec `json:"healthChecker"`
 
+	// Init is used to initialize a database
+	// +optional
+	Init *InitSpec `json:"init,omitempty"`
+
 	// Monitor is used monitor database instance
 	// +optional
 	Monitor *mona.AgentSpec `json:"monitor,omitempty"`
 
-	// Archiver controls database backup using Archiver CR
+	// PodTemplate is an optional configuration for pods used to expose database
 	// +optional
-	Archiver *Archiver `json:"archiver,omitempty"`
+	PodTemplate *ofst.PodTemplateSpec `json:"podTemplate,omitempty"`
 
-	// Arbiter controls spec for arbiter pods
+	// Number of instances to deploy for a MSSQLServer database. In case of MSSQLServer Availability Group.
+	Replicas *int32 `json:"replicas,omitempty"`
+
+	// ServiceTemplates is an optional configuration for services used to expose database
 	// +optional
-	Arbiter *ArbiterSpec `json:"arbiter,omitempty"`
+	ServiceTemplates []NamedServiceTemplateSpec `json:"serviceTemplates,omitempty"`
+
+	// Storage spec to specify how storage shall be used.
+	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty"`
+
+	// StorageType can be durable (default) or ephemeral
+	StorageType StorageType `json:"storageType,omitempty"`
+
+	// TLS contains tls configurations for client and server.
+	TLS *MSSQLServerTLSConfig `json:"tls"`
+
+	// MSSQLServer cluster topology
+	// +optional
+	Topology *MSSQLServerTopology `json:"topology,omitempty"`
+
+	// Version of MSSQLServer to be deployed.
+	Version string `json:"version"`
 }
 
 type MSSQLServerTLSConfig struct {

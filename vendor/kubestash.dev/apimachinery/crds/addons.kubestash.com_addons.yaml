@@ -45,12 +45,14 @@ spec:
                         - VolumeSnapshotter
                         - Solr
                         - Medusa
+                        - ClickHouseBackup
                       - enum:
                         - Restic
                         - WalG
                         - Medusa
                         - VolumeSnapshotter
                         - Solr
+                        - ClickHouseBackup
                       type: string
                     executor:
                       enum:
@@ -1069,12 +1071,14 @@ spec:
                         - VolumeSnapshotter
                         - Solr
                         - Medusa
+                        - ClickHouseBackup
                       - enum:
                         - Restic
                         - WalG
                         - Medusa
                         - VolumeSnapshotter
                         - Solr
+                        - ClickHouseBackup
                       type: string
                     executor:
                       enum:

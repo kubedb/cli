@@ -389,7 +389,7 @@ func (c *ClickHouse) SetDefaults(kc client.Client) {
 		}
 
 		dbContainer := coreutil.GetContainerByName(cluster.PodTemplate.Spec.Containers, kubedb.ClickHouseContainerName)
-		if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
+		if dbContainer != nil {
 			apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.ClickHouseDefaultResources)
 		}
 		c.setDefaultContainerSecurityContext(&chVersion, cluster.PodTemplate)
@@ -409,7 +409,7 @@ func (c *ClickHouse) SetDefaults(kc client.Client) {
 			}
 			c.setKeeperDefaultContainerSecurityContext(&chVersion, c.Spec.ClusterTopology.ClickHouseKeeper.Spec.PodTemplate)
 			dbContainer := coreutil.GetContainerByName(c.Spec.ClusterTopology.ClickHouseKeeper.Spec.PodTemplate.Spec.Containers, kubedb.ClickHouseKeeperContainerName)
-			if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
+			if dbContainer != nil {
 				apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResources)
 			}
 		}
@@ -429,7 +429,7 @@ func (c *ClickHouse) SetDefaults(kc client.Client) {
 		}
 		c.setDefaultContainerSecurityContext(&chVersion, c.Spec.PodTemplate)
 		dbContainer := coreutil.GetContainerByName(c.Spec.PodTemplate.Spec.Containers, kubedb.ClickHouseContainerName)
-		if dbContainer != nil && (dbContainer.Resources.Requests == nil && dbContainer.Resources.Limits == nil) {
+		if dbContainer != nil {
 			apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.ClickHouseDefaultResources)
 		}
 	}
