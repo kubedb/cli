@@ -3,7 +3,5 @@ updates:
   - package-ecosystem: "gomod"
     directory: "/"
     schedule:
-      interval: "cron"
-      cron: "0 */4 * * *"
-      timezone: "UTC"
+      interval: "daily"
     open-pull-requests-limit: 0
