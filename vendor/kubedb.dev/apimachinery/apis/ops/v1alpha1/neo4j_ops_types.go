@@ -21,6 +21,7 @@ import (
 	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 
 	core "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -68,6 +69,10 @@ type Neo4jOpsRequestSpec struct {
 	HorizontalScaling *Neo4jHorizontalScalingSpec `json:"horizontalScaling,omitempty"`
 	// Specifies information necessary for vertical scaling
 	VerticalScaling *Neo4jVerticalScalingSpec `json:"verticalScaling,omitempty"`
+	// Specifies information necessary for volume expansion
+	VolumeExpansion *Neo4jVolumeExpansionSpec `json:"volumeExpansion,omitempty"`
+	// Specifies information necessary for upgrading Neo4j
+	UpdateVersion *Neo4jUpdateVersionSpec `json:"updateVersion,omitempty"`
 	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
 	Timeout *metav1.Duration `json:"timeout,omitempty"`
 	// ApplyOption is to control the execution of OpsRequest depending on the database state.
@@ -75,6 +80,19 @@ type Neo4jOpsRequestSpec struct {
 	Apply ApplyOption `json:"apply,omitempty"`
 	// +kubebuilder:default=1
 	MaxRetries int32 `json:"maxRetries,omitempty"`
+}
+
+// Neo4jVolumeExpansionSpec is the spec for Neo4j volume expansion
+type Neo4jVolumeExpansionSpec struct {
+	Mode VolumeExpansionMode `json:"mode"`
+	// volume specification for servers
+	Server *resource.Quantity `json:"server,omitempty"`
+}
+
+// Neo4jUpdateVersionSpec contains the update version information of a Neo4j cluster
+type Neo4jUpdateVersionSpec struct {
+	// Specifies the target version name from catalog
+	TargetVersion string `json:"targetVersion,omitempty"`
 }
 
 // ReallocateStrategy defines how reallocation should be performed
@@ -129,8 +147,8 @@ type Neo4jTLSSpec struct {
 	Remove bool `json:"remove,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=Restart;ReconfigureTLS;RotateAuth;Reconfigure;VerticalScaling;HorizontalScaling
-// ENUM(Restart,ReconfigureTLS,RotateAuth,Reconfigure,HorizontalScaling,VerticalScaling)
+// +kubebuilder:validation:Enum=Restart;ReconfigureTLS;RotateAuth;Reconfigure;VerticalScaling;HorizontalScaling;VolumeExpansion;UpdateVersion
+// ENUM(Restart,ReconfigureTLS,RotateAuth,Reconfigure,HorizontalScaling,VerticalScaling,VolumeExpansion,UpdateVersion)
 type Neo4jOpsRequestType string
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

@@ -122,7 +122,7 @@ const (
 const (
 	Restart              = "Restart"
 	RestartNodes         = "RestartNodes"
-	RestartServer        = "RestartServer"
+	RestartServers       = "RestartServers"
 	RestartPods          = "RestartPods"
 	RestartKeeperPods    = "RestartKeeperPods"
 	RestartPodsSucceeded = "RestartPodsSucceeded"
@@ -430,4 +430,9 @@ const (
 const (
 	RebalanceShards = "RebalanceShards"
 	RemovePeers     = "RemovePeers"
+)
+
+// Neo4j Constanst
+const (
+	UpdateServerPVCs = "UpdateServerPVCs"
 )
