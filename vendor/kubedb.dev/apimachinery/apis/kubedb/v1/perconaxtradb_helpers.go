@@ -369,20 +369,25 @@ func (p *PerconaXtraDB) SetTLSDefaults() {
 }
 
 // CertificateName returns the default certificate name and/or certificate secret name for a certificate alias
-func (p *PerconaXtraDBSpec) GetPersistentSecrets() []string {
+func (p *PerconaXtraDB) GetPersistentSecrets() []string {
 	if p == nil {
 		return nil
 	}
 
 	var secrets []string
-	if p.AuthSecret != nil {
-		secrets = append(secrets, p.AuthSecret.Name)
+	if p.Spec.AuthSecret != nil {
+		secrets = append(secrets, p.Spec.AuthSecret.Name)
 	}
-	if p.SystemUserSecrets != nil && p.SystemUserSecrets.ReplicationUserSecret != nil {
-		secrets = append(secrets, p.SystemUserSecrets.ReplicationUserSecret.Name)
+	if p.Spec.SystemUserSecrets != nil && p.Spec.SystemUserSecrets.ReplicationUserSecret != nil {
+		secrets = append(secrets, p.Spec.SystemUserSecrets.ReplicationUserSecret.Name)
 	}
-	if p.SystemUserSecrets != nil && p.SystemUserSecrets.MonitorUserSecret != nil {
-		secrets = append(secrets, p.SystemUserSecrets.MonitorUserSecret.Name)
+	if p.Spec.SystemUserSecrets != nil && p.Spec.SystemUserSecrets.MonitorUserSecret != nil {
+		secrets = append(secrets, p.Spec.SystemUserSecrets.MonitorUserSecret.Name)
+	}
+
+	if p.Spec.Monitor != nil && p.Spec.TLS != nil {
+		name := meta_util.NameWithSuffix(p.Name, kubedb.MySQLMetricsExporterConfigSecretSuffix)
+		secrets = append(secrets, name)
 	}
 	return secrets
 }

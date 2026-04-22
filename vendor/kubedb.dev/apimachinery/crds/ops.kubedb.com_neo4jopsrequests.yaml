@@ -294,7 +294,14 @@ spec:
                 - Reconfigure
                 - VerticalScaling
                 - HorizontalScaling
+                - VolumeExpansion
+                - UpdateVersion
                 type: string
+              updateVersion:
+                properties:
+                  targetVersion:
+                    type: string
+                type: object
               verticalScaling:
                 properties:
                   server:
@@ -345,6 +352,22 @@ spec:
                         - value
                         type: object
                     type: object
+                type: object
+              volumeExpansion:
+                properties:
+                  mode:
+                    enum:
+                    - Offline
+                    - Online
+                    type: string
+                  server:
+                    anyOf:
+                    - type: integer
+                    - type: string
+                    pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                    x-kubernetes-int-or-string: true
+                required:
+                - mode
                 type: object
             required:
             - databaseRef

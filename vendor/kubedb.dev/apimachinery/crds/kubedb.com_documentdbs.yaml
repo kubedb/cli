@@ -17,7 +17,7 @@ spec:
     listKind: DocumentDBList
     plural: documentdbs
     shortNames:
-    - fr
+    - docdb
     singular: documentdb
   scope: Namespaced
   versions:

@@ -368,7 +368,7 @@ func (m *MariaDB) SetDefaults(mdVersion *v1alpha1.MariaDBVersion) {
 
 func (m *MariaDB) SetDefaultsMaxscale(mdVersion *v1alpha1.MariaDBVersion, maxscale *MaxScaleSpec) {
 	if maxscale == nil {
-		return
+		maxscale = &MaxScaleSpec{}
 	}
 	if maxscale.StorageType == "" {
 		maxscale.StorageType = StorageTypeDurable
@@ -569,15 +569,21 @@ func (m *MariaDB) SetTLSDefaults() {
 	m.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(m.Spec.TLS.Certificates, string(MariaDBExporterCert), m.CertificateName(MariaDBExporterCert))
 }
 
-func (m *MariaDBSpec) GetPersistentSecrets() []string {
+func (m *MariaDB) GetPersistentSecrets() []string {
 	if m == nil {
 		return nil
 	}
 
 	var secrets []string
-	if m.AuthSecret != nil {
-		secrets = append(secrets, m.AuthSecret.Name)
+	if m.Spec.AuthSecret != nil {
+		secrets = append(secrets, m.Spec.AuthSecret.Name)
 	}
+
+	if m.Spec.Monitor != nil && m.Spec.TLS != nil {
+		name := meta_util.NameWithSuffix(m.Name, kubedb.MySQLMetricsExporterConfigSecretSuffix)
+		secrets = append(secrets, name)
+	}
+
 	return secrets
 }
 
