@@ -59,13 +59,39 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Classify release
+        id: release-type
+        run: |
+          ref="${GITHUB_REF}"
+          if [[ "$ref" == refs/tags/* ]] \
+              && [[ "$ref" != *-alpha.* ]] \
+              && [[ "$ref" != *-beta.* ]] \
+              && [[ "$ref" != *-rc.* ]]; then
+            echo "is_release=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "is_release=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Generate LGTM App token
+        id: lgtm-app-token
+        if: steps.release-type.outputs.is_release == 'true'
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          client-id: ${{ secrets.LGTM_APP_CLIENT_ID }}
+          private-key: ${{ secrets.LGTM_APP_PRIVATE_KEY }}
+          owner: appscode
+          repositories: krew-index
+          permission-contents: write
+          permission-pull-requests: write
+
       - name: Clone krew-index repository
+        if: steps.release-type.outputs.is_release == 'true'
         env:
           GITHUB_USER: ${{ github.actor }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.lgtm-app-token.outputs.token }}
         run: |
           KREW_INDEX_REPOSITORY=github.com/appscode/krew-index
-          url="https://${GITHUB_USER}:${GITHUB_TOKEN}@${KREW_INDEX_REPOSITORY}.git"
+          url="https://x-access-token:${GITHUB_TOKEN}@${KREW_INDEX_REPOSITORY}.git"
           cd $RUNNER_WORKSPACE
           git clone $url
           cd $(basename $KREW_INDEX_REPOSITORY)
@@ -73,10 +99,10 @@ jobs:
           git config user.email "${GITHUB_USER}@appscode.com"
 
       - name: Publish krew manifest
+        if: steps.release-type.outputs.is_release == 'true'
         env:
           GITHUB_USER: ${{ github.actor }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        if: startsWith(github.event.ref, 'refs/tags/') && (contains(github.ref, '-alpha.') || contains(github.ref, '-beta.') || contains(github.ref, '-rc.')) == false
+          GITHUB_TOKEN: ${{ steps.lgtm-app-token.outputs.token }}
         run: |
           cd $RUNNER_WORKSPACE/krew-index
           ./hack/scripts/open-pr.sh $GITHUB_WORKSPACE dba
