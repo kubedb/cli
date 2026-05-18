@@ -3,8 +3,6 @@ name: release-tracker
 on:
   pull_request:
     types: [closed]
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
@@ -14,7 +12,6 @@ jobs:
   build:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-24.04
-
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
@@ -30,7 +27,6 @@ jobs:
 
       - name: Update release tracker
         env:
-          GITHUB_USER: ${{ github.actor }}
           GITHUB_TOKEN: ${{ steps.lgtm-app-token.outputs.token }}
         run: |
           ./hack/scripts/update-release-tracker.sh
