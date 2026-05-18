@@ -47,7 +47,6 @@ jobs:
 
       - name: Clone charts repository
         env:
-          GITHUB_USER: ${{ github.actor }}
           GITHUB_TOKEN: ${{ steps.lgtm-app-token.outputs.token }}
           DOCS_REPOSITORY: ${{ secrets.DOCS_REPOSITORY }}
         run: |

@@ -86,7 +86,6 @@ jobs:
       - name: Clone krew-index repository
         if: steps.release-type.outputs.is_release == 'true'
         env:
-          GITHUB_USER: ${{ github.actor }}
           GITHUB_TOKEN: ${{ steps.lgtm-app-token.outputs.token }}
         run: |
           KREW_INDEX_REPOSITORY=github.com/appscode/krew-index
@@ -94,13 +93,12 @@ jobs:
           cd $RUNNER_WORKSPACE
           git clone $url
           cd $(basename $KREW_INDEX_REPOSITORY)
-          git config user.name "${GITHUB_USER}"
-          git config user.email "${GITHUB_USER}@appscode.com"
+          git config user.name "1gtm"
+          git config user.email "1gtm@appscode.com"
 
       - name: Publish krew manifest
         if: steps.release-type.outputs.is_release == 'true'
         env:
-          GITHUB_USER: ${{ github.actor }}
           GITHUB_TOKEN: ${{ steps.lgtm-app-token.outputs.token }}
         run: |
           cd $RUNNER_WORKSPACE/krew-index
