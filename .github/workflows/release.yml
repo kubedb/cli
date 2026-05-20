@@ -47,6 +47,7 @@ jobs:
         uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2.6.2
         if: startsWith(github.ref, 'refs/tags/')
         with:
+          generate_release_notes: true
           files: |
             bin/kubectl-dba-darwin-amd64.tar.gz
             bin/kubectl-dba-darwin-arm64.tar.gz
