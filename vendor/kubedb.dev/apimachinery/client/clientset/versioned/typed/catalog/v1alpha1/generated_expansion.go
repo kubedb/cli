@@ -18,6 +18,8 @@ limitations under the License.
 
 package v1alpha1
 
+type AerospikeVersionExpansion interface{}
+
 type CassandraVersionExpansion interface{}
 
 type ClickHouseVersionExpansion interface{}
@@ -49,6 +51,8 @@ type MSSQLServerVersionExpansion interface{}
 type MariaDBVersionExpansion interface{}
 
 type MemcachedVersionExpansion interface{}
+
+type MilvusVersionExpansion interface{}
 
 type MongoDBVersionExpansion interface{}
 

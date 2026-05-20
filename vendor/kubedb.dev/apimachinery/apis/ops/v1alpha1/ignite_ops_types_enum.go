@@ -27,6 +27,8 @@ const (
 	IgniteOpsRequestTypeReconfigureTLS IgniteOpsRequestType = "ReconfigureTLS"
 	// IgniteOpsRequestTypeRotateAuth is a IgniteOpsRequestType of type RotateAuth.
 	IgniteOpsRequestTypeRotateAuth IgniteOpsRequestType = "RotateAuth"
+	// IgniteOpsRequestTypeStorageMigration is a IgniteOpsRequestType of type StorageMigration.
+	IgniteOpsRequestTypeStorageMigration IgniteOpsRequestType = "StorageMigration"
 )
 
 var ErrInvalidIgniteOpsRequestType = fmt.Errorf("not a valid IgniteOpsRequestType, try [%s]", strings.Join(_IgniteOpsRequestTypeNames, ", "))
@@ -40,6 +42,7 @@ var _IgniteOpsRequestTypeNames = []string{
 	string(IgniteOpsRequestTypeReconfigure),
 	string(IgniteOpsRequestTypeReconfigureTLS),
 	string(IgniteOpsRequestTypeRotateAuth),
+	string(IgniteOpsRequestTypeStorageMigration),
 }
 
 // IgniteOpsRequestTypeNames returns a list of possible string values of IgniteOpsRequestType.
@@ -60,6 +63,7 @@ func IgniteOpsRequestTypeValues() []IgniteOpsRequestType {
 		IgniteOpsRequestTypeReconfigure,
 		IgniteOpsRequestTypeReconfigureTLS,
 		IgniteOpsRequestTypeRotateAuth,
+		IgniteOpsRequestTypeStorageMigration,
 	}
 }
 
@@ -84,6 +88,7 @@ var _IgniteOpsRequestTypeValue = map[string]IgniteOpsRequestType{
 	"Reconfigure":       IgniteOpsRequestTypeReconfigure,
 	"ReconfigureTLS":    IgniteOpsRequestTypeReconfigureTLS,
 	"RotateAuth":        IgniteOpsRequestTypeRotateAuth,
+	"StorageMigration":  IgniteOpsRequestTypeStorageMigration,
 }
 
 // ParseIgniteOpsRequestType attempts to convert a string to a IgniteOpsRequestType.

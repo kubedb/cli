@@ -91,7 +91,7 @@ type PgpoolTLSSpec struct {
 	ClientAuthMode v1alpha2.PgpoolClientAuthMode `json:"clientAuthMode,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=UpdateVersion;VerticalScaling;Reconfigure;Restart;HorizontalScaling;ReconfigureTLS;RotateAuth
+// +kubebuilder:validation:Enum=UpdateVersion;Restart;Reconfigure;VerticalScaling;HorizontalScaling;ReconfigureTLS;RotateAuth
 // ENUM(UpdateVersion, Restart, Reconfigure, VerticalScaling, HorizontalScaling, ReconfigureTLS, RotateAuth)
 type PgpoolOpsRequestType string
 

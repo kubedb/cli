@@ -18,6 +18,7 @@ package v1alpha2
 
 import (
 	"fmt"
+	"strconv"
 
 	"kubedb.dev/apimachinery/apis"
 	catalogv1alpha1 "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
@@ -26,6 +27,7 @@ import (
 
 	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/api/resource"
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/utils/ptr"
 	"kmodules.xyz/client-go/apiextensions"
@@ -131,6 +133,10 @@ func (d *DocumentDB) ResourceSingular() string {
 	return ResourceSingularDocumentDB
 }
 
+func (d *DocumentDB) ServiceAccountName() string {
+	return d.OffshootName()
+}
+
 func (d *DocumentDB) SetDefaults(_ client.Client, documentDBVersion catalogv1alpha1.DocumentDBVersion) {
 	if d.Spec.DeletionPolicy == "" {
 		d.Spec.DeletionPolicy = DeletionPolicyDelete
@@ -227,4 +233,33 @@ func (d *DocumentDB) SetHealthCheckerDefaults() {
 	if d.Spec.HealthChecker.FailureThreshold == nil {
 		d.Spec.HealthChecker.FailureThreshold = pointer.Int32P(3)
 	}
+}
+
+// GetSharedBufferSizeForDocumentdb this func takes a input type int64 which is in bytes
+// return the 25% of the input in Bytes
+func GetSharedBufferSizeForDocumentdb(resource *resource.Quantity) string {
+	// no more than 25% of main memory (RAM)
+	minSharedBuffer := int64(128)
+	ret := minSharedBuffer
+	if resource != nil {
+		ret = resource.Value() / (4 * 1024)
+	}
+	// the shared buffer value can't be less then this
+	// 128 KB  is the minimum
+	if ret < minSharedBuffer {
+		ret = minSharedBuffer
+	}
+
+	// check If the ret value need to convert into MB
+	// why need this? -> PostgreSQL officially stores shared_buffers as an int32 that's why if the value is greater than 2147483648B.
+	// It's going to through and error that the value is going to cross the limit.
+
+	sharedBuffer := fmt.Sprintf("%skB", strconv.FormatInt(ret, 10))
+	if ret > kubedb.SharedBuffersGbAsKiloByte {
+		// convert the ret as MB devide by SharedBuffersMbAsByte
+		ret /= kubedb.SharedBuffersMbAsKiloByte
+		sharedBuffer = fmt.Sprintf("%sMB", strconv.FormatInt(ret, 10))
+	}
+
+	return sharedBuffer
 }

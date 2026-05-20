@@ -160,3 +160,32 @@ func isShardIdAndHostnameMatched(shardId string, pods []string) bool {
 	}
 	return false
 }
+
+// Resolves this pod's shard index from the ShardConfiguration.
+// It finds the pod's hostname in the ShardConfiguration status pod list and returns the index as a string.
+func ResolveShardIndex(kc client.Client, shardConfigName string) (string, error) {
+	hostName := os.Getenv("HOSTNAME")
+	if hostName == "" {
+		return "", fmt.Errorf("HOSTNAME env var not set, cannot resolve shard index")
+	}
+
+	head, err := FindHeadOfLineage(kc)
+	if err != nil {
+		return "", fmt.Errorf("failed to find head of lineage: %v", err)
+	}
+
+	pods, err := GetPodListsFromShardConfig(kc, *head, shardConfigName)
+	if err != nil {
+		return "", fmt.Errorf("failed to get pod lists from shard config %s: %v", shardConfigName, err)
+	}
+
+	for i, pod := range pods {
+		if pod == hostName {
+			idx := strconv.Itoa(i)
+			klog.Infof("Resolved recommender shard index: %s (pod=%s, config=%s)", idx, hostName, shardConfigName)
+			return idx, nil
+		}
+	}
+
+	return "", fmt.Errorf("pod %s not found in shard configuration %s pods list", hostName, shardConfigName)
+}

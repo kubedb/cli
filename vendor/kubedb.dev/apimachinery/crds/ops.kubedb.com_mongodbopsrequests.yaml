@@ -305,6 +305,54 @@ spec:
                 default: 1
                 format: int32
                 type: integer
+              migration:
+                properties:
+                  configServer:
+                    properties:
+                      oldPVReclaimPolicy:
+                        type: string
+                      storageClassName:
+                        type: string
+                    required:
+                    - storageClassName
+                    type: object
+                  hidden:
+                    properties:
+                      oldPVReclaimPolicy:
+                        type: string
+                      storageClassName:
+                        type: string
+                    required:
+                    - storageClassName
+                    type: object
+                  replicaSet:
+                    properties:
+                      oldPVReclaimPolicy:
+                        type: string
+                      storageClassName:
+                        type: string
+                    required:
+                    - storageClassName
+                    type: object
+                  shard:
+                    properties:
+                      oldPVReclaimPolicy:
+                        type: string
+                      storageClassName:
+                        type: string
+                    required:
+                    - storageClassName
+                    type: object
+                  standalone:
+                    properties:
+                      oldPVReclaimPolicy:
+                        type: string
+                      storageClassName:
+                        type: string
+                    required:
+                    - storageClassName
+                    type: object
+                type: object
               readinessCriteria:
                 properties:
                   objectsCountDiffPercentage:
@@ -430,7 +478,6 @@ spec:
                 type: object
               type:
                 enum:
-                - Upgrade
                 - UpdateVersion
                 - HorizontalScaling
                 - VerticalScaling
@@ -441,6 +488,7 @@ spec:
                 - Reprovision
                 - RotateAuth
                 - Horizons
+                - StorageMigration
                 type: string
               updateVersion:
                 properties:

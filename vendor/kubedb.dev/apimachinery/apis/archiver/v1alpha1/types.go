@@ -168,3 +168,62 @@ type GenericSecretReference struct {
 
 	EnvToSecretKey map[string]string `json:"envToSecretKey"`
 }
+
+type ClickHouseFullBackupOptions struct {
+	// +kubebuilder:default:=ClickHouseBackup
+	Driver apis.Driver `json:"driver"`
+	// +optional
+	Task *Task `json:"task,omitempty"`
+	// +optional
+	Scheduler *SchedulerOptions `json:"scheduler,omitempty"`
+	// +optional
+	ContainerRuntimeSettings *ofst.ContainerRuntimeSettings `json:"containerRuntimeSettings,omitempty"`
+	// +optional
+	JobTemplate *ofst.PodTemplateSpec `json:"jobTemplate,omitempty"`
+	// +optional
+	RetryConfig *stashcoreapi.RetryConfig `json:"retryConfig,omitempty"`
+	// +optional
+	Timeout *metav1.Duration `json:"timeout,omitempty"`
+	// +optional
+	SessionHistoryLimit int32 `json:"sessionHistoryLimit,omitempty"`
+}
+
+type ClickHouseIncrementalBackupOptions struct {
+	// +optional
+	RuntimeSettings *ofst.RuntimeSettings `json:"runtimeSettings,omitempty"`
+
+	// +optional
+	ConfigSecret *GenericSecretReference `json:"configSecret,omitempty"`
+
+	// RetentionPeriod is the retention policy to be used for Logs (i.e. '60d') means how long logs will be retained before being pruned.
+	// The retention policy is expressed in the form of `XXu` where `XX` is a positive integer and `u` is in `[dwm]` - days, weeks, months, years.
+	// time.RFC3339 We need to parse the time to RFC3339 format
+	// +kubebuilder:validation:Pattern=^[1-9][0-9]*[dwmy]$
+	// +kubebuilder:default="1y"
+	// +optional
+	RetentionPeriod string `json:"retentionPeriod,omitempty"`
+
+	// RetentionSchedule defines the cron expression when the log retention (pruning) task will run.
+	// Cron format, e.g. "0 0 1 * *" (monthly on the 1st at 12).
+	// +kubebuilder:default="0 0 1 * *"
+	// +optional
+	RetentionSchedule string `json:"retentionSchedule,omitempty"`
+
+	// SuccessfulLogHistoryLimit defines the number of successful Logs backup status that the incremental snapshot will retain
+	// The default value is 5.
+	// +kubebuilder:default=5
+	// +optional
+	SuccessfulLogHistoryLimit int32 `json:"successfulLogHistoryLimit,omitempty"`
+
+	// FailedLogHistoryLimit defines the number of failed Logs backup that the incremental snapshot will retain for debugging purposes.
+	// The default value is 5.
+	// +kubebuilder:default=5
+	// +optional
+	FailedLogHistoryLimit int32 `json:"failedLogHistoryLimit,omitempty"`
+
+	// LogRetentionHistoryLimit defines the number of retention status the incremental snapshot will retain for debugging purposes.
+	// The default value is 5.
+	// +kubebuilder:default=5
+	// +optional
+	LogRetentionHistoryLimit int32 `json:"logRetentionHistoryLimit,omitempty"`
+}

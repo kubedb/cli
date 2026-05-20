@@ -147,6 +147,29 @@ const (
 	OrphanStatefulSetPods       = "OrphanStatefulSetPods"
 )
 
+// StorageMigration
+const (
+	StorageMigrationPetSetDeleted    = "PetSetDeleted"
+	StorageMigrationGetPetSet        = "GetPetSet"
+	StorageMigrationGetStorageClass  = "GetStorageClass"
+	StorageMigrationGetPVC           = "GetPVC"
+	StorageMigrationPVCCreated       = "PVCCreated"
+	StorageMigrationGetPod           = "GetPod"
+	StorageMigrationPodCreated       = "PodCreated"
+	StorageMigrationPodDeleted       = "PodDeleted"
+	StorageMigrationCheckPodPhase    = "CheckPodPhase"
+	StorageMigrationAddAnnotation    = "AddAnnotation"
+	StorageMigrationCheckPodDelete   = "CheckPodDelete"
+	StorageMigrationJobCreated       = "JobCreated"
+	StorageMigrationJobDeleted       = "JobDeleted"
+	StorageMigrationPatchPV          = "PatchPV"
+	StorageMigrationPVCDeleted       = "PVCDeleted"
+	StorageMigrationCheckPVCDelete   = "CheckPVCDelete"
+	StorageMigrationRemoveAnnotation = "RemoveAnnotation"
+	StorageMigrationPodReady         = "PodReady"
+	StorageMigrationUpdateStatus     = "UpdateOpsReqStatus"
+)
+
 // PetSets
 const (
 	UpdatePetSets          = "UpdatePetSets"
@@ -405,6 +428,9 @@ const (
 
 	UpdateMiddleManagersNodePVCs = "UpdateMiddleManagersNodePVCs"
 	UpdateHistoricalsNodePVCs    = "UpdateHistoricalsNodePVCs"
+
+	MigrateMiddleManagersStorage = "MigrateMiddleManagersStorage"
+	MigrateHistoricalsStorage    = "MigrateHistoricalsStorage"
 
 	UpdateCredentialDynamically = "UpdateCredentialDynamically"
 )

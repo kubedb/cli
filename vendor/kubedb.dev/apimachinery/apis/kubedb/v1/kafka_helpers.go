@@ -87,6 +87,10 @@ func (k *Kafka) OffshootName() string {
 	return k.Name
 }
 
+func (k *Kafka) GetStorageClassName() string {
+	return *k.Spec.Storage.StorageClassName
+}
+
 func (k *Kafka) ServiceName() string {
 	return k.OffshootName()
 }

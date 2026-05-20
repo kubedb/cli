@@ -1000,6 +1000,10 @@ func (e *Elasticsearch) GetMatchExpressions() []metav1.LabelSelectorRequirement 
 	}
 }
 
+func (e *Elasticsearch) GetStorageClassName() string {
+	return *e.Spec.Storage.StorageClassName
+}
+
 func (e *Elasticsearch) GetPersistentSecrets() []string {
 	if e == nil {
 		return nil
@@ -1009,6 +1013,10 @@ func (e *Elasticsearch) GetPersistentSecrets() []string {
 	// Add Admin/Elastic user secret name
 	if e.Spec.AuthSecret != nil {
 		secrets = append(secrets, e.Spec.AuthSecret.Name)
+	}
+
+	if e.Spec.EnableSSL && e.Spec.Monitor != nil {
+		secrets = append(secrets, e.CertificateName(ElasticsearchMetricsExporterCert))
 	}
 
 	// Skip for Admin/Elastic User.

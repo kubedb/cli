@@ -25,6 +25,17 @@ import (
 	kmapi "kmodules.xyz/client-go/api/v1"
 )
 
+type OpsRequestOptions struct {
+	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
+	Timeout *metav1.Duration `json:"timeout,omitempty"`
+
+	// ApplyOption is to control the execution of OpsRequest depending on the database state.
+	// +kubebuilder:default="IfReady"
+	Apply opsapi.ApplyOption `json:"apply,omitempty"`
+
+	// +kubebuilder:default=1
+	MaxRetries int32 `json:"maxRetries,omitempty"`
+}
 type NodeTopology struct {
 	// Name of the NodeTopology object
 	Name string `json:"name,omitempty"`

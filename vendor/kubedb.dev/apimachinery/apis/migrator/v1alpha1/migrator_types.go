@@ -41,6 +41,7 @@ const (
 // +kubebuilder:printcolumn:name="DBType",type="string",JSONPath=".status.progress.dbType"
 // +kubebuilder:printcolumn:name="Stage",type="string",JSONPath=".status.progress.info.Stage"
 // +kubebuilder:printcolumn:name="Lag",type="string",JSONPath=".status.progress.info.Lag"
+// +kubebuilder:printcolumn:name="Progress",type="string",JSONPath=".status.progress.info.Progress"
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 type Migrator struct {
 	metav1.TypeMeta `json:",inline"`

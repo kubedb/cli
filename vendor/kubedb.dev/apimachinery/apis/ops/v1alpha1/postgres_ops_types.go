@@ -102,7 +102,7 @@ type PostgresOpsRequestSpec struct {
 	// Set given key pairs to raft storage
 	SetRaftKeyPair *PostgresSetRaftKeyPair `json:"setRaftKeyPair,omitempty"`
 	// Specifies information necessary for migrating storageClass or data
-	Migration *PostgresMigrationSpec `json:"migration,omitempty"`
+	Migration *StorageMigrationSpec `json:"migration,omitempty"`
 	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
 	Timeout *metav1.Duration `json:"timeout,omitempty"`
 	// ApplyOption is to control the execution of OpsRequest depending on the database state.
@@ -112,7 +112,7 @@ type PostgresOpsRequestSpec struct {
 	MaxRetries int32 `json:"maxRetries,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=Upgrade;UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS;RotateAuth;ReconnectStandby;ForceFailOver;SetRaftKeyPair;StorageMigration
+// +kubebuilder:validation:Enum=UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS;RotateAuth;ReconnectStandby;ForceFailOver;SetRaftKeyPair;StorageMigration
 // ENUM(UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Restart, Reconfigure, ReconfigureTLS, RotateAuth, ReconnectStandby, ForceFailOver, SetRaftKeyPair, StorageMigration)
 type PostgresOpsRequestType string
 
@@ -201,11 +201,6 @@ type PostgresVerticalScalingSpec struct {
 type ReadReplicaResources struct {
 	Postgres *PodResources `json:"postgres,omitempty"`
 	Name     string        `json:"name,omitempty"`
-}
-
-type PostgresMigrationSpec struct {
-	StorageClassName   *string                            `json:"storageClassName"`
-	OldPVReclaimPolicy core.PersistentVolumeReclaimPolicy `json:"oldPVReclaimPolicy,omitempty"`
 }
 
 // PostgresVolumeExpansionSpec is the spec for Postgres volume expansion

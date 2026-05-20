@@ -27,6 +27,8 @@ const (
 	DruidOpsRequestTypeReconfigureTLS DruidOpsRequestType = "ReconfigureTLS"
 	// DruidOpsRequestTypeRotateAuth is a DruidOpsRequestType of type RotateAuth.
 	DruidOpsRequestTypeRotateAuth DruidOpsRequestType = "RotateAuth"
+	// DruidOpsRequestTypeStorageMigration is a DruidOpsRequestType of type StorageMigration.
+	DruidOpsRequestTypeStorageMigration DruidOpsRequestType = "StorageMigration"
 )
 
 var ErrInvalidDruidOpsRequestType = fmt.Errorf("not a valid DruidOpsRequestType, try [%s]", strings.Join(_DruidOpsRequestTypeNames, ", "))
@@ -40,6 +42,7 @@ var _DruidOpsRequestTypeNames = []string{
 	string(DruidOpsRequestTypeReconfigure),
 	string(DruidOpsRequestTypeReconfigureTLS),
 	string(DruidOpsRequestTypeRotateAuth),
+	string(DruidOpsRequestTypeStorageMigration),
 }
 
 // DruidOpsRequestTypeNames returns a list of possible string values of DruidOpsRequestType.
@@ -60,6 +63,7 @@ func DruidOpsRequestTypeValues() []DruidOpsRequestType {
 		DruidOpsRequestTypeReconfigure,
 		DruidOpsRequestTypeReconfigureTLS,
 		DruidOpsRequestTypeRotateAuth,
+		DruidOpsRequestTypeStorageMigration,
 	}
 }
 
@@ -84,6 +88,7 @@ var _DruidOpsRequestTypeValue = map[string]DruidOpsRequestType{
 	"Reconfigure":       DruidOpsRequestTypeReconfigure,
 	"ReconfigureTLS":    DruidOpsRequestTypeReconfigureTLS,
 	"RotateAuth":        DruidOpsRequestTypeRotateAuth,
+	"StorageMigration":  DruidOpsRequestTypeStorageMigration,
 }
 
 // ParseDruidOpsRequestType attempts to convert a string to a DruidOpsRequestType.

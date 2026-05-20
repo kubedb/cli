@@ -117,20 +117,6 @@ type Neo4jTLSConfig struct {
 	KeystoreCredSecret *SecretReference `json:"keystoreCredSecret,omitempty"`
 }
 
-type TLSMode string
-
-const (
-	TLSModeDisabled TLSMode = "Disabled"
-	TLSModeTLS      TLSMode = "TLS"
-	TLSModeMTLS     TLSMode = "mTLS"
-)
-
-type ProtocolTLSConfig struct {
-	// +kubebuilder:validation:Enum=Disabled;TLS;mTLS
-	// +optional
-	Mode TLSMode `json:"mode,omitempty"`
-}
-
 // Neo4jStatus defines the observed state of Neo4j.
 type Neo4jStatus struct {
 	// Important: Run "make" to regenerate code after modifying this file

@@ -378,3 +378,7 @@ func (r *Neo4j) GetCertSecretName(alias Neo4jCertificateType) string {
 func (r *Neo4j) CertificateName(alias Neo4jCertificateType) string {
 	return meta_util.NameWithSuffix(r.Name, fmt.Sprintf("%s-cert", string(alias)))
 }
+
+func (r Neo4j) GetStorageClassName() string {
+	return *r.Spec.Storage.StorageClassName
+}

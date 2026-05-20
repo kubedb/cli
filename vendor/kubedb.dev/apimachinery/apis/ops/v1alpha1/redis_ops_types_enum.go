@@ -31,6 +31,8 @@ const (
 	RedisOpsRequestTypeRotateAuth RedisOpsRequestType = "RotateAuth"
 	// RedisOpsRequestTypeAnnounce is a RedisOpsRequestType of type Announce.
 	RedisOpsRequestTypeAnnounce RedisOpsRequestType = "Announce"
+	// RedisOpsRequestTypeStorageMigration is a RedisOpsRequestType of type StorageMigration.
+	RedisOpsRequestTypeStorageMigration RedisOpsRequestType = "StorageMigration"
 )
 
 var ErrInvalidRedisOpsRequestType = fmt.Errorf("not a valid RedisOpsRequestType, try [%s]", strings.Join(_RedisOpsRequestTypeNames, ", "))
@@ -46,6 +48,7 @@ var _RedisOpsRequestTypeNames = []string{
 	string(RedisOpsRequestTypeReplaceSentinel),
 	string(RedisOpsRequestTypeRotateAuth),
 	string(RedisOpsRequestTypeAnnounce),
+	string(RedisOpsRequestTypeStorageMigration),
 }
 
 // RedisOpsRequestTypeNames returns a list of possible string values of RedisOpsRequestType.
@@ -68,6 +71,7 @@ func RedisOpsRequestTypeValues() []RedisOpsRequestType {
 		RedisOpsRequestTypeReplaceSentinel,
 		RedisOpsRequestTypeRotateAuth,
 		RedisOpsRequestTypeAnnounce,
+		RedisOpsRequestTypeStorageMigration,
 	}
 }
 
@@ -94,6 +98,7 @@ var _RedisOpsRequestTypeValue = map[string]RedisOpsRequestType{
 	"ReplaceSentinel":   RedisOpsRequestTypeReplaceSentinel,
 	"RotateAuth":        RedisOpsRequestTypeRotateAuth,
 	"Announce":          RedisOpsRequestTypeAnnounce,
+	"StorageMigration":  RedisOpsRequestTypeStorageMigration,
 }
 
 // ParseRedisOpsRequestType attempts to convert a string to a RedisOpsRequestType.

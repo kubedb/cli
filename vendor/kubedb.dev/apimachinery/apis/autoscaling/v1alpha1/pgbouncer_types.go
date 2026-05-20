@@ -17,8 +17,6 @@ limitations under the License.
 package v1alpha1
 
 import (
-	opsapi "kubedb.dev/apimachinery/apis/ops/v1alpha1"
-
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -61,7 +59,7 @@ type PgBouncerAutoscalerSpec struct {
 	DatabaseRef *core.LocalObjectReference `json:"databaseRef"`
 
 	// OpsRequestOptions will be used to control the behaviour of ops-manager
-	OpsRequestOptions *PgBouncerOpsRequestOptions `json:"opsRequestOptions,omitempty"`
+	OpsRequestOptions *OpsRequestOptions `json:"opsRequestOptions,omitempty"`
 
 	Compute *PgBouncerComputeAutoscalerSpec `json:"compute,omitempty"`
 }
@@ -75,15 +73,6 @@ type PgBouncerComputeAutoscalerSpec struct {
 
 type PgBouncerStorageAutoscalerSpec struct {
 	PgBouncer *StorageAutoscalerSpec `json:"pgbouncer,omitempty"`
-}
-
-type PgBouncerOpsRequestOptions struct {
-	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
-	Timeout *metav1.Duration `json:"timeout,omitempty"`
-
-	// Apply is to control the execution of OpsRequest depending on the database state.
-	// +kubebuilder:default="IfReady"
-	Apply opsapi.ApplyOption `json:"apply,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

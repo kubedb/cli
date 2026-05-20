@@ -578,6 +578,12 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kmodules.xyz/offshoot-api/api/v1.VolumeSource":                                              schema_kmodulesxyz_offshoot_api_api_v1_VolumeSource(ref),
 		"kubedb.dev/apimachinery/apis/archiver/v1alpha1.ArchiverDatabaseRef":                         schema_apimachinery_apis_archiver_v1alpha1_ArchiverDatabaseRef(ref),
 		"kubedb.dev/apimachinery/apis/archiver/v1alpha1.BackupStorage":                               schema_apimachinery_apis_archiver_v1alpha1_BackupStorage(ref),
+		"kubedb.dev/apimachinery/apis/archiver/v1alpha1.ClickHouseArchiver":                          schema_apimachinery_apis_archiver_v1alpha1_ClickHouseArchiver(ref),
+		"kubedb.dev/apimachinery/apis/archiver/v1alpha1.ClickHouseArchiverList":                      schema_apimachinery_apis_archiver_v1alpha1_ClickHouseArchiverList(ref),
+		"kubedb.dev/apimachinery/apis/archiver/v1alpha1.ClickHouseArchiverSpec":                      schema_apimachinery_apis_archiver_v1alpha1_ClickHouseArchiverSpec(ref),
+		"kubedb.dev/apimachinery/apis/archiver/v1alpha1.ClickHouseArchiverStatus":                    schema_apimachinery_apis_archiver_v1alpha1_ClickHouseArchiverStatus(ref),
+		"kubedb.dev/apimachinery/apis/archiver/v1alpha1.ClickHouseFullBackupOptions":                 schema_apimachinery_apis_archiver_v1alpha1_ClickHouseFullBackupOptions(ref),
+		"kubedb.dev/apimachinery/apis/archiver/v1alpha1.ClickHouseIncrementalBackupOptions":          schema_apimachinery_apis_archiver_v1alpha1_ClickHouseIncrementalBackupOptions(ref),
 		"kubedb.dev/apimachinery/apis/archiver/v1alpha1.FullBackupOptions":                           schema_apimachinery_apis_archiver_v1alpha1_FullBackupOptions(ref),
 		"kubedb.dev/apimachinery/apis/archiver/v1alpha1.GenericSecretReference":                      schema_apimachinery_apis_archiver_v1alpha1_GenericSecretReference(ref),
 		"kubedb.dev/apimachinery/apis/archiver/v1alpha1.LogBackupOptions":                            schema_apimachinery_apis_archiver_v1alpha1_LogBackupOptions(ref),
@@ -33364,6 +33370,317 @@ func schema_apimachinery_apis_archiver_v1alpha1_BackupStorage(ref common.Referen
 		},
 		Dependencies: []string{
 			"kmodules.xyz/client-go/api/v1.ObjectReference"},
+	}
+}
+
+func schema_apimachinery_apis_archiver_v1alpha1_ClickHouseArchiver(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
+						},
+					},
+					"spec": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kubedb.dev/apimachinery/apis/archiver/v1alpha1.ClickHouseArchiverSpec"),
+						},
+					},
+					"status": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kubedb.dev/apimachinery/apis/archiver/v1alpha1.ClickHouseArchiverStatus"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.ClickHouseArchiverSpec", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.ClickHouseArchiverStatus"},
+	}
+}
+
+func schema_apimachinery_apis_archiver_v1alpha1_ClickHouseArchiverList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+						},
+					},
+					"items": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kubedb.dev/apimachinery/apis/archiver/v1alpha1.ClickHouseArchiver"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"items"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.ClickHouseArchiver"},
+	}
+}
+
+func schema_apimachinery_apis_archiver_v1alpha1_ClickHouseArchiverSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ClickHouseArchiverSpec defines the desired state of ClickHouseArchiver",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"databases": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Databases define which ClickHouse databases are allowed to consume this archiver",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1.AllowedConsumers"),
+						},
+					},
+					"pause": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Pause defines if the backup process should be paused or not",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"retentionPolicy": {
+						SchemaProps: spec.SchemaProps{
+							Description: "RetentionPolicy field is the RetentionPolicy of the backupConfiguration's backend",
+							Ref:         ref("kmodules.xyz/client-go/api/v1.ObjectReference"),
+						},
+					},
+					"fullBackup": {
+						SchemaProps: spec.SchemaProps{
+							Description: "FullBackup defines the sessionConfig of the fullBackup This options will eventually go to the full-backup job's yaml",
+							Ref:         ref("kubedb.dev/apimachinery/apis/archiver/v1alpha1.ClickHouseFullBackupOptions"),
+						},
+					},
+					"incrementalBackup": {
+						SchemaProps: spec.SchemaProps{
+							Description: "IncrementalBackup defines the configuration for incremental backup",
+							Ref:         ref("kubedb.dev/apimachinery/apis/archiver/v1alpha1.ClickHouseIncrementalBackupOptions"),
+						},
+					},
+					"manifestBackup": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ManifestBackup defines the sessionConfig of the manifestBackup This options will eventually go to the manifest-backup job's yaml",
+							Ref:         ref("kubedb.dev/apimachinery/apis/archiver/v1alpha1.ManifestBackupOptions"),
+						},
+					},
+					"encryptionSecret": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kmodules.xyz/client-go/api/v1.ObjectReference"),
+						},
+					},
+					"backupStorage": {
+						SchemaProps: spec.SchemaProps{
+							Description: "BackupStorage is the backend storageRef of the BackupConfiguration",
+							Ref:         ref("kubedb.dev/apimachinery/apis/archiver/v1alpha1.BackupStorage"),
+						},
+					},
+					"deletionPolicy": {
+						SchemaProps: spec.SchemaProps{
+							Description: "DeletionPolicy defines the created repository's deletionPolicy",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"databases"},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/client-go/api/v1.ObjectReference", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.BackupStorage", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.ClickHouseFullBackupOptions", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.ClickHouseIncrementalBackupOptions", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.ManifestBackupOptions", "kubedb.dev/apimachinery/apis/kubedb/v1.AllowedConsumers"},
+	}
+}
+
+func schema_apimachinery_apis_archiver_v1alpha1_ClickHouseArchiverStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ClickHouseArchiverStatus defines the observed state of ClickHouseArchiver",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"databaseRefs": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies the information of all the databases managed by this archiver",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kubedb.dev/apimachinery/apis/archiver/v1alpha1.ArchiverDatabaseRef"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/archiver/v1alpha1.ArchiverDatabaseRef"},
+	}
+}
+
+func schema_apimachinery_apis_archiver_v1alpha1_ClickHouseFullBackupOptions(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"driver": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"task": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/archiver/v1alpha1.Task"),
+						},
+					},
+					"scheduler": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/archiver/v1alpha1.SchedulerOptions"),
+						},
+					},
+					"containerRuntimeSettings": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kmodules.xyz/offshoot-api/api/v1.ContainerRuntimeSettings"),
+						},
+					},
+					"jobTemplate": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec"),
+						},
+					},
+					"retryConfig": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubestash.dev/apimachinery/apis/core/v1alpha1.RetryConfig"),
+						},
+					},
+					"timeout": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("k8s.io/apimachinery/pkg/apis/meta/v1.Duration"),
+						},
+					},
+					"sessionHistoryLimit": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"integer"},
+							Format: "int32",
+						},
+					},
+				},
+				Required: []string{"driver"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kmodules.xyz/offshoot-api/api/v1.ContainerRuntimeSettings", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.SchedulerOptions", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.Task", "kubestash.dev/apimachinery/apis/core/v1alpha1.RetryConfig"},
+	}
+}
+
+func schema_apimachinery_apis_archiver_v1alpha1_ClickHouseIncrementalBackupOptions(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"runtimeSettings": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kmodules.xyz/offshoot-api/api/v1.RuntimeSettings"),
+						},
+					},
+					"configSecret": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/archiver/v1alpha1.GenericSecretReference"),
+						},
+					},
+					"retentionPeriod": {
+						SchemaProps: spec.SchemaProps{
+							Description: "RetentionPeriod is the retention policy to be used for Logs (i.e. '60d') means how long logs will be retained before being pruned. The retention policy is expressed in the form of `XXu` where `XX` is a positive integer and `u` is in `[dwm]` - days, weeks, months, years. time.RFC3339 We need to parse the time to RFC3339 format",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"retentionSchedule": {
+						SchemaProps: spec.SchemaProps{
+							Description: "RetentionSchedule defines the cron expression when the log retention (pruning) task will run. Cron format, e.g. \"0 0 1 * *\" (monthly on the 1st at 12).",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"successfulLogHistoryLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "SuccessfulLogHistoryLimit defines the number of successful Logs backup status that the incremental snapshot will retain The default value is 5.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"failedLogHistoryLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "FailedLogHistoryLimit defines the number of failed Logs backup that the incremental snapshot will retain for debugging purposes. The default value is 5.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"logRetentionHistoryLimit": {
+						SchemaProps: spec.SchemaProps{
+							Description: "LogRetentionHistoryLimit defines the number of retention status the incremental snapshot will retain for debugging purposes. The default value is 5.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/offshoot-api/api/v1.RuntimeSettings", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.GenericSecretReference"},
 	}
 }
 

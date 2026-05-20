@@ -54,3 +54,86 @@ const (
 	MigrationFailed       = "MigrationFailed"
 	ReasonMigrationFailed = "MigrationError"
 )
+
+// ============ CLI Constants ==================
+const (
+	MySQLDump   = "mysqldump"
+	MySQLCli    = "mysql"
+	MariaDBCli  = "mariadb"
+	MariaDBDump = "mariadb-dump"
+)
+
+// ============ Snapshot Pipeline Constant ==================
+const (
+	SnapshotWorker     = 3
+	SnapshotSinker     = 3
+	SnapshotBuffer     = 10
+	SnapshotReadBatch  = 5000
+	SnapshotWriteBatch = 500
+)
+
+// ============ SQLite Related Constants ==================
+const (
+	// SQLite Constants
+	sqliteMaxOpenConns = 35
+	sqliteMaxIdleConns = 10
+	sqliteBusyTimeout  = 5000
+	SqliteFile         = "migration.db"
+
+	// Status Constants
+	StatusPending    = "pending"
+	StatusInProgress = "in_progress"
+	StatusCompleted  = "completed"
+	StatusFailed     = "failed"
+	StatusSkipped    = "skipped"
+
+	// Phase Constants
+	PhaseSchema    = "schema"
+	PhaseSnapshot  = "snapshot"
+	PhaseStreaming = "streaming"
+
+	// Table Names
+	TableMigrationInfo = "migration_info"
+	TablePhases        = "phases"
+	TableSnapshot      = "snapshot"
+	TableStreaming     = "streaming"
+
+	// Position methods
+	PositionMethodGTID    = "gtid"
+	PositionMethodFilePos = "file_pos"
+
+	// migration_info columns
+	ColMigrationID      = "migration_id"
+	ColCreatedAt        = "created_at"
+	ColRestartedAt      = "restarted_at"
+	ColRestartCount     = "restart_count"
+	ColLastErrorMessage = "last_error_message"
+
+	// phases columns
+	ColPhaseID          = "id"
+	ColPhaseName        = "name"
+	ColPhaseEnabled     = "enabled"
+	ColPhaseStatus      = "status"
+	ColPhaseStartedAt   = "started_at"
+	ColPhaseCompletedAt = "completed_at"
+	ColPhaseErrorMsg    = "error_message"
+
+	// snapshot columns
+	ColTableID           = "table_id"
+	ColDatabaseName      = "database_name"
+	ColTableName         = "table_name"
+	ColStatus            = "status"
+	ColRowsCopied        = "rows_copied"
+	ColLastInsertedBatch = "last_inserted_batch"
+	ColLastInsertedKey   = "last_inserted_key"
+	ColStartedAt         = "started_at"
+	ColCompletedAt       = "completed_at"
+	ColErrorMessage      = "error_message"
+
+	// streaming columns
+	ColPositionMethod = "position_method"
+	ColGTIDSet        = "gtid_set"
+	ColBinlogFile     = "binlog_file"
+	ColBinlogPos      = "binlog_pos"
+	ColUpdatedAt      = "updated_at"
+)

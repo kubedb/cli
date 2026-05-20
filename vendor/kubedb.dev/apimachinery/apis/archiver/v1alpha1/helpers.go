@@ -50,6 +50,10 @@ func (MSSQLServerArchiver) CustomResourceDefinition() *apiextensions.CustomResou
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralMSSQLServerArchiver))
 }
 
+func (ClickHouseArchiver) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralClickHouseArchiver))
+}
+
 func SetDefaultLogBackupOptions(log *LogBackupOptions) *LogBackupOptions {
 	if log == nil {
 		log = &LogBackupOptions{
@@ -82,4 +86,14 @@ func SetKeyValueToExtraArgs(args map[string]runtime.RawExtension, key string, va
 		Raw: jsonVal,
 	}
 	return nil
+}
+
+func SetDefaultIncrementalBackupOptions(log *ClickHouseIncrementalBackupOptions) *ClickHouseIncrementalBackupOptions {
+	if log == nil {
+		log = &ClickHouseIncrementalBackupOptions{
+			SuccessfulLogHistoryLimit: 5,
+			FailedLogHistoryLimit:     5,
+		}
+	}
+	return log
 }

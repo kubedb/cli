@@ -591,6 +591,10 @@ spec:
                     - IfReady
                     - Always
                     type: string
+                  maxRetries:
+                    default: 1
+                    format: int32
+                    type: integer
                   readinessCriteria:
                     type: object
                   timeout:

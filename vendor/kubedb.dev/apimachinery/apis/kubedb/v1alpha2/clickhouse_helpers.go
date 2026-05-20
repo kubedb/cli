@@ -234,6 +234,14 @@ func (c *ClickHouse) DBPodLabels(labels map[string]string, extraLabels ...map[st
 	return c.offshootLabels(meta_util.OverwriteKeys(c.OffshootDBSelectors(), extraLabels...), labels)
 }
 
+func (c *ClickHouse) SidekickLabels(skName string) map[string]string {
+	return meta_util.OverwriteKeys(nil, kubedb.CommonSidekickLabels(), map[string]string{
+		meta_util.InstanceLabelKey: skName,
+		kubedb.SidekickOwnerName:   c.Name,
+		kubedb.SidekickOwnerKind:   c.ResourceFQN(),
+	})
+}
+
 func (c *ClickHouse) GetConnectionScheme() string {
 	scheme := "http"
 	return scheme

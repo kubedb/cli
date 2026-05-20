@@ -27,6 +27,8 @@ const (
 	Neo4jOpsRequestTypeVolumeExpansion Neo4jOpsRequestType = "VolumeExpansion"
 	// Neo4jOpsRequestTypeUpdateVersion is a Neo4jOpsRequestType of type UpdateVersion.
 	Neo4jOpsRequestTypeUpdateVersion Neo4jOpsRequestType = "UpdateVersion"
+	// Neo4jOpsRequestTypeStorageMigration is a Neo4jOpsRequestType of type StorageMigration.
+	Neo4jOpsRequestTypeStorageMigration Neo4jOpsRequestType = "StorageMigration"
 )
 
 var ErrInvalidNeo4jOpsRequestType = fmt.Errorf("not a valid Neo4jOpsRequestType, try [%s]", strings.Join(_Neo4jOpsRequestTypeNames, ", "))
@@ -40,6 +42,7 @@ var _Neo4jOpsRequestTypeNames = []string{
 	string(Neo4jOpsRequestTypeVerticalScaling),
 	string(Neo4jOpsRequestTypeVolumeExpansion),
 	string(Neo4jOpsRequestTypeUpdateVersion),
+	string(Neo4jOpsRequestTypeStorageMigration),
 }
 
 // Neo4jOpsRequestTypeNames returns a list of possible string values of Neo4jOpsRequestType.
@@ -60,6 +63,7 @@ func Neo4jOpsRequestTypeValues() []Neo4jOpsRequestType {
 		Neo4jOpsRequestTypeVerticalScaling,
 		Neo4jOpsRequestTypeVolumeExpansion,
 		Neo4jOpsRequestTypeUpdateVersion,
+		Neo4jOpsRequestTypeStorageMigration,
 	}
 }
 
@@ -84,6 +88,7 @@ var _Neo4jOpsRequestTypeValue = map[string]Neo4jOpsRequestType{
 	"VerticalScaling":   Neo4jOpsRequestTypeVerticalScaling,
 	"VolumeExpansion":   Neo4jOpsRequestTypeVolumeExpansion,
 	"UpdateVersion":     Neo4jOpsRequestTypeUpdateVersion,
+	"StorageMigration":  Neo4jOpsRequestTypeStorageMigration,
 }
 
 // ParseNeo4jOpsRequestType attempts to convert a string to a Neo4jOpsRequestType.

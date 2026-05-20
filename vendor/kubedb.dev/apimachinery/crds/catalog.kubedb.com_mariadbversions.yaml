@@ -56,6 +56,7 @@ spec:
                         - mysql-addon
                         - mariadb-addon
                         - mssqlserver-addon
+                        - clickhouse-addon
                         type: string
                       tasks:
                         properties:
@@ -67,6 +68,13 @@ spec:
                             - name
                             type: object
                           fullBackupRestore:
+                            properties:
+                              name:
+                                type: string
+                            required:
+                            - name
+                            type: object
+                          incBackupRestore:
                             properties:
                               name:
                                 type: string

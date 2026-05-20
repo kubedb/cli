@@ -16,7 +16,11 @@ limitations under the License.
 
 package v1alpha1
 
-import kmapi "kmodules.xyz/client-go/api/v1"
+import (
+	"fmt"
+
+	kmapi "kmodules.xyz/client-go/api/v1"
+)
 
 // MigrationConfig defines the desired state of Migrator
 type MigrationConfig struct {
@@ -28,12 +32,22 @@ type MigrationConfig struct {
 type Source struct {
 	// Postgres refers to the source Postgres database configuration
 	Postgres *PostgresSource `yaml:"postgres" json:"postgres,omitempty"`
+	// MySQL refers to the source MySQL database configuration
+	MySQL *MySQLSource `yaml:"mysql" json:"mysql,omitempty"`
+	// MariaDB refers to the source MariaDB database configuration
+	MariaDB *MariaDBSource `yaml:"mariadb" json:"mariadb,omitempty"`
+	MongoDB *MongoSource   `yaml:"mongodb" json:"mongodb,omitempty"`
 }
 
 // Target defines the target database configuration
 type Target struct {
 	// Postgres refers to the target Postgres database configuration
 	Postgres *PostgresTarget `yaml:"postgres" json:"postgres,omitempty"`
+	MongoDB  *MongoTarget    `yaml:"mongodb" json:"mongodb,omitempty"`
+	// MySQL refers to the target MySQL database configuration
+	MySQL *MySQLTarget `yaml:"mysql" json:"mysql,omitempty"`
+	// MariaDB refers to the target MariaDB database configuration
+	MariaDB *MariaDBTarget `yaml:"mariadb" json:"mariadb,omitempty"`
 }
 
 type ConnectionInfo struct {
@@ -70,4 +84,27 @@ type DBMigratorCLI struct {
 
 type DBMigratorStatusReporter struct {
 	Image string `json:"image"`
+}
+
+type TableRef struct {
+	TableID int64
+	Schema  string
+	Name    string
+}
+
+func (t TableRef) Key() string {
+	return fmt.Sprintf("%s.%s", t.Schema, t.Name)
+}
+
+func (t TableRef) QuotedName() string {
+	return fmt.Sprintf("`%s`.`%s`", t.Schema, t.Name)
+}
+
+// PipelineConfig contains configuration for the snapshot pipeline
+type PipelineConfig struct {
+	SnapshotWorker int // Number of concurrent snapshot worker goroutines
+	Buffer         int // Size of buffer channel between extractor and sinkers
+	Sinkers        int // Number of concurrent sinker goroutines
+	ReadBatchSize  int // Number of rows to read per batch from source
+	WriteBatchSize int // Number of rows to write per transaction to target
 }

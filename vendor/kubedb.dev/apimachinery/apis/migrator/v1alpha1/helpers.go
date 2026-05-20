@@ -34,7 +34,10 @@ func (m Migrator) GetDBKindAndCommand() (string, string) {
 	switch {
 	case m.Spec.Source.Postgres != nil && m.Spec.Target.Postgres != nil:
 		return "Postgres", "postgres"
+	case m.Spec.Source.MongoDB != nil && m.Spec.Target.MongoDB != nil:
+		return "MongoDB", "mongodb"
 	}
+
 	return "", ""
 }
 
@@ -42,6 +45,8 @@ func (m Migrator) GetConnectionInfos() (*ConnectionInfo, *ConnectionInfo) {
 	switch {
 	case m.Spec.Source.Postgres != nil && m.Spec.Target.Postgres != nil:
 		return &m.Spec.Source.Postgres.ConnectionInfo, &m.Spec.Target.Postgres.ConnectionInfo
+	case m.Spec.Source.MongoDB != nil && m.Spec.Target.MongoDB != nil:
+		return &m.Spec.Source.MongoDB.ConnectionInfo, &m.Spec.Target.MongoDB.ConnectionInfo
 	}
 	return nil, nil
 }

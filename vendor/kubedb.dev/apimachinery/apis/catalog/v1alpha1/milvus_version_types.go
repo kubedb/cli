@@ -27,10 +27,13 @@ const (
 	ResourcePluralMilvusVersion   = "milvusversions"
 )
 
-// Package v1alpha2 contains API Schema definitions for the  v1alpha2 API group.
-// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
-// +kubebuilder:object:root=true
+// +genclient
 // +genclient:nonNamespaced
+// +genclient:skipVerbs=updateStatus
+// +k8s:openapi-gen=true
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+
+// +kubebuilder:object:root=true
 // +kubebuilder:resource:path=milvusversions,singular=milvusversion,scope=Cluster,shortName=mvversion,categories={catalog,kubedb,appscode}
 // +kubebuilder:printcolumn:name="Version",type="string",JSONPath=".spec.version"
 // +kubebuilder:printcolumn:name="DB_IMAGE",type="string",JSONPath=".spec.db.image"

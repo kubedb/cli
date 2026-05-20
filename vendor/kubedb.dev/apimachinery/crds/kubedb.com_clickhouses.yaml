@@ -48,6 +48,22 @@ spec:
             type: object
           spec:
             properties:
+              archiver:
+                properties:
+                  pause:
+                    type: boolean
+                  ref:
+                    properties:
+                      name:
+                        type: string
+                      namespace:
+                        type: string
+                    required:
+                    - name
+                    type: object
+                required:
+                - ref
+                type: object
               authSecret:
                 properties:
                   activeFrom:

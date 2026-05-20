@@ -49,8 +49,8 @@ type SolrOpsRequest struct {
 	Status            OpsRequestStatus   `json:"status,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Reconfigure;Restart;ReconfigureTLS;RotateAuth
-// ENUM(UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Reconfigure, Restart, ReconfigureTLS, RotateAuth)
+// +kubebuilder:validation:Enum=UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Reconfigure;Restart;ReconfigureTLS;RotateAuth;StorageMigration
+// ENUM(UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Reconfigure, Restart, ReconfigureTLS, RotateAuth, StorageMigration)
 type SolrOpsRequestType string
 
 // SolrOpsRequestSpec is the spec for SolrOpsRequest
@@ -75,6 +75,8 @@ type SolrOpsRequestSpec struct {
 	TLS *TLSSpec `json:"tls,omitempty"`
 	// Specifies information necessary for configuring authSecret of the database
 	Authentication *AuthSpec `json:"authentication,omitempty"`
+	// Specifies information necessary for migrating storageClass or data
+	Migration *SolrMigrationSpec `json:"migration,omitempty"`
 	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
 	Timeout *metav1.Duration `json:"timeout,omitempty"`
 	// ApplyOption is to control the execution of OpsRequest depending on the database state.
@@ -110,6 +112,23 @@ type SolrVolumeExpansionSpec struct {
 type SolrUpdateVersionSpec struct {
 	// Specifies the target version name from catalog
 	TargetVersion string `json:"targetVersion,omitempty"`
+}
+
+// SolrMigrationSpec is the spec for storage migration of a Solr cluster.
+// Set Node for combined mode, or Overseer + Data + Coordinator for topology mode.
+type SolrMigrationSpec struct {
+	// Node is the migration spec for a combined-mode Solr instance.
+	// +optional
+	Node *StorageMigrationSpec `json:"node,omitempty"`
+	// Overseer is the migration spec for overseer nodes in topology mode.
+	// +optional
+	Overseer *StorageMigrationSpec `json:"overseer,omitempty"`
+	// Data is the migration spec for data nodes in topology mode.
+	// +optional
+	Data *StorageMigrationSpec `json:"data,omitempty"`
+	// Coordinator is the migration spec for coordinator nodes in topology mode.
+	// +optional
+	Coordinator *StorageMigrationSpec `json:"coordinator,omitempty"`
 }
 
 type SolrHorizontalScalingSpec struct {
