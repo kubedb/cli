@@ -190,3 +190,15 @@ type Topology struct {
 	Key   string `json:"key"`
 	Value string `json:"value"`
 }
+
+// StorageMigrationSpec holds the target StorageClass and old PV reclaim policy for a single component.
+type StorageMigrationSpec struct {
+	// StorageClassName is the desired StorageClass to migrate the PVCs to.
+	StorageClassName *string `json:"storageClassName"`
+	// OldPVReclaimPolicy controls the reclaim policy applied to the previous PersistentVolume
+	// after the underlying PVC has been renamed onto the new StorageClass. Defaults to the
+	// reclaim policy that was already configured on the PV when migration started.
+	// Set to "Retain" to keep the previous PV after migration.
+	// +optional
+	OldPVReclaimPolicy core.PersistentVolumeReclaimPolicy `json:"oldPVReclaimPolicy,omitempty"`
+}

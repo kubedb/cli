@@ -250,6 +250,19 @@ type Archiver struct {
 	Ref kmapi.ObjectReference `json:"ref"`
 }
 
+type TLSMode string
+
+const (
+	TLSModeDisabled TLSMode = "Disabled"
+	TLSModeTLS      TLSMode = "TLS"
+	TLSModeMTLS     TLSMode = "mTLS"
+)
+
+type ProtocolTLSConfig struct {
+	// +kubebuilder:validation:Enum=Disabled;TLS;mTLS
+	// +optional
+	Mode TLSMode `json:"mode,omitempty"`
+}
 type ArchiverRecovery struct {
 	RecoveryTimestamp metav1.Time `json:"recoveryTimestamp"`
 	// +optional

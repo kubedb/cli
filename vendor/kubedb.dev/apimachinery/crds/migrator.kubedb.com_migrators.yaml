@@ -27,6 +27,9 @@ spec:
     - jsonPath: .status.progress.info.Lag
       name: Lag
       type: string
+    - jsonPath: .status.progress.info.Progress
+      name: Progress
+      type: string
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
@@ -2793,6 +2796,200 @@ spec:
                 type: object
               source:
                 properties:
+                  mariadb:
+                    properties:
+                      connectionInfo:
+                        properties:
+                          address:
+                            type: string
+                          dbName:
+                            type: string
+                          maxConnections:
+                            type: integer
+                          password:
+                            type: string
+                          user:
+                            type: string
+                        required:
+                        - address
+                        - dbName
+                        - password
+                        - user
+                        type: object
+                      schema:
+                        properties:
+                          database:
+                            items:
+                              type: string
+                            type: array
+                          enabled:
+                            type: boolean
+                          excludeDatabase:
+                            items:
+                              type: string
+                            type: array
+                        required:
+                        - enabled
+                        type: object
+                      snapshot:
+                        properties:
+                          enabled:
+                            type: boolean
+                          pipeline:
+                            properties:
+                              buffer:
+                                type: integer
+                              read_batch_size:
+                                type: integer
+                              sinkers:
+                                type: integer
+                              workers:
+                                type: integer
+                              write_batch_size:
+                                type: integer
+                            required:
+                            - buffer
+                            - read_batch_size
+                            - sinkers
+                            - workers
+                            - write_batch_size
+                            type: object
+                        type: object
+                      streaming:
+                        properties:
+                          enabled:
+                            type: boolean
+                        type: object
+                    required:
+                    - connectionInfo
+                    type: object
+                  mongodb:
+                    properties:
+                      connectionInfo:
+                        properties:
+                          appBinding:
+                            properties:
+                              name:
+                                type: string
+                              namespace:
+                                type: string
+                            required:
+                            - name
+                            type: object
+                          dbName:
+                            type: string
+                          maxConnections:
+                            format: int32
+                            type: integer
+                          url:
+                            type: string
+                        type: object
+                      mongoshake:
+                        properties:
+                          checkpointStartPosition:
+                            format: int64
+                            type: integer
+                          extraConfiguration:
+                            additionalProperties:
+                              type: string
+                            type: object
+                          filterDdlEnable:
+                            type: boolean
+                          filterNamespaceBlack:
+                            items:
+                              type: string
+                            type: array
+                          filterNamespaceWhite:
+                            items:
+                              type: string
+                            type: array
+                          filterOpTypes:
+                            items:
+                              type: string
+                            type: array
+                          filterOplogGids:
+                            type: boolean
+                          filterPassSpecialDb:
+                            items:
+                              type: string
+                            type: array
+                          syncMode:
+                            type: string
+                          transformNamespace:
+                            items:
+                              type: string
+                            type: array
+                        type: object
+                    required:
+                    - connectionInfo
+                    type: object
+                  mysql:
+                    properties:
+                      connectionInfo:
+                        properties:
+                          address:
+                            type: string
+                          dbName:
+                            type: string
+                          maxConnections:
+                            type: integer
+                          password:
+                            type: string
+                          user:
+                            type: string
+                        required:
+                        - address
+                        - dbName
+                        - password
+                        - user
+                        type: object
+                      schema:
+                        properties:
+                          database:
+                            items:
+                              type: string
+                            type: array
+                          enabled:
+                            type: boolean
+                          excludeDatabase:
+                            items:
+                              type: string
+                            type: array
+                        required:
+                        - enabled
+                        type: object
+                      snapshot:
+                        properties:
+                          enabled:
+                            type: boolean
+                          pipeline:
+                            properties:
+                              buffer:
+                                type: integer
+                              read_batch_size:
+                                type: integer
+                              sinkers:
+                                type: integer
+                              workers:
+                                type: integer
+                              write_batch_size:
+                                type: integer
+                            required:
+                            - buffer
+                            - read_batch_size
+                            - sinkers
+                            - workers
+                            - write_batch_size
+                            type: object
+                        type: object
+                      streaming:
+                        properties:
+                          enabled:
+                            type: boolean
+                        type: object
+                    required:
+                    - connectionInfo
+                    type: object
                   postgres:
                     properties:
                       connectionInfo:
@@ -2873,6 +3070,76 @@ spec:
                 type: object
               target:
                 properties:
+                  mariadb:
+                    properties:
+                      connectionInfo:
+                        properties:
+                          address:
+                            type: string
+                          dbName:
+                            type: string
+                          maxConnections:
+                            type: integer
+                          password:
+                            type: string
+                          user:
+                            type: string
+                        required:
+                        - address
+                        - dbName
+                        - password
+                        - user
+                        type: object
+                    required:
+                    - connectionInfo
+                    type: object
+                  mongodb:
+                    properties:
+                      connectionInfo:
+                        properties:
+                          appBinding:
+                            properties:
+                              name:
+                                type: string
+                              namespace:
+                                type: string
+                            required:
+                            - name
+                            type: object
+                          dbName:
+                            type: string
+                          maxConnections:
+                            format: int32
+                            type: integer
+                          url:
+                            type: string
+                        type: object
+                    required:
+                    - connectionInfo
+                    type: object
+                  mysql:
+                    properties:
+                      connectionInfo:
+                        properties:
+                          address:
+                            type: string
+                          dbName:
+                            type: string
+                          maxConnections:
+                            type: integer
+                          password:
+                            type: string
+                          user:
+                            type: string
+                        required:
+                        - address
+                        - dbName
+                        - password
+                        - user
+                        type: object
+                    required:
+                    - connectionInfo
+                    type: object
                   postgres:
                     properties:
                       connectionInfo:

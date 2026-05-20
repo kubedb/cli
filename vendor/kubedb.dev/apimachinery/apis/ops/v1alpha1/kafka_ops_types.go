@@ -71,6 +71,8 @@ type KafkaOpsRequestSpec struct {
 	Authentication *AuthSpec `json:"authentication,omitempty"`
 	// Specifies information necessary for restarting database
 	Restart *RestartSpec `json:"restart,omitempty"`
+	// Specifies information necessary for migrating storageClass or data
+	Migration *KafkaMigrationSpec `json:"migration,omitempty"`
 	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
 	Timeout *metav1.Duration `json:"timeout,omitempty"`
 	// ApplyOption is to control the execution of OpsRequest depending on the database state.
@@ -80,9 +82,23 @@ type KafkaOpsRequestSpec struct {
 	MaxRetries int32 `json:"maxRetries,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS;RotateAuth
-// ENUM(UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Restart, Reconfigure, ReconfigureTLS, RotateAuth)
+// +kubebuilder:validation:Enum=UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS;RotateAuth;StorageMigration
+// ENUM(UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Restart, Reconfigure, ReconfigureTLS, RotateAuth, StorageMigration)
 type KafkaOpsRequestType string
+
+// KafkaMigrationSpec is the spec for storage migration of a Kafka cluster.
+// Set Node for combined mode, or Controller + Broker for topology mode.
+type KafkaMigrationSpec struct {
+	// Node is the migration spec for a combined-mode Kafka instance.
+	// +optional
+	Node *StorageMigrationSpec `json:"node,omitempty"`
+	// Controller is the migration spec for controller nodes in topology mode.
+	// +optional
+	Controller *StorageMigrationSpec `json:"controller,omitempty"`
+	// Broker is the migration spec for broker nodes in topology mode.
+	// +optional
+	Broker *StorageMigrationSpec `json:"broker,omitempty"`
+}
 
 // KafkaReplicaReadinessCriteria is the criteria for checking readiness of a Kafka pod
 // after updating, horizontal scaling etc.

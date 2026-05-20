@@ -49,7 +49,7 @@ type AddonSpec struct {
 	Tasks AddonTasks `json:"tasks,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=mongodb-addon;postgres-addon;mysql-addon;mariadb-addon;mssqlserver-addon
+// +kubebuilder:validation:Enum=mongodb-addon;postgres-addon;mysql-addon;mariadb-addon;mssqlserver-addon;clickhouse-addon
 type AddonType string
 
 type AddonTasks struct {
@@ -58,6 +58,7 @@ type AddonTasks struct {
 	ManifestRestore   ManifestRestore   `json:"manifestRestore,omitempty"`
 	FullBackup        FullBackup        `json:"fullBackup,omitempty"`
 	FullBackupRestore FullBackupRestore `json:"fullBackupRestore,omitempty"`
+	IncBackupRestore  IncBackupRestore  `json:"incBackupRestore,omitempty"`
 }
 
 type FullBackup struct {
@@ -77,6 +78,10 @@ type ManifestRestore struct {
 }
 
 type FullBackupRestore struct {
+	Name string `json:"name"`
+}
+
+type IncBackupRestore struct {
 	Name string `json:"name"`
 }
 

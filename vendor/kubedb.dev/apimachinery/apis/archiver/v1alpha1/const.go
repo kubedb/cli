@@ -94,3 +94,14 @@ const (
 	ReasonSuccessfullyCompletedInitialBackupSession = "SuccessfullyCompletedInitialBackup"
 	ReasonFailedToCompleteInitialBackupSession      = "FailedToCompleteInitialBackup"
 )
+
+const (
+	BackupDirClickHouseMetadata    = "metadata"
+	BackupDirClickHouseData        = "data"
+	BackupDirClickHouseIncremental = "incremental"
+
+	ComponentNameMetadata = "metadata"
+	ComponentNameData     = "data"
+
+	ClickHouseDriver = "ClickHouseBackup"
+)

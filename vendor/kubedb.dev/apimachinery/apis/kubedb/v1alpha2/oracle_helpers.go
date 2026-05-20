@@ -67,6 +67,10 @@ func (o *Oracle) OffshootName() string {
 	return o.Name
 }
 
+func (o Oracle) GetStorageClassName() string {
+	return *o.Spec.Storage.StorageClassName
+}
+
 func (o *Oracle) ServiceName() string {
 	return o.OffshootName()
 }

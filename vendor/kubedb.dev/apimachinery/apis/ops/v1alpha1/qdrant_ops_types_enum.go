@@ -27,6 +27,8 @@ const (
 	QdrantOpsRequestTypeReconfigureTLS QdrantOpsRequestType = "ReconfigureTLS"
 	// QdrantOpsRequestTypeRotateAuth is a QdrantOpsRequestType of type RotateAuth.
 	QdrantOpsRequestTypeRotateAuth QdrantOpsRequestType = "RotateAuth"
+	// QdrantOpsRequestTypeStorageMigration is a QdrantOpsRequestType of type StorageMigration.
+	QdrantOpsRequestTypeStorageMigration QdrantOpsRequestType = "StorageMigration"
 )
 
 var ErrInvalidQdrantOpsRequestType = fmt.Errorf("not a valid QdrantOpsRequestType, try [%s]", strings.Join(_QdrantOpsRequestTypeNames, ", "))
@@ -40,6 +42,7 @@ var _QdrantOpsRequestTypeNames = []string{
 	string(QdrantOpsRequestTypeReconfigure),
 	string(QdrantOpsRequestTypeReconfigureTLS),
 	string(QdrantOpsRequestTypeRotateAuth),
+	string(QdrantOpsRequestTypeStorageMigration),
 }
 
 // QdrantOpsRequestTypeNames returns a list of possible string values of QdrantOpsRequestType.
@@ -60,6 +63,7 @@ func QdrantOpsRequestTypeValues() []QdrantOpsRequestType {
 		QdrantOpsRequestTypeReconfigure,
 		QdrantOpsRequestTypeReconfigureTLS,
 		QdrantOpsRequestTypeRotateAuth,
+		QdrantOpsRequestTypeStorageMigration,
 	}
 }
 
@@ -84,6 +88,7 @@ var _QdrantOpsRequestTypeValue = map[string]QdrantOpsRequestType{
 	"Reconfigure":       QdrantOpsRequestTypeReconfigure,
 	"ReconfigureTLS":    QdrantOpsRequestTypeReconfigureTLS,
 	"RotateAuth":        QdrantOpsRequestTypeRotateAuth,
+	"StorageMigration":  QdrantOpsRequestTypeStorageMigration,
 }
 
 // ParseQdrantOpsRequestType attempts to convert a string to a QdrantOpsRequestType.

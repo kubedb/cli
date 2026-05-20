@@ -71,6 +71,8 @@ type ElasticsearchOpsRequestSpec struct {
 	Authentication *AuthSpec `json:"authentication,omitempty"`
 	// Specifies information necessary for restarting database
 	Restart *RestartSpec `json:"restart,omitempty"`
+	// Specifies information necessary for migrating storageClass or data
+	Migration *ElasticsearchMigrationSpec `json:"migration,omitempty"`
 	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
 	Timeout *metav1.Duration `json:"timeout,omitempty"`
 	// ApplyOption is to control the execution of OpsRequest depending on the database state.
@@ -80,8 +82,8 @@ type ElasticsearchOpsRequestSpec struct {
 	MaxRetries int32 `json:"maxRetries,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=Upgrade;UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS;RotateAuth
-// ENUM(UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Restart, Reconfigure, ReconfigureTLS, RotateAuth)
+// +kubebuilder:validation:Enum=UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS;RotateAuth;StorageMigration
+// ENUM(UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Restart, Reconfigure, ReconfigureTLS, RotateAuth, StorageMigration)
 type ElasticsearchOpsRequestType string
 
 // ElasticsearchReplicaReadinessCriteria is the criteria for checking readiness of an Elasticsearch database
@@ -197,6 +199,44 @@ type ElasticsearchReconfigurationSpec struct {
 	// +optional
 	// +kubebuilder:default=auto
 	Restart ReconfigureRestartType `json:"restart,omitempty"`
+}
+
+// ElasticsearchMigrationSpec is the spec for storage migration of an Elasticsearch database.
+// Set Node for combined mode, or per-role fields for topology mode.
+type ElasticsearchMigrationSpec struct {
+	// Node is the migration spec for a combined-mode Elasticsearch instance.
+	// +optional
+	Node *StorageMigrationSpec `json:"node,omitempty"`
+	// Master is the migration spec for master nodes in topology mode.
+	// +optional
+	Master *StorageMigrationSpec `json:"master,omitempty"`
+	// Ingest is the migration spec for ingest nodes in topology mode.
+	// +optional
+	Ingest *StorageMigrationSpec `json:"ingest,omitempty"`
+	// Data is the migration spec for data nodes in topology mode.
+	// +optional
+	Data *StorageMigrationSpec `json:"data,omitempty"`
+	// DataContent is the migration spec for data_content nodes in topology mode.
+	// +optional
+	DataContent *StorageMigrationSpec `json:"dataContent,omitempty"`
+	// DataHot is the migration spec for data_hot nodes in topology mode.
+	// +optional
+	DataHot *StorageMigrationSpec `json:"dataHot,omitempty"`
+	// DataWarm is the migration spec for data_warm nodes in topology mode.
+	// +optional
+	DataWarm *StorageMigrationSpec `json:"dataWarm,omitempty"`
+	// DataCold is the migration spec for data_cold nodes in topology mode.
+	// +optional
+	DataCold *StorageMigrationSpec `json:"dataCold,omitempty"`
+	// DataFrozen is the migration spec for data_frozen nodes in topology mode.
+	// +optional
+	DataFrozen *StorageMigrationSpec `json:"dataFrozen,omitempty"`
+	// ML is the migration spec for ml nodes in topology mode.
+	// +optional
+	ML *StorageMigrationSpec `json:"ml,omitempty"`
+	// Transform is the migration spec for transform nodes in topology mode.
+	// +optional
+	Transform *StorageMigrationSpec `json:"transform,omitempty"`
 }
 
 type ElasticsearchCustomConfiguration struct {

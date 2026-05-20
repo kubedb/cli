@@ -115,6 +115,36 @@ spec:
                 default: 1
                 format: int32
                 type: integer
+              migration:
+                properties:
+                  broker:
+                    properties:
+                      oldPVReclaimPolicy:
+                        type: string
+                      storageClassName:
+                        type: string
+                    required:
+                    - storageClassName
+                    type: object
+                  controller:
+                    properties:
+                      oldPVReclaimPolicy:
+                        type: string
+                      storageClassName:
+                        type: string
+                    required:
+                    - storageClassName
+                    type: object
+                  node:
+                    properties:
+                      oldPVReclaimPolicy:
+                        type: string
+                      storageClassName:
+                        type: string
+                    required:
+                    - storageClassName
+                    type: object
+                type: object
               restart:
                 type: object
               timeout:
@@ -234,6 +264,7 @@ spec:
                 - Reconfigure
                 - ReconfigureTLS
                 - RotateAuth
+                - StorageMigration
                 type: string
               updateVersion:
                 properties:

@@ -75,11 +75,15 @@ type WeaviateSpec struct {
 	// +optional
 	AuthSecret *SecretReference `json:"authSecret,omitempty"`
 
+	// Init is used to initialize database
+	// +optional
+	Init *InitSpec `json:"init,omitempty"`
+
 	// Configuration is an optional field to provide custom configuration file for database (i.e conf.yaml).
 	// If specified, this file will be used as configuration file otherwise default configuration file will be used.
 	// You can provide custom configurations using Secret or ApplyConfig.
 	// +optional
-	Configuration *ConfigurationSpec `json:"configuration,omitempty"`
+	Configuration *WeaviateConfiguration `json:"configuration,omitempty"`
 
 	// PodTemplate is an optional configuration for pods used to expose database
 	// +optional
@@ -119,4 +123,14 @@ type WeaviateList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
 	Items           []Weaviate `json:"items"`
+}
+
+type WeaviateConfiguration struct {
+	ConfigurationSpec `json:",inline,omitempty"`
+
+	// BackupConfigSecret is an optional field to provide environment variables
+	// from a Kubernetes Secret for backup or other purposes.
+	// These env vars will be injected into the database container.
+	// +optional
+	BackupConfigSecret *core.LocalObjectReference `json:"backupConfigSecret,omitempty"`
 }

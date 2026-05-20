@@ -69,6 +69,8 @@ type CassandraOpsRequestSpec struct {
 	VolumeExpansion *CassandraVolumeExpansionSpec `json:"volumeExpansion,omitempty"`
 	// Specifies information necessary for restarting database
 	Restart *RestartSpec `json:"restart,omitempty"`
+	// Specifies information necessary for migrating storage
+	Migration *StorageMigrationSpec `json:"migration,omitempty"`
 	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
 	Timeout *metav1.Duration `json:"timeout,omitempty"`
 	// Specifies information necessary for configuring TLS
@@ -85,8 +87,8 @@ type CassandraOpsRequestSpec struct {
 	MaxRetries int32 `json:"maxRetries,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=UpdateVersion;VerticalScaling;Restart;VolumeExpansion;HorizontalScaling;Reconfigure;ReconfigureTLS;RotateAuth
-// ENUM(UpdateVersion, VerticalScaling, Restart, VolumeExpansion, HorizontalScaling, Reconfigure, ReconfigureTLS, RotateAuth)
+// +kubebuilder:validation:Enum=UpdateVersion;VerticalScaling;Restart;VolumeExpansion;HorizontalScaling;Reconfigure;ReconfigureTLS;RotateAuth;StorageMigration
+// ENUM(UpdateVersion, VerticalScaling, Restart, VolumeExpansion, HorizontalScaling, Reconfigure, ReconfigureTLS, RotateAuth, StorageMigration)
 type CassandraOpsRequestType string
 
 // CassandraHorizontalScalingSpec contains the horizontal scaling information of a Cassandra cluster

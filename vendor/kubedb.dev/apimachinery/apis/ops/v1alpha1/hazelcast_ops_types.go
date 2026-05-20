@@ -49,8 +49,8 @@ type HazelcastOpsRequest struct {
 	Status            OpsRequestStatus        `json:"status,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Reconfigure;Restart;ReconfigureTLS;RotateAuth
-// ENUM(UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Reconfigure, Restart, ReconfigureTLS, RotateAuth)
+// +kubebuilder:validation:Enum=UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Reconfigure;Restart;ReconfigureTLS;RotateAuth;StorageMigration
+// ENUM(UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Reconfigure, Restart, ReconfigureTLS, RotateAuth, StorageMigration)
 type HazelcastOpsRequestType string
 
 // HazelcastOpsRequestSpec is the spec for HazelcastOpsRequest
@@ -75,6 +75,8 @@ type HazelcastOpsRequestSpec struct {
 	TLS *TLSSpec `json:"tls,omitempty"`
 	// Specifies information necessary for configuring authSecret of the database
 	Authentication *AuthSpec `json:"authentication,omitempty"`
+	// Specifies information necessary for migrating storageClass or data
+	Migration *StorageMigrationSpec `json:"migration,omitempty"`
 	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
 	Timeout *metav1.Duration `json:"timeout,omitempty"`
 	// ApplyOption is to control the execution of OpsRequest depending on the database state.

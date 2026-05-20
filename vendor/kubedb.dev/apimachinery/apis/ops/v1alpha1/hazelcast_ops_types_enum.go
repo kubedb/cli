@@ -27,6 +27,8 @@ const (
 	HazelcastOpsRequestTypeReconfigureTLS HazelcastOpsRequestType = "ReconfigureTLS"
 	// HazelcastOpsRequestTypeRotateAuth is a HazelcastOpsRequestType of type RotateAuth.
 	HazelcastOpsRequestTypeRotateAuth HazelcastOpsRequestType = "RotateAuth"
+	// HazelcastOpsRequestTypeStorageMigration is a HazelcastOpsRequestType of type StorageMigration.
+	HazelcastOpsRequestTypeStorageMigration HazelcastOpsRequestType = "StorageMigration"
 )
 
 var ErrInvalidHazelcastOpsRequestType = fmt.Errorf("not a valid HazelcastOpsRequestType, try [%s]", strings.Join(_HazelcastOpsRequestTypeNames, ", "))
@@ -40,6 +42,7 @@ var _HazelcastOpsRequestTypeNames = []string{
 	string(HazelcastOpsRequestTypeRestart),
 	string(HazelcastOpsRequestTypeReconfigureTLS),
 	string(HazelcastOpsRequestTypeRotateAuth),
+	string(HazelcastOpsRequestTypeStorageMigration),
 }
 
 // HazelcastOpsRequestTypeNames returns a list of possible string values of HazelcastOpsRequestType.
@@ -60,6 +63,7 @@ func HazelcastOpsRequestTypeValues() []HazelcastOpsRequestType {
 		HazelcastOpsRequestTypeRestart,
 		HazelcastOpsRequestTypeReconfigureTLS,
 		HazelcastOpsRequestTypeRotateAuth,
+		HazelcastOpsRequestTypeStorageMigration,
 	}
 }
 
@@ -84,6 +88,7 @@ var _HazelcastOpsRequestTypeValue = map[string]HazelcastOpsRequestType{
 	"Restart":           HazelcastOpsRequestTypeRestart,
 	"ReconfigureTLS":    HazelcastOpsRequestTypeReconfigureTLS,
 	"RotateAuth":        HazelcastOpsRequestTypeRotateAuth,
+	"StorageMigration":  HazelcastOpsRequestTypeStorageMigration,
 }
 
 // ParseHazelcastOpsRequestType attempts to convert a string to a HazelcastOpsRequestType.

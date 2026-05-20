@@ -27,6 +27,8 @@ const (
 	ClickHouseOpsRequestTypeReconfigureTLS ClickHouseOpsRequestType = "ReconfigureTLS"
 	// ClickHouseOpsRequestTypeRotateAuth is a ClickHouseOpsRequestType of type RotateAuth.
 	ClickHouseOpsRequestTypeRotateAuth ClickHouseOpsRequestType = "RotateAuth"
+	// ClickHouseOpsRequestTypeStorageMigration is a ClickHouseOpsRequestType of type StorageMigration.
+	ClickHouseOpsRequestTypeStorageMigration ClickHouseOpsRequestType = "StorageMigration"
 )
 
 var ErrInvalidClickHouseOpsRequestType = fmt.Errorf("not a valid ClickHouseOpsRequestType, try [%s]", strings.Join(_ClickHouseOpsRequestTypeNames, ", "))
@@ -40,6 +42,7 @@ var _ClickHouseOpsRequestTypeNames = []string{
 	string(ClickHouseOpsRequestTypeReconfigure),
 	string(ClickHouseOpsRequestTypeReconfigureTLS),
 	string(ClickHouseOpsRequestTypeRotateAuth),
+	string(ClickHouseOpsRequestTypeStorageMigration),
 }
 
 // ClickHouseOpsRequestTypeNames returns a list of possible string values of ClickHouseOpsRequestType.
@@ -60,6 +63,7 @@ func ClickHouseOpsRequestTypeValues() []ClickHouseOpsRequestType {
 		ClickHouseOpsRequestTypeReconfigure,
 		ClickHouseOpsRequestTypeReconfigureTLS,
 		ClickHouseOpsRequestTypeRotateAuth,
+		ClickHouseOpsRequestTypeStorageMigration,
 	}
 }
 
@@ -84,6 +88,7 @@ var _ClickHouseOpsRequestTypeValue = map[string]ClickHouseOpsRequestType{
 	"Reconfigure":       ClickHouseOpsRequestTypeReconfigure,
 	"ReconfigureTLS":    ClickHouseOpsRequestTypeReconfigureTLS,
 	"RotateAuth":        ClickHouseOpsRequestTypeRotateAuth,
+	"StorageMigration":  ClickHouseOpsRequestTypeStorageMigration,
 }
 
 // ParseClickHouseOpsRequestType attempts to convert a string to a ClickHouseOpsRequestType.

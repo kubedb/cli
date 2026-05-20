@@ -17,6 +17,8 @@ limitations under the License.
 package v1alpha1
 
 import (
+	"kubedb.dev/apimachinery/apis/migrator/v1alpha1"
+
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
 )
@@ -87,6 +89,9 @@ type MongoDBVersionSpec struct {
 	Archiver ArchiverSpec `json:"archiver,omitempty"`
 	// +optional
 	UI []ChartInfo `json:"ui,omitempty"`
+	// Migrator defines the migration related CLI/Tools images for this MongoDB version
+	// +optional
+	Migrator v1alpha1.DBMigratorImages `json:"migrator,omitempty"`
 }
 
 // MongoDBVersionDatabase is the MongoDB Database image

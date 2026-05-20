@@ -189,6 +189,10 @@ func (m MySQL) GetAuthSecretName() string {
 	return meta_util.NameWithSuffix(m.OffshootName(), "auth")
 }
 
+func (m MySQL) GetRouterServiceName() string {
+	return meta_util.NameWithSuffix(m.OffshootName(), kubedb.MySQLRouterSuffix)
+}
+
 func (m MySQL) GetStorageClassName() string {
 	return *m.Spec.Storage.StorageClassName
 }
@@ -473,7 +477,7 @@ func (m *MySQL) MySQLTLSArgs() []string {
 }
 
 func (m *MySQL) GetRouterName() string {
-	return fmt.Sprintf("%s-router", m.Name)
+	return fmt.Sprintf("%s-%s", m.Name, kubedb.MySQLRouterSuffix)
 }
 
 func (m *MySQL) setDefaultContainerSecurityContext(myVersion *v1alpha1.MySQLVersion, podTemplate *ofstv2.PodTemplateSpec) {

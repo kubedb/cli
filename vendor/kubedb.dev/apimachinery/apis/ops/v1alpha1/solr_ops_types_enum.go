@@ -27,6 +27,8 @@ const (
 	SolrOpsRequestTypeReconfigureTLS SolrOpsRequestType = "ReconfigureTLS"
 	// SolrOpsRequestTypeRotateAuth is a SolrOpsRequestType of type RotateAuth.
 	SolrOpsRequestTypeRotateAuth SolrOpsRequestType = "RotateAuth"
+	// SolrOpsRequestTypeStorageMigration is a SolrOpsRequestType of type StorageMigration.
+	SolrOpsRequestTypeStorageMigration SolrOpsRequestType = "StorageMigration"
 )
 
 var ErrInvalidSolrOpsRequestType = fmt.Errorf("not a valid SolrOpsRequestType, try [%s]", strings.Join(_SolrOpsRequestTypeNames, ", "))
@@ -40,6 +42,7 @@ var _SolrOpsRequestTypeNames = []string{
 	string(SolrOpsRequestTypeRestart),
 	string(SolrOpsRequestTypeReconfigureTLS),
 	string(SolrOpsRequestTypeRotateAuth),
+	string(SolrOpsRequestTypeStorageMigration),
 }
 
 // SolrOpsRequestTypeNames returns a list of possible string values of SolrOpsRequestType.
@@ -60,6 +63,7 @@ func SolrOpsRequestTypeValues() []SolrOpsRequestType {
 		SolrOpsRequestTypeRestart,
 		SolrOpsRequestTypeReconfigureTLS,
 		SolrOpsRequestTypeRotateAuth,
+		SolrOpsRequestTypeStorageMigration,
 	}
 }
 
@@ -84,6 +88,7 @@ var _SolrOpsRequestTypeValue = map[string]SolrOpsRequestType{
 	"Restart":           SolrOpsRequestTypeRestart,
 	"ReconfigureTLS":    SolrOpsRequestTypeReconfigureTLS,
 	"RotateAuth":        SolrOpsRequestTypeRotateAuth,
+	"StorageMigration":  SolrOpsRequestTypeStorageMigration,
 }
 
 // ParseSolrOpsRequestType attempts to convert a string to a SolrOpsRequestType.

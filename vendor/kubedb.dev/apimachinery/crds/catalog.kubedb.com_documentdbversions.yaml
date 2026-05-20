@@ -45,6 +45,13 @@ spec:
             type: object
           spec:
             properties:
+              coordinator:
+                properties:
+                  image:
+                    type: string
+                required:
+                - image
+                type: object
               db:
                 properties:
                   image:
@@ -56,6 +63,13 @@ spec:
                 type: boolean
               endOfLife:
                 type: boolean
+              initContainer:
+                properties:
+                  image:
+                    type: string
+                required:
+                - image
+                type: object
               postgresVersion:
                 type: string
               securityContext:

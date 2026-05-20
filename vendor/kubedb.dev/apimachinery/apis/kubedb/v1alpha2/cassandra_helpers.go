@@ -355,7 +355,7 @@ func (r *Cassandra) SetDefaults(kc client.Client) {
 
 			dbContainer := coreutil.GetContainerByName(rack.PodTemplate.Spec.Containers, kubedb.CassandraContainerName)
 			if dbContainer != nil {
-				apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResources)
+				apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResourcesMemoryIntensive)
 			}
 			r.setDefaultContainerSecurityContext(&casVersion, rack.PodTemplate)
 			racks[index] = rack
@@ -375,7 +375,7 @@ func (r *Cassandra) SetDefaults(kc client.Client) {
 		r.setDefaultContainerSecurityContext(&casVersion, r.Spec.PodTemplate)
 		dbContainer := coreutil.GetContainerByName(r.Spec.PodTemplate.Spec.Containers, kubedb.CassandraContainerName)
 		if dbContainer != nil {
-			apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResources)
+			apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResourcesMemoryIntensive)
 		}
 		r.SetHealthCheckerDefaults()
 	}

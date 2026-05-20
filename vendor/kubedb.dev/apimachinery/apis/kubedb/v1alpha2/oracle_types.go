@@ -278,3 +278,21 @@ type OracleList struct {
 	metav1.ListMeta `json:"metadata,omitempty"`
 	Items           []Oracle `json:"items"`
 }
+
+var _ Accessor = &Oracle{}
+
+func (m *Oracle) GetObjectMeta() metav1.ObjectMeta {
+	return m.ObjectMeta
+}
+
+func (m *Oracle) GetConditions() []kmapi.Condition {
+	return m.Status.Conditions
+}
+
+func (m *Oracle) SetCondition(cond kmapi.Condition) {
+	m.Status.Conditions = setCondition(m.Status.Conditions, cond)
+}
+
+func (m *Oracle) RemoveCondition(typ string) {
+	m.Status.Conditions = removeCondition(m.Status.Conditions, typ)
+}

@@ -32,6 +32,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/klog/v2"
+	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	coreutil "kmodules.xyz/client-go/core/v1"
 	meta_util "kmodules.xyz/client-go/meta"
@@ -80,6 +81,9 @@ func (m Milvus) Type() appcat.AppType {
 
 func (m *Milvus) GetConnectionScheme() string {
 	scheme := "http"
+	if m.Spec.TLS != nil && m.Spec.TLS.External != nil && m.Spec.TLS.External.Mode != TLSModeDisabled {
+		scheme = "https"
+	}
 	return scheme
 }
 
@@ -354,6 +358,8 @@ func (m *Milvus) SetDefaults(kc client.Client) {
 
 	m.SetHealthCheckerDefaults()
 
+	m.SetTLSDefaults()
+
 	if m.Spec.Monitor != nil {
 		if m.Spec.Monitor.Prometheus == nil {
 			m.Spec.Monitor.Prometheus = &mona.PrometheusSpec{}
@@ -369,6 +375,27 @@ func (m *Milvus) SetDefaults(kc client.Client) {
 			m.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup = mvVersion.Spec.SecurityContext.RunAsUser
 		}
 	}
+}
+
+func (m *Milvus) SetTLSDefaults() {
+	if m.Spec.TLS == nil || m.Spec.TLS.IssuerRef == nil {
+		return
+	}
+
+	if m.Spec.TLS.External == nil {
+		m.Spec.TLS.External = &ProtocolTLSConfig{
+			Mode: TLSModeDisabled,
+		}
+	}
+
+	if m.Spec.TLS.Internal == nil {
+		m.Spec.TLS.Internal = &ProtocolTLSConfig{
+			Mode: TLSModeDisabled,
+		}
+	}
+
+	m.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(m.Spec.TLS.Certificates, string(MilvusCertificateTypeServer), m.CertificateName(MilvusCertificateTypeServer))
+	m.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(m.Spec.TLS.Certificates, string(MilvusCertificateTypeClient), m.CertificateName(MilvusCertificateTypeClient))
 }
 
 func (m *Milvus) setMetaStorageDefaults() {
@@ -507,4 +534,18 @@ func (m milvusStatsService) TLSConfig() *promapi.TLSConfig {
 
 func (m Milvus) StatsService() mona.StatsAccessor {
 	return &milvusStatsService{&m}
+}
+
+func (m *Milvus) GetCertSecretName(alias MilvusCertificateType) string {
+	if m.Spec.TLS != nil {
+		name, ok := kmapi.GetCertificateSecretName(m.Spec.TLS.Certificates, string(alias))
+		if ok {
+			return name
+		}
+	}
+	return m.CertificateName(alias)
+}
+
+func (m *Milvus) CertificateName(alias MilvusCertificateType) string {
+	return meta_util.NameWithSuffix(m.Name, fmt.Sprintf("%s-cert", string(alias)))
 }

@@ -89,7 +89,7 @@ type FerretDBTLSSpec struct {
 	ClientAuthMode v1alpha2.ClusterAuthMode `json:"clientAuthMode,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=UpdateVersion;VerticalScaling;Restart;HorizontalScaling;ReconfigureTLS;RotateAuth
+// +kubebuilder:validation:Enum=UpdateVersion;Restart;VerticalScaling;HorizontalScaling;ReconfigureTLS;RotateAuth
 // ENUM(UpdateVersion, Restart, VerticalScaling, HorizontalScaling, ReconfigureTLS, RotateAuth)
 type FerretDBOpsRequestType string
 

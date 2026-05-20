@@ -77,6 +77,8 @@ type MongoDBOpsRequestSpec struct {
 	Archiver *ArchiverOptions `json:"archiver,omitempty"`
 	// Horizons specifies the information for setting up replicaset horizons.
 	Horizons *Horizons `json:"horizons,omitempty"`
+	// Specifies information necessary for migrating storageClass or data
+	Migration *MongoDBMigrationSpec `json:"migration,omitempty"`
 
 	// Specifies the Readiness Criteria
 	ReadinessCriteria *MongoDBReplicaReadinessCriteria `json:"readinessCriteria,omitempty"`
@@ -89,9 +91,30 @@ type MongoDBOpsRequestSpec struct {
 	MaxRetries int32 `json:"maxRetries,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=Upgrade;UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS;Reprovision;RotateAuth;Horizons
-// ENUM(UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Restart, Reconfigure, ReconfigureTLS, Reprovision, RotateAuth, Horizons)
+// +kubebuilder:validation:Enum=UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS;Reprovision;RotateAuth;Horizons;StorageMigration
+// ENUM(UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Restart, Reconfigure, ReconfigureTLS, Reprovision, RotateAuth, Horizons, StorageMigration)
 type MongoDBOpsRequestType string
+
+// MongoDBMigrationSpec is the spec for storage migration of a MongoDB database.
+// Exactly one of Standalone, ReplicaSet, or (ConfigServer + Shard) must be set,
+// matching the topology of the target MongoDB instance.
+type MongoDBMigrationSpec struct {
+	// Standalone is the migration spec for a standalone MongoDB instance.
+	// +optional
+	Standalone *StorageMigrationSpec `json:"standalone,omitempty"`
+	// ReplicaSet is the migration spec for a MongoDB replicaset.
+	// +optional
+	ReplicaSet *StorageMigrationSpec `json:"replicaSet,omitempty"`
+	// ConfigServer is the migration spec for the config server component of a sharded MongoDB.
+	// +optional
+	ConfigServer *StorageMigrationSpec `json:"configServer,omitempty"`
+	// Shard is the migration spec for the shard component of a sharded MongoDB.
+	// +optional
+	Shard *StorageMigrationSpec `json:"shard,omitempty"`
+	// Hidden is the migration spec for the hidden replica of a MongoDB replicaset.
+	// +optional
+	Hidden *StorageMigrationSpec `json:"hidden,omitempty"`
+}
 
 // MongoDBReplicaReadinessCriteria is the criteria for checking readiness of a MongoDB pod
 // after restarting the pod

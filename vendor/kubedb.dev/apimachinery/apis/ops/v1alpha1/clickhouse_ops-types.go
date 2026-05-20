@@ -71,6 +71,8 @@ type ClickHouseOpsRequestSpec struct {
 	VolumeExpansion *ClickHouseVolumeExpansionSpec `json:"volumeExpansion,omitempty"`
 	// Specifies information necessary for custom configuration of clickhouse
 	Configuration *ReconfigurationSpec `json:"configuration,omitempty"`
+	// Specifies information necessary for migrating storageClass or data
+	Migration *ClickHouseMigrationSpec `json:"migration,omitempty"`
 	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
 	Timeout *metav1.Duration `json:"timeout,omitempty"`
 	// Specifies information necessary for configuring TLS
@@ -82,8 +84,8 @@ type ClickHouseOpsRequestSpec struct {
 	MaxRetries int32 `json:"maxRetries,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=Restart;VerticalScaling;HorizontalScaling;UpdateVersion;VolumeExpansion;Reconfigure;ReconfigureTLS;RotateAuth
-// ENUM(Restart, VerticalScaling, HorizontalScaling, UpdateVersion, VolumeExpansion, Reconfigure, ReconfigureTLS, RotateAuth)
+// +kubebuilder:validation:Enum=Restart;VerticalScaling;HorizontalScaling;UpdateVersion;VolumeExpansion;Reconfigure;ReconfigureTLS;RotateAuth;StorageMigration
+// ENUM(Restart, VerticalScaling, HorizontalScaling, UpdateVersion, VolumeExpansion, Reconfigure, ReconfigureTLS, RotateAuth, StorageMigration)
 type ClickHouseOpsRequestType string
 
 // ClickHouseUpdateVersionSpec contains the update version information of a clickhouse cluster
@@ -116,6 +118,20 @@ type ClickHouseVerticalScalingSpec struct {
 type ClickHouseHorizontalScalingSpec struct {
 	// Number of node
 	Replicas *int32 `json:"replicas,omitempty"`
+}
+
+// ClickHouseMigrationSpec is the spec for migrating storageClass of a ClickHouse database.
+// Set Standalone for non-topology mode, or Cluster + ClickHouseKeeper for topology mode.
+type ClickHouseMigrationSpec struct {
+	// Standalone is the migration spec for a ClickHouse instance without cluster topology.
+	// +optional
+	Standalone *StorageMigrationSpec `json:"standalone,omitempty"`
+	// Cluster is the migration spec for the cluster nodes in topology mode.
+	// +optional
+	Cluster *StorageMigrationSpec `json:"cluster,omitempty"`
+	// ClickHouseKeeper is the migration spec for the embedded ClickHouse Keeper nodes.
+	// +optional
+	ClickHouseKeeper *StorageMigrationSpec `json:"clickHouseKeeper,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
