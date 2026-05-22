@@ -17,13 +17,47 @@ limitations under the License.
 package debug
 
 import (
+	"fmt"
 	"os"
 	"path"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/klog/v2"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/yaml"
 )
+
+type Resource interface {
+	OffshootSelectors() map[string]string
+}
+
+type ResourceExtra interface {
+	OffshootSelectors(extraSelectors ...map[string]string) map[string]string
+}
+
+func getOffshootSelectorsIfAny(obj client.Object) (map[string]string, bool) {
+	if r, ok := obj.(Resource); ok {
+		return r.OffshootSelectors(), true
+	}
+	if r, ok := obj.(ResourceExtra); ok {
+		return r.OffshootSelectors(), true
+	}
+	return nil, false
+}
+
+func (opts *dbOpts) run(db client.Object) error {
+	opts.db.OwnerReferences = db.GetOwnerReferences()
+	if err := writeYaml(db, getDir(db.GetName())); err != nil {
+		return err
+	}
+	selectors, ok := getOffshootSelectorsIfAny(db)
+	if !ok {
+		return fmt.Errorf("%T does not implement OffshootSelectors", db)
+	}
+	opts.selectors = selectors
+	klog.Infof("db selectors: %v;\nDebug info has been generated in '%v' folder", opts.selectors, db.GetName())
+	return opts.collectALl()
+}
 
 func IsOwnByGitOpsObject(owners []metav1.OwnerReference, name, kind string) bool {
 	for _, owner := range owners {

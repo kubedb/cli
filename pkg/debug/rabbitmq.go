@@ -73,16 +73,7 @@ func RabbitMQDebugCMD(f cmdutil.Factory) *cobra.Command {
 			if err != nil {
 				log.Fatalln(err)
 			}
-			opts.db.OwnerReferences = db.OwnerReferences
-
-			err = writeYaml(&db, getDir(db.GetName()))
-			if err != nil {
-				return
-			}
-			opts.selectors = db.OffshootSelectors()
-			klog.Infof("db selectors: %v;\nDebug info has been generated in '%v' folder", opts.selectors, dbName)
-			err = opts.collectALl()
-			if err != nil {
+			if err := opts.run(&db); err != nil {
 				log.Fatalln(err)
 			}
 		},
