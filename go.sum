@@ -685,8 +685,6 @@ gomodules.xyz/runtime v0.3.0/go.mod h1:lJuiayVYjz8LWDwKhbDqFzUrXqr1btLbJS5/lKDz1
 gomodules.xyz/sets v0.2.0/go.mod h1:jKgNp01/iDs+svOWXaPk5cKP3VXy0mWUoTF/ore+aMc=
 gomodules.xyz/sets v0.2.1 h1:vK3oUWoGVrZKLDKO/bzEo/ucHFdCE7+DxWPeWxK72KQ=
 gomodules.xyz/sets v0.2.1/go.mod h1:jKgNp01/iDs+svOWXaPk5cKP3VXy0mWUoTF/ore+aMc=
-gomodules.xyz/sync v0.1.0 h1:Y7vHOtMrqN9FojRwkCQdC17dKL1fVx+6xb7WdfnXX58=
-gomodules.xyz/sync v0.1.0/go.mod h1:kv570yCdknyiZ8Y94uaRFGBC5E47TV/5A7PD9jlnJoQ=
 gomodules.xyz/testing v0.0.4 h1:XGKt4B64mBe7P9kPR0Rz1nCQpWoSpBEFdTGkfU1RLe4=
 gomodules.xyz/testing v0.0.4/go.mod h1:hD6aXtv9eVycPwS01zv+QTl5BrK2DXQgr6bHqnrW+44=
 gomodules.xyz/wait v0.2.0 h1:HnRIh+cvIrrKIFaXoYznCVVirv2/2xu3KzjSzsQmYAY=
@@ -795,10 +793,10 @@ kmodules.xyz/resource-metadata v0.46.1 h1:mm4sWZvQMFJJiLdKlPGxD9Cj6f44SCdHB7Csbk
 kmodules.xyz/resource-metadata v0.46.1/go.mod h1:ejz7IVjhqmj6VH8CVfprocJK/IM++OeunrfUp51ZrIw=
 kmodules.xyz/resource-metrics v0.34.0 h1:cqscgTx3PONxHj6PIySK3sTlKKv8iKTGzRd+S6YSwXg=
 kmodules.xyz/resource-metrics v0.34.0/go.mod h1:R34IKtp5+NqcQz7AQJheBJK6Iem0LqrCbm/55Mn+ECQ=
-kubedb.dev/apimachinery v0.65.0-rc.0.0.20260604181114-007ef3ea6adf h1:z5nypkhN4O65KO0OOe3ZJz7lQLFy4CXESXSivYGZfiE=
-kubedb.dev/apimachinery v0.65.0-rc.0.0.20260604181114-007ef3ea6adf/go.mod h1:Bby15v8jdaIjyCZVA7ckqIgcueRkRrWzzV1Es6NBDIM=
-kubedb.dev/db-client-go v0.20.0-rc.0 h1:gU7sqcaMzD5G27gaLMYNTRGLF5Le44kT9Q9C0uL5TdM=
-kubedb.dev/db-client-go v0.20.0-rc.0/go.mod h1:+paHZL4gXER6pl2YySdzjGlUNZHc7xDkOignwYYkwmg=
+kubedb.dev/apimachinery v0.65.0-rc.1 h1:rDBoUsJW5ToRDOwWOGLccJBVOvDV+nRaXoItdJxPNSM=
+kubedb.dev/apimachinery v0.65.0-rc.1/go.mod h1:SI/R0ly6c3+K7AxFMfiY7zzPTu1HhI4aEhfaupVYltw=
+kubedb.dev/db-client-go v0.20.0-rc.1 h1:Wj79j86/cZbaAPvhpYu54YscxSnwXGb6wytqFBO5Oyo=
+kubedb.dev/db-client-go v0.20.0-rc.1/go.mod h1:WsrPtYP7BfC63Tp7N2uIP1XMe9aTkcUSIZXGwx8MQC4=
 kubeops.dev/csi-driver-cacerts v0.5.1-0.20260418091014-4f539f46235c h1:ZKmBV3fFfCWQ3jDeWBbUi2J4WjJ2ff88n+cTqJ8ZXT8=
 kubeops.dev/csi-driver-cacerts v0.5.1-0.20260418091014-4f539f46235c/go.mod h1:VNbwC3gTWfmdQCVxd8mkVx+n1+0F1lOA5X3usyZN1rk=
 kubeops.dev/operator-shard-manager v0.0.6-0.20260418091213-65daf7da824d h1:/nZYflp2w1x+wQmxDtHR0Sbzl39fcuaJ66oqgVXBBwQ=

@@ -31,6 +31,7 @@ import (
 	"kubedb.dev/apimachinery/apis/elasticsearch/v1alpha1"
 	"kubedb.dev/apimachinery/apis/kubedb"
 	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
+	secret_lib "kubedb.dev/apimachinery/pkg/secret"
 
 	"github.com/Masterminds/semver/v3"
 	esv5 "github.com/elastic/go-elasticsearch/v5"
@@ -106,25 +107,25 @@ func (o *KubeDBClientBuilder) GetElasticClient() (*Client, error) {
 		return nil, errors.Errorf("Failed to get elasticsearchVersion with %s", err)
 	}
 
-	var authSecret core.Secret
 	var username, password string
 	if !o.db.Spec.DisableSecurity && o.db.Spec.AuthSecret != nil {
-		err = o.kc.Get(o.ctx, client.ObjectKey{Namespace: o.db.Namespace, Name: o.db.Spec.AuthSecret.Name}, &authSecret)
+		isVirtual := dbapi.IsVirtualAuthSecretReferred(o.db.Spec.AuthSecret)
+		data, err := secret_lib.GetData(o.ctx, o.kc, o.db.Namespace, o.db.Spec.AuthSecret.Name, isVirtual)
 		if err != nil {
 			return nil, errors.Errorf("Failed to get auth secret with %s", err)
 		}
 
-		if value, ok := authSecret.Data[core.BasicAuthUsernameKey]; ok {
+		if value, ok := data[core.BasicAuthUsernameKey]; ok {
 			username = string(value)
 		} else {
-			klog.Errorf("Failed for secret: %s/%s, username is missing", authSecret.Namespace, authSecret.Name)
+			klog.Errorf("Failed for secret: %s/%s, username is missing", o.db.Namespace, o.db.Spec.AuthSecret.Name)
 			return nil, errors.New("username is missing")
 		}
 
-		if value, ok := authSecret.Data[core.BasicAuthPasswordKey]; ok {
+		if value, ok := data[core.BasicAuthPasswordKey]; ok {
 			password = string(value)
 		} else {
-			klog.Errorf("Failed for secret: %s/%s, password is missing", authSecret.Namespace, authSecret.Name)
+			klog.Errorf("Failed for secret: %s/%s, password is missing", o.db.Namespace, o.db.Spec.AuthSecret.Name)
 			return nil, errors.New("password is missing")
 		}
 	}
@@ -533,25 +534,25 @@ func (o *KubeDBClientBuilder) GetElasticRestyClient() (*ESRestyClient, error) {
 		},
 	}
 
-	var authSecret core.Secret
 	var username, password string
 	if !o.db.Spec.DisableSecurity && o.db.Spec.AuthSecret != nil {
-		err := o.kc.Get(o.ctx, client.ObjectKey{Namespace: o.db.Namespace, Name: o.db.Spec.AuthSecret.Name}, &authSecret)
+		isVirtual := dbapi.IsVirtualAuthSecretReferred(o.db.Spec.AuthSecret)
+		data, err := secret_lib.GetData(o.ctx, o.kc, o.db.Namespace, o.db.Spec.AuthSecret.Name, isVirtual)
 		if err != nil {
 			return nil, errors.Errorf("Failed to get auth secret with %s", err)
 		}
 
-		if value, ok := authSecret.Data[core.BasicAuthUsernameKey]; ok {
+		if value, ok := data[core.BasicAuthUsernameKey]; ok {
 			username = string(value)
 		} else {
-			klog.Errorf("Failed for secret: %s/%s, username is missing", authSecret.Namespace, authSecret.Name)
+			klog.Errorf("Failed for secret: %s/%s, username is missing", o.db.Namespace, o.db.Spec.AuthSecret.Name)
 			return nil, errors.New("username is missing")
 		}
 
-		if value, ok := authSecret.Data[core.BasicAuthPasswordKey]; ok {
+		if value, ok := data[core.BasicAuthPasswordKey]; ok {
 			password = string(value)
 		} else {
-			klog.Errorf("Failed for secret: %s/%s, password is missing", authSecret.Namespace, authSecret.Name)
+			klog.Errorf("Failed for secret: %s/%s, password is missing", o.db.Namespace, o.db.Spec.AuthSecret.Name)
 			return nil, errors.New("password is missing")
 		}
 	}
