@@ -149,6 +149,10 @@ func (w *Weaviate) PetSetName() string {
 	return w.OffshootName()
 }
 
+func (q *Weaviate) PVCName(alias string) string {
+	return alias
+}
+
 func (w *Weaviate) GetAuthSecretName() string {
 	if w.Spec.AuthSecret != nil && w.Spec.AuthSecret.Name != "" {
 		return w.Spec.AuthSecret.Name
@@ -259,4 +263,8 @@ func (w *Weaviate) GetConnectionScheme() string {
 func (w *Weaviate) ConfigSecretName() string {
 	uid := string(w.UID)
 	return meta_util.NameWithSuffix(w.OffshootName(), uid[len(uid)-6:])
+}
+
+func (w *Weaviate) GetStorageClassName() string {
+	return *w.Spec.Storage.StorageClassName
 }

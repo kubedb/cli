@@ -19,6 +19,7 @@ package v1alpha1
 
 import (
 	core "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -53,41 +54,62 @@ type WeaviateOpsRequest struct {
 type WeaviateOpsRequestSpec struct {
 	// Specifies the Weaviate reference
 	DatabaseRef core.LocalObjectReference `json:"databaseRef"`
-
 	// Specifies the ops request type: UpdateVersion, HorizontalScaling, VerticalScaling etc.
 	Type WeaviateOpsRequestType `json:"type"`
-
+	// Specifies information necessary for horizontal scaling
+	HorizontalScaling *WeaviateHorizontalScalingSpec `json:"horizontalScaling,omitempty"`
 	// Specifies information necessary for vertical scaling
 	VerticalScaling *WeaviateVerticalScalingSpec `json:"verticalScaling,omitempty"`
-
-	// Specifies information necessary for configuring authSecret of the database
-	Authentication *AuthSpec `json:"authentication,omitempty"`
-
+	// Specifies information necessary for volume expansion
+	VolumeExpansion *WeaviateVolumeExpansionSpec `json:"volumeExpansion,omitempty"`
+	// Specifies information necessary for restarting database
+	Restart *RestartSpec `json:"restart,omitempty"`
 	// Specifies information necessary for custom configuration of weaviate
 	Configuration *WeaviateReconfigurationSpec `json:"configuration,omitempty"`
-
 	// Specifies information necessary for migrating storageClass or data
 	Migration *WeaviateMigrationSpec `json:"migration,omitempty"`
-
+	// Specifies information necessary for configuring authSecret of the database
+	Authentication *AuthSpec `json:"authentication,omitempty"`
 	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
 	Timeout *metav1.Duration `json:"timeout,omitempty"`
-
 	// ApplyOption is to control the execution of OpsRequest depending on the database state.
 	// +kubebuilder:default="IfReady"
 	Apply ApplyOption `json:"apply,omitempty"`
-
 	// +kubebuilder:default=1
 	MaxRetries int32 `json:"maxRetries,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=Restart;Reconfigure;RotateAuth
-// ENUM(Restart,Reconfigure,RotateAuth)
+// +kubebuilder:validation:Enum=UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;RotateAuth;StorageMigration
+// ENUM(UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Restart, Reconfigure, RotateAuth, StorageMigration)
 type WeaviateOpsRequestType string
+
+// WeaviateUpdateVersionSpec contains the update version information of a Weaviate cluster
+type WeaviateUpdateVersionSpec struct {
+	// Specifies the target version name from catalog
+	TargetVersion string `json:"targetVersion,omitempty"`
+}
+
+// WeaviateReplicaReadinessCriteria is the criteria for checking readiness of a Weaviate pod
+// after updating, horizontal scaling etc.
+type WeaviateReplicaReadinessCriteria struct{}
+
+// WeaviateHorizontalScalingSpec contains the horizontal scaling information of a Weaviate cluster
+type WeaviateHorizontalScalingSpec struct {
+	// Number of node
+	Node *int32 `json:"node,omitempty"`
+}
 
 // WeaviateVerticalScalingSpec contains the vertical scaling information of a Weaviate cluster
 type WeaviateVerticalScalingSpec struct {
 	// Resource spec for nodes
 	Node *PodResources `json:"node,omitempty"`
+}
+
+// WeaviateVolumeExpansionSpec is the spec for Weaviate volume expansion
+type WeaviateVolumeExpansionSpec struct {
+	Mode VolumeExpansionMode `json:"mode"`
+	// volume specification for nodes
+	Node *resource.Quantity `json:"node,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

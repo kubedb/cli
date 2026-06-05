@@ -103,6 +103,12 @@ spec:
                     type: string
                 type: object
                 x-kubernetes-map-type: atomic
+              horizontalScaling:
+                properties:
+                  node:
+                    format: int32
+                    type: integer
+                type: object
               maxRetries:
                 default: 1
                 format: int32
@@ -116,13 +122,20 @@ spec:
                 required:
                 - storageClassName
                 type: object
+              restart:
+                type: object
               timeout:
                 type: string
               type:
                 enum:
+                - UpdateVersion
+                - HorizontalScaling
+                - VerticalScaling
+                - VolumeExpansion
                 - Restart
                 - Reconfigure
                 - RotateAuth
+                - StorageMigration
                 type: string
               verticalScaling:
                 properties:
@@ -174,6 +187,22 @@ spec:
                         - value
                         type: object
                     type: object
+                type: object
+              volumeExpansion:
+                properties:
+                  mode:
+                    enum:
+                    - Offline
+                    - Online
+                    type: string
+                  node:
+                    anyOf:
+                    - type: integer
+                    - type: string
+                    pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                    x-kubernetes-int-or-string: true
+                required:
+                - mode
                 type: object
             required:
             - databaseRef

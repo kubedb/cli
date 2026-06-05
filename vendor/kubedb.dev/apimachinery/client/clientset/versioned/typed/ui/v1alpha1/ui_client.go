@@ -29,8 +29,9 @@ import (
 
 type UiV1alpha1Interface interface {
 	RESTClient() rest.Interface
+	DatabaseConfigurationsGetter
 	DatabaseConnectionsGetter
-	DatabaseInfosGetter
+	DatabaseSummariesGetter
 	ElasticsearchInsightsGetter
 	ElasticsearchNodesStatsesGetter
 	ElasticsearchSchemaOverviewsGetter
@@ -64,12 +65,16 @@ type UiV1alpha1Client struct {
 	restClient rest.Interface
 }
 
+func (c *UiV1alpha1Client) DatabaseConfigurations() DatabaseConfigurationInterface {
+	return newDatabaseConfigurations(c)
+}
+
 func (c *UiV1alpha1Client) DatabaseConnections(namespace string) DatabaseConnectionInterface {
 	return newDatabaseConnections(c, namespace)
 }
 
-func (c *UiV1alpha1Client) DatabaseInfos() DatabaseInfoInterface {
-	return newDatabaseInfos(c)
+func (c *UiV1alpha1Client) DatabaseSummaries() DatabaseSummaryInterface {
+	return newDatabaseSummaries(c)
 }
 
 func (c *UiV1alpha1Client) ElasticsearchInsights(namespace string) ElasticsearchInsightInterface {

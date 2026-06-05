@@ -115,10 +115,6 @@ var databases = []dbEntry{
 		gvk: schema.GroupVersionKind{Group: olddbapi.SchemeGroupVersion.Group, Version: olddbapi.SchemeGroupVersion.Version, Kind: olddbapi.ResourceKindDruid},
 	},
 	{
-		use: olddbapi.ResourceSingularFerretDB, aliases: []string{olddbapi.ResourceCodeFerretDB, olddbapi.ResourcePluralFerretDB}, short: "Debug helper for FerretDB database",
-		gvk: schema.GroupVersionKind{Group: olddbapi.SchemeGroupVersion.Group, Version: olddbapi.SchemeGroupVersion.Version, Kind: olddbapi.ResourceKindFerretDB},
-	},
-	{
 		use: olddbapi.ResourceSingularHanaDB, aliases: []string{olddbapi.ResourceCodeHanaDB, olddbapi.ResourcePluralHanaDB}, short: "Debug helper for HanaDB database",
 		gvk: schema.GroupVersionKind{Group: olddbapi.SchemeGroupVersion.Group, Version: olddbapi.SchemeGroupVersion.Version, Kind: olddbapi.ResourceKindHanaDB},
 	},

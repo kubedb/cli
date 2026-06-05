@@ -6,7 +6,7 @@ This file provides instructions for AI coding agents working in the KubeDB `kube
 
 `kubectl-dba` is the official `kubectl` plugin for KubeDB (Kubernetes database operator platform by AppsCode). It provides DBA-style commands for KubeDB-managed databases: describe, connect/exec, restart, pause/resume, debug, monitor, show credentials, generate appbinding/secrets for remote replicas, and insert/verify test data. Distributed as a single static binary via GitHub Releases and as the `dba` plugin in the krew-index.
 
-Supported databases include: Cassandra, ClickHouse, Druid, Elasticsearch, FerretDB, Hazelcast, Ignite, Kafka, MariaDB, Memcached, MongoDB, MSSQLServer, MySQL, Oracle, PerconaXtraDB, PgBouncer, Pgpool, PostgreSQL, ProxySQL, RabbitMQ, Redis, SingleStore, Solr, ZooKeeper.
+Supported databases include: Cassandra, ClickHouse, Druid, Elasticsearch, Hazelcast, Ignite, Kafka, MariaDB, Memcached, MongoDB, MSSQLServer, MySQL, Oracle, PerconaXtraDB, PgBouncer, Pgpool, PostgreSQL, ProxySQL, RabbitMQ, Redis, SingleStore, Solr, ZooKeeper.
 
 ## Build & Development Commands
 

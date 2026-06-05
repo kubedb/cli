@@ -22,9 +22,9 @@ import (
 )
 
 const (
-	ResourceKindDatabaseInfo = "DatabaseInfo"
-	ResourceDatabaseInfo     = "databaseinfo"
-	ResourceDatabaseInfos    = "databaseinfos"
+	ResourceKindDatabaseConfiguration = "DatabaseConfiguration"
+	ResourceDatabaseConfiguration     = "databaseconfiguration"
+	ResourceDatabaseConfigurations    = "databaseconfigurations"
 )
 
 // +genclient
@@ -35,23 +35,23 @@ const (
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 // +kubebuilder:object:root=true
-// +kubebuilder:resource:path=databaseinfos,singular=databaseinfo,scope=Cluster
-type DatabaseInfo struct {
+// +kubebuilder:resource:path=databaseconfigurations,singular=databaseconfiguration,scope=Cluster
+type DatabaseConfiguration struct {
 	metav1.TypeMeta `json:",inline"`
 	// Request describes the attributes for the graph request.
 	// +optional
-	Request *DatabaseInfoRequest `json:"request,omitempty"`
+	Request *DatabaseConfigurationRequest `json:"request,omitempty"`
 	// Response describes the attributes for the graph response.
 	// +optional
-	Response *DatabaseInfoResponse `json:"response,omitempty"`
+	Response *DatabaseConfigurationResponse `json:"response,omitempty"`
 }
 
-type DatabaseInfoRequest struct {
+type DatabaseConfigurationRequest struct {
 	Source kmapi.ObjectInfo `json:"source"`
 	Keys   []string         `json:"keys,omitempty"`
 }
 
-type DatabaseInfoResponse struct {
+type DatabaseConfigurationResponse struct {
 	Configurations   []SingleComponentConfiguration `json:"configurations,omitempty"`
 	AvailableSecrets []string                       `json:"availableSecrets,omitempty"`
 }

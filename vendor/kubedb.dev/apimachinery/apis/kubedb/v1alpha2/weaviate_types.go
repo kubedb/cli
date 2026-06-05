@@ -38,7 +38,7 @@ const (
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
-// +kubebuilder:resource:path=weaviates,singular=weaviate,shortName=wv,categories={datastore,vectordb,kubedb,appscode,all}
+// +kubebuilder:resource:path=weaviates,singular=weaviate,shortName=wv,categories={vector-db,kubedb,appscode,all}
 // +kubebuilder:printcolumn:name="Type",type="string",JSONPath=".apiVersion"
 // +kubebuilder:printcolumn:name="Version",type="string",JSONPath=".spec.version"
 // +kubebuilder:printcolumn:name="Status",type="string",JSONPath=".status.phase"
@@ -59,6 +59,11 @@ type WeaviateSpec struct {
 	// Number of instances to deploy for a Weaviate database.
 	// +optional
 	Replicas *int32 `json:"replicas,omitempty"`
+
+	// Replication configuration for the Weaviate cluster.
+	// This controls the data replication factor per collection.
+	// +optional
+	Replication *ReplicationConfig `json:"replication,omitempty"`
 
 	// StorageType can be durable (default) or ephemeral
 	StorageType StorageType `json:"storageType,omitempty"`
@@ -125,6 +130,15 @@ type WeaviateList struct {
 	Items           []Weaviate `json:"items"`
 }
 
+// ReplicationConfig defines replication settings for Weaviate.
+type ReplicationConfig struct {
+	// Factor is the number of replicas for each data object.
+	// Set to 1 for no replication (default), 2-3 for production HA.
+	// +optional
+	// +kubebuilder:minimum=1
+	// +kubebuilder:maximum=5
+	Factor int32 `json:"factor,omitempty"`
+}
 type WeaviateConfiguration struct {
 	ConfigurationSpec `json:",inline,omitempty"`
 
@@ -133,4 +147,22 @@ type WeaviateConfiguration struct {
 	// These env vars will be injected into the database container.
 	// +optional
 	BackupConfigSecret *core.LocalObjectReference `json:"backupConfigSecret,omitempty"`
+}
+
+var _ Accessor = &Weaviate{}
+
+func (w *Weaviate) GetObjectMeta() metav1.ObjectMeta {
+	return w.ObjectMeta
+}
+
+func (w *Weaviate) GetConditions() []kmapi.Condition {
+	return w.Status.Conditions
+}
+
+func (w *Weaviate) SetCondition(cond kmapi.Condition) {
+	w.Status.Conditions = setCondition(w.Status.Conditions, cond)
+}
+
+func (w *Weaviate) RemoveCondition(typ string) {
+	w.Status.Conditions = removeCondition(w.Status.Conditions, typ)
 }

@@ -70,8 +70,6 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&ElasticsearchList{},
 		&Etcd{},
 		&EtcdList{},
-		&FerretDB{},
-		&FerretDBList{},
 		&HanaDB{},
 		&HanaDBList{},
 		&Hazelcast{},

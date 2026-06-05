@@ -64,7 +64,6 @@ type MemcachedAutoscalerSpec struct {
 	OpsRequestOptions *MemcachedOpsRequestOptions `json:"opsRequestOptions,omitempty"`
 
 	Compute *MemcachedComputeAutoscalerSpec `json:"compute,omitempty"`
-	Storage *MemcachedStorageAutoscalerSpec `json:"storage,omitempty"`
 }
 
 type MemcachedComputeAutoscalerSpec struct {
@@ -72,10 +71,6 @@ type MemcachedComputeAutoscalerSpec struct {
 	NodeTopology *NodeTopology `json:"nodeTopology,omitempty"`
 
 	Memcached *ComputeAutoscalerSpec `json:"memcached,omitempty"`
-}
-
-type MemcachedStorageAutoscalerSpec struct {
-	Memcached *StorageAutoscalerSpec `json:"memcached,omitempty"`
 }
 
 type MemcachedOpsRequestOptions struct {

@@ -153,6 +153,15 @@ spec:
                 type: integer
               migration:
                 properties:
+                  coordinating:
+                    properties:
+                      oldPVReclaimPolicy:
+                        type: string
+                      storageClassName:
+                        type: string
+                    required:
+                    - storageClassName
+                    type: object
                   data:
                     properties:
                       oldPVReclaimPolicy:

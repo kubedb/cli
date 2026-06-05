@@ -30,8 +30,6 @@ type ElasticsearchOpsRequestExpansion interface{}
 
 type EtcdOpsRequestExpansion interface{}
 
-type FerretDBOpsRequestExpansion interface{}
-
 type HanaDBOpsRequestExpansion interface{}
 
 type HazelcastOpsRequestExpansion interface{}
@@ -45,6 +43,8 @@ type MSSQLServerOpsRequestExpansion interface{}
 type MariaDBOpsRequestExpansion interface{}
 
 type MemcachedOpsRequestExpansion interface{}
+
+type MilvusOpsRequestExpansion interface{}
 
 type MongoDBOpsRequestExpansion interface{}
 

@@ -35,7 +35,6 @@ type AutoscalingV1alpha1Interface interface {
 	DruidAutoscalersGetter
 	ElasticsearchAutoscalersGetter
 	EtcdAutoscalersGetter
-	FerretDBAutoscalersGetter
 	HanaDBAutoscalersGetter
 	HazelcastAutoscalersGetter
 	IgniteAutoscalersGetter
@@ -43,6 +42,7 @@ type AutoscalingV1alpha1Interface interface {
 	MSSQLServerAutoscalersGetter
 	MariaDBAutoscalersGetter
 	MemcachedAutoscalersGetter
+	MilvusAutoscalersGetter
 	MongoDBAutoscalersGetter
 	MySQLAutoscalersGetter
 	Neo4jAutoscalersGetter
@@ -91,10 +91,6 @@ func (c *AutoscalingV1alpha1Client) EtcdAutoscalers(namespace string) EtcdAutosc
 	return newEtcdAutoscalers(c, namespace)
 }
 
-func (c *AutoscalingV1alpha1Client) FerretDBAutoscalers(namespace string) FerretDBAutoscalerInterface {
-	return newFerretDBAutoscalers(c, namespace)
-}
-
 func (c *AutoscalingV1alpha1Client) HanaDBAutoscalers(namespace string) HanaDBAutoscalerInterface {
 	return newHanaDBAutoscalers(c, namespace)
 }
@@ -121,6 +117,10 @@ func (c *AutoscalingV1alpha1Client) MariaDBAutoscalers(namespace string) MariaDB
 
 func (c *AutoscalingV1alpha1Client) MemcachedAutoscalers(namespace string) MemcachedAutoscalerInterface {
 	return newMemcachedAutoscalers(c, namespace)
+}
+
+func (c *AutoscalingV1alpha1Client) MilvusAutoscalers(namespace string) MilvusAutoscalerInterface {
+	return newMilvusAutoscalers(c, namespace)
 }
 
 func (c *AutoscalingV1alpha1Client) MongoDBAutoscalers(namespace string) MongoDBAutoscalerInterface {

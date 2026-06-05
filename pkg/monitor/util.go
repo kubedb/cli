@@ -117,7 +117,7 @@ func IsOldAPI(resource string) bool {
 	oldDBApi := []string{
 		olddbapi.ResourcePluralDruid, olddbapi.ResourcePluralSinglestore, olddbapi.ResourcePluralRabbitmq, olddbapi.ResourcePluralPgpool,
 		olddbapi.ResourcePluralMSSQLServer, olddbapi.ResourcePluralSolr, olddbapi.ResourcePluralCassandra, olddbapi.ResourcePluralClickHouse,
-		olddbapi.ResourcePluralFerretDB, olddbapi.ResourcePluralZooKeeper,
+		olddbapi.ResourcePluralZooKeeper,
 	}
 	for _, api := range oldDBApi {
 		if resource == api {

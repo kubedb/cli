@@ -16,7 +16,42 @@ limitations under the License.
 
 package v1alpha1
 
-import metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+import (
+	"fmt"
+
+	"kubedb.dev/apimachinery/apis"
+	"kubedb.dev/apimachinery/apis/ops"
+	"kubedb.dev/apimachinery/crds"
+
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"kmodules.xyz/client-go/apiextensions"
+)
+
+func (w *WeaviateOpsRequest) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralWeaviateOpsRequest))
+}
+
+var _ apis.ResourceInfo = &WeaviateOpsRequest{}
+
+func (w *WeaviateOpsRequest) ResourceFQN() string {
+	return fmt.Sprintf("%s.%s", ResourcePluralWeaviateOpsRequest, ops.GroupName)
+}
+
+func (w *WeaviateOpsRequest) ResourceShortCode() string {
+	return ResourceCodeWeaviateOpsRequest
+}
+
+func (w *WeaviateOpsRequest) ResourceKind() string {
+	return ResourceKindWeaviateOpsRequest
+}
+
+func (w *WeaviateOpsRequest) ResourceSingular() string {
+	return ResourceSingularWeaviateOpsRequest
+}
+
+func (w *WeaviateOpsRequest) ResourcePlural() string {
+	return ResourcePluralWeaviateOpsRequest
+}
 
 var _ Accessor = &WeaviateOpsRequest{}
 

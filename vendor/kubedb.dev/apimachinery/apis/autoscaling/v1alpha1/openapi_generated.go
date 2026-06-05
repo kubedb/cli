@@ -616,11 +616,6 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.EtcdAutoscalerSpec":                       schema_apimachinery_apis_autoscaling_v1alpha1_EtcdAutoscalerSpec(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.EtcdScalingPolicy":                        schema_apimachinery_apis_autoscaling_v1alpha1_EtcdScalingPolicy(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.EtcdScalingRules":                         schema_apimachinery_apis_autoscaling_v1alpha1_EtcdScalingRules(ref),
-		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.FerretDBAutoscaler":                       schema_apimachinery_apis_autoscaling_v1alpha1_FerretDBAutoscaler(ref),
-		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.FerretDBAutoscalerList":                   schema_apimachinery_apis_autoscaling_v1alpha1_FerretDBAutoscalerList(ref),
-		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.FerretDBAutoscalerSpec":                   schema_apimachinery_apis_autoscaling_v1alpha1_FerretDBAutoscalerSpec(ref),
-		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.FerretDBComputeAutoscalerSpec":            schema_apimachinery_apis_autoscaling_v1alpha1_FerretDBComputeAutoscalerSpec(ref),
-		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.FerretDBStorageAutoscalerSpec":            schema_apimachinery_apis_autoscaling_v1alpha1_FerretDBStorageAutoscalerSpec(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.HanaDBAutoscaler":                         schema_apimachinery_apis_autoscaling_v1alpha1_HanaDBAutoscaler(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.HanaDBAutoscalerList":                     schema_apimachinery_apis_autoscaling_v1alpha1_HanaDBAutoscalerList(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.HanaDBAutoscalerSpec":                     schema_apimachinery_apis_autoscaling_v1alpha1_HanaDBAutoscalerSpec(ref),
@@ -659,7 +654,12 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MemcachedAutoscalerSpec":                  schema_apimachinery_apis_autoscaling_v1alpha1_MemcachedAutoscalerSpec(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MemcachedComputeAutoscalerSpec":           schema_apimachinery_apis_autoscaling_v1alpha1_MemcachedComputeAutoscalerSpec(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MemcachedOpsRequestOptions":               schema_apimachinery_apis_autoscaling_v1alpha1_MemcachedOpsRequestOptions(ref),
-		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MemcachedStorageAutoscalerSpec":           schema_apimachinery_apis_autoscaling_v1alpha1_MemcachedStorageAutoscalerSpec(ref),
+		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MilvusAutoscaler":                         schema_apimachinery_apis_autoscaling_v1alpha1_MilvusAutoscaler(ref),
+		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MilvusAutoscalerList":                     schema_apimachinery_apis_autoscaling_v1alpha1_MilvusAutoscalerList(ref),
+		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MilvusAutoscalerSpec":                     schema_apimachinery_apis_autoscaling_v1alpha1_MilvusAutoscalerSpec(ref),
+		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MilvusComputeAutoscalerSpec":              schema_apimachinery_apis_autoscaling_v1alpha1_MilvusComputeAutoscalerSpec(ref),
+		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MilvusOpsRequestOptions":                  schema_apimachinery_apis_autoscaling_v1alpha1_MilvusOpsRequestOptions(ref),
+		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MilvusStorageAutoscalerSpec":              schema_apimachinery_apis_autoscaling_v1alpha1_MilvusStorageAutoscalerSpec(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MongoDBAutoscaler":                        schema_apimachinery_apis_autoscaling_v1alpha1_MongoDBAutoscaler(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MongoDBAutoscalerList":                    schema_apimachinery_apis_autoscaling_v1alpha1_MongoDBAutoscalerList(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MongoDBAutoscalerSpec":                    schema_apimachinery_apis_autoscaling_v1alpha1_MongoDBAutoscalerSpec(ref),
@@ -753,13 +753,11 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.WeaviateAutoscalerList":                   schema_apimachinery_apis_autoscaling_v1alpha1_WeaviateAutoscalerList(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.WeaviateAutoscalerSpec":                   schema_apimachinery_apis_autoscaling_v1alpha1_WeaviateAutoscalerSpec(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.WeaviateComputeAutoscalerSpec":            schema_apimachinery_apis_autoscaling_v1alpha1_WeaviateComputeAutoscalerSpec(ref),
-		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.WeaviateOpsRequestOptions":                schema_apimachinery_apis_autoscaling_v1alpha1_WeaviateOpsRequestOptions(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.WeaviateStorageAutoscalerSpec":            schema_apimachinery_apis_autoscaling_v1alpha1_WeaviateStorageAutoscalerSpec(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ZooKeeperAutoscaler":                      schema_apimachinery_apis_autoscaling_v1alpha1_ZooKeeperAutoscaler(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ZooKeeperAutoscalerList":                  schema_apimachinery_apis_autoscaling_v1alpha1_ZooKeeperAutoscalerList(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ZooKeeperAutoscalerSpec":                  schema_apimachinery_apis_autoscaling_v1alpha1_ZooKeeperAutoscalerSpec(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ZooKeeperComputeAutoscalerSpec":           schema_apimachinery_apis_autoscaling_v1alpha1_ZooKeeperComputeAutoscalerSpec(ref),
-		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ZooKeeperStorageAutoscalerSpec":           schema_apimachinery_apis_autoscaling_v1alpha1_ZooKeeperStorageAutoscalerSpec(ref),
 	}
 }
 
@@ -35196,192 +35194,6 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_EtcdScalingRules(ref common.R
 	}
 }
 
-func schema_apimachinery_apis_autoscaling_v1alpha1_FerretDBAutoscaler(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Type: []string{"object"},
-				Properties: map[string]spec.Schema{
-					"kind": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"apiVersion": {
-						SchemaProps: spec.SchemaProps{
-							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"metadata": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Standard object metadata. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata",
-							Default:     map[string]interface{}{},
-							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
-						},
-					},
-					"spec": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Specification of the behavior of the autoscaler. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#spec-and-status.",
-							Default:     map[string]interface{}{},
-							Ref:         ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.FerretDBAutoscalerSpec"),
-						},
-					},
-					"status": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Current information about the autoscaler.",
-							Default:     map[string]interface{}{},
-							Ref:         ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.AutoscalerStatus"),
-						},
-					},
-				},
-				Required: []string{"spec"},
-			},
-		},
-		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.AutoscalerStatus", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.FerretDBAutoscalerSpec"},
-	}
-}
-
-func schema_apimachinery_apis_autoscaling_v1alpha1_FerretDBAutoscalerList(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "FerretDBAutoscalerList is a list of FerretDBAutoscaler objects.",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"kind": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"apiVersion": {
-						SchemaProps: spec.SchemaProps{
-							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"metadata": {
-						SchemaProps: spec.SchemaProps{
-							Description: "metadata is the standard list metadata.",
-							Default:     map[string]interface{}{},
-							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
-						},
-					},
-					"items": {
-						SchemaProps: spec.SchemaProps{
-							Description: "items is the list of ferretdb database autoscaler objects.",
-							Type:        []string{"array"},
-							Items: &spec.SchemaOrArray{
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: map[string]interface{}{},
-										Ref:     ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.FerretDBAutoscaler"),
-									},
-								},
-							},
-						},
-					},
-				},
-				Required: []string{"items"},
-			},
-		},
-		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.FerretDBAutoscaler"},
-	}
-}
-
-func schema_apimachinery_apis_autoscaling_v1alpha1_FerretDBAutoscalerSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "FerretDBAutoscalerSpec is the specification of the behavior of the autoscaler.",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"databaseRef": {
-						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.LocalObjectReference"),
-						},
-					},
-					"opsRequestOptions": {
-						SchemaProps: spec.SchemaProps{
-							Description: "This field will be used to control the behaviour of ops-manager",
-							Ref:         ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.OpsRequestOptions"),
-						},
-					},
-					"compute": {
-						SchemaProps: spec.SchemaProps{
-							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.FerretDBComputeAutoscalerSpec"),
-						},
-					},
-					"storage": {
-						SchemaProps: spec.SchemaProps{
-							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.FerretDBStorageAutoscalerSpec"),
-						},
-					},
-				},
-				Required: []string{"databaseRef"},
-			},
-		},
-		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.FerretDBComputeAutoscalerSpec", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.FerretDBStorageAutoscalerSpec", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.OpsRequestOptions"},
-	}
-}
-
-func schema_apimachinery_apis_autoscaling_v1alpha1_FerretDBComputeAutoscalerSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Type: []string{"object"},
-				Properties: map[string]spec.Schema{
-					"nodeTopology": {
-						SchemaProps: spec.SchemaProps{
-							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.NodeTopology"),
-						},
-					},
-					"primary": {
-						SchemaProps: spec.SchemaProps{
-							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec"),
-						},
-					},
-					"secondary": {
-						SchemaProps: spec.SchemaProps{
-							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec"),
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.NodeTopology"},
-	}
-}
-
-func schema_apimachinery_apis_autoscaling_v1alpha1_FerretDBStorageAutoscalerSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Type: []string{"object"},
-				Properties: map[string]spec.Schema{
-					"ferretdb": {
-						SchemaProps: spec.SchemaProps{
-							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.StorageAutoscalerSpec"),
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.StorageAutoscalerSpec"},
-	}
-}
-
 func schema_apimachinery_apis_autoscaling_v1alpha1_HanaDBAutoscaler(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -36712,17 +36524,12 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_MemcachedAutoscalerSpec(ref c
 							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MemcachedComputeAutoscalerSpec"),
 						},
 					},
-					"storage": {
-						SchemaProps: spec.SchemaProps{
-							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MemcachedStorageAutoscalerSpec"),
-						},
-					},
 				},
 				Required: []string{"databaseRef"},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MemcachedComputeAutoscalerSpec", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MemcachedOpsRequestOptions", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MemcachedStorageAutoscalerSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MemcachedComputeAutoscalerSpec", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MemcachedOpsRequestOptions"},
 	}
 }
 
@@ -36789,15 +36596,238 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_MemcachedOpsRequestOptions(re
 	}
 }
 
-func schema_apimachinery_apis_autoscaling_v1alpha1_MemcachedStorageAutoscalerSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_autoscaling_v1alpha1_MilvusAutoscaler(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
 				Type: []string{"object"},
 				Properties: map[string]spec.Schema{
-					"memcached": {
+					"kind": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.StorageAutoscalerSpec"),
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Standard object metadata. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
+						},
+					},
+					"spec": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specification of the behavior of the autoscaler. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#spec-and-status.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MilvusAutoscalerSpec"),
+						},
+					},
+					"status": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Current information about the autoscaler.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.AutoscalerStatus"),
+						},
+					},
+				},
+				Required: []string{"spec"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.AutoscalerStatus", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MilvusAutoscalerSpec"},
+	}
+}
+
+func schema_apimachinery_apis_autoscaling_v1alpha1_MilvusAutoscalerList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "MilvusAutoscalerList is a list of MilvusAutoscaler objects.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Description: "metadata is the standard list metadata.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+						},
+					},
+					"items": {
+						SchemaProps: spec.SchemaProps{
+							Description: "items is the list of milvus database autoscaler objects.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MilvusAutoscaler"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"items"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MilvusAutoscaler"},
+	}
+}
+
+func schema_apimachinery_apis_autoscaling_v1alpha1_MilvusAutoscalerSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "MilvusAutoscalerSpec is the specification of the behavior of the autoscaler.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"databaseRef": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("k8s.io/api/core/v1.LocalObjectReference"),
+						},
+					},
+					"opsRequestOptions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "This field will be used to control the behaviour of ops-manager",
+							Ref:         ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MilvusOpsRequestOptions"),
+						},
+					},
+					"compute": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MilvusComputeAutoscalerSpec"),
+						},
+					},
+					"storage": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MilvusStorageAutoscalerSpec"),
+						},
+					},
+				},
+				Required: []string{"databaseRef"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MilvusComputeAutoscalerSpec", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MilvusOpsRequestOptions", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.MilvusStorageAutoscalerSpec"},
+	}
+}
+
+func schema_apimachinery_apis_autoscaling_v1alpha1_MilvusComputeAutoscalerSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"nodeTopology": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.NodeTopology"),
+						},
+					},
+					"node": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Standalone mode",
+							Ref:         ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec"),
+						},
+					},
+					"proxy": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Distributed mode",
+							Ref:         ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec"),
+						},
+					},
+					"mixcoord": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec"),
+						},
+					},
+					"datanode": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec"),
+						},
+					},
+					"querynode": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec"),
+						},
+					},
+					"streamingnode": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.NodeTopology"},
+	}
+}
+
+func schema_apimachinery_apis_autoscaling_v1alpha1_MilvusOpsRequestOptions(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"timeout": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Duration"),
+						},
+					},
+					"apply": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ApplyOption is to control the execution of OpsRequest depending on the database state.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.Duration"},
+	}
+}
+
+func schema_apimachinery_apis_autoscaling_v1alpha1_MilvusStorageAutoscalerSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"node": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Standalone mode",
+							Ref:         ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.StorageAutoscalerSpec"),
+						},
+					},
+					"streamingnode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Distributed mode (only StreamingNode has persistent storage)",
+							Ref:         ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.StorageAutoscalerSpec"),
 						},
 					},
 				},
@@ -40352,7 +40382,7 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_WeaviateAutoscalerSpec(ref co
 					"opsRequestOptions": {
 						SchemaProps: spec.SchemaProps{
 							Description: "This field will be used to control the behaviour of ops-manager",
-							Ref:         ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.WeaviateOpsRequestOptions"),
+							Ref:         ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.OpsRequestOptions"),
 						},
 					},
 					"compute": {
@@ -40370,7 +40400,7 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_WeaviateAutoscalerSpec(ref co
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.WeaviateComputeAutoscalerSpec", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.WeaviateOpsRequestOptions", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.WeaviateStorageAutoscalerSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.OpsRequestOptions", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.WeaviateComputeAutoscalerSpec", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.WeaviateStorageAutoscalerSpec"},
 	}
 }
 
@@ -40395,33 +40425,6 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_WeaviateComputeAutoscalerSpec
 		},
 		Dependencies: []string{
 			"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.NodeTopology"},
-	}
-}
-
-func schema_apimachinery_apis_autoscaling_v1alpha1_WeaviateOpsRequestOptions(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Type: []string{"object"},
-				Properties: map[string]spec.Schema{
-					"timeout": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.",
-							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Duration"),
-						},
-					},
-					"apply": {
-						SchemaProps: spec.SchemaProps{
-							Description: "ApplyOption is to control the execution of OpsRequest depending on the database state.",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.Duration"},
 	}
 }
 
@@ -40568,17 +40571,12 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_ZooKeeperAutoscalerSpec(ref c
 							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ZooKeeperComputeAutoscalerSpec"),
 						},
 					},
-					"storage": {
-						SchemaProps: spec.SchemaProps{
-							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ZooKeeperStorageAutoscalerSpec"),
-						},
-					},
 				},
 				Required: []string{"databaseRef"},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.OpsRequestOptions", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ZooKeeperComputeAutoscalerSpec", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ZooKeeperStorageAutoscalerSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.OpsRequestOptions", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ZooKeeperComputeAutoscalerSpec"},
 	}
 }
 
@@ -40603,24 +40601,5 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_ZooKeeperComputeAutoscalerSpe
 		},
 		Dependencies: []string{
 			"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.NodeTopology"},
-	}
-}
-
-func schema_apimachinery_apis_autoscaling_v1alpha1_ZooKeeperStorageAutoscalerSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Type: []string{"object"},
-				Properties: map[string]spec.Schema{
-					"zookeeper": {
-						SchemaProps: spec.SchemaProps{
-							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.StorageAutoscalerSpec"),
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.StorageAutoscalerSpec"},
 	}
 }
