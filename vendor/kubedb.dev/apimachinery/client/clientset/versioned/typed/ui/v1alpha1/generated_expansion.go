@@ -18,9 +18,11 @@ limitations under the License.
 
 package v1alpha1
 
+type DatabaseConfigurationExpansion interface{}
+
 type DatabaseConnectionExpansion interface{}
 
-type DatabaseInfoExpansion interface{}
+type DatabaseSummaryExpansion interface{}
 
 type ElasticsearchInsightExpansion interface{}
 

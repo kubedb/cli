@@ -237,6 +237,9 @@ type ElasticsearchMigrationSpec struct {
 	// Transform is the migration spec for transform nodes in topology mode.
 	// +optional
 	Transform *StorageMigrationSpec `json:"transform,omitempty"`
+	// Coordinating is the migration spec for coordinating nodes in topology mode.
+	// +optional
+	Coordinating *StorageMigrationSpec `json:"coordinating,omitempty"`
 }
 
 type ElasticsearchCustomConfiguration struct {

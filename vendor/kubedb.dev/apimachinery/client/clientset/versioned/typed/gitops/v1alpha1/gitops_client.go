@@ -31,7 +31,6 @@ type GitopsV1alpha1Interface interface {
 	RESTClient() rest.Interface
 	DruidsGetter
 	ElasticsearchesGetter
-	FerretDBsGetter
 	KafkasGetter
 	MSSQLServersGetter
 	MariaDBsGetter
@@ -62,10 +61,6 @@ func (c *GitopsV1alpha1Client) Druids(namespace string) DruidInterface {
 
 func (c *GitopsV1alpha1Client) Elasticsearches(namespace string) ElasticsearchInterface {
 	return newElasticsearches(c, namespace)
-}
-
-func (c *GitopsV1alpha1Client) FerretDBs(namespace string) FerretDBInterface {
-	return newFerretDBs(c, namespace)
 }
 
 func (c *GitopsV1alpha1Client) Kafkas(namespace string) KafkaInterface {

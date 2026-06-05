@@ -37,7 +37,6 @@ type KubedbV1alpha2Interface interface {
 	DruidsGetter
 	ElasticsearchesGetter
 	EtcdsGetter
-	FerretDBsGetter
 	HanaDBsGetter
 	HazelcastsGetter
 	IgnitesGetter
@@ -100,10 +99,6 @@ func (c *KubedbV1alpha2Client) Elasticsearches(namespace string) ElasticsearchIn
 
 func (c *KubedbV1alpha2Client) Etcds(namespace string) EtcdInterface {
 	return newEtcds(c, namespace)
-}
-
-func (c *KubedbV1alpha2Client) FerretDBs(namespace string) FerretDBInterface {
-	return newFerretDBs(c, namespace)
 }
 
 func (c *KubedbV1alpha2Client) HanaDBs(namespace string) HanaDBInterface {

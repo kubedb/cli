@@ -257,3 +257,21 @@ const (
 	MilvusNodeRoleStreamingNode MilvusNodeRoleType = "streamingnode"
 	MilvusNodeRoleProxy         MilvusNodeRoleType = "proxy"
 )
+
+var _ Accessor = &Milvus{}
+
+func (m *Milvus) GetObjectMeta() metav1.ObjectMeta {
+	return m.ObjectMeta
+}
+
+func (m *Milvus) GetConditions() []kmapi.Condition {
+	return m.Status.Conditions
+}
+
+func (m *Milvus) SetCondition(cond kmapi.Condition) {
+	m.Status.Conditions = setCondition(m.Status.Conditions, cond)
+}
+
+func (m *Milvus) RemoveCondition(typ string) {
+	m.Status.Conditions = removeCondition(m.Status.Conditions, typ)
+}

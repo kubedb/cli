@@ -62,7 +62,6 @@ type ZooKeeperAutoscalerSpec struct {
 	OpsRequestOptions *OpsRequestOptions `json:"opsRequestOptions,omitempty"`
 
 	Compute *ZooKeeperComputeAutoscalerSpec `json:"compute,omitempty"`
-	Storage *ZooKeeperStorageAutoscalerSpec `json:"storage,omitempty"`
 }
 
 type ZooKeeperComputeAutoscalerSpec struct {
@@ -70,10 +69,6 @@ type ZooKeeperComputeAutoscalerSpec struct {
 	NodeTopology *NodeTopology `json:"nodeTopology,omitempty"`
 
 	ZooKeeper *ComputeAutoscalerSpec `json:"zookeeper,omitempty"`
-}
-
-type ZooKeeperStorageAutoscalerSpec struct {
-	ZooKeeper *StorageAutoscalerSpec `json:"zookeeper,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

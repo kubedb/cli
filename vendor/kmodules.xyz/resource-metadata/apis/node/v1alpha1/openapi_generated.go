@@ -20636,6 +20636,14 @@ func schema_kmodulesxyz_resource_metadata_apis_shared_RegistryProxies(ref common
 							Format:      "",
 						},
 					},
+					"oracle": {
+						SchemaProps: spec.SchemaProps{
+							Description: "container-registry.oracle.com",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 					"weaviate": {
 						SchemaProps: spec.SchemaProps{
 							Description: "cr.weaviate.io",

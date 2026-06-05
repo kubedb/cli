@@ -170,3 +170,21 @@ type Neo4jList struct {
 	metav1.ListMeta `json:"metadata,omitempty"`
 	Items           []Neo4j `json:"items"`
 }
+
+var _ Accessor = &Neo4j{}
+
+func (m *Neo4j) GetObjectMeta() metav1.ObjectMeta {
+	return m.ObjectMeta
+}
+
+func (m *Neo4j) GetConditions() []kmapi.Condition {
+	return m.Status.Conditions
+}
+
+func (m *Neo4j) SetCondition(cond kmapi.Condition) {
+	m.Status.Conditions = setCondition(m.Status.Conditions, cond)
+}
+
+func (m *Neo4j) RemoveCondition(typ string) {
+	m.Status.Conditions = removeCondition(m.Status.Conditions, typ)
+}

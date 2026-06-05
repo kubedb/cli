@@ -30,8 +30,6 @@ type ElasticsearchAutoscalerExpansion interface{}
 
 type EtcdAutoscalerExpansion interface{}
 
-type FerretDBAutoscalerExpansion interface{}
-
 type HanaDBAutoscalerExpansion interface{}
 
 type HazelcastAutoscalerExpansion interface{}
@@ -45,6 +43,8 @@ type MSSQLServerAutoscalerExpansion interface{}
 type MariaDBAutoscalerExpansion interface{}
 
 type MemcachedAutoscalerExpansion interface{}
+
+type MilvusAutoscalerExpansion interface{}
 
 type MongoDBAutoscalerExpansion interface{}
 

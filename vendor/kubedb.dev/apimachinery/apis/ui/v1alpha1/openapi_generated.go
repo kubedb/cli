@@ -576,12 +576,17 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kmodules.xyz/offshoot-api/api/v1.ServiceTemplateSpec":                                       schema_kmodulesxyz_offshoot_api_api_v1_ServiceTemplateSpec(ref),
 		"kmodules.xyz/offshoot-api/api/v1.Volume":                                                    schema_kmodulesxyz_offshoot_api_api_v1_Volume(ref),
 		"kmodules.xyz/offshoot-api/api/v1.VolumeSource":                                              schema_kmodulesxyz_offshoot_api_api_v1_VolumeSource(ref),
+		"kubedb.dev/apimachinery/apis/ui/v1alpha1.AggregatedStats":                                   schema_apimachinery_apis_ui_v1alpha1_AggregatedStats(ref),
+		"kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseConfiguration":                             schema_apimachinery_apis_ui_v1alpha1_DatabaseConfiguration(ref),
+		"kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseConfigurationRequest":                      schema_apimachinery_apis_ui_v1alpha1_DatabaseConfigurationRequest(ref),
+		"kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseConfigurationResponse":                     schema_apimachinery_apis_ui_v1alpha1_DatabaseConfigurationResponse(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseConnection":                                schema_apimachinery_apis_ui_v1alpha1_DatabaseConnection(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseConnectionList":                            schema_apimachinery_apis_ui_v1alpha1_DatabaseConnectionList(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseConnectionSpec":                            schema_apimachinery_apis_ui_v1alpha1_DatabaseConnectionSpec(ref),
-		"kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseInfo":                                      schema_apimachinery_apis_ui_v1alpha1_DatabaseInfo(ref),
-		"kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseInfoRequest":                               schema_apimachinery_apis_ui_v1alpha1_DatabaseInfoRequest(ref),
-		"kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseInfoResponse":                              schema_apimachinery_apis_ui_v1alpha1_DatabaseInfoResponse(ref),
+		"kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseIndexEntry":                                schema_apimachinery_apis_ui_v1alpha1_DatabaseIndexEntry(ref),
+		"kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseSummary":                                   schema_apimachinery_apis_ui_v1alpha1_DatabaseSummary(ref),
+		"kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseSummaryRequest":                            schema_apimachinery_apis_ui_v1alpha1_DatabaseSummaryRequest(ref),
+		"kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseSummaryResponse":                           schema_apimachinery_apis_ui_v1alpha1_DatabaseSummaryResponse(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.ElasticsearchClusterHealth":                        schema_apimachinery_apis_ui_v1alpha1_ElasticsearchClusterHealth(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.ElasticsearchIndexSpec":                            schema_apimachinery_apis_ui_v1alpha1_ElasticsearchIndexSpec(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.ElasticsearchInsight":                              schema_apimachinery_apis_ui_v1alpha1_ElasticsearchInsight(ref),
@@ -714,6 +719,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.RedisSchemaOverviewSpec":                           schema_apimachinery_apis_ui_v1alpha1_RedisSchemaOverviewSpec(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.RuleExecution":                                     schema_apimachinery_apis_ui_v1alpha1_RuleExecution(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.SingleComponentConfiguration":                      schema_apimachinery_apis_ui_v1alpha1_SingleComponentConfiguration(ref),
+		"kubedb.dev/apimachinery/apis/ui/v1alpha1.StatForSpecificDB":                                 schema_apimachinery_apis_ui_v1alpha1_StatForSpecificDB(ref),
 	}
 }
 
@@ -33428,6 +33434,166 @@ func schema_kmodulesxyz_offshoot_api_api_v1_VolumeSource(ref common.ReferenceCal
 	}
 }
 
+func schema_apimachinery_apis_ui_v1alpha1_AggregatedStats(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"total": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"integer"},
+							Format: "int32",
+						},
+					},
+					"resources": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kmodules.xyz/resource-metadata/apis/core/v1alpha1.ResourceRequirements"),
+						},
+					},
+					"gatewayExposed": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"integer"},
+							Format: "int32",
+						},
+					},
+					"backupEnabled": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"integer"},
+							Format: "int32",
+						},
+					},
+					"monitoringEnabled": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"integer"},
+							Format: "int32",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/resource-metadata/apis/core/v1alpha1.ResourceRequirements"},
+	}
+}
+
+func schema_apimachinery_apis_ui_v1alpha1_DatabaseConfiguration(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"request": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Request describes the attributes for the graph request.",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseConfigurationRequest"),
+						},
+					},
+					"response": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Response describes the attributes for the graph response.",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseConfigurationResponse"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseConfigurationRequest", "kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseConfigurationResponse"},
+	}
+}
+
+func schema_apimachinery_apis_ui_v1alpha1_DatabaseConfigurationRequest(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"source": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kmodules.xyz/client-go/api/v1.ObjectInfo"),
+						},
+					},
+					"keys": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"source"},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/client-go/api/v1.ObjectInfo"},
+	}
+}
+
+func schema_apimachinery_apis_ui_v1alpha1_DatabaseConfigurationResponse(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"configurations": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.SingleComponentConfiguration"),
+									},
+								},
+							},
+						},
+					},
+					"availableSecrets": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/ui/v1alpha1.SingleComponentConfiguration"},
+	}
+}
+
 func schema_apimachinery_apis_ui_v1alpha1_DatabaseConnection(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -33572,7 +33738,65 @@ func schema_apimachinery_apis_ui_v1alpha1_DatabaseConnectionSpec(ref common.Refe
 	}
 }
 
-func schema_apimachinery_apis_ui_v1alpha1_DatabaseInfo(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_ui_v1alpha1_DatabaseIndexEntry(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"total": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"integer"},
+							Format: "int32",
+						},
+					},
+					"resources": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kmodules.xyz/resource-metadata/apis/core/v1alpha1.ResourceRequirements"),
+						},
+					},
+					"gatewayExposed": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"integer"},
+							Format: "int32",
+						},
+					},
+					"backupEnabled": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"integer"},
+							Format: "int32",
+						},
+					},
+					"monitoringEnabled": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"integer"},
+							Format: "int32",
+						},
+					},
+					"indices": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: 0,
+										Type:    []string{"integer"},
+										Format:  "int32",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/resource-metadata/apis/core/v1alpha1.ResourceRequirements"},
+	}
+}
+
+func schema_apimachinery_apis_ui_v1alpha1_DatabaseSummary(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -33594,25 +33818,23 @@ func schema_apimachinery_apis_ui_v1alpha1_DatabaseInfo(ref common.ReferenceCallb
 					},
 					"request": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Request describes the attributes for the graph request.",
-							Ref:         ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseInfoRequest"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseSummaryRequest"),
 						},
 					},
 					"response": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Response describes the attributes for the graph response.",
-							Ref:         ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseInfoResponse"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseSummaryResponse"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseInfoRequest", "kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseInfoResponse"},
+			"kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseSummaryRequest", "kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseSummaryResponse"},
 	}
 }
 
-func schema_apimachinery_apis_ui_v1alpha1_DatabaseInfoRequest(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_ui_v1alpha1_DatabaseSummaryRequest(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -33624,20 +33846,6 @@ func schema_apimachinery_apis_ui_v1alpha1_DatabaseInfoRequest(ref common.Referen
 							Ref:     ref("kmodules.xyz/client-go/api/v1.ObjectInfo"),
 						},
 					},
-					"keys": {
-						SchemaProps: spec.SchemaProps{
-							Type: []string{"array"},
-							Items: &spec.SchemaOrArray{
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: "",
-										Type:    []string{"string"},
-										Format:  "",
-									},
-								},
-							},
-						},
-					},
 				},
 				Required: []string{"source"},
 			},
@@ -33647,34 +33855,54 @@ func schema_apimachinery_apis_ui_v1alpha1_DatabaseInfoRequest(ref common.Referen
 	}
 }
 
-func schema_apimachinery_apis_ui_v1alpha1_DatabaseInfoResponse(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_apimachinery_apis_ui_v1alpha1_DatabaseSummaryResponse(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
 				Type: []string{"object"},
 				Properties: map[string]spec.Schema{
-					"configurations": {
+					"cluster": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.AggregatedStats"),
+						},
+					},
+					"namespaces": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseIndexEntry"),
+									},
+								},
+							},
+						},
+					},
+					"kinds": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseIndexEntry"),
+									},
+								},
+							},
+						},
+					},
+					"stats": {
 						SchemaProps: spec.SchemaProps{
 							Type: []string{"array"},
 							Items: &spec.SchemaOrArray{
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.SingleComponentConfiguration"),
-									},
-								},
-							},
-						},
-					},
-					"availableSecrets": {
-						SchemaProps: spec.SchemaProps{
-							Type: []string{"array"},
-							Items: &spec.SchemaOrArray{
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: "",
-										Type:    []string{"string"},
-										Format:  "",
+										Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.StatForSpecificDB"),
 									},
 								},
 							},
@@ -33684,7 +33912,7 @@ func schema_apimachinery_apis_ui_v1alpha1_DatabaseInfoResponse(ref common.Refere
 			},
 		},
 		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/ui/v1alpha1.SingleComponentConfiguration"},
+			"kubedb.dev/apimachinery/apis/ui/v1alpha1.AggregatedStats", "kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseIndexEntry", "kubedb.dev/apimachinery/apis/ui/v1alpha1.StatForSpecificDB"},
 	}
 }
 
@@ -40520,5 +40748,76 @@ func schema_apimachinery_apis_ui_v1alpha1_SingleComponentConfiguration(ref commo
 				},
 			},
 		},
+	}
+}
+
+func schema_apimachinery_apis_ui_v1alpha1_StatForSpecificDB(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"namespace": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"resources": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kmodules.xyz/resource-metadata/apis/core/v1alpha1.ResourceRequirements"),
+						},
+					},
+					"gatewayExposed": {
+						SchemaProps: spec.SchemaProps{
+							Default: false,
+							Type:    []string{"boolean"},
+							Format:  "",
+						},
+					},
+					"backupEnabled": {
+						SchemaProps: spec.SchemaProps{
+							Default: false,
+							Type:    []string{"boolean"},
+							Format:  "",
+						},
+					},
+					"monitoringEnabled": {
+						SchemaProps: spec.SchemaProps{
+							Default: false,
+							Type:    []string{"boolean"},
+							Format:  "",
+						},
+					},
+					"lastSuccessfulBackup": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
+						},
+					},
+					"lastBackupPhase": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+				},
+				Required: []string{"gatewayExposed", "backupEnabled", "monitoringEnabled"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.Time", "kmodules.xyz/resource-metadata/apis/core/v1alpha1.ResourceRequirements"},
 	}
 }

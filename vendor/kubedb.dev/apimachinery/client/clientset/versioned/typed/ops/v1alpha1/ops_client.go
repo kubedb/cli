@@ -35,7 +35,6 @@ type OpsV1alpha1Interface interface {
 	DruidOpsRequestsGetter
 	ElasticsearchOpsRequestsGetter
 	EtcdOpsRequestsGetter
-	FerretDBOpsRequestsGetter
 	HanaDBOpsRequestsGetter
 	HazelcastOpsRequestsGetter
 	IgniteOpsRequestsGetter
@@ -43,6 +42,7 @@ type OpsV1alpha1Interface interface {
 	MSSQLServerOpsRequestsGetter
 	MariaDBOpsRequestsGetter
 	MemcachedOpsRequestsGetter
+	MilvusOpsRequestsGetter
 	MongoDBOpsRequestsGetter
 	MySQLOpsRequestsGetter
 	Neo4jOpsRequestsGetter
@@ -91,10 +91,6 @@ func (c *OpsV1alpha1Client) EtcdOpsRequests(namespace string) EtcdOpsRequestInte
 	return newEtcdOpsRequests(c, namespace)
 }
 
-func (c *OpsV1alpha1Client) FerretDBOpsRequests(namespace string) FerretDBOpsRequestInterface {
-	return newFerretDBOpsRequests(c, namespace)
-}
-
 func (c *OpsV1alpha1Client) HanaDBOpsRequests(namespace string) HanaDBOpsRequestInterface {
 	return newHanaDBOpsRequests(c, namespace)
 }
@@ -121,6 +117,10 @@ func (c *OpsV1alpha1Client) MariaDBOpsRequests(namespace string) MariaDBOpsReque
 
 func (c *OpsV1alpha1Client) MemcachedOpsRequests(namespace string) MemcachedOpsRequestInterface {
 	return newMemcachedOpsRequests(c, namespace)
+}
+
+func (c *OpsV1alpha1Client) MilvusOpsRequests(namespace string) MilvusOpsRequestInterface {
+	return newMilvusOpsRequests(c, namespace)
 }
 
 func (c *OpsV1alpha1Client) MongoDBOpsRequests(namespace string) MongoDBOpsRequestInterface {

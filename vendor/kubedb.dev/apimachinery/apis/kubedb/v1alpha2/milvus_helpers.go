@@ -549,3 +549,7 @@ func (m *Milvus) GetCertSecretName(alias MilvusCertificateType) string {
 func (m *Milvus) CertificateName(alias MilvusCertificateType) string {
 	return meta_util.NameWithSuffix(m.Name, fmt.Sprintf("%s-cert", string(alias)))
 }
+
+func (m *Milvus) GetStorageClassName() string {
+	return *m.Spec.Storage.StorageClassName
+}
