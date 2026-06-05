@@ -26,10 +26,9 @@ import (
 
 	"kubedb.dev/apimachinery/apis/kubedb"
 	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
-	"kubedb.dev/apimachinery/pkg/lib"
+	secret_lib "kubedb.dev/apimachinery/pkg/secret"
 
 	rd "github.com/redis/go-redis/v9"
-	vsecretapi "go.virtual-secrets.dev/apimachinery/apis/virtual/v1alpha1"
 	core "k8s.io/api/core/v1"
 	"k8s.io/klog/v2"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -158,26 +157,12 @@ func (o *KubeDBClientBuilder) getClientPassword(ctx context.Context) (string, er
 	if o.db.Spec.AuthSecret == nil || o.db.Spec.AuthSecret.Name == "" {
 		return "", errors.New("no database secret")
 	}
-	var clientPass string
-	if !dbapi.IsVirtualAuthSecretReferred(o.db.Spec.AuthSecret) {
-		var authSecret core.Secret
-		err := o.kc.Get(ctx, client.ObjectKey{Namespace: o.db.Namespace, Name: o.db.Spec.AuthSecret.Name}, &authSecret)
-		if err != nil {
-			return "", err
-		}
-		clientPass = string(authSecret.Data[core.BasicAuthPasswordKey])
-		return clientPass, nil
-	}
-	vSecret := &vsecretapi.Secret{}
-	err := o.kc.Get(context.TODO(), client.ObjectKey{Namespace: o.db.Namespace, Name: o.db.Spec.AuthSecret.Name}, vSecret)
+	isVirtual := dbapi.IsVirtualAuthSecretReferred(o.db.Spec.AuthSecret)
+	data, err := secret_lib.GetData(ctx, o.kc, o.db.Namespace, o.db.Spec.AuthSecret.Name, isVirtual)
 	if err != nil {
 		return "", err
 	}
-
-	if err = lib.ValidateVirtualAuthSecret(vSecret); err != nil {
-		return "", err
-	}
-	return string(vSecret.Data[core.BasicAuthPasswordKey]), nil
+	return string(data[core.BasicAuthPasswordKey]), nil
 }
 
 func (o *KubeDBClientBuilder) getTLSConfig(ctx context.Context) (*tls.Config, error) {

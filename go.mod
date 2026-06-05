@@ -27,8 +27,8 @@ require (
 	kmodules.xyz/client-go v0.34.3
 	kmodules.xyz/custom-resources v0.34.0
 	kmodules.xyz/monitoring-agent-api v0.34.1
-	kubedb.dev/apimachinery v0.65.0-rc.0.0.20260604181114-007ef3ea6adf
-	kubedb.dev/db-client-go v0.20.0-rc.0
+	kubedb.dev/apimachinery v0.65.0-rc.1
+	kubedb.dev/db-client-go v0.20.0-rc.1
 	kubeops.dev/petset v0.0.17-0.20260418091244-7f666912d240
 	sigs.k8s.io/controller-runtime v0.22.4
 	sigs.k8s.io/yaml v1.6.0
@@ -90,7 +90,6 @@ require (
 	github.com/go-errors/errors v1.4.2 // indirect
 	github.com/go-logr/logr v1.4.3 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
-	github.com/go-logr/zapr v1.3.0 // indirect
 	github.com/go-openapi/jsonpointer v0.22.1 // indirect
 	github.com/go-openapi/jsonreference v0.21.2 // indirect
 	github.com/go-openapi/swag v0.25.1 // indirect
@@ -153,8 +152,6 @@ require (
 	go.opentelemetry.io/otel v1.43.0 // indirect
 	go.opentelemetry.io/otel/metric v1.43.0 // indirect
 	go.opentelemetry.io/otel/trace v1.43.0 // indirect
-	go.uber.org/multierr v1.11.0 // indirect
-	go.uber.org/zap v1.27.1 // indirect
 	go.virtual-secrets.dev/apimachinery v0.0.1 // indirect
 	golang.org/x/crypto v0.52.0 // indirect
 	golang.org/x/net v0.55.0 // indirect
@@ -171,7 +168,6 @@ require (
 	gomodules.xyz/mergo v0.3.13 // indirect
 	gomodules.xyz/password-generator v0.2.9 // indirect
 	gomodules.xyz/sets v0.2.1 // indirect
-	gomodules.xyz/sync v0.1.0 // indirect
 	gomodules.xyz/wait v0.2.0 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/evanphx/json-patch.v4 v4.13.0 // indirect
