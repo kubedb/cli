@@ -82,6 +82,9 @@ type MSSQLServerVersionSpec struct {
 
 	// +optional
 	UI []ChartInfo `json:"ui,omitempty"`
+
+	// +optional
+	GitSyncer GitSyncer `json:"gitSyncer,omitempty"`
 }
 
 // MSSQLServerDatabase is the MSSQLServer Database image

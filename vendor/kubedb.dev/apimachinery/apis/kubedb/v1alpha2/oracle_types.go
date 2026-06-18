@@ -132,7 +132,7 @@ type OracleSpec struct {
 	// If specified, this file will be used as configuration file otherwise default configuration file will be used.
 	// You can provide custom configurations using Secret or ApplyConfig.
 	// +optional
-	Configuration *ConfigurationSpec `json:"configuration,omitempty"`
+	Configuration *OracleConfiguration `json:"configuration,omitempty"`
 
 	// Database authentication secret
 	// +optional
@@ -178,6 +178,16 @@ type OracleSpec struct {
 	// TLS configuration for secure client connections
 	// +optional
 	TCPSConfig *OracleTCPSConfig `json:"tcpsConfig,omitempty"`
+}
+
+type OracleConfiguration struct {
+	// +optional
+	ConfigurationSpec `json:",inline,omitempty"`
+
+	// WalletConfigSecret is an optional field to provide the configuration
+	// details for the db to connect with different online storage provider
+	// +optional
+	WalletConfigSecret string `json:"walletConfigSecret,omitempty"`
 }
 
 type OracleTCPSConfig struct {

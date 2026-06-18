@@ -17,8 +17,6 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"fmt"
-
 	kmapi "kmodules.xyz/client-go/api/v1"
 )
 
@@ -53,7 +51,7 @@ type Target struct {
 type ConnectionInfo struct {
 	// AppBinding refers to the source database AppBinding name, Who contains the connection information.
 	// +optional
-	AppBinding kmapi.ObjectReference `yaml:"appBinding,omitempty" json:"appBinding,omitempty"`
+	AppBinding *kmapi.ObjectReference `yaml:"appBinding,omitempty" json:"appBinding,omitempty"`
 
 	// DBName refers to the database name.
 	// +optional
@@ -67,6 +65,27 @@ type ConnectionInfo struct {
 	// The default is the greater of 4 or runtime.NumCPU().
 	// +optional
 	MaxConnections *int32 `yaml:"maxConnections" json:"maxConnections,omitempty"`
+	// TLS holds paths to PEM files for TLS-enabled connections.
+	// +optional
+	TLS *TLSConfig `yaml:"tls,omitempty" json:"tls,omitempty"`
+}
+
+type TLSConfig struct {
+	// CAFile is the path to the PEM-encoded CA certificate file.
+	// +optional
+	CAFile string `yaml:"caFile" json:"caFile,omitempty"`
+	// CertFile is the path to the PEM-encoded client certificate (mutual TLS).
+	// +optional
+	CertFile string `yaml:"certFile" json:"certFile,omitempty"`
+	// KeyFile is the path to the PEM-encoded client private key (mutual TLS).
+	// +optional
+	KeyFile string `yaml:"keyFile" json:"keyFile,omitempty"`
+	// InsecureSkipVerify disables server certificate and hostname verification.
+	// +optional
+	InsecureSkipVerify bool `yaml:"insecureSkipVerify" json:"insecureSkipVerify,omitempty"`
+	// ServerName overrides the hostname used for TLS SNI and certificate verification.
+	// +optional
+	ServerName string `yaml:"serverName" json:"serverName,omitempty"`
 }
 
 type DBMigratorImages struct {
@@ -84,27 +103,4 @@ type DBMigratorCLI struct {
 
 type DBMigratorStatusReporter struct {
 	Image string `json:"image"`
-}
-
-type TableRef struct {
-	TableID int64
-	Schema  string
-	Name    string
-}
-
-func (t TableRef) Key() string {
-	return fmt.Sprintf("%s.%s", t.Schema, t.Name)
-}
-
-func (t TableRef) QuotedName() string {
-	return fmt.Sprintf("`%s`.`%s`", t.Schema, t.Name)
-}
-
-// PipelineConfig contains configuration for the snapshot pipeline
-type PipelineConfig struct {
-	SnapshotWorker int // Number of concurrent snapshot worker goroutines
-	Buffer         int // Size of buffer channel between extractor and sinkers
-	Sinkers        int // Number of concurrent sinker goroutines
-	ReadBatchSize  int // Number of rows to read per batch from source
-	WriteBatchSize int // Number of rows to write per transaction to target
 }

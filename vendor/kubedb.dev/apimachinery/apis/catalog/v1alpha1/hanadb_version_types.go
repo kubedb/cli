@@ -64,6 +64,8 @@ type HanaDBVersionSpec struct {
 	UI []ChartInfo `json:"ui,omitempty"`
 	// update constraints
 	UpdateConstraints UpdateConstraints `json:"updateConstraints,omitempty"`
+	// +optional
+	GitSyncer GitSyncer `json:"gitSyncer,omitempty"`
 }
 
 // HanaDBSecurityContext is for the additional config for the DB container

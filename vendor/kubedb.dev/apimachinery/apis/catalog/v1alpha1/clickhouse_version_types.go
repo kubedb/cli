@@ -82,6 +82,9 @@ type ClickHouseVersionSpec struct {
 
 	// update constraints
 	UpdateConstraints UpdateConstraints `json:"updateConstraints,omitempty"`
+
+	// +optional
+	GitSyncer GitSyncer `json:"gitSyncer,omitempty"`
 }
 
 // ClickHouseVersionDatabase is the ClickHouse Database image

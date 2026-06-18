@@ -36,6 +36,10 @@ func (m Migrator) GetDBKindAndCommand() (string, string) {
 		return "Postgres", "postgres"
 	case m.Spec.Source.MongoDB != nil && m.Spec.Target.MongoDB != nil:
 		return "MongoDB", "mongodb"
+	case m.Spec.Source.MySQL != nil && m.Spec.Target.MySQL != nil:
+		return "MySQL", "mysql"
+	case m.Spec.Source.MariaDB != nil && m.Spec.Target.MariaDB != nil:
+		return "MariaDB", "mariadb"
 	}
 
 	return "", ""
@@ -47,6 +51,10 @@ func (m Migrator) GetConnectionInfos() (*ConnectionInfo, *ConnectionInfo) {
 		return &m.Spec.Source.Postgres.ConnectionInfo, &m.Spec.Target.Postgres.ConnectionInfo
 	case m.Spec.Source.MongoDB != nil && m.Spec.Target.MongoDB != nil:
 		return &m.Spec.Source.MongoDB.ConnectionInfo, &m.Spec.Target.MongoDB.ConnectionInfo
+	case m.Spec.Source.MySQL != nil && m.Spec.Target.MySQL != nil:
+		return m.Spec.Source.MySQL.ConnectionInfo, m.Spec.Target.MySQL.ConnectionInfo
+	case m.Spec.Source.MariaDB != nil && m.Spec.Target.MariaDB != nil:
+		return m.Spec.Source.MariaDB.ConnectionInfo, m.Spec.Target.MariaDB.ConnectionInfo
 	}
 	return nil, nil
 }

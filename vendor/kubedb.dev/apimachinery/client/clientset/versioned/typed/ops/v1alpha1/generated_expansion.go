@@ -28,8 +28,6 @@ type DruidOpsRequestExpansion interface{}
 
 type ElasticsearchOpsRequestExpansion interface{}
 
-type EtcdOpsRequestExpansion interface{}
-
 type HanaDBOpsRequestExpansion interface{}
 
 type HazelcastOpsRequestExpansion interface{}

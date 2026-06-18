@@ -174,7 +174,9 @@ func (o *Oracle) GetAuthSecretName() string {
 
 func (o *Oracle) GetPersistentSecrets() []string {
 	var secrets []string
-	secrets = append(secrets, o.GetAuthSecretName())
+	if !IsVirtualAuthSecretReferred(o.Spec.AuthSecret) && o.Spec.AuthSecret != nil && o.Spec.AuthSecret.Name != "" {
+		secrets = append(secrets, o.GetAuthSecretName())
+	}
 	return secrets
 }
 

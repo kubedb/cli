@@ -29,24 +29,34 @@ import (
 
 type GitopsV1alpha1Interface interface {
 	RESTClient() rest.Interface
+	CassandrasGetter
+	ClickHousesGetter
 	DruidsGetter
 	ElasticsearchesGetter
+	HanaDBsGetter
+	HazelcastsGetter
+	IgnitesGetter
 	KafkasGetter
 	MSSQLServersGetter
 	MariaDBsGetter
 	MemcachedsGetter
+	MilvusesGetter
 	MongoDBsGetter
 	MySQLsGetter
+	Neo4jsGetter
+	OraclesGetter
 	PerconaXtraDBsGetter
 	PgBouncersGetter
 	PgpoolsGetter
 	PostgresesGetter
 	ProxySQLsGetter
+	QdrantsGetter
 	RabbitMQsGetter
 	RedisesGetter
 	RedisSentinelsGetter
 	SinglestoresGetter
 	SolrsGetter
+	WeaviatesGetter
 	ZooKeepersGetter
 }
 
@@ -55,12 +65,32 @@ type GitopsV1alpha1Client struct {
 	restClient rest.Interface
 }
 
+func (c *GitopsV1alpha1Client) Cassandras(namespace string) CassandraInterface {
+	return newCassandras(c, namespace)
+}
+
+func (c *GitopsV1alpha1Client) ClickHouses(namespace string) ClickHouseInterface {
+	return newClickHouses(c, namespace)
+}
+
 func (c *GitopsV1alpha1Client) Druids(namespace string) DruidInterface {
 	return newDruids(c, namespace)
 }
 
 func (c *GitopsV1alpha1Client) Elasticsearches(namespace string) ElasticsearchInterface {
 	return newElasticsearches(c, namespace)
+}
+
+func (c *GitopsV1alpha1Client) HanaDBs(namespace string) HanaDBInterface {
+	return newHanaDBs(c, namespace)
+}
+
+func (c *GitopsV1alpha1Client) Hazelcasts(namespace string) HazelcastInterface {
+	return newHazelcasts(c, namespace)
+}
+
+func (c *GitopsV1alpha1Client) Ignites(namespace string) IgniteInterface {
+	return newIgnites(c, namespace)
 }
 
 func (c *GitopsV1alpha1Client) Kafkas(namespace string) KafkaInterface {
@@ -79,12 +109,24 @@ func (c *GitopsV1alpha1Client) Memcacheds(namespace string) MemcachedInterface {
 	return newMemcacheds(c, namespace)
 }
 
+func (c *GitopsV1alpha1Client) Milvuses(namespace string) MilvusInterface {
+	return newMilvuses(c, namespace)
+}
+
 func (c *GitopsV1alpha1Client) MongoDBs(namespace string) MongoDBInterface {
 	return newMongoDBs(c, namespace)
 }
 
 func (c *GitopsV1alpha1Client) MySQLs(namespace string) MySQLInterface {
 	return newMySQLs(c, namespace)
+}
+
+func (c *GitopsV1alpha1Client) Neo4js(namespace string) Neo4jInterface {
+	return newNeo4js(c, namespace)
+}
+
+func (c *GitopsV1alpha1Client) Oracles(namespace string) OracleInterface {
+	return newOracles(c, namespace)
 }
 
 func (c *GitopsV1alpha1Client) PerconaXtraDBs(namespace string) PerconaXtraDBInterface {
@@ -107,6 +149,10 @@ func (c *GitopsV1alpha1Client) ProxySQLs(namespace string) ProxySQLInterface {
 	return newProxySQLs(c, namespace)
 }
 
+func (c *GitopsV1alpha1Client) Qdrants(namespace string) QdrantInterface {
+	return newQdrants(c, namespace)
+}
+
 func (c *GitopsV1alpha1Client) RabbitMQs(namespace string) RabbitMQInterface {
 	return newRabbitMQs(c, namespace)
 }
@@ -125,6 +171,10 @@ func (c *GitopsV1alpha1Client) Singlestores(namespace string) SinglestoreInterfa
 
 func (c *GitopsV1alpha1Client) Solrs(namespace string) SolrInterface {
 	return newSolrs(c, namespace)
+}
+
+func (c *GitopsV1alpha1Client) Weaviates(namespace string) WeaviateInterface {
+	return newWeaviates(c, namespace)
 }
 
 func (c *GitopsV1alpha1Client) ZooKeepers(namespace string) ZooKeeperInterface {

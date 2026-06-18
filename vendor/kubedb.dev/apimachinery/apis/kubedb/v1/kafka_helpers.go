@@ -246,7 +246,7 @@ func (k *Kafka) GetKeystoreSecretName() string {
 
 func (k *Kafka) GetPersistentSecrets() []string {
 	var secrets []string
-	if k.Spec.AuthSecret != nil {
+	if !IsVirtualAuthSecretReferred(k.Spec.AuthSecret) && k.Spec.AuthSecret != nil && k.Spec.AuthSecret.Name != "" {
 		secrets = append(secrets, k.Spec.AuthSecret.Name)
 	}
 	if k.Spec.KeystoreCredSecret != nil {

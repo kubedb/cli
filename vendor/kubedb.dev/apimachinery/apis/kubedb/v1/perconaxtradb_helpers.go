@@ -375,7 +375,7 @@ func (p *PerconaXtraDB) GetPersistentSecrets() []string {
 	}
 
 	var secrets []string
-	if p.Spec.AuthSecret != nil {
+	if !IsVirtualAuthSecretReferred(p.Spec.AuthSecret) && p.Spec.AuthSecret != nil && p.Spec.AuthSecret.Name != "" {
 		secrets = append(secrets, p.Spec.AuthSecret.Name)
 	}
 	if p.Spec.SystemUserSecrets != nil && p.Spec.SystemUserSecrets.ReplicationUserSecret != nil {

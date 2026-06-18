@@ -81,6 +81,9 @@ type CassandraVersionSpec struct {
 
 	// update constraints
 	UpdateConstraints UpdateConstraints `json:"updateConstraints,omitempty"`
+
+	// +optional
+	GitSyncer GitSyncer `json:"gitSyncer,omitempty"`
 }
 
 // CassandraVersionExporter is the image for the Cassandra exporter

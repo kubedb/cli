@@ -61,7 +61,7 @@ type DocumentDBVersionSpec struct {
 
 	// Init container image
 	//+ optional
-	InitContainer DcdbInitContainer `json:"initContainer,omitempty"`
+	InitContainer DocumentDBInitContainer `json:"initContainer,omitempty"`
 
 	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
 	// +optional
@@ -81,6 +81,9 @@ type DocumentDBVersionSpec struct {
 
 	// +optional
 	UI []ChartInfo `json:"ui,omitempty"`
+
+	// +optional
+	GitSyncer GitSyncer `json:"gitSyncer,omitempty"`
 }
 
 // DocumentDBVersionDatabase is the DocumentDB Database image
@@ -88,7 +91,7 @@ type DocumentDBVersionDatabase struct {
 	Image string `json:"image"`
 }
 
-type DcdbInitContainer struct {
+type DocumentDBInitContainer struct {
 	Image string `json:"image"`
 }
 

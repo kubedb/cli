@@ -1011,7 +1011,7 @@ func (e *Elasticsearch) GetPersistentSecrets() []string {
 
 	var secrets []string
 	// Add Admin/Elastic user secret name
-	if e.Spec.AuthSecret != nil {
+	if !IsVirtualAuthSecretReferred(e.Spec.AuthSecret) && e.Spec.AuthSecret != nil && e.Spec.AuthSecret.Name != "" {
 		secrets = append(secrets, e.Spec.AuthSecret.Name)
 	}
 

@@ -635,16 +635,6 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchUpdateVersionSpec":                   schema_apimachinery_apis_ops_v1alpha1_ElasticsearchUpdateVersionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchVerticalScalingSpec":                 schema_apimachinery_apis_ops_v1alpha1_ElasticsearchVerticalScalingSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ElasticsearchVolumeExpansionSpec":                 schema_apimachinery_apis_ops_v1alpha1_ElasticsearchVolumeExpansionSpec(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdCustomConfiguration":                          schema_apimachinery_apis_ops_v1alpha1_EtcdCustomConfiguration(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdCustomConfigurationSpec":                      schema_apimachinery_apis_ops_v1alpha1_EtcdCustomConfigurationSpec(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdHorizontalScalingSpec":                        schema_apimachinery_apis_ops_v1alpha1_EtcdHorizontalScalingSpec(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdOpsRequest":                                   schema_apimachinery_apis_ops_v1alpha1_EtcdOpsRequest(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdOpsRequestList":                               schema_apimachinery_apis_ops_v1alpha1_EtcdOpsRequestList(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdOpsRequestSpec":                               schema_apimachinery_apis_ops_v1alpha1_EtcdOpsRequestSpec(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdReplicaReadinessCriteria":                     schema_apimachinery_apis_ops_v1alpha1_EtcdReplicaReadinessCriteria(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdUpdateVersionSpec":                            schema_apimachinery_apis_ops_v1alpha1_EtcdUpdateVersionSpec(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdVerticalScalingSpec":                          schema_apimachinery_apis_ops_v1alpha1_EtcdVerticalScalingSpec(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdVolumeExpansionSpec":                          schema_apimachinery_apis_ops_v1alpha1_EtcdVolumeExpansionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.HanaDBOpsRequest":                                 schema_apimachinery_apis_ops_v1alpha1_HanaDBOpsRequest(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.HanaDBOpsRequestList":                             schema_apimachinery_apis_ops_v1alpha1_HanaDBOpsRequestList(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.HanaDBOpsRequestSpec":                             schema_apimachinery_apis_ops_v1alpha1_HanaDBOpsRequestSpec(ref),
@@ -754,6 +744,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.OracleOpsRequest":                                 schema_apimachinery_apis_ops_v1alpha1_OracleOpsRequest(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.OracleOpsRequestList":                             schema_apimachinery_apis_ops_v1alpha1_OracleOpsRequestList(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.OracleOpsRequestSpec":                             schema_apimachinery_apis_ops_v1alpha1_OracleOpsRequestSpec(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.OracleReconfigurationSpec":                        schema_apimachinery_apis_ops_v1alpha1_OracleReconfigurationSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.OracleVerticalScalingSpec":                        schema_apimachinery_apis_ops_v1alpha1_OracleVerticalScalingSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.OracleVolumeExpansionSpec":                        schema_apimachinery_apis_ops_v1alpha1_OracleVolumeExpansionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.PerconaXtraDBCustomConfigurationSpec":             schema_apimachinery_apis_ops_v1alpha1_PerconaXtraDBCustomConfigurationSpec(ref),
@@ -874,7 +865,6 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.TLSSpec":                                          schema_apimachinery_apis_ops_v1alpha1_TLSSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.Topology":                                         schema_apimachinery_apis_ops_v1alpha1_Topology(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.WeaviateHorizontalScalingSpec":                    schema_apimachinery_apis_ops_v1alpha1_WeaviateHorizontalScalingSpec(ref),
-		"kubedb.dev/apimachinery/apis/ops/v1alpha1.WeaviateMigrationSpec":                            schema_apimachinery_apis_ops_v1alpha1_WeaviateMigrationSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.WeaviateOpsRequest":                               schema_apimachinery_apis_ops_v1alpha1_WeaviateOpsRequest(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.WeaviateOpsRequestList":                           schema_apimachinery_apis_ops_v1alpha1_WeaviateOpsRequestList(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.WeaviateOpsRequestSpec":                           schema_apimachinery_apis_ops_v1alpha1_WeaviateOpsRequestSpec(ref),
@@ -36296,322 +36286,6 @@ func schema_apimachinery_apis_ops_v1alpha1_ElasticsearchVolumeExpansionSpec(ref 
 	}
 }
 
-func schema_apimachinery_apis_ops_v1alpha1_EtcdCustomConfiguration(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Type: []string{"object"},
-				Properties: map[string]spec.Schema{
-					"configMap": {
-						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/api/core/v1.LocalObjectReference"),
-						},
-					},
-					"data": {
-						SchemaProps: spec.SchemaProps{
-							Type: []string{"object"},
-							AdditionalProperties: &spec.SchemaOrBool{
-								Allows: true,
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: "",
-										Type:    []string{"string"},
-										Format:  "",
-									},
-								},
-							},
-						},
-					},
-					"remove": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"boolean"},
-							Format: "",
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference"},
-	}
-}
-
-func schema_apimachinery_apis_ops_v1alpha1_EtcdCustomConfigurationSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Type: []string{"object"},
-			},
-		},
-	}
-}
-
-func schema_apimachinery_apis_ops_v1alpha1_EtcdHorizontalScalingSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "HorizontalScaling is the spec for Etcd horizontal scaling",
-				Type:        []string{"object"},
-			},
-		},
-	}
-}
-
-func schema_apimachinery_apis_ops_v1alpha1_EtcdOpsRequest(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Type: []string{"object"},
-				Properties: map[string]spec.Schema{
-					"kind": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"apiVersion": {
-						SchemaProps: spec.SchemaProps{
-							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"metadata": {
-						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
-						},
-					},
-					"spec": {
-						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdOpsRequestSpec"),
-						},
-					},
-					"status": {
-						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.OpsRequestStatus"),
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdOpsRequestSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.OpsRequestStatus"},
-	}
-}
-
-func schema_apimachinery_apis_ops_v1alpha1_EtcdOpsRequestList(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "EtcdOpsRequestList is a list of EtcdOpsRequests",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"kind": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"apiVersion": {
-						SchemaProps: spec.SchemaProps{
-							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"metadata": {
-						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
-						},
-					},
-					"items": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Items is a list of EtcdOpsRequest CRD objects",
-							Type:        []string{"array"},
-							Items: &spec.SchemaOrArray{
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: map[string]interface{}{},
-										Ref:     ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdOpsRequest"),
-									},
-								},
-							},
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdOpsRequest"},
-	}
-}
-
-func schema_apimachinery_apis_ops_v1alpha1_EtcdOpsRequestSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "EtcdOpsRequestSpec is the spec for EtcdOpsRequest",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"databaseRef": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Specifies the Etcd reference",
-							Default:     map[string]interface{}{},
-							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
-						},
-					},
-					"type": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Specifies the ops request type: Upgrade, HorizontalScaling, VerticalScaling etc.",
-							Default:     "",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"updateVersion": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Specifies information necessary for upgrading Etcd",
-							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdUpdateVersionSpec"),
-						},
-					},
-					"horizontalScaling": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Specifies information necessary for horizontal scaling",
-							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdHorizontalScalingSpec"),
-						},
-					},
-					"verticalScaling": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Specifies information necessary for vertical scaling",
-							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdVerticalScalingSpec"),
-						},
-					},
-					"volumeExpansion": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Specifies information necessary for volume expansion",
-							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdVolumeExpansionSpec"),
-						},
-					},
-					"configuration": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Specifies information necessary for custom configuration of Etcd",
-							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdCustomConfigurationSpec"),
-						},
-					},
-					"tls": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Specifies information necessary for configuring TLS",
-							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.TLSSpec"),
-						},
-					},
-					"authentication": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Specifies information necessary for configuring authSecret of the database",
-							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.AuthSpec"),
-						},
-					},
-					"restart": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Specifies information necessary for restarting database",
-							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec"),
-						},
-					},
-					"apply": {
-						SchemaProps: spec.SchemaProps{
-							Description: "ApplyOption is to control the execution of OpsRequest depending on the database state.",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"maxRetries": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"integer"},
-							Format: "int32",
-						},
-					},
-				},
-				Required: []string{"databaseRef", "type"},
-			},
-		},
-		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/ops/v1alpha1.AuthSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdUpdateVersionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.TLSSpec"},
-	}
-}
-
-func schema_apimachinery_apis_ops_v1alpha1_EtcdReplicaReadinessCriteria(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "EtcdReplicaReadinessCriteria is the criteria for checking readiness of a Etcd pod after updating, horizontal scaling etc.",
-				Type:        []string{"object"},
-			},
-		},
-	}
-}
-
-func schema_apimachinery_apis_ops_v1alpha1_EtcdUpdateVersionSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Type: []string{"object"},
-				Properties: map[string]spec.Schema{
-					"targetVersion": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Specifies the target version name from catalog",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"readinessCriteria": {
-						SchemaProps: spec.SchemaProps{
-							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdReplicaReadinessCriteria"),
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdReplicaReadinessCriteria"},
-	}
-}
-
-func schema_apimachinery_apis_ops_v1alpha1_EtcdVerticalScalingSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "EtcdVerticalScalingSpec is the spec for Etcd vertical scaling",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"readinessCriteria": {
-						SchemaProps: spec.SchemaProps{
-							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdReplicaReadinessCriteria"),
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdReplicaReadinessCriteria"},
-	}
-}
-
-func schema_apimachinery_apis_ops_v1alpha1_EtcdVolumeExpansionSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "EtcdVolumeExpansionSpec is the spec for Etcd volume expansion",
-				Type:        []string{"object"},
-			},
-		},
-	}
-}
-
 func schema_apimachinery_apis_ops_v1alpha1_HanaDBOpsRequest(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -36731,6 +36405,12 @@ func schema_apimachinery_apis_ops_v1alpha1_HanaDBOpsRequestSpec(ref common.Refer
 							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.HanaDBVerticalScalingSpec"),
 						},
 					},
+					"volumeExpansion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies information necessary for volume expansion",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.HanaDBVolumeExpansionSpec"),
+						},
+					},
 					"configuration": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Specifies information necessary for custom configuration of HanaDB",
@@ -36739,7 +36419,8 @@ func schema_apimachinery_apis_ops_v1alpha1_HanaDBOpsRequestSpec(ref common.Refer
 					},
 					"tls": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.HanaDBTLSSpec"),
+							Description: "Specifies information necessary for configuring TLS",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.HanaDBTLSSpec"),
 						},
 					},
 					"authentication": {
@@ -36781,7 +36462,7 @@ func schema_apimachinery_apis_ops_v1alpha1_HanaDBOpsRequestSpec(ref common.Refer
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.AuthSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.HanaDBTLSSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.HanaDBVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ReconfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.StorageMigrationSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.AuthSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.HanaDBTLSSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.HanaDBVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.HanaDBVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ReconfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.StorageMigrationSpec"},
 	}
 }
 
@@ -36811,27 +36492,6 @@ func schema_apimachinery_apis_ops_v1alpha1_HanaDBTLSSpec(ref common.ReferenceCal
 							},
 						},
 					},
-					"clientTLS": {
-						SchemaProps: spec.SchemaProps{
-							Description: "ClientTLS determines whether KubeDB clients connect to the SAP HANA SQL interface over TLS.",
-							Type:        []string{"boolean"},
-							Format:      "",
-						},
-					},
-					"serverName": {
-						SchemaProps: spec.SchemaProps{
-							Description: "ServerName is used to verify the hostname on the certificate returned by SAP HANA.",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"insecureSkipVerify": {
-						SchemaProps: spec.SchemaProps{
-							Description: "InsecureSkipVerify controls whether KubeDB clients verify the SAP HANA server certificate chain and hostname.",
-							Type:        []string{"boolean"},
-							Format:      "",
-						},
-					},
 					"rotateCertificates": {
 						SchemaProps: spec.SchemaProps{
 							Description: "RotateCertificates tells operator to initiate certificate rotation",
@@ -36858,20 +36518,29 @@ func schema_apimachinery_apis_ops_v1alpha1_HanaDBVerticalScalingSpec(ref common.
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
-				Description: "HanaDBVerticalScalingSpec contains the vertical scaling information of a HanaDB cluster",
+				Description: "HanaDBVerticalScalingSpec is the spec for HanaDB vertical scaling.",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
-					"node": {
+					"hanadb": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Resource spec for nodes",
-							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
+						},
+					},
+					"coordinator": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources"),
+						},
+					},
+					"exporter": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"},
+			"kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"},
 	}
 }
 
@@ -36879,20 +36548,19 @@ func schema_apimachinery_apis_ops_v1alpha1_HanaDBVolumeExpansionSpec(ref common.
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
-				Description: "HanaDBVolumeExpansionSpec is the spec for HanaDB volume expansion",
+				Description: "HanaDBVolumeExpansionSpec is the spec for HanaDB volume expansion.",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
+					"hanadb": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("k8s.io/apimachinery/pkg/api/resource.Quantity"),
+						},
+					},
 					"mode": {
 						SchemaProps: spec.SchemaProps{
 							Default: "",
 							Type:    []string{"string"},
 							Format:  "",
-						},
-					},
-					"node": {
-						SchemaProps: spec.SchemaProps{
-							Description: "volume specification for nodes",
-							Ref:         ref("k8s.io/apimachinery/pkg/api/resource.Quantity"),
 						},
 					},
 				},
@@ -41188,7 +40856,7 @@ func schema_apimachinery_apis_ops_v1alpha1_OracleOpsRequestSpec(ref common.Refer
 					"configuration": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Specifies information necessary for custom configuration of oracle",
-							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ReconfigurationSpec"),
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.OracleReconfigurationSpec"),
 						},
 					},
 					"authentication": {
@@ -41227,7 +40895,63 @@ func schema_apimachinery_apis_ops_v1alpha1_OracleOpsRequestSpec(ref common.Refer
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.AuthSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.OracleMigrationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.OracleVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.OracleVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ReconfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.AuthSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.OracleMigrationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.OracleReconfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.OracleVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.OracleVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec"},
+	}
+}
+
+func schema_apimachinery_apis_ops_v1alpha1_OracleReconfigurationSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"configSecret": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ConfigSecret is an optional field to provide custom configuration file for the database (i.e. mssql.conf, mongod.conf). If specified, these configurations will be used with default configurations (if any) and applyConfig configurations (if any). Configurations from this secret will override default configurations.",
+							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
+						},
+					},
+					"applyConfig": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ApplyConfig contains key-value pairs of configurations to be applied to the database. These configurations will override both default configurations and configurations from the config secret (if any).",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"removeCustomConfig": {
+						SchemaProps: spec.SchemaProps{
+							Description: "RemoveCustomConfig when set to true, removes any previous custom configuration (config secret and apply configs) and uses only current configurations (if provided) and the default configurations.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"restart": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Restart controls whether to restart the database during reconfiguration. - auto (default): Operator determines if restart is needed based on configuration changes. - true: Restart the database during reconfiguration. - false: Don't restart the database during reconfiguration.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"walletConfigSecret": {
+						SchemaProps: spec.SchemaProps{
+							Description: "WalletConfigSecret is an optional field to provide the configuration details for the db to connect with different online storage provider",
+							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.LocalObjectReference"},
 	}
 }
 
@@ -46165,33 +45889,6 @@ func schema_apimachinery_apis_ops_v1alpha1_WeaviateHorizontalScalingSpec(ref com
 	}
 }
 
-func schema_apimachinery_apis_ops_v1alpha1_WeaviateMigrationSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Type: []string{"object"},
-				Properties: map[string]spec.Schema{
-					"storageClassName": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
-					"oldPVReclaimPolicy": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Possible enum values:\n - `\"Delete\"` means the volume will be deleted from Kubernetes on release from its claim. The volume plugin must support Deletion.\n - `\"Recycle\"` means the volume will be recycled back into the pool of unbound persistent volumes on release from its claim. The volume plugin must support Recycling.\n - `\"Retain\"` means the volume will be left in its current phase (Released) for manual reclamation by the administrator. The default policy is Retain.",
-							Type:        []string{"string"},
-							Format:      "",
-							Enum:        []interface{}{"Delete", "Recycle", "Retain"},
-						},
-					},
-				},
-				Required: []string{"storageClassName"},
-			},
-		},
-	}
-}
-
 func schema_apimachinery_apis_ops_v1alpha1_WeaviateOpsRequest(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -46342,7 +46039,7 @@ func schema_apimachinery_apis_ops_v1alpha1_WeaviateOpsRequestSpec(ref common.Ref
 					"migration": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Specifies information necessary for migrating storageClass or data",
-							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.WeaviateMigrationSpec"),
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.StorageMigrationSpec"),
 						},
 					},
 					"authentication": {
@@ -46375,7 +46072,7 @@ func schema_apimachinery_apis_ops_v1alpha1_WeaviateOpsRequestSpec(ref common.Ref
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.AuthSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.WeaviateHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.WeaviateMigrationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.WeaviateReconfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.WeaviateVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.WeaviateVolumeExpansionSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.AuthSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.StorageMigrationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.WeaviateHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.WeaviateReconfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.WeaviateVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.WeaviateVolumeExpansionSpec"},
 	}
 }
 

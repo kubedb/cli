@@ -267,10 +267,9 @@ func (m *MSSQLServer) PodControllerLabel(podTemplate *ofst.PodTemplateSpec) map[
 
 func (m *MSSQLServer) GetPersistentSecrets() []string {
 	var secrets []string
-	if m.Spec.AuthSecret != nil {
+	if !IsVirtualAuthSecretReferred(m.Spec.AuthSecret) && m.Spec.AuthSecret != nil && m.Spec.AuthSecret.Name != "" {
 		secrets = append(secrets, m.Spec.AuthSecret.Name)
 	}
-
 	secrets = append(secrets, m.EndpointCertSecretName())
 	secrets = append(secrets, m.DbmLoginSecretName())
 	secrets = append(secrets, m.MasterKeySecretName())

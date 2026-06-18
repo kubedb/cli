@@ -68,6 +68,8 @@ type Neo4jVersionSpec struct {
 	UI []ChartInfo `json:"ui,omitempty"`
 	// update constraints
 	UpdateConstraints UpdateConstraints `json:"updateConstraints,omitempty"`
+	// +optional
+	GitSyncer GitSyncer `json:"gitSyncer,omitempty"`
 }
 
 // Neo4jVersionDatabase is the Neo4j Database image

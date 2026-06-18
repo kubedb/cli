@@ -1629,7 +1629,7 @@ const (
 	DocumentDBCoordinatorPortName       = "coordinator"
 	DocumentDBCoordinatorPort           = 2380
 	DocumentDBCoordinatorClientPortName = "coordinatclient"
-	DocumentDBCoordinatorClientPort     = 2389
+	DocumentDBCoordinatorClientPort     = 2379
 	DocumentDBGRPCServerPortName        = "grpcserver"
 	DocumentDBGRPCServerPort            = 2384
 
@@ -1639,12 +1639,14 @@ const (
 	DocumentDBDatabaseRoleKey      = "documentdb.db/role"
 	DocumentDBDatabaseRoleInstance = "instance"
 
-	DocumentDBDefaultUsername = "default_user"
+	DocumentDBDefaultUsername       = "default_user"
+	DocumentDBAdminUsername         = "documentdb"
+	DocumentDBAdminAuthSecretSuffix = "admin-auth"
 
 	DefaultDocumentDBDatabase = "sampledb"
 
 	// volume related constants
-	DocumentDBVolumeMountData = "documentdb-data"
+	DocumentDBVolumeMountData = "data"
 	DocumentDBDataDir         = "/var/pv"
 
 	DocumentDBScripts    = "scripts"
@@ -1662,9 +1664,6 @@ const (
 	DocumentDBContainerName            = "documentdb"
 	DocumentDBInitContainerName        = "documentdb-init"
 	DocumentDBCoordinatorContainerName = "documentdb-coordinator"
-	DocumentDBMainImage                = "ghcr.io/documentdb/documentdb"
-	DocumentDBUser                     = "postgres"
-	DocumentDBLinkedDBName             = "documentdb"
 
 	DocumentDBServerPath = "/etc/certs/server"
 
@@ -1681,6 +1680,18 @@ const (
 	DocumentDBBackendInitShellFile = "data.sh"
 	DocumentDBBackendInitSqlFile   = "data.sql"
 	DocumentDBBackendConfigFile    = "user.conf"
+
+	// DocumentDBCustomConfigVolumeName is the projected volume that carries the user-provided
+	// custom config secret along with the operator-generated tuning/inline config.
+	DocumentDBCustomConfigVolumeName = "custom-config"
+	// DocumentDBCustomConfigDir is the mount path where config files (user.conf, inline.conf,
+	// pgtune.conf) are made available to the database container. The init-docker scripts
+	// reference this path via include_if_exists directives.
+	DocumentDBCustomConfigDir = "/etc/config"
+	// DocumentDBCustomConfigFile is the key/path of the user-provided custom config file.
+	DocumentDBCustomConfigFile = "user.conf"
+	// DocumentDBTuningConfigFile is the key/path of the operator-generated pgtune config file.
+	DocumentDBTuningConfigFile = "pgtune.conf"
 )
 
 const (

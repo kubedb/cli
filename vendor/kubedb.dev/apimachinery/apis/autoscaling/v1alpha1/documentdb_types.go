@@ -17,8 +17,6 @@ limitations under the License.
 package v1alpha1
 
 import (
-	opsapi "kubedb.dev/apimachinery/apis/ops/v1alpha1"
-
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -63,7 +61,7 @@ type DocumentDBAutoscalerSpec struct {
 	DatabaseRef *core.LocalObjectReference `json:"databaseRef"`
 
 	// OpsRequestOptions will be used to control the behaviour of ops-manager
-	OpsRequestOptions *DocumentDBOpsRequestOptions `json:"opsRequestOptions,omitempty"`
+	OpsRequestOptions *OpsRequestOptions `json:"opsRequestOptions,omitempty"`
 
 	Compute *DocumentDBComputeAutoscalerSpec `json:"compute,omitempty"`
 	Storage *DocumentDBStorageAutoscalerSpec `json:"storage,omitempty"`
@@ -78,15 +76,6 @@ type DocumentDBComputeAutoscalerSpec struct {
 
 type DocumentDBStorageAutoscalerSpec struct {
 	DocumentDB *StorageAutoscalerSpec `json:"documentdb,omitempty"`
-}
-
-type DocumentDBOpsRequestOptions struct {
-	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
-	Timeout *metav1.Duration `json:"timeout,omitempty"`
-
-	// ApplyOption is to control the execution of OpsRequest depending on the database state.
-	// +kubebuilder:default="IfReady"
-	Apply opsapi.ApplyOption `json:"apply,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

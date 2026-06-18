@@ -56,6 +56,13 @@ spec:
                 type: boolean
               endOfLife:
                 type: boolean
+              gitSyncer:
+                properties:
+                  image:
+                    type: string
+                required:
+                - image
+                type: object
               securityContext:
                 properties:
                   runAsUser:

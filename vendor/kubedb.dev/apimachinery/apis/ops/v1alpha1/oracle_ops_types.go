@@ -61,7 +61,7 @@ type OracleOpsRequestSpec struct {
 	// Specifies information necessary for volume expansion
 	VolumeExpansion *OracleVolumeExpansionSpec `json:"volumeExpansion,omitempty"`
 	// Specifies information necessary for custom configuration of oracle
-	Configuration *ReconfigurationSpec `json:"configuration,omitempty"`
+	Configuration *OracleReconfigurationSpec `json:"configuration,omitempty"`
 	// Specifies information necessary for configuring authSecret of the database
 	Authentication *AuthSpec `json:"authentication,omitempty"`
 	// Specifies information necessary for restarting database
@@ -73,6 +73,14 @@ type OracleOpsRequestSpec struct {
 	// ApplyOption is to control the execution of OpsRequest depending on the database state.
 	// +kubebuilder:default="IfReady"
 	Apply ApplyOption `json:"apply,omitempty"`
+}
+
+type OracleReconfigurationSpec struct {
+	ReconfigurationSpec `json:",inline,omitempty"`
+	// WalletConfigSecret is an optional field to provide the configuration
+	// details for the db to connect with different online storage provider
+	// +optional
+	WalletConfigSecret *core.LocalObjectReference `json:"walletConfigSecret,omitempty"`
 }
 
 type OracleMigrationSpec struct {

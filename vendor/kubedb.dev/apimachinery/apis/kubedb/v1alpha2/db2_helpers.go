@@ -119,7 +119,9 @@ func (d *DB2) GetAuthSecretName() string {
 
 func (d *DB2) GetPersistentSecrets() []string {
 	var secrets []string
-	secrets = append(secrets, d.GetAuthSecretName())
+	if !IsVirtualAuthSecretReferred(d.Spec.AuthSecret) && d.Spec.AuthSecret != nil && d.Spec.AuthSecret.Name != "" {
+		secrets = append(secrets, d.GetAuthSecretName())
+	}
 	return secrets
 }
 

@@ -18,13 +18,13 @@ package v1alpha1
 
 type MariaDBSource struct {
 	// ConnectionInfo refers to the source MariaDB database connection information.
-	ConnectionInfo *MySQLConnectionInfo `yaml:"connectionInfo" json:"connectionInfo"`
-	Schema         *MySQLSchema         `yaml:"schema" json:"schema,omitempty"`
-	Snapshot       *MySQLSnapshot       `yaml:"snapshot" json:"snapshot,omitempty"`
-	Streaming      *MySQLStreaming      `yaml:"streaming" json:"streaming,omitempty"`
+	ConnectionInfo *ConnectionInfo `yaml:"connectionInfo" json:"connectionInfo"`
+	Schema         *MySQLSchema    `yaml:"schema" json:"schema,omitempty"`
+	Snapshot       *MySQLSnapshot  `yaml:"snapshot" json:"snapshot,omitempty"`
+	Streaming      *MySQLStreaming `yaml:"streaming" json:"streaming,omitempty"`
 }
 
 type MariaDBTarget struct {
 	// ConnectionInfo refers to the target MariaDB database connection information.
-	ConnectionInfo *MySQLConnectionInfo `yaml:"connectionInfo" json:"connectionInfo"`
+	ConnectionInfo *ConnectionInfo `yaml:"connectionInfo" json:"connectionInfo"`
 }
