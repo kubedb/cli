@@ -133,29 +133,55 @@ func generateMySQLConfig(f cmdutil.Factory, userName string, password string, dn
 	}
 	buffer = append(buffer, authBuff...)
 
-	// generate secret
+	var tlsSecretName string
 	if apb.Spec.TLSSecret != nil {
-		tlsBuff, tlsSecretName, err := generateMySQLTlsSecret(userName, apb, ns, opts)
+		var tlsBuff []byte
+		tlsBuff, tlsSecretName, err = generateMySQLTlsSecret(userName, apb, ns, opts)
 		if err != nil {
 			return nil, fmt.Errorf("failed to generate tls secret %v", err)
 		}
 		buffer = append(buffer, tlsBuff...)
-		apb.Spec.TLSSecret.Name = tlsSecretName
 	}
 
-	apb.APIVersion = AppcatApiVersion
-	apb.Kind = AppcatKind
-	apb.Spec.ClientConfig.Service.Name = dns
-	apb.Spec.Secret.Name = authSecretName
-	apb.ResourceVersion = ""
-	apb.UID = ""
-	apb.CreationTimestamp = metav1.Time{}
-	apb.Generation = 0
-	apb.Annotations = nil
-	apb.ManagedFields = nil
-	apb.OwnerReferences = nil
+	// Build a minimal AppBinding from scratch so that no server-managed fields
+	// (resourceVersion, uid, generation), source-cluster labels, or unrelated
+	// parameters (e.g. Stash addon config) are carried over. This makes
+	// repeated kubectl apply idempotent: the last-applied annotation stays
+	// clean and the 3-way merge never tries to remove metadata.resourceVersion.
+	remoteApb := &appApi.AppBinding{
+		TypeMeta: metav1.TypeMeta{
+			APIVersion: AppcatApiVersion,
+			Kind:       AppcatKind,
+		},
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      apb.Name,
+			Namespace: ns,
+		},
+		Spec: appApi.AppBindingSpec{
+			Type:    apb.Spec.Type,
+			Version: apb.Spec.Version,
+			ClientConfig: appApi.ClientConfig{
+				CABundle: apb.Spec.ClientConfig.CABundle,
+				Service: &appApi.ServiceReference{
+					Scheme: apb.Spec.ClientConfig.Service.Scheme,
+					Name:   dns,
+					Port:   apb.Spec.ClientConfig.Service.Port,
+					Path:   apb.Spec.ClientConfig.Service.Path,
+					Query:  apb.Spec.ClientConfig.Service.Query,
+				},
+			},
+			Secret: &appApi.TypedLocalObjectReference{
+				Name: authSecretName,
+			},
+		},
+	}
+	if tlsSecretName != "" {
+		remoteApb.Spec.TLSSecret = &appApi.TypedLocalObjectReference{
+			Name: tlsSecretName,
+		}
+	}
 
-	appbindingYaml, err := yaml.Marshal(apb)
+	appbindingYaml, err := yaml.Marshal(remoteApb)
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal appbind yaml %v", err)
 	}
