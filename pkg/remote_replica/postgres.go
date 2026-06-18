@@ -156,9 +156,18 @@ func generateConfig(f cmdutil.Factory, userName string, password string, dns str
 		Name:      apb.Name,
 		Namespace: ns,
 	}
+	if remoteApb.Spec.ClientConfig.Service == nil {
+		remoteApb.Spec.ClientConfig.Service = &appApi.ServiceReference{}
+	}
 	remoteApb.Spec.ClientConfig.Service.Name = dns
+	if remoteApb.Spec.Secret == nil {
+		remoteApb.Spec.Secret = &appApi.TypedLocalObjectReference{}
+	}
 	remoteApb.Spec.Secret.Name = authSecretName
 	if tlsSecretName != "" {
+		if remoteApb.Spec.TLSSecret == nil {
+			remoteApb.Spec.TLSSecret = &appApi.TypedLocalObjectReference{}
+		}
 		remoteApb.Spec.TLSSecret.Name = tlsSecretName
 	}
 
