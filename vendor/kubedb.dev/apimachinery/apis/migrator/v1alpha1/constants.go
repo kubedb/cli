@@ -36,6 +36,10 @@ const (
 	ConfigFileName         = "config.yaml"
 	MigratorConfigSuffix   = "config"
 	ConfigPath             = ConfigVolMountPath + "/" + ConfigFileName
+	TLSVolumePrefix        = "tls"
+	TLSMountPathPrefix     = "/etc/tls"
+	SourceDatabaseRole     = "source"
+	TargetDatabaseRole     = "target"
 )
 
 // Conditions Related Constants

@@ -88,18 +88,22 @@ spec:
                 additionalProperties:
                   properties:
                     clickHouseStats:
-                      properties:
-                        finishTime:
-                          format: date-time
-                          type: string
-                        id:
-                          type: string
-                        startTime:
-                          format: date-time
-                          type: string
-                        status:
-                          type: string
-                      type: object
+                      items:
+                        properties:
+                          finishTime:
+                            format: date-time
+                            type: string
+                          host:
+                            type: string
+                          id:
+                            type: string
+                          startTime:
+                            format: date-time
+                            type: string
+                          status:
+                            type: string
+                        type: object
+                      type: array
                     driver:
                       enum:
                       - Restic
@@ -193,20 +197,43 @@ spec:
                     resticStats:
                       items:
                         properties:
-                          endTime:
-                            format: date-time
-                            type: string
-                          hostPath:
-                            type: string
-                          id:
-                            type: string
-                          size:
-                            type: string
-                          startTime:
-                            format: date-time
-                            type: string
-                          uploaded:
-                            type: string
+                          progress:
+                            properties:
+                              backupDone:
+                                type: string
+                              filesDone:
+                                format: int64
+                                type: integer
+                              percentDone:
+                                type: string
+                              secondsElapsed:
+                                format: int64
+                                type: integer
+                              speed:
+                                type: string
+                              total:
+                                type: string
+                              totalFiles:
+                                format: int64
+                                type: integer
+                            type: object
+                          summary:
+                            properties:
+                              endTime:
+                                format: date-time
+                                type: string
+                              hostPath:
+                                type: string
+                              id:
+                                type: string
+                              size:
+                                type: string
+                              startTime:
+                                format: date-time
+                                type: string
+                              uploaded:
+                                type: string
+                            type: object
                         type: object
                       type: array
                     size:

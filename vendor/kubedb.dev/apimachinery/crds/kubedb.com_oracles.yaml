@@ -82,6 +82,8 @@ spec:
                     type: object
                   secretName:
                     type: string
+                  walletConfigSecret:
+                    type: string
                 type: object
               dataGuard:
                 properties:

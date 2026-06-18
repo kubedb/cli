@@ -32,8 +32,6 @@ type DruidExpansion interface{}
 
 type ElasticsearchExpansion interface{}
 
-type EtcdExpansion interface{}
-
 type HanaDBExpansion interface{}
 
 type HazelcastExpansion interface{}

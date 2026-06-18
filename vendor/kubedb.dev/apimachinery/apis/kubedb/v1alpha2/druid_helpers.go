@@ -747,7 +747,7 @@ func (d *Druid) GetPersistentSecrets() []string {
 	}
 
 	var secrets []string
-	if d.Spec.AuthSecret != nil {
+	if !IsVirtualAuthSecretReferred(d.Spec.AuthSecret) && d.Spec.AuthSecret != nil && d.Spec.AuthSecret.Name != "" {
 		secrets = append(secrets, d.Spec.AuthSecret.Name)
 	}
 	return secrets

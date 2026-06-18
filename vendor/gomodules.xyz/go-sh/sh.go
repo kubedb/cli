@@ -28,7 +28,6 @@ Why I love golang so much, because the usage of golang is simple, but the power 
 package sh
 
 import (
-	"bytes"
 	"fmt"
 	"io"
 	"os"
@@ -61,10 +60,13 @@ type Session struct {
 	PipeStdErrors bool // combine std errors of all pipe commands
 
 	// Options related to leaf commands
-	leafCmds           []*exec.Cmd     // List of commands
-	leafOutputBuffer   []*bytes.Buffer // Buffers to store the output of each command
-	enableOutputBuffer bool            // If true, collect all command outputs in buffers
-	enableErrsBuffer   bool            // If true, collect all command errors in buffers
+	leafCmds           []*exec.Cmd   // List of commands
+	leafOutputBuffer   []*safeBuffer // Buffers to store the output of each command
+	enableOutputBuffer bool          // If true, collect all command outputs in buffers
+	enableErrsBuffer   bool          // If true, collect all command errors in buffers
+
+	// Last CMD Output
+	lastOutputBuffer *safeBuffer
 }
 
 func (s *Session) writePrompt(args ...interface{}) {
@@ -195,7 +197,8 @@ func (s *Session) appendCmd(cmd string, args []string, cwd Dir, env map[string]s
 		s.cmds = make([]*exec.Cmd, 0)
 		s.leafCmds = make([]*exec.Cmd, 0)
 		s.pipeWriters = make([]*io.PipeWriter, 0)
-		s.leafOutputBuffer = make([]*bytes.Buffer, 0)
+		s.leafOutputBuffer = make([]*safeBuffer, 0)
+		s.lastOutputBuffer = new(safeBuffer)
 	}
 	for k, v := range s.Env {
 		if _, ok := env[k]; !ok {
@@ -242,6 +245,8 @@ func (s *Session) appendLeafCmd(cmd string, args []string, cwd Dir, env map[stri
 		s.started = false
 		s.leafCmds = make([]*exec.Cmd, 0)
 		s.pipeWriters = make([]*io.PipeWriter, 0)
+		s.leafOutputBuffer = make([]*safeBuffer, 0)
+		s.lastOutputBuffer = new(safeBuffer)
 	}
 	for k, v := range s.Env {
 		if _, ok := env[k]; !ok {

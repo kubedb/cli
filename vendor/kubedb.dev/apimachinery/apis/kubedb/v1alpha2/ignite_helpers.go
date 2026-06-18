@@ -92,7 +92,7 @@ func (i *Ignite) GetAuthSecretName() string {
 
 func (i *Ignite) GetPersistentSecrets() []string {
 	var secrets []string
-	if i.Spec.AuthSecret != nil {
+	if !IsVirtualAuthSecretReferred(i.Spec.AuthSecret) && i.Spec.AuthSecret != nil && i.Spec.AuthSecret.Name != "" {
 		secrets = append(secrets, i.GetAuthSecretName())
 	}
 	return secrets

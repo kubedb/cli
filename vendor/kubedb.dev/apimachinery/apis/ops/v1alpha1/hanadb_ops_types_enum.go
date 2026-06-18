@@ -13,6 +13,8 @@ import (
 const (
 	// HanaDBOpsRequestTypeVerticalScaling is a HanaDBOpsRequestType of type VerticalScaling.
 	HanaDBOpsRequestTypeVerticalScaling HanaDBOpsRequestType = "VerticalScaling"
+	// HanaDBOpsRequestTypeVolumeExpansion is a HanaDBOpsRequestType of type VolumeExpansion.
+	HanaDBOpsRequestTypeVolumeExpansion HanaDBOpsRequestType = "VolumeExpansion"
 	// HanaDBOpsRequestTypeRestart is a HanaDBOpsRequestType of type Restart.
 	HanaDBOpsRequestTypeRestart HanaDBOpsRequestType = "Restart"
 	// HanaDBOpsRequestTypeReconfigure is a HanaDBOpsRequestType of type Reconfigure.
@@ -29,6 +31,7 @@ var ErrInvalidHanaDBOpsRequestType = fmt.Errorf("not a valid HanaDBOpsRequestTyp
 
 var _HanaDBOpsRequestTypeNames = []string{
 	string(HanaDBOpsRequestTypeVerticalScaling),
+	string(HanaDBOpsRequestTypeVolumeExpansion),
 	string(HanaDBOpsRequestTypeRestart),
 	string(HanaDBOpsRequestTypeReconfigure),
 	string(HanaDBOpsRequestTypeReconfigureTLS),
@@ -47,6 +50,7 @@ func HanaDBOpsRequestTypeNames() []string {
 func HanaDBOpsRequestTypeValues() []HanaDBOpsRequestType {
 	return []HanaDBOpsRequestType{
 		HanaDBOpsRequestTypeVerticalScaling,
+		HanaDBOpsRequestTypeVolumeExpansion,
 		HanaDBOpsRequestTypeRestart,
 		HanaDBOpsRequestTypeReconfigure,
 		HanaDBOpsRequestTypeReconfigureTLS,
@@ -69,6 +73,7 @@ func (x HanaDBOpsRequestType) IsValid() bool {
 
 var _HanaDBOpsRequestTypeValue = map[string]HanaDBOpsRequestType{
 	"VerticalScaling":  HanaDBOpsRequestTypeVerticalScaling,
+	"VolumeExpansion":  HanaDBOpsRequestTypeVolumeExpansion,
 	"Restart":          HanaDBOpsRequestTypeRestart,
 	"Reconfigure":      HanaDBOpsRequestTypeReconfigure,
 	"ReconfigureTLS":   HanaDBOpsRequestTypeReconfigureTLS,

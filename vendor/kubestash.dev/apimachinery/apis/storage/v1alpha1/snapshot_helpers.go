@@ -58,10 +58,10 @@ func (s *Snapshot) GetComponentsPhase() SnapshotPhase {
 	successfulComponent := 0
 
 	for _, c := range s.Status.Components {
-		if c.Phase == ComponentPhaseSucceeded {
+		switch c.Phase {
+		case ComponentPhaseSucceeded:
 			successfulComponent++
-		}
-		if c.Phase == ComponentPhaseFailed {
+		case ComponentPhaseFailed:
 			failedComponent++
 		}
 	}
@@ -73,6 +73,12 @@ func (s *Snapshot) GetComponentsPhase() SnapshotPhase {
 	}
 
 	if successfulComponent+failedComponent == totalComponents {
+		return SnapshotFailed
+	}
+
+	// For any if a single componet failed we're returning failed, Later IF any issue accours \
+	// we should return Running if the other components is still running.
+	if failedComponent > 0 {
 		return SnapshotFailed
 	}
 
@@ -117,7 +123,7 @@ func (s *Snapshot) GetTotalBackupSizeInBytes() (uint64, error) {
 	var totalSizeInByte uint64
 	for componentName, component := range s.Status.Components {
 		for _, stats := range component.ResticStats {
-			if stats.Size == "" {
+			if stats.Summary == nil || stats.Summary.Size == "" {
 				return 0, fmt.Errorf("resticStats size of component %s is empty for the snapshot %s/%s", componentName, s.Namespace, s.Name)
 			}
 

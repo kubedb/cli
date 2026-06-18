@@ -511,8 +511,9 @@ func (s *Solr) GetPersistentSecrets() []string {
 
 	var secrets []string
 	// Add Admin/Elastic user secret name
-
-	secrets = append(secrets, s.GetAuthSecretName())
+	if !IsVirtualAuthSecretReferred(s.Spec.AuthSecret) && s.Spec.AuthSecret != nil && s.Spec.AuthSecret.Name != "" {
+		secrets = append(secrets, s.GetAuthSecretName())
+	}
 
 	if s.Spec.AuthConfigSecret != nil {
 		secrets = append(secrets, s.Spec.AuthConfigSecret.Name)

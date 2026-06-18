@@ -83,7 +83,9 @@ func (r *RabbitMQ) GetAuthSecretName() string {
 
 func (r *RabbitMQ) GetPersistentSecrets() []string {
 	var secrets []string
-	secrets = append(secrets, r.GetAuthSecretName())
+	if !IsVirtualAuthSecretReferred(r.Spec.AuthSecret) && r.Spec.AuthSecret != nil && r.Spec.AuthSecret.Name != "" {
+		secrets = append(secrets, r.GetAuthSecretName())
+	}
 	secrets = append(secrets, r.DefaultErlangCookieSecretName())
 	return secrets
 }

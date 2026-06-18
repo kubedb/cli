@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"errors"
+	"fmt"
 	"io"
 	"os"
 	"os/exec"
@@ -17,6 +18,10 @@ var ErrExecTimeout = errors.New("execute timeout")
 
 // unmarshal shell output to decode json
 func (s *Session) UnmarshalJSON(data interface{}) (err error) {
+	oldout, oldbuf := s.Stdout, s.enableOutputBuffer
+	defer func() {
+		s.Stdout, s.enableOutputBuffer = oldout, oldbuf
+	}()
 	bufrw := bytes.NewBuffer(nil)
 	s.Stdout, s.enableOutputBuffer = bufrw, true
 	err = s.Run()
@@ -29,6 +34,10 @@ func (s *Session) UnmarshalJSON(data interface{}) (err error) {
 
 // unmarshal command output into xml
 func (s *Session) UnmarshalXML(data interface{}) (err error) {
+	oldout, oldbuf := s.Stdout, s.enableOutputBuffer
+	defer func() {
+		s.Stdout, s.enableOutputBuffer = oldout, oldbuf
+	}()
 	bufrw := bytes.NewBuffer(nil)
 	s.Stdout, s.enableOutputBuffer = bufrw, true
 	err = s.Run()
@@ -56,7 +65,6 @@ func (s *Session) executeCommandChain(index int, stdin *io.PipeReader) error {
 	if index >= len(s.cmds) {
 		return nil
 	}
-
 	pipeReaders, pipeWriters := createPipes(s.determinePipeCount(index))
 
 	cmd := s.cmds[index]
@@ -64,7 +72,6 @@ func (s *Session) executeCommandChain(index int, stdin *io.PipeReader) error {
 	cmd.Stdout, cmd.Stderr = s.configureCmdOutput(index, pipeWriters)
 
 	s.pipeWriters = append(s.pipeWriters, pipeWriters...)
-
 	if err := cmd.Start(); err != nil {
 		return err
 	}
@@ -84,6 +91,14 @@ func (s *Session) selectCmdStdin(index int, stdin *io.PipeReader) io.Reader {
 
 func (s *Session) configureCmdOutput(index int, pipeWriters []*io.PipeWriter) (io.Writer, io.Writer) {
 	if s.isLastCommand(index) && len(s.leafCmds) == 0 {
+		if s.enableOutputBuffer {
+			cmdOutput := &safeBuffer{}
+			s.lastOutputBuffer = cmdOutput
+			if s.enableErrsBuffer {
+				return cmdOutput, cmdOutput
+			}
+			return cmdOutput, s.Stderr
+		}
 		return s.Stdout, s.Stderr
 	}
 
@@ -133,7 +148,7 @@ func (s *Session) selectLeafCmdStderr() io.Writer {
 
 func (s *Session) selectLeafCmdStdout() io.Writer {
 	if s.enableOutputBuffer {
-		cmdOutput := &bytes.Buffer{}
+		cmdOutput := &safeBuffer{}
 		s.leafOutputBuffer = append(s.leafOutputBuffer, cmdOutput)
 		return cmdOutput
 	}
@@ -237,6 +252,7 @@ func Go(f func() error) chan error {
 }
 
 func (s *Session) Run() (err error) {
+	s.resetOutputBuffer()
 	if err = s.Start(); err != nil {
 		return
 	}
@@ -247,9 +263,9 @@ func (s *Session) Run() (err error) {
 }
 
 func (s *Session) Output() (out []byte, err error) {
-	oldout := s.Stdout
+	oldout, oldbuf := s.Stdout, s.enableOutputBuffer
 	defer func() {
-		s.Stdout = oldout
+		s.Stdout, s.enableOutputBuffer = oldout, oldbuf
 	}()
 	stdout := bytes.NewBuffer(nil)
 	s.Stdout = stdout
@@ -261,9 +277,9 @@ func (s *Session) Output() (out []byte, err error) {
 }
 
 func (s *Session) WriteStdout(f string) error {
-	oldout := s.Stdout
+	oldout, oldbuf := s.Stdout, s.enableOutputBuffer
 	defer func() {
-		s.Stdout = oldout
+		s.Stdout, s.enableOutputBuffer = oldout, oldbuf
 	}()
 
 	out, err := os.Create(f)
@@ -279,9 +295,9 @@ func (s *Session) WriteStdout(f string) error {
 }
 
 func (s *Session) AppendStdout(f string) error {
-	oldout := s.Stdout
+	oldout, oldbuf := s.Stdout, s.enableOutputBuffer
 	defer func() {
-		s.Stdout = oldout
+		s.Stdout, s.enableOutputBuffer = oldout, oldbuf
 	}()
 
 	out, err := os.OpenFile(f, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
@@ -297,11 +313,11 @@ func (s *Session) AppendStdout(f string) error {
 }
 
 func (s *Session) CombinedOutput() (out []byte, err error) {
-	oldout := s.Stdout
-	olderr := s.Stderr
+	oldout, olderr := s.Stdout, s.Stderr
+	oldbuf, olderrbuf := s.enableOutputBuffer, s.enableErrsBuffer
 	defer func() {
-		s.Stdout = oldout
-		s.Stderr = olderr
+		s.Stdout, s.Stderr = oldout, olderr
+		s.enableOutputBuffer, s.enableErrsBuffer = oldbuf, olderrbuf
 	}()
 	stdout := bytes.NewBuffer(nil)
 	s.Stdout = stdout
@@ -323,5 +339,46 @@ func (s *Session) writeCmdOutputToStdOut() error {
 			errs = append(errs, err)
 		}
 	}
+
+	if len(s.leafOutputBuffer) == 0 && s.lastOutputBuffer != nil {
+		_, err := s.Stdout.Write(s.lastOutputBuffer.Bytes())
+		if err != nil {
+			errs = append(errs, err)
+		}
+	}
 	return errors.Join(errs...)
+}
+
+func (s *Session) resetOutputBuffer() {
+	for _, buffer := range s.leafOutputBuffer {
+		buffer.Reset()
+	}
+	if s.lastOutputBuffer != nil {
+		s.lastOutputBuffer.Reset()
+	}
+}
+
+// CurrentOutput returns a snapshot of command output at the given index.
+// If leaf commands exist, index maps to the leaf command index.
+// Otherwise, only index 0 is valid and returns the last command output.
+func (s *Session) CurrentOutput(index int) ([]byte, error) {
+	if len(s.leafOutputBuffer) > 0 {
+		if index < 0 || index >= len(s.leafOutputBuffer) {
+			return nil, fmt.Errorf("index %d out of range [0, %d)", index, len(s.leafOutputBuffer))
+		}
+		return s.leafOutputBuffer[index].Bytes(), nil
+	}
+
+	if s.lastOutputBuffer == nil {
+		return nil, fmt.Errorf("no output buffer available; ensure the command was started with buffered output")
+	}
+	if index != 0 {
+		return nil, fmt.Errorf("index %d out of range: only index 0 is valid for non-leaf command chains", index)
+	}
+	return s.lastOutputBuffer.Bytes(), nil
+}
+
+// CurrentLeafOutput is kept for backward compatibility. Use CurrentOutput instead.
+func (s *Session) CurrentLeafOutput(index int) ([]byte, error) {
+	return s.CurrentOutput(index)
 }

@@ -333,7 +333,9 @@ func (h *Hazelcast) GetPersistentSecrets() []string {
 	}
 
 	var secrets []string
-	secrets = append(secrets, h.GetAuthSecretName())
+	if !IsVirtualAuthSecretReferred(h.Spec.AuthSecret) && h.Spec.AuthSecret != nil && h.Spec.AuthSecret.Name != "" {
+		secrets = append(secrets, h.GetAuthSecretName())
+	}
 
 	return secrets
 }

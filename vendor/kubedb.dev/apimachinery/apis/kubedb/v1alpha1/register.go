@@ -70,8 +70,6 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&MariaDBList{},
 		&Redis{},
 		&RedisList{},
-		&Etcd{},
-		&EtcdList{},
 	)
 
 	scheme.AddKnownTypes(SchemeGroupVersion,

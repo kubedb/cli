@@ -164,8 +164,10 @@ func (q *Qdrant) ConfigSecretName() string {
 
 func (q *Qdrant) GetPersistentSecrets() []string {
 	var secrets []string
-	if q.Spec.AuthSecret != nil {
+	if !IsVirtualAuthSecretReferred(q.Spec.AuthSecret) && q.Spec.AuthSecret != nil && q.Spec.AuthSecret.Name != "" {
 		secrets = append(secrets, q.GetAuthSecretName())
+	}
+	if q.Spec.AuthSecret != nil {
 		secrets = append(secrets, q.ConfigSecretName())
 	}
 	return secrets

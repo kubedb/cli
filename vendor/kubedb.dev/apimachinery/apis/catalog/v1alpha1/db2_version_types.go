@@ -75,6 +75,9 @@ type DB2VersionSpec struct {
 
 	// +optional
 	UI []ChartInfo `json:"ui,omitempty"`
+
+	// +optional
+	GitSyncer GitSyncer `json:"gitSyncer,omitempty"`
 }
 
 // DB2VersionDatabase is the DB2 Database image

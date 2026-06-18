@@ -16,17 +16,19 @@ limitations under the License.
 
 package v1alpha1
 
+import kmapi "kmodules.xyz/client-go/api/v1"
+
 type MySQLSource struct {
 	// ConnectionInfo refers to the source MySQL database connection information.
-	ConnectionInfo *MySQLConnectionInfo `yaml:"connectionInfo" json:"connectionInfo"`
-	Schema         *MySQLSchema         `yaml:"schema" json:"schema,omitempty"`
-	Snapshot       *MySQLSnapshot       `yaml:"snapshot" json:"snapshot,omitempty"`
-	Streaming      *MySQLStreaming      `yaml:"streaming" json:"streaming,omitempty"`
+	ConnectionInfo *ConnectionInfo `yaml:"connectionInfo" json:"connectionInfo"`
+	Schema         *MySQLSchema    `yaml:"schema" json:"schema,omitempty"`
+	Snapshot       *MySQLSnapshot  `yaml:"snapshot" json:"snapshot,omitempty"`
+	Streaming      *MySQLStreaming `yaml:"streaming" json:"streaming,omitempty"`
 }
 
 type MySQLTarget struct {
 	// ConnectionInfo refers to the target MySQL database connection information.
-	ConnectionInfo *MySQLConnectionInfo `yaml:"connectionInfo" json:"connectionInfo"`
+	ConnectionInfo *ConnectionInfo `yaml:"connectionInfo" json:"connectionInfo"`
 }
 
 type MySQLSchema struct {
@@ -54,11 +56,14 @@ type MySQLStreaming struct {
 }
 
 type MySQLConnectionInfo struct {
-	Address        string `yaml:"address" json:"address"`
-	User           string `yaml:"user" json:"user"`
-	Password       string `yaml:"password" json:"password"`
-	DBName         string `yaml:"dbName" json:"dbName"`
-	MaxConnections int    `yaml:"maxConnections" json:"maxConnections,omitempty"`
+	// AppBinding refers to the source database AppBinding name, which contains the connection information.
+	// +optional
+	AppBinding     *kmapi.ObjectReference `yaml:"appBinding,omitempty" json:"appBinding,omitempty"`
+	Address        string                 `yaml:"address" json:"address"`
+	User           string                 `yaml:"user" json:"user"`
+	Password       string                 `yaml:"password" json:"password"`
+	DBName         string                 `yaml:"dbName" json:"dbName"`
+	MaxConnections int                    `yaml:"maxConnections" json:"maxConnections,omitempty"`
 }
 
 type MySQLSnapshotPipeline struct {

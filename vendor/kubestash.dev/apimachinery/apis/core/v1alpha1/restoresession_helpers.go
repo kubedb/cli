@@ -84,13 +84,12 @@ func (rs *RestoreSession) getComponentsPhase() RestorePhase {
 	unknownComponentPhase := 0
 
 	for _, c := range rs.Status.Components {
-		if c.Phase == RestoreSucceeded {
+		switch c.Phase {
+		case RestoreSucceeded:
 			successfulComponent++
-		}
-		if c.Phase == RestoreFailed {
+		case RestoreFailed:
 			failedComponent++
-		}
-		if c.Phase == RestorePhaseUnknown {
+		case RestorePhaseUnknown:
 			unknownComponentPhase++
 		}
 	}
@@ -106,6 +105,13 @@ func (rs *RestoreSession) getComponentsPhase() RestorePhase {
 			return RestoreFailed
 		}
 		return RestorePhaseUnknown
+	}
+
+	// For any if a single componet failed we're returning failed, Later IF any issue accours \
+	// we should return Running if the other components is still running.
+
+	if failedComponent > 0 {
+		return RestoreFailed
 	}
 
 	return RestoreRunning

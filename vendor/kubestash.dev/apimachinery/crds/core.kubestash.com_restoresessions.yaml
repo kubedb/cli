@@ -9680,6 +9680,54 @@ spec:
                 type: object
               manifestOptions:
                 properties:
+                  clickhouse:
+                    properties:
+                      archiver:
+                        default: false
+                        type: boolean
+                      archiverRef:
+                        properties:
+                          name:
+                            type: string
+                          namespace:
+                            type: string
+                        required:
+                        - name
+                        type: object
+                      authSecret:
+                        default: true
+                        type: boolean
+                      authSecretName:
+                        type: string
+                      configSecret:
+                        default: true
+                        type: boolean
+                      configSecretName:
+                        type: string
+                      db:
+                        default: true
+                        type: boolean
+                      dbName:
+                        type: string
+                      initScript:
+                        default: true
+                        type: boolean
+                      restoreNamespace:
+                        type: string
+                      tlsIssuerRef:
+                        properties:
+                          apiGroup:
+                            type: string
+                          kind:
+                            type: string
+                          name:
+                            type: string
+                        required:
+                        - kind
+                        - name
+                        type: object
+                        x-kubernetes-map-type: atomic
+                    type: object
                   druid:
                     properties:
                       authSecret:
@@ -10150,6 +10198,26 @@ spec:
                       - Invalid
                       - Unknown
                       type: string
+                    progress:
+                      properties:
+                        filesDone:
+                          format: int64
+                          type: integer
+                        percentDone:
+                          type: string
+                        restoreDone:
+                          type: string
+                        secondsElapsed:
+                          format: int64
+                          type: integer
+                        speed:
+                          type: string
+                        total:
+                          type: string
+                        totalFiles:
+                          format: int64
+                          type: integer
+                      type: object
                   type: object
                 type: object
                 x-kubernetes-map-type: granular

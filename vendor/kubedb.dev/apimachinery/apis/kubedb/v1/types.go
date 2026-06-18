@@ -231,6 +231,7 @@ type Archiver struct {
 	// +optional
 	Pause bool `json:"pause,omitempty"`
 	// Ref is the name and namespace reference to the Archiver CR
+	// Ref is the name and namespace reference to the Archiver CR
 	Ref kmapi.ObjectReference `json:"ref"`
 }
 

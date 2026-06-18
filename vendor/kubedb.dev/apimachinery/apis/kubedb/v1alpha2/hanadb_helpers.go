@@ -381,7 +381,9 @@ func (h *HanaDB) GetAuthSecretName() string {
 
 func (h *HanaDB) GetPersistentSecrets() []string {
 	var secrets []string
-	secrets = append(secrets, h.GetAuthSecretName())
+	if !IsVirtualAuthSecretReferred(h.Spec.AuthSecret) && h.Spec.AuthSecret != nil && h.Spec.AuthSecret.Name != "" {
+		secrets = append(secrets, h.GetAuthSecretName())
+	}
 	return secrets
 }
 
@@ -626,11 +628,6 @@ func (h *HanaDB) SetTLSDefaults() {
 		return
 	}
 
-	if h.Spec.TLS.ClientTLS == nil {
-		defaultValue := true
-		h.Spec.TLS.ClientTLS = &defaultValue
-	}
-
 	defaultServerOrg := []string{kubedb.KubeDBOrganization}
 	defaultServerOrgUnit := []string{string(HanaDBServerCert)}
 	_, cert := kmapi.GetCertificate(h.Spec.TLS.Certificates, string(HanaDBServerCert))
@@ -720,6 +717,20 @@ func (h *HanaDB) setDefaultContainerSecurityContext(hanadbVersion *catalog.HanaD
 	h.assignDefaultContainerSecurityContext(hanadbVersion, container.SecurityContext)
 
 	podTemplate.Spec.Containers = coreutil.UpsertContainer(podTemplate.Spec.Containers, *container)
+
+	if h.IsCluster() {
+		coordinatorContainer := coreutil.GetContainerByName(podTemplate.Spec.Containers, kubedb.HanaDBCoordinatorContainerName)
+		if coordinatorContainer == nil {
+			coordinatorContainer = &core.Container{
+				Name: kubedb.HanaDBCoordinatorContainerName,
+			}
+		}
+		if coordinatorContainer.SecurityContext == nil {
+			coordinatorContainer.SecurityContext = &core.SecurityContext{}
+		}
+		h.assignDefaultContainerSecurityContext(hanadbVersion, coordinatorContainer.SecurityContext)
+		podTemplate.Spec.Containers = coreutil.UpsertContainer(podTemplate.Spec.Containers, *coordinatorContainer)
+	}
 }
 
 func (h *HanaDB) assignDefaultContainerSecurityContext(hanadbVersion *catalog.HanaDBVersion, sc *core.SecurityContext) {

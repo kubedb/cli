@@ -101,6 +101,9 @@ type ElasticsearchVersionSpec struct {
 
 	// +optional
 	UI []ChartInfo `json:"ui,omitempty"`
+
+	// +optional
+	GitSyncer GitSyncer `json:"gitSyncer,omitempty"`
 }
 
 // ElasticsearchVersionDatabase is the Elasticsearch Database image

@@ -310,7 +310,7 @@ func (s *Singlestore) GetAuthSecretName() string {
 
 func (s *Singlestore) GetPersistentSecrets() []string {
 	var secrets []string
-	if s.Spec.AuthSecret != nil {
+	if !IsVirtualAuthSecretReferred(s.Spec.AuthSecret) && s.Spec.AuthSecret != nil && s.Spec.AuthSecret.Name != "" {
 		secrets = append(secrets, s.Spec.AuthSecret.Name)
 	}
 	return secrets

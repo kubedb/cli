@@ -61,26 +61,6 @@ func RegisterConversions(s *runtime.Scheme) error {
 	}); err != nil {
 		return err
 	}
-	if err := s.AddGeneratedConversionFunc((*Etcd)(nil), (*v1alpha2.Etcd)(nil), func(a, b interface{}, scope conversion.Scope) error {
-		return Convert_v1alpha1_Etcd_To_v1alpha2_Etcd(a.(*Etcd), b.(*v1alpha2.Etcd), scope)
-	}); err != nil {
-		return err
-	}
-	if err := s.AddGeneratedConversionFunc((*v1alpha2.Etcd)(nil), (*Etcd)(nil), func(a, b interface{}, scope conversion.Scope) error {
-		return Convert_v1alpha2_Etcd_To_v1alpha1_Etcd(a.(*v1alpha2.Etcd), b.(*Etcd), scope)
-	}); err != nil {
-		return err
-	}
-	if err := s.AddGeneratedConversionFunc((*EtcdList)(nil), (*v1alpha2.EtcdList)(nil), func(a, b interface{}, scope conversion.Scope) error {
-		return Convert_v1alpha1_EtcdList_To_v1alpha2_EtcdList(a.(*EtcdList), b.(*v1alpha2.EtcdList), scope)
-	}); err != nil {
-		return err
-	}
-	if err := s.AddGeneratedConversionFunc((*v1alpha2.EtcdList)(nil), (*EtcdList)(nil), func(a, b interface{}, scope conversion.Scope) error {
-		return Convert_v1alpha2_EtcdList_To_v1alpha1_EtcdList(a.(*v1alpha2.EtcdList), b.(*EtcdList), scope)
-	}); err != nil {
-		return err
-	}
 	if err := s.AddGeneratedConversionFunc((*MariaDB)(nil), (*v1alpha2.MariaDB)(nil), func(a, b interface{}, scope conversion.Scope) error {
 		return Convert_v1alpha1_MariaDB_To_v1alpha2_MariaDB(a.(*MariaDB), b.(*v1alpha2.MariaDB), scope)
 	}); err != nil {
@@ -98,16 +78,6 @@ func RegisterConversions(s *runtime.Scheme) error {
 	}
 	if err := s.AddGeneratedConversionFunc((*v1alpha2.MariaDBList)(nil), (*MariaDBList)(nil), func(a, b interface{}, scope conversion.Scope) error {
 		return Convert_v1alpha2_MariaDBList_To_v1alpha1_MariaDBList(a.(*v1alpha2.MariaDBList), b.(*MariaDBList), scope)
-	}); err != nil {
-		return err
-	}
-	if err := s.AddGeneratedConversionFunc((*MemberSecret)(nil), (*v1alpha2.MemberSecret)(nil), func(a, b interface{}, scope conversion.Scope) error {
-		return Convert_v1alpha1_MemberSecret_To_v1alpha2_MemberSecret(a.(*MemberSecret), b.(*v1alpha2.MemberSecret), scope)
-	}); err != nil {
-		return err
-	}
-	if err := s.AddGeneratedConversionFunc((*v1alpha2.MemberSecret)(nil), (*MemberSecret)(nil), func(a, b interface{}, scope conversion.Scope) error {
-		return Convert_v1alpha2_MemberSecret_To_v1alpha1_MemberSecret(a.(*v1alpha2.MemberSecret), b.(*MemberSecret), scope)
 	}); err != nil {
 		return err
 	}
@@ -296,16 +266,6 @@ func RegisterConversions(s *runtime.Scheme) error {
 	}); err != nil {
 		return err
 	}
-	if err := s.AddGeneratedConversionFunc((*TLSPolicy)(nil), (*v1alpha2.TLSPolicy)(nil), func(a, b interface{}, scope conversion.Scope) error {
-		return Convert_v1alpha1_TLSPolicy_To_v1alpha2_TLSPolicy(a.(*TLSPolicy), b.(*v1alpha2.TLSPolicy), scope)
-	}); err != nil {
-		return err
-	}
-	if err := s.AddGeneratedConversionFunc((*v1alpha2.TLSPolicy)(nil), (*TLSPolicy)(nil), func(a, b interface{}, scope conversion.Scope) error {
-		return Convert_v1alpha2_TLSPolicy_To_v1alpha1_TLSPolicy(a.(*v1alpha2.TLSPolicy), b.(*TLSPolicy), scope)
-	}); err != nil {
-		return err
-	}
 	if err := s.AddConversionFunc((*int64)(nil), (*types.IntHash)(nil), func(a, b interface{}, scope conversion.Scope) error {
 		return Convert_int64_To_types_IntHash(a.(*int64), b.(*types.IntHash), scope)
 	}); err != nil {
@@ -333,16 +293,6 @@ func RegisterConversions(s *runtime.Scheme) error {
 	}
 	if err := s.AddConversionFunc((*ElasticsearchStatus)(nil), (*v1alpha2.ElasticsearchStatus)(nil), func(a, b interface{}, scope conversion.Scope) error {
 		return Convert_v1alpha1_ElasticsearchStatus_To_v1alpha2_ElasticsearchStatus(a.(*ElasticsearchStatus), b.(*v1alpha2.ElasticsearchStatus), scope)
-	}); err != nil {
-		return err
-	}
-	if err := s.AddConversionFunc((*EtcdSpec)(nil), (*v1alpha2.EtcdSpec)(nil), func(a, b interface{}, scope conversion.Scope) error {
-		return Convert_v1alpha1_EtcdSpec_To_v1alpha2_EtcdSpec(a.(*EtcdSpec), b.(*v1alpha2.EtcdSpec), scope)
-	}); err != nil {
-		return err
-	}
-	if err := s.AddConversionFunc((*EtcdStatus)(nil), (*v1alpha2.EtcdStatus)(nil), func(a, b interface{}, scope conversion.Scope) error {
-		return Convert_v1alpha1_EtcdStatus_To_v1alpha2_EtcdStatus(a.(*EtcdStatus), b.(*v1alpha2.EtcdStatus), scope)
 	}); err != nil {
 		return err
 	}
@@ -463,16 +413,6 @@ func RegisterConversions(s *runtime.Scheme) error {
 	}
 	if err := s.AddConversionFunc((*v1alpha2.ElasticsearchStatus)(nil), (*ElasticsearchStatus)(nil), func(a, b interface{}, scope conversion.Scope) error {
 		return Convert_v1alpha2_ElasticsearchStatus_To_v1alpha1_ElasticsearchStatus(a.(*v1alpha2.ElasticsearchStatus), b.(*ElasticsearchStatus), scope)
-	}); err != nil {
-		return err
-	}
-	if err := s.AddConversionFunc((*v1alpha2.EtcdSpec)(nil), (*EtcdSpec)(nil), func(a, b interface{}, scope conversion.Scope) error {
-		return Convert_v1alpha2_EtcdSpec_To_v1alpha1_EtcdSpec(a.(*v1alpha2.EtcdSpec), b.(*EtcdSpec), scope)
-	}); err != nil {
-		return err
-	}
-	if err := s.AddConversionFunc((*v1alpha2.EtcdStatus)(nil), (*EtcdStatus)(nil), func(a, b interface{}, scope conversion.Scope) error {
-		return Convert_v1alpha2_EtcdStatus_To_v1alpha1_EtcdStatus(a.(*v1alpha2.EtcdStatus), b.(*EtcdStatus), scope)
 	}); err != nil {
 		return err
 	}
@@ -800,144 +740,6 @@ func autoConvert_v1alpha2_ElasticsearchStatus_To_v1alpha1_ElasticsearchStatus(in
 	return nil
 }
 
-func autoConvert_v1alpha1_Etcd_To_v1alpha2_Etcd(in *Etcd, out *v1alpha2.Etcd, s conversion.Scope) error {
-	out.ObjectMeta = in.ObjectMeta
-	if err := Convert_v1alpha1_EtcdSpec_To_v1alpha2_EtcdSpec(&in.Spec, &out.Spec, s); err != nil {
-		return err
-	}
-	if err := Convert_v1alpha1_EtcdStatus_To_v1alpha2_EtcdStatus(&in.Status, &out.Status, s); err != nil {
-		return err
-	}
-	return nil
-}
-
-// Convert_v1alpha1_Etcd_To_v1alpha2_Etcd is an autogenerated conversion function.
-func Convert_v1alpha1_Etcd_To_v1alpha2_Etcd(in *Etcd, out *v1alpha2.Etcd, s conversion.Scope) error {
-	return autoConvert_v1alpha1_Etcd_To_v1alpha2_Etcd(in, out, s)
-}
-
-func autoConvert_v1alpha2_Etcd_To_v1alpha1_Etcd(in *v1alpha2.Etcd, out *Etcd, s conversion.Scope) error {
-	out.ObjectMeta = in.ObjectMeta
-	if err := Convert_v1alpha2_EtcdSpec_To_v1alpha1_EtcdSpec(&in.Spec, &out.Spec, s); err != nil {
-		return err
-	}
-	if err := Convert_v1alpha2_EtcdStatus_To_v1alpha1_EtcdStatus(&in.Status, &out.Status, s); err != nil {
-		return err
-	}
-	return nil
-}
-
-// Convert_v1alpha2_Etcd_To_v1alpha1_Etcd is an autogenerated conversion function.
-func Convert_v1alpha2_Etcd_To_v1alpha1_Etcd(in *v1alpha2.Etcd, out *Etcd, s conversion.Scope) error {
-	return autoConvert_v1alpha2_Etcd_To_v1alpha1_Etcd(in, out, s)
-}
-
-func autoConvert_v1alpha1_EtcdList_To_v1alpha2_EtcdList(in *EtcdList, out *v1alpha2.EtcdList, s conversion.Scope) error {
-	out.ListMeta = in.ListMeta
-	if in.Items != nil {
-		in, out := &in.Items, &out.Items
-		*out = make([]v1alpha2.Etcd, len(*in))
-		for i := range *in {
-			if err := Convert_v1alpha1_Etcd_To_v1alpha2_Etcd(&(*in)[i], &(*out)[i], s); err != nil {
-				return err
-			}
-		}
-	} else {
-		out.Items = nil
-	}
-	return nil
-}
-
-// Convert_v1alpha1_EtcdList_To_v1alpha2_EtcdList is an autogenerated conversion function.
-func Convert_v1alpha1_EtcdList_To_v1alpha2_EtcdList(in *EtcdList, out *v1alpha2.EtcdList, s conversion.Scope) error {
-	return autoConvert_v1alpha1_EtcdList_To_v1alpha2_EtcdList(in, out, s)
-}
-
-func autoConvert_v1alpha2_EtcdList_To_v1alpha1_EtcdList(in *v1alpha2.EtcdList, out *EtcdList, s conversion.Scope) error {
-	out.ListMeta = in.ListMeta
-	if in.Items != nil {
-		in, out := &in.Items, &out.Items
-		*out = make([]Etcd, len(*in))
-		for i := range *in {
-			if err := Convert_v1alpha2_Etcd_To_v1alpha1_Etcd(&(*in)[i], &(*out)[i], s); err != nil {
-				return err
-			}
-		}
-	} else {
-		out.Items = nil
-	}
-	return nil
-}
-
-// Convert_v1alpha2_EtcdList_To_v1alpha1_EtcdList is an autogenerated conversion function.
-func Convert_v1alpha2_EtcdList_To_v1alpha1_EtcdList(in *v1alpha2.EtcdList, out *EtcdList, s conversion.Scope) error {
-	return autoConvert_v1alpha2_EtcdList_To_v1alpha1_EtcdList(in, out, s)
-}
-
-func autoConvert_v1alpha1_EtcdSpec_To_v1alpha2_EtcdSpec(in *EtcdSpec, out *v1alpha2.EtcdSpec, s conversion.Scope) error {
-	out.Version = string(in.Version)
-	out.Replicas = (*int32)(unsafe.Pointer(in.Replicas))
-	out.StorageType = v1alpha2.StorageType(in.StorageType)
-	out.Storage = (*v1.PersistentVolumeClaimSpec)(unsafe.Pointer(in.Storage))
-	// WARNING: in.DatabaseSecret requires manual conversion: does not exist in peer-type
-	if in.Init != nil {
-		in, out := &in.Init, &out.Init
-		*out = new(v1alpha2.InitSpec)
-		if err := Convert_v1alpha1_InitSpec_To_v1alpha2_InitSpec(*in, *out, s); err != nil {
-			return err
-		}
-	} else {
-		out.Init = nil
-	}
-	// WARNING: in.BackupSchedule requires manual conversion: does not exist in peer-type
-	out.Monitor = (*apiv1.AgentSpec)(unsafe.Pointer(in.Monitor))
-	out.TLS = (*v1alpha2.TLSPolicy)(unsafe.Pointer(in.TLS))
-	out.PodTemplate = in.PodTemplate
-	// WARNING: in.ServiceTemplate requires manual conversion: does not exist in peer-type
-	// WARNING: in.UpdateStrategy requires manual conversion: does not exist in peer-type
-	out.DeletionPolicy = v1alpha2.DeletionPolicy(in.TerminationPolicy)
-	return nil
-}
-
-func autoConvert_v1alpha2_EtcdSpec_To_v1alpha1_EtcdSpec(in *v1alpha2.EtcdSpec, out *EtcdSpec, s conversion.Scope) error {
-	out.Version = types.StrYo(in.Version)
-	out.Replicas = (*int32)(unsafe.Pointer(in.Replicas))
-	out.StorageType = StorageType(in.StorageType)
-	out.Storage = (*v1.PersistentVolumeClaimSpec)(unsafe.Pointer(in.Storage))
-	// WARNING: in.AuthSecret requires manual conversion: does not exist in peer-type
-	if in.Init != nil {
-		in, out := &in.Init, &out.Init
-		*out = new(InitSpec)
-		if err := Convert_v1alpha2_InitSpec_To_v1alpha1_InitSpec(*in, *out, s); err != nil {
-			return err
-		}
-	} else {
-		out.Init = nil
-	}
-	out.Monitor = (*apiv1.AgentSpec)(unsafe.Pointer(in.Monitor))
-	out.TLS = (*TLSPolicy)(unsafe.Pointer(in.TLS))
-	out.PodTemplate = in.PodTemplate
-	// WARNING: in.ServiceTemplates requires manual conversion: does not exist in peer-type
-	// WARNING: in.Halted requires manual conversion: does not exist in peer-type
-	out.TerminationPolicy = TerminationPolicy(in.DeletionPolicy)
-	return nil
-}
-
-func autoConvert_v1alpha1_EtcdStatus_To_v1alpha2_EtcdStatus(in *EtcdStatus, out *v1alpha2.EtcdStatus, s conversion.Scope) error {
-	out.Phase = v1alpha2.DatabasePhase(in.Phase)
-	// WARNING: in.Reason requires manual conversion: does not exist in peer-type
-	// WARNING: in.ObservedGeneration requires manual conversion: inconvertible types (*gomodules.xyz/encoding/json/types.IntHash vs int64)
-	return nil
-}
-
-func autoConvert_v1alpha2_EtcdStatus_To_v1alpha1_EtcdStatus(in *v1alpha2.EtcdStatus, out *EtcdStatus, s conversion.Scope) error {
-	out.Phase = DatabasePhase(in.Phase)
-	// WARNING: in.ObservedGeneration requires manual conversion: inconvertible types (int64 vs *gomodules.xyz/encoding/json/types.IntHash)
-	// WARNING: in.Conditions requires manual conversion: does not exist in peer-type
-	// WARNING: in.AuthSecret requires manual conversion: does not exist in peer-type
-	return nil
-}
-
 func autoConvert_v1alpha1_InitSpec_To_v1alpha2_InitSpec(in *InitSpec, out *v1alpha2.InitSpec, s conversion.Scope) error {
 	// WARNING: in.ScriptSource requires manual conversion: does not exist in peer-type
 	// WARNING: in.SnapshotSource requires manual conversion: does not exist in peer-type
@@ -1095,28 +897,6 @@ func autoConvert_v1alpha2_MariaDBStatus_To_v1alpha1_MariaDBStatus(in *v1alpha2.M
 	// WARNING: in.Conditions requires manual conversion: does not exist in peer-type
 	// WARNING: in.AuthSecret requires manual conversion: does not exist in peer-type
 	return nil
-}
-
-func autoConvert_v1alpha1_MemberSecret_To_v1alpha2_MemberSecret(in *MemberSecret, out *v1alpha2.MemberSecret, s conversion.Scope) error {
-	out.PeerSecret = in.PeerSecret
-	out.ServerSecret = in.ServerSecret
-	return nil
-}
-
-// Convert_v1alpha1_MemberSecret_To_v1alpha2_MemberSecret is an autogenerated conversion function.
-func Convert_v1alpha1_MemberSecret_To_v1alpha2_MemberSecret(in *MemberSecret, out *v1alpha2.MemberSecret, s conversion.Scope) error {
-	return autoConvert_v1alpha1_MemberSecret_To_v1alpha2_MemberSecret(in, out, s)
-}
-
-func autoConvert_v1alpha2_MemberSecret_To_v1alpha1_MemberSecret(in *v1alpha2.MemberSecret, out *MemberSecret, s conversion.Scope) error {
-	out.PeerSecret = in.PeerSecret
-	out.ServerSecret = in.ServerSecret
-	return nil
-}
-
-// Convert_v1alpha2_MemberSecret_To_v1alpha1_MemberSecret is an autogenerated conversion function.
-func Convert_v1alpha2_MemberSecret_To_v1alpha1_MemberSecret(in *v1alpha2.MemberSecret, out *MemberSecret, s conversion.Scope) error {
-	return autoConvert_v1alpha2_MemberSecret_To_v1alpha1_MemberSecret(in, out, s)
 }
 
 func autoConvert_v1alpha1_Memcached_To_v1alpha2_Memcached(in *Memcached, out *v1alpha2.Memcached, s conversion.Scope) error {
@@ -2283,26 +2063,4 @@ func autoConvert_v1alpha2_ScriptSourceSpec_To_v1alpha1_ScriptSourceSpec(in *v1al
 	out.VolumeSource = in.VolumeSource
 	// WARNING: in.Git requires manual conversion: does not exist in peer-type
 	return nil
-}
-
-func autoConvert_v1alpha1_TLSPolicy_To_v1alpha2_TLSPolicy(in *TLSPolicy, out *v1alpha2.TLSPolicy, s conversion.Scope) error {
-	out.Member = (*v1alpha2.MemberSecret)(unsafe.Pointer(in.Member))
-	out.OperatorSecret = in.OperatorSecret
-	return nil
-}
-
-// Convert_v1alpha1_TLSPolicy_To_v1alpha2_TLSPolicy is an autogenerated conversion function.
-func Convert_v1alpha1_TLSPolicy_To_v1alpha2_TLSPolicy(in *TLSPolicy, out *v1alpha2.TLSPolicy, s conversion.Scope) error {
-	return autoConvert_v1alpha1_TLSPolicy_To_v1alpha2_TLSPolicy(in, out, s)
-}
-
-func autoConvert_v1alpha2_TLSPolicy_To_v1alpha1_TLSPolicy(in *v1alpha2.TLSPolicy, out *TLSPolicy, s conversion.Scope) error {
-	out.Member = (*MemberSecret)(unsafe.Pointer(in.Member))
-	out.OperatorSecret = in.OperatorSecret
-	return nil
-}
-
-// Convert_v1alpha2_TLSPolicy_To_v1alpha1_TLSPolicy is an autogenerated conversion function.
-func Convert_v1alpha2_TLSPolicy_To_v1alpha1_TLSPolicy(in *v1alpha2.TLSPolicy, out *TLSPolicy, s conversion.Scope) error {
-	return autoConvert_v1alpha2_TLSPolicy_To_v1alpha1_TLSPolicy(in, out, s)
 }

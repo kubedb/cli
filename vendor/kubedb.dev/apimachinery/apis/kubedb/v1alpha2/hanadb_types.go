@@ -67,24 +67,6 @@ const (
 	HanaDBMetricsExporterCert HanaDBCertificateAlias = "metrics-exporter"
 )
 
-type HanaDBTLSConfig struct {
-	kmapi.TLSConfig `json:",inline"`
-
-	// ClientTLS determines whether KubeDB clients connect to the SAP HANA SQL interface
-	// over TLS.
-	// +optional
-	ClientTLS *bool `json:"clientTLS,omitempty"`
-
-	// ServerName is used to verify the hostname on the certificate returned by SAP HANA.
-	// +optional
-	ServerName string `json:"serverName,omitempty"`
-
-	// InsecureSkipVerify controls whether KubeDB clients verify the SAP HANA server
-	// certificate chain and hostname.
-	// +optional
-	InsecureSkipVerify bool `json:"insecureSkipVerify,omitempty"`
-}
-
 // HanaDB is the Schema for the hanadbs API
 
 // +genclient
@@ -143,7 +125,7 @@ type HanaDBSpec struct {
 	// server-side TLS, KubeDB client connections, and metrics exporter TLS.
 	// When TLS is specified, issuerRef must be set.
 	// +optional
-	TLS *HanaDBTLSConfig `json:"tls,omitempty"`
+	TLS *kmapi.TLSConfig `json:"tls,omitempty"`
 
 	// Monitor is used monitor database instance
 	// +optional
@@ -169,6 +151,10 @@ type HanaDBSpec struct {
 	// Arbiter controls spec for arbiter pods
 	// +optional
 	Arbiter *ArbiterSpec `json:"arbiter,omitempty"`
+
+	// Init is used to initialize the database from a script or git repo.
+	// +optional
+	Init *InitSpec `json:"init,omitempty"`
 }
 
 // HanaDBTopology defines the deployment mode for HanaDB

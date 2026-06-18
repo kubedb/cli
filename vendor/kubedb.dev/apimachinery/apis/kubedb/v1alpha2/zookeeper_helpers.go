@@ -174,7 +174,7 @@ func (z *ZooKeeper) GetPersistentSecrets() []string {
 	}
 
 	var secrets []string
-	if z.Spec.AuthSecret != nil {
+	if !IsVirtualAuthSecretReferred(z.Spec.AuthSecret) && z.Spec.AuthSecret != nil && z.Spec.AuthSecret.Name != "" {
 		secrets = append(secrets, z.Spec.AuthSecret.Name)
 	}
 	return secrets
