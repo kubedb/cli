@@ -139,42 +139,27 @@ func generateConfig(f cmdutil.Factory, userName string, password string, dns str
 		buffer = append(buffer, tlsBuff...)
 	}
 
-	// Build a minimal AppBinding from scratch so that no server-managed fields
-	// (resourceVersion, uid, generation), source-cluster labels, or unrelated
-	// parameters (e.g. Stash addon config) are carried over. This makes
-	// repeated kubectl apply idempotent: the last-applied annotation stays
-	// clean and the 3-way merge never tries to remove metadata.resourceVersion.
-	remoteApb := &appApi.AppBinding{
-		TypeMeta: metav1.TypeMeta{
-			APIVersion: AppcatApiVersion,
-			Kind:       AppcatKind,
-		},
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      apb.Name,
-			Namespace: ns,
-		},
-		Spec: appApi.AppBindingSpec{
-			Type:    apb.Spec.Type,
-			Version: apb.Spec.Version,
-			ClientConfig: appApi.ClientConfig{
-				CABundle: apb.Spec.ClientConfig.CABundle,
-				Service: &appApi.ServiceReference{
-					Scheme: apb.Spec.ClientConfig.Service.Scheme,
-					Name:   dns,
-					Port:   apb.Spec.ClientConfig.Service.Port,
-					Path:   apb.Spec.ClientConfig.Service.Path,
-					Query:  apb.Spec.ClientConfig.Service.Query,
-				},
-			},
-			Secret: &appApi.TypedLocalObjectReference{
-				Name: authSecretName,
-			},
-		},
+	// Deep-copy the source AppBinding and replace only the ObjectMeta with a
+	// clean one. This preserves all spec fields (appRef, parameters, type,
+	// version, clientConfig, etc.) so nothing is silently dropped, while
+	// ensuring server-managed metadata (resourceVersion, uid, generation,
+	// labels, annotations) never leaks into the generated YAML. A clean
+	// ObjectMeta means the last-applied annotation stays minimal, so
+	// repeated kubectl apply is idempotent and the 3-way merge never tries
+	// to remove metadata.resourceVersion.
+	remoteApb := apb.DeepCopy()
+	remoteApb.TypeMeta = metav1.TypeMeta{
+		APIVersion: AppcatApiVersion,
+		Kind:       AppcatKind,
 	}
+	remoteApb.ObjectMeta = metav1.ObjectMeta{
+		Name:      apb.Name,
+		Namespace: ns,
+	}
+	remoteApb.Spec.ClientConfig.Service.Name = dns
+	remoteApb.Spec.Secret.Name = authSecretName
 	if tlsSecretName != "" {
-		remoteApb.Spec.TLSSecret = &appApi.TypedLocalObjectReference{
-			Name: tlsSecretName,
-		}
+		remoteApb.Spec.TLSSecret.Name = tlsSecretName
 	}
 
 	appbindingYaml, err := yaml.Marshal(remoteApb)
