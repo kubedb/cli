@@ -147,6 +147,10 @@ func generateMySQLConfig(f cmdutil.Factory, userName string, password string, dn
 	apb.Kind = AppcatKind
 	apb.Spec.ClientConfig.Service.Name = dns
 	apb.Spec.Secret.Name = authSecretName
+	apb.ResourceVersion = ""
+	apb.UID = ""
+	apb.CreationTimestamp = metav1.Time{}
+	apb.Generation = 0
 	apb.Annotations = nil
 	apb.ManagedFields = nil
 	apb.OwnerReferences = nil
@@ -184,7 +188,11 @@ func generateMySQLTlsSecret(userName string, apb *appApi.AppBinding, ns string, 
 	}
 	tlsSecret.APIVersion = ApiversionV1
 	tlsSecret.Kind = KindSecret
+	tlsSecret.ResourceVersion = ""
+	tlsSecret.UID = ""
+	tlsSecret.CreationTimestamp = metav1.Time{}
 	tlsSecret.Annotations = nil
+	tlsSecret.Labels = nil
 	tlsSecret.ManagedFields = nil
 	tlsSecretYaml, err := yaml.Marshal(tlsSecret)
 	if err != nil {

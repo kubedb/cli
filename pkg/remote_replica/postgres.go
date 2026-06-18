@@ -143,6 +143,10 @@ func generateConfig(f cmdutil.Factory, userName string, password string, dns str
 	apb.Kind = AppcatKind
 	apb.Spec.ClientConfig.Service.Name = dns
 	apb.Spec.Secret.Name = authSecretName
+	apb.ResourceVersion = ""
+	apb.UID = ""
+	apb.CreationTimestamp = metav1.Time{}
+	apb.Generation = 0
 	apb.Annotations = nil
 	apb.ManagedFields = nil
 	apb.OwnerReferences = nil
@@ -180,7 +184,11 @@ func generateTlsSecret(userName string, apb *appApi.AppBinding, ns string, opts 
 	}
 	tlsSecret.APIVersion = "v1"
 	tlsSecret.Kind = "Secret"
+	tlsSecret.ResourceVersion = ""
+	tlsSecret.UID = ""
+	tlsSecret.CreationTimestamp = metav1.Time{}
 	tlsSecret.Annotations = nil
+	tlsSecret.Labels = nil
 	tlsSecret.ManagedFields = nil
 	tlsSecretYaml, err := yaml.Marshal(tlsSecret)
 	if err != nil {
