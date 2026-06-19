@@ -218,6 +218,22 @@ type Component struct {
 
 	// ClickHouseStats specifies the ClickHouse Backup specific information
 	ClickHouseStats []ClickHouseStats `json:"clickHouseStats,omitempty"`
+
+	// Neo4jStats specifies the Neo4j Admin specific information
+	Neo4jStats []Neo4jStats `json:"neo4jStats,omitempty"`
+}
+
+type Neo4jStats struct {
+	File        string `json:"file,omitempty"`
+	Database    string `json:"database,omitempty"`
+	DatabaseID  string `json:"databaseID,omitempty"`
+	Time        string `json:"time,omitempty"`
+	Full        bool   `json:"full,omitempty"`
+	Compressed  bool   `json:"compressed,omitempty"`
+	LowestTX    int64  `json:"lowestTX,omitempty"`
+	HighestTX   int64  `json:"highestTX,omitempty"`
+	StoreIDHash string `json:"storeIDHash,omitempty"`
+	Recovered   bool   `json:"recovered,omitempty"`
 }
 
 type LogStats struct {

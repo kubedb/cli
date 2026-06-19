@@ -24,12 +24,44 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 )
 
+func (Aerospike) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1a2.ResourcePluralAerospike))
+}
+
+func (Cassandra) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1a2.ResourcePluralCassandra))
+}
+
+func (ClickHouse) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1a2.ResourcePluralClickHouse))
+}
+
+func (DB2) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1a2.ResourcePluralDB2))
+}
+
+func (DocumentDB) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1a2.ResourcePluralDocumentDB))
+}
+
 func (Druid) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1a2.ResourcePluralDruid))
 }
 
 func (Elasticsearch) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1.ResourcePluralElasticsearch))
+}
+
+func (HanaDB) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1a2.ResourcePluralHanaDB))
+}
+
+func (Hazelcast) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1a2.ResourcePluralHazelcast))
+}
+
+func (Ignite) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1a2.ResourcePluralIgnite))
 }
 
 func (Kafka) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
@@ -56,6 +88,18 @@ func (MySQL) CustomResourceDefinition() *apiextensions.CustomResourceDefinition 
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1.ResourcePluralMySQL))
 }
 
+func (Milvus) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1a2.ResourcePluralMilvus))
+}
+
+func (Neo4j) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1a2.ResourcePluralNeo4j))
+}
+
+func (Oracle) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1a2.ResourcePluralOracle))
+}
+
 func (PerconaXtraDB) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1.ResourcePluralPerconaXtraDB))
 }
@@ -76,6 +120,10 @@ func (ProxySQL) CustomResourceDefinition() *apiextensions.CustomResourceDefiniti
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1.ResourcePluralProxySQL))
 }
 
+func (Qdrant) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1a2.ResourcePluralQdrant))
+}
+
 func (RabbitMQ) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1a2.ResourcePluralRabbitmq))
 }
@@ -94,6 +142,10 @@ func (Singlestore) CustomResourceDefinition() *apiextensions.CustomResourceDefin
 
 func (Solr) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1a2.ResourcePluralSolr))
+}
+
+func (Weaviate) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1a2.ResourcePluralWeaviate))
 }
 
 func (ZooKeeper) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {

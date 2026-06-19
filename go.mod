@@ -27,8 +27,8 @@ require (
 	kmodules.xyz/client-go v0.34.3
 	kmodules.xyz/custom-resources v0.34.0
 	kmodules.xyz/monitoring-agent-api v0.34.1
-	kubedb.dev/apimachinery v0.65.0-rc.2
-	kubedb.dev/db-client-go v0.20.0-rc.2
+	kubedb.dev/apimachinery v0.65.0
+	kubedb.dev/db-client-go v0.20.0
 	kubeops.dev/petset v0.0.17-0.20260418091244-7f666912d240
 	sigs.k8s.io/controller-runtime v0.22.4
 	sigs.k8s.io/yaml v1.6.0
@@ -189,7 +189,7 @@ require (
 	kubeops.dev/csi-driver-cacerts v0.5.1-0.20260418091014-4f539f46235c // indirect
 	kubeops.dev/operator-shard-manager v0.0.6-0.20260418091213-65daf7da824d // indirect
 	kubeops.dev/sidekick v0.0.15-0.20260418091208-a1cb9f4a3553 // indirect
-	kubestash.dev/apimachinery v0.28.0-rc.2 // indirect
+	kubestash.dev/apimachinery v0.28.0 // indirect
 	open-cluster-management.io/api v1.2.0 // indirect
 	sigs.k8s.io/cli-utils v0.37.2 // indirect
 	sigs.k8s.io/gateway-api v1.4.0 // indirect

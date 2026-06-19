@@ -827,6 +827,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.WeaviateList":                                  schema_apimachinery_apis_kubedb_v1alpha2_WeaviateList(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.WeaviateSpec":                                  schema_apimachinery_apis_kubedb_v1alpha2_WeaviateSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.WeaviateStatus":                                schema_apimachinery_apis_kubedb_v1alpha2_WeaviateStatus(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.WeaviateTLSConfig":                             schema_apimachinery_apis_kubedb_v1alpha2_WeaviateTLSConfig(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ZooKeeper":                                     schema_apimachinery_apis_kubedb_v1alpha2_ZooKeeper(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ZooKeeperApp":                                  schema_apimachinery_apis_kubedb_v1alpha2_ZooKeeperApp(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ZooKeeperList":                                 schema_apimachinery_apis_kubedb_v1alpha2_ZooKeeperList(ref),
@@ -33728,13 +33729,6 @@ func schema_apimachinery_apis_kubedb_v1alpha2_AerospikeSpec(ref common.Reference
 							Format:      "",
 						},
 					},
-					"replicas": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Number of instances to deploy for a Aerospike instance.",
-							Type:        []string{"integer"},
-							Format:      "int32",
-						},
-					},
 					"mode": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Default is \"Standalone\".",
@@ -33764,9 +33758,17 @@ func schema_apimachinery_apis_kubedb_v1alpha2_AerospikeSpec(ref common.Reference
 							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec"),
 						},
 					},
+					"disableAuth": {
+						SchemaProps: spec.SchemaProps{
+							Description: "If disable Auth true then don't create any auth secret",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
 					"podTemplate": {
 						SchemaProps: spec.SchemaProps{
 							Description: "PodTemplate is an optional configuration for pods used to expose Aerospike",
+							Default:     map[string]interface{}{},
 							Ref:         ref("kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec"),
 						},
 					},
@@ -47147,6 +47149,12 @@ func schema_apimachinery_apis_kubedb_v1alpha2_WeaviateSpec(ref common.ReferenceC
 							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.WeaviateConfiguration"),
 						},
 					},
+					"tls": {
+						SchemaProps: spec.SchemaProps{
+							Description: "TLS contains tls configurations for client and server.",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.WeaviateTLSConfig"),
+						},
+					},
 					"podTemplate": {
 						SchemaProps: spec.SchemaProps{
 							Description: "PodTemplate is an optional configuration for pods used to expose database",
@@ -47187,7 +47195,7 @@ func schema_apimachinery_apis_kubedb_v1alpha2_WeaviateSpec(ref common.ReferenceC
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ReplicationConfig", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.WeaviateConfiguration"},
+			"k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ReplicationConfig", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.WeaviateConfiguration", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.WeaviateTLSConfig"},
 	}
 }
 
@@ -47231,6 +47239,47 @@ func schema_apimachinery_apis_kubedb_v1alpha2_WeaviateStatus(ref common.Referenc
 		},
 		Dependencies: []string{
 			"kmodules.xyz/client-go/api/v1.Condition"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1alpha2_WeaviateTLSConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"issuerRef": {
+						SchemaProps: spec.SchemaProps{
+							Description: "IssuerRef is a reference to a Certificate Issuer.",
+							Ref:         ref("k8s.io/api/core/v1.TypedLocalObjectReference"),
+						},
+					},
+					"certificates": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Certificate provides server and/or client certificate options used by application pods. These options are passed to a cert-manager Certificate object. xref: https://github.com/jetstack/cert-manager/blob/v0.16.0/pkg/apis/certmanager/v1beta1/types_certificate.go#L82-L162",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kmodules.xyz/client-go/api/v1.CertificateSpec"),
+									},
+								},
+							},
+						},
+					},
+					"clientAuth": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ClientAuth controls whether the REST HTTPS listener requires clients to present a valid certificate. If unset, client certificate authentication is enabled for backward compatibility.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.TypedLocalObjectReference", "kmodules.xyz/client-go/api/v1.CertificateSpec"},
 	}
 }
 

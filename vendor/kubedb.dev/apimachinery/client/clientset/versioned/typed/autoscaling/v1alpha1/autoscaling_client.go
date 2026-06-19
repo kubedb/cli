@@ -29,8 +29,10 @@ import (
 
 type AutoscalingV1alpha1Interface interface {
 	RESTClient() rest.Interface
+	AerospikeAutoscalersGetter
 	CassandraAutoscalersGetter
 	ClickHouseAutoscalersGetter
+	DB2AutoscalersGetter
 	DocumentDBAutoscalersGetter
 	DruidAutoscalersGetter
 	ElasticsearchAutoscalersGetter
@@ -66,12 +68,20 @@ type AutoscalingV1alpha1Client struct {
 	restClient rest.Interface
 }
 
+func (c *AutoscalingV1alpha1Client) AerospikeAutoscalers(namespace string) AerospikeAutoscalerInterface {
+	return newAerospikeAutoscalers(c, namespace)
+}
+
 func (c *AutoscalingV1alpha1Client) CassandraAutoscalers(namespace string) CassandraAutoscalerInterface {
 	return newCassandraAutoscalers(c, namespace)
 }
 
 func (c *AutoscalingV1alpha1Client) ClickHouseAutoscalers(namespace string) ClickHouseAutoscalerInterface {
 	return newClickHouseAutoscalers(c, namespace)
+}
+
+func (c *AutoscalingV1alpha1Client) DB2Autoscalers(namespace string) DB2AutoscalerInterface {
+	return newDB2Autoscalers(c, namespace)
 }
 
 func (c *AutoscalingV1alpha1Client) DocumentDBAutoscalers(namespace string) DocumentDBAutoscalerInterface {

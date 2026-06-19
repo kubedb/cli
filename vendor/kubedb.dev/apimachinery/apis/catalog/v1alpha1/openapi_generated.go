@@ -41983,12 +41983,18 @@ func schema_apimachinery_apis_catalog_v1alpha1_SinglestoreVersionSpec(ref common
 							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.SinglestoreSecurityContext"),
 						},
 					},
+					"gitSyncer": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.GitSyncer"),
+						},
+					},
 				},
 				Required: []string{"version", "db", "coordinator"},
 			},
 		},
 		Dependencies: []string{
-			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.SinglestoreCoordinator", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.SinglestoreInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.SinglestoreSecurityContext", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.SinglestoreStandaloneVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.SinglestoreVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints"},
+			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.GitSyncer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.SinglestoreCoordinator", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.SinglestoreInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.SinglestoreSecurityContext", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.SinglestoreStandaloneVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.SinglestoreVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints"},
 	}
 }
 

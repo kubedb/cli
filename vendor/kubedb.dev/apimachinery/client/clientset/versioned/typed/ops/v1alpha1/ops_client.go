@@ -29,8 +29,10 @@ import (
 
 type OpsV1alpha1Interface interface {
 	RESTClient() rest.Interface
+	AerospikeOpsRequestsGetter
 	CassandraOpsRequestsGetter
 	ClickHouseOpsRequestsGetter
+	DB2OpsRequestsGetter
 	DocumentDBOpsRequestsGetter
 	DruidOpsRequestsGetter
 	ElasticsearchOpsRequestsGetter
@@ -66,12 +68,20 @@ type OpsV1alpha1Client struct {
 	restClient rest.Interface
 }
 
+func (c *OpsV1alpha1Client) AerospikeOpsRequests(namespace string) AerospikeOpsRequestInterface {
+	return newAerospikeOpsRequests(c, namespace)
+}
+
 func (c *OpsV1alpha1Client) CassandraOpsRequests(namespace string) CassandraOpsRequestInterface {
 	return newCassandraOpsRequests(c, namespace)
 }
 
 func (c *OpsV1alpha1Client) ClickHouseOpsRequests(namespace string) ClickHouseOpsRequestInterface {
 	return newClickHouseOpsRequests(c, namespace)
+}
+
+func (c *OpsV1alpha1Client) DB2OpsRequests(namespace string) DB2OpsRequestInterface {
+	return newDB2OpsRequests(c, namespace)
 }
 
 func (c *OpsV1alpha1Client) DocumentDBOpsRequests(namespace string) DocumentDBOpsRequestInterface {

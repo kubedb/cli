@@ -66,10 +66,6 @@ type AerospikeSpec struct {
 	// +optional
 	Version string `json:"version"`
 
-	// Number of instances to deploy for a Aerospike instance.
-	// +optional
-	Replicas *int32 `json:"replicas,omitempty"`
-
 	// Default is "Standalone".
 	Mode AerospikeMode `json:"mode,omitempty"`
 
@@ -86,9 +82,13 @@ type AerospikeSpec struct {
 	// +optional
 	Init *InitSpec `json:"init,omitempty"`
 
+	// If disable Auth true then don't create any auth secret
+	// +optional
+	DisableAuth bool `json:"disableAuth,omitempty"`
+
 	// PodTemplate is an optional configuration for pods used to expose Aerospike
 	// +optional
-	PodTemplate *ofst.PodTemplateSpec `json:"podTemplate,omitempty"`
+	PodTemplate ofst.PodTemplateSpec `json:"podTemplate,omitempty"`
 
 	// ServiceTemplates is an optional configuration for services used to expose Aerospike
 	// +optional

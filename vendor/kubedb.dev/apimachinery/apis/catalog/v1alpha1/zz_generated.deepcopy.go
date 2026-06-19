@@ -4858,6 +4858,7 @@ func (in *SinglestoreVersionSpec) DeepCopyInto(out *SinglestoreVersionSpec) {
 	in.Stash.DeepCopyInto(&out.Stash)
 	in.UpdateConstraints.DeepCopyInto(&out.UpdateConstraints)
 	in.SecurityContext.DeepCopyInto(&out.SecurityContext)
+	out.GitSyncer = in.GitSyncer
 	return
 }
 

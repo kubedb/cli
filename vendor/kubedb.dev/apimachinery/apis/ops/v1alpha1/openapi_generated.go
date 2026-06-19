@@ -576,6 +576,10 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kmodules.xyz/offshoot-api/api/v1.ServiceTemplateSpec":                                       schema_kmodulesxyz_offshoot_api_api_v1_ServiceTemplateSpec(ref),
 		"kmodules.xyz/offshoot-api/api/v1.Volume":                                                    schema_kmodulesxyz_offshoot_api_api_v1_Volume(ref),
 		"kmodules.xyz/offshoot-api/api/v1.VolumeSource":                                              schema_kmodulesxyz_offshoot_api_api_v1_VolumeSource(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.AerospikeOpsRequest":                              schema_apimachinery_apis_ops_v1alpha1_AerospikeOpsRequest(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.AerospikeOpsRequestList":                          schema_apimachinery_apis_ops_v1alpha1_AerospikeOpsRequestList(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.AerospikeOpsRequestSpec":                          schema_apimachinery_apis_ops_v1alpha1_AerospikeOpsRequestSpec(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.AerospikeVerticalScalingSpec":                     schema_apimachinery_apis_ops_v1alpha1_AerospikeVerticalScalingSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.Announce":                                         schema_apimachinery_apis_ops_v1alpha1_Announce(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ArchiverOptions":                                  schema_apimachinery_apis_ops_v1alpha1_ArchiverOptions(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.AuthSpec":                                         schema_apimachinery_apis_ops_v1alpha1_AuthSpec(ref),
@@ -598,6 +602,10 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ClickHouseVolumeExpansionSpec":                    schema_apimachinery_apis_ops_v1alpha1_ClickHouseVolumeExpansionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ConfigNode":                                       schema_apimachinery_apis_ops_v1alpha1_ConfigNode(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources":                               schema_apimachinery_apis_ops_v1alpha1_ContainerResources(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.DB2OpsRequest":                                    schema_apimachinery_apis_ops_v1alpha1_DB2OpsRequest(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.DB2OpsRequestList":                                schema_apimachinery_apis_ops_v1alpha1_DB2OpsRequestList(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.DB2OpsRequestSpec":                                schema_apimachinery_apis_ops_v1alpha1_DB2OpsRequestSpec(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.DB2VerticalScalingSpec":                           schema_apimachinery_apis_ops_v1alpha1_DB2VerticalScalingSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.DocumentDBCustomConfiguration":                    schema_apimachinery_apis_ops_v1alpha1_DocumentDBCustomConfiguration(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.DocumentDBCustomConfigurationSpec":                schema_apimachinery_apis_ops_v1alpha1_DocumentDBCustomConfigurationSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.DocumentDBForceFailOver":                          schema_apimachinery_apis_ops_v1alpha1_DocumentDBForceFailOver(ref),
@@ -870,6 +878,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.WeaviateOpsRequestSpec":                           schema_apimachinery_apis_ops_v1alpha1_WeaviateOpsRequestSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.WeaviateReconfigurationSpec":                      schema_apimachinery_apis_ops_v1alpha1_WeaviateReconfigurationSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.WeaviateReplicaReadinessCriteria":                 schema_apimachinery_apis_ops_v1alpha1_WeaviateReplicaReadinessCriteria(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.WeaviateTLSSpec":                                  schema_apimachinery_apis_ops_v1alpha1_WeaviateTLSSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.WeaviateUpdateVersionSpec":                        schema_apimachinery_apis_ops_v1alpha1_WeaviateUpdateVersionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.WeaviateVerticalScalingSpec":                      schema_apimachinery_apis_ops_v1alpha1_WeaviateVerticalScalingSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.WeaviateVolumeExpansionSpec":                      schema_apimachinery_apis_ops_v1alpha1_WeaviateVolumeExpansionSpec(ref),
@@ -33595,6 +33604,182 @@ func schema_kmodulesxyz_offshoot_api_api_v1_VolumeSource(ref common.ReferenceCal
 	}
 }
 
+func schema_apimachinery_apis_ops_v1alpha1_AerospikeOpsRequest(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "AerospikeOpsRequest defines an Aerospike DBA operation.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
+						},
+					},
+					"spec": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.AerospikeOpsRequestSpec"),
+						},
+					},
+					"status": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.OpsRequestStatus"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/ops/v1alpha1.AerospikeOpsRequestSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.OpsRequestStatus"},
+	}
+}
+
+func schema_apimachinery_apis_ops_v1alpha1_AerospikeOpsRequestList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+						},
+					},
+					"items": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.AerospikeOpsRequest"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "kubedb.dev/apimachinery/apis/ops/v1alpha1.AerospikeOpsRequest"},
+	}
+}
+
+func schema_apimachinery_apis_ops_v1alpha1_AerospikeOpsRequestSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"databaseRef": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/api/core/v1.LocalObjectReference"),
+						},
+					},
+					"type": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"verticalScaling": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies information necessary for vertical scaling",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.AerospikeVerticalScalingSpec"),
+						},
+					},
+					"restart": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies information necessary for restarting database",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec"),
+						},
+					},
+					"timeout": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("k8s.io/apimachinery/pkg/apis/meta/v1.Duration"),
+						},
+					},
+					"apply": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"maxRetries": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"integer"},
+							Format: "int32",
+						},
+					},
+				},
+				Required: []string{"databaseRef", "type"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.AerospikeVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec"},
+	}
+}
+
+func schema_apimachinery_apis_ops_v1alpha1_AerospikeVerticalScalingSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "AerospikeVerticalScalingSpec is the spec for Aerospike vertical scaling.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"aerospike": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
+						},
+					},
+					"exporter": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"},
+	}
+}
+
 func schema_apimachinery_apis_ops_v1alpha1_Announce(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -34431,6 +34616,182 @@ func schema_apimachinery_apis_ops_v1alpha1_ContainerResources(ref common.Referen
 		},
 		Dependencies: []string{
 			"k8s.io/api/core/v1.ResourceRequirements"},
+	}
+}
+
+func schema_apimachinery_apis_ops_v1alpha1_DB2OpsRequest(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "DB2OpsRequest defines a DB2 DBA operation.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
+						},
+					},
+					"spec": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.DB2OpsRequestSpec"),
+						},
+					},
+					"status": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.OpsRequestStatus"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/ops/v1alpha1.DB2OpsRequestSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.OpsRequestStatus"},
+	}
+}
+
+func schema_apimachinery_apis_ops_v1alpha1_DB2OpsRequestList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+						},
+					},
+					"items": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.DB2OpsRequest"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "kubedb.dev/apimachinery/apis/ops/v1alpha1.DB2OpsRequest"},
+	}
+}
+
+func schema_apimachinery_apis_ops_v1alpha1_DB2OpsRequestSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"databaseRef": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/api/core/v1.LocalObjectReference"),
+						},
+					},
+					"type": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"verticalScaling": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies information necessary for vertical scaling",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.DB2VerticalScalingSpec"),
+						},
+					},
+					"restart": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies information necessary for restarting database",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec"),
+						},
+					},
+					"timeout": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("k8s.io/apimachinery/pkg/apis/meta/v1.Duration"),
+						},
+					},
+					"apply": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"maxRetries": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"integer"},
+							Format: "int32",
+						},
+					},
+				},
+				Required: []string{"databaseRef", "type"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.DB2VerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec"},
+	}
+}
+
+func schema_apimachinery_apis_ops_v1alpha1_DB2VerticalScalingSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "DB2VerticalScalingSpec is the spec for DB2 vertical scaling.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"db2": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
+						},
+					},
+					"exporter": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources", "kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"},
 	}
 }
 
@@ -46036,6 +46397,12 @@ func schema_apimachinery_apis_ops_v1alpha1_WeaviateOpsRequestSpec(ref common.Ref
 							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.WeaviateReconfigurationSpec"),
 						},
 					},
+					"tls": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies information necessary for configuring TLS",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.WeaviateTLSSpec"),
+						},
+					},
 					"migration": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Specifies information necessary for migrating storageClass or data",
@@ -46072,7 +46439,7 @@ func schema_apimachinery_apis_ops_v1alpha1_WeaviateOpsRequestSpec(ref common.Ref
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.AuthSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.StorageMigrationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.WeaviateHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.WeaviateReconfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.WeaviateVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.WeaviateVolumeExpansionSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.AuthSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.StorageMigrationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.WeaviateHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.WeaviateReconfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.WeaviateTLSSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.WeaviateVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.WeaviateVolumeExpansionSpec"},
 	}
 }
 
@@ -46141,6 +46508,61 @@ func schema_apimachinery_apis_ops_v1alpha1_WeaviateReplicaReadinessCriteria(ref 
 				Type:        []string{"object"},
 			},
 		},
+	}
+}
+
+func schema_apimachinery_apis_ops_v1alpha1_WeaviateTLSSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"issuerRef": {
+						SchemaProps: spec.SchemaProps{
+							Description: "IssuerRef is a reference to a Certificate Issuer.",
+							Ref:         ref("k8s.io/api/core/v1.TypedLocalObjectReference"),
+						},
+					},
+					"certificates": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Certificate provides server and/or client certificate options used by application pods. These options are passed to a cert-manager Certificate object. xref: https://github.com/jetstack/cert-manager/blob/v0.16.0/pkg/apis/certmanager/v1beta1/types_certificate.go#L82-L162",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kmodules.xyz/client-go/api/v1.CertificateSpec"),
+									},
+								},
+							},
+						},
+					},
+					"clientAuth": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ClientAuth controls whether the REST HTTPS listener requires clients to present a valid certificate. If unset, client certificate authentication is enabled for backward compatibility.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"rotateCertificates": {
+						SchemaProps: spec.SchemaProps{
+							Description: "RotateCertificates tells operator to initiate certificate rotation",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"remove": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Remove tells operator to remove TLS configuration",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.TypedLocalObjectReference", "kmodules.xyz/client-go/api/v1.CertificateSpec"},
 	}
 }
 

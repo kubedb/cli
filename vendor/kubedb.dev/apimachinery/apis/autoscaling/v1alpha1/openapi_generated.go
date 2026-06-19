@@ -576,6 +576,10 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kmodules.xyz/offshoot-api/api/v1.ServiceTemplateSpec":                                       schema_kmodulesxyz_offshoot_api_api_v1_ServiceTemplateSpec(ref),
 		"kmodules.xyz/offshoot-api/api/v1.Volume":                                                    schema_kmodulesxyz_offshoot_api_api_v1_Volume(ref),
 		"kmodules.xyz/offshoot-api/api/v1.VolumeSource":                                              schema_kmodulesxyz_offshoot_api_api_v1_VolumeSource(ref),
+		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.AerospikeAutoscaler":                      schema_apimachinery_apis_autoscaling_v1alpha1_AerospikeAutoscaler(ref),
+		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.AerospikeAutoscalerList":                  schema_apimachinery_apis_autoscaling_v1alpha1_AerospikeAutoscalerList(ref),
+		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.AerospikeAutoscalerSpec":                  schema_apimachinery_apis_autoscaling_v1alpha1_AerospikeAutoscalerSpec(ref),
+		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.AerospikeComputeAutoscalerSpec":           schema_apimachinery_apis_autoscaling_v1alpha1_AerospikeComputeAutoscalerSpec(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.AutoscalerStatus":                         schema_apimachinery_apis_autoscaling_v1alpha1_AutoscalerStatus(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.BucketWeight":                             schema_apimachinery_apis_autoscaling_v1alpha1_BucketWeight(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.CassandraAutoscaler":                      schema_apimachinery_apis_autoscaling_v1alpha1_CassandraAutoscaler(ref),
@@ -593,6 +597,10 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec":                    schema_apimachinery_apis_autoscaling_v1alpha1_ComputeAutoscalerSpec(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeInMemoryStorageSpec":               schema_apimachinery_apis_autoscaling_v1alpha1_ComputeInMemoryStorageSpec(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ContainerResourcePolicy":                  schema_apimachinery_apis_autoscaling_v1alpha1_ContainerResourcePolicy(ref),
+		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.DB2Autoscaler":                            schema_apimachinery_apis_autoscaling_v1alpha1_DB2Autoscaler(ref),
+		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.DB2AutoscalerList":                        schema_apimachinery_apis_autoscaling_v1alpha1_DB2AutoscalerList(ref),
+		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.DB2AutoscalerSpec":                        schema_apimachinery_apis_autoscaling_v1alpha1_DB2AutoscalerSpec(ref),
+		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.DB2ComputeAutoscalerSpec":                 schema_apimachinery_apis_autoscaling_v1alpha1_DB2ComputeAutoscalerSpec(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.DocumentDBAutoscaler":                     schema_apimachinery_apis_autoscaling_v1alpha1_DocumentDBAutoscaler(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.DocumentDBAutoscalerList":                 schema_apimachinery_apis_autoscaling_v1alpha1_DocumentDBAutoscalerList(ref),
 		"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.DocumentDBAutoscalerSpec":                 schema_apimachinery_apis_autoscaling_v1alpha1_DocumentDBAutoscalerSpec(ref),
@@ -33461,6 +33469,163 @@ func schema_kmodulesxyz_offshoot_api_api_v1_VolumeSource(ref common.ReferenceCal
 	}
 }
 
+func schema_apimachinery_apis_autoscaling_v1alpha1_AerospikeAutoscaler(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Standard object metadata. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
+						},
+					},
+					"spec": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specification of the behavior of the autoscaler. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#spec-and-status.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.AerospikeAutoscalerSpec"),
+						},
+					},
+					"status": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Current information about the autoscaler.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.AutoscalerStatus"),
+						},
+					},
+				},
+				Required: []string{"spec"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.AerospikeAutoscalerSpec", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.AutoscalerStatus"},
+	}
+}
+
+func schema_apimachinery_apis_autoscaling_v1alpha1_AerospikeAutoscalerList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "AerospikeAutoscalerList is a list of AerospikeAutoscaler objects.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Description: "metadata is the standard list metadata.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+						},
+					},
+					"items": {
+						SchemaProps: spec.SchemaProps{
+							Description: "items is the list of Aerospike database autoscaler objects.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.AerospikeAutoscaler"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"items"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.AerospikeAutoscaler"},
+	}
+}
+
+func schema_apimachinery_apis_autoscaling_v1alpha1_AerospikeAutoscalerSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "AerospikeAutoscalerSpec is the specification of the behavior of the autoscaler.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"databaseRef": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("k8s.io/api/core/v1.LocalObjectReference"),
+						},
+					},
+					"opsRequestOptions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "OpsRequestOptions will be used to control the behaviour of ops-manager",
+							Ref:         ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.OpsRequestOptions"),
+						},
+					},
+					"compute": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.AerospikeComputeAutoscalerSpec"),
+						},
+					},
+				},
+				Required: []string{"databaseRef"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.AerospikeComputeAutoscalerSpec", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.OpsRequestOptions"},
+	}
+}
+
+func schema_apimachinery_apis_autoscaling_v1alpha1_AerospikeComputeAutoscalerSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"nodeTopology": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.NodeTopology"),
+						},
+					},
+					"aerospike": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.NodeTopology"},
+	}
+}
+
 func schema_apimachinery_apis_autoscaling_v1alpha1_AutoscalerStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -34167,6 +34332,163 @@ func schema_apimachinery_apis_autoscaling_v1alpha1_ContainerResourcePolicy(ref c
 				},
 			},
 		},
+	}
+}
+
+func schema_apimachinery_apis_autoscaling_v1alpha1_DB2Autoscaler(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Standard object metadata. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
+						},
+					},
+					"spec": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specification of the behavior of the autoscaler. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#spec-and-status.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.DB2AutoscalerSpec"),
+						},
+					},
+					"status": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Current information about the autoscaler.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.AutoscalerStatus"),
+						},
+					},
+				},
+				Required: []string{"spec"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.AutoscalerStatus", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.DB2AutoscalerSpec"},
+	}
+}
+
+func schema_apimachinery_apis_autoscaling_v1alpha1_DB2AutoscalerList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "DB2AutoscalerList is a list of DB2Autoscaler objects.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Description: "metadata is the standard list metadata.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+						},
+					},
+					"items": {
+						SchemaProps: spec.SchemaProps{
+							Description: "items is the list of DB2 database autoscaler objects.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.DB2Autoscaler"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"items"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.DB2Autoscaler"},
+	}
+}
+
+func schema_apimachinery_apis_autoscaling_v1alpha1_DB2AutoscalerSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "DB2AutoscalerSpec is the specification of the behavior of the autoscaler.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"databaseRef": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("k8s.io/api/core/v1.LocalObjectReference"),
+						},
+					},
+					"opsRequestOptions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "OpsRequestOptions will be used to control the behaviour of ops-manager",
+							Ref:         ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.OpsRequestOptions"),
+						},
+					},
+					"compute": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.DB2ComputeAutoscalerSpec"),
+						},
+					},
+				},
+				Required: []string{"databaseRef"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.DB2ComputeAutoscalerSpec", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.OpsRequestOptions"},
+	}
+}
+
+func schema_apimachinery_apis_autoscaling_v1alpha1_DB2ComputeAutoscalerSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"nodeTopology": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.NodeTopology"),
+						},
+					},
+					"db2": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.ComputeAutoscalerSpec", "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1.NodeTopology"},
 	}
 }
 

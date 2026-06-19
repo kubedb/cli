@@ -18,9 +18,13 @@ limitations under the License.
 
 package v1alpha1
 
+type AerospikeOpsRequestExpansion interface{}
+
 type CassandraOpsRequestExpansion interface{}
 
 type ClickHouseOpsRequestExpansion interface{}
+
+type DB2OpsRequestExpansion interface{}
 
 type DocumentDBOpsRequestExpansion interface{}
 

@@ -1580,6 +1580,8 @@ const (
 const (
 	WeaviateHTTPPortName   = "http"
 	WeaviateHTTPPort       = 8080
+	WeaviateHTTPSPortName  = "https"
+	WeaviateHTTPSPort      = 8443
 	WeaviateGRPCPortName   = "grpc"
 	WeaviateGRPCPort       = 50051
 	WeaviateRAFTPortName   = "raft"
@@ -1601,6 +1603,12 @@ const (
 	WeaviateConfigFileName  = "conf.yaml"
 	WeaviateCustomConfigDir = "/weaviate-config/conf.yaml"
 	WeaviateConfigVolName   = "config"
+
+	WeaviateTLSServerMountPath = "/weaviate/certs/server"
+	WeaviateTLSClientMountPath = "/weaviate/certs/client"
+	WeaviateTLSCACert          = "ca.crt"
+	WeaviateTLSCert            = "tls.crt"
+	WeaviateTLSKey             = "tls.key"
 )
 
 // =========================== DocumentDB Constants ============================
