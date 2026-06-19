@@ -18,6 +18,8 @@ limitations under the License.
 package v1alpha1
 
 import (
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+
 	core "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -66,6 +68,8 @@ type WeaviateOpsRequestSpec struct {
 	Restart *RestartSpec `json:"restart,omitempty"`
 	// Specifies information necessary for custom configuration of weaviate
 	Configuration *WeaviateReconfigurationSpec `json:"configuration,omitempty"`
+	// Specifies information necessary for configuring TLS
+	TLS *WeaviateTLSSpec `json:"tls,omitempty"`
 	// Specifies information necessary for migrating storageClass or data
 	Migration *StorageMigrationSpec `json:"migration,omitempty"`
 	// Specifies information necessary for configuring authSecret of the database
@@ -79,8 +83,8 @@ type WeaviateOpsRequestSpec struct {
 	MaxRetries int32 `json:"maxRetries,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;RotateAuth;StorageMigration
-// ENUM(HorizontalScaling, VerticalScaling, VolumeExpansion, Restart, Reconfigure, RotateAuth, StorageMigration)
+// +kubebuilder:validation:Enum=HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS;RotateAuth;StorageMigration
+// ENUM(HorizontalScaling, VerticalScaling, VolumeExpansion, Restart, Reconfigure, ReconfigureTLS, RotateAuth, StorageMigration)
 type WeaviateOpsRequestType string
 
 // WeaviateUpdateVersionSpec contains the update version information of a Weaviate cluster
@@ -110,6 +114,19 @@ type WeaviateVolumeExpansionSpec struct {
 	Mode VolumeExpansionMode `json:"mode"`
 	// volume specification for nodes
 	Node *resource.Quantity `json:"node,omitempty"`
+}
+
+type WeaviateTLSSpec struct {
+	// +optional
+	dbapi.WeaviateTLSConfig `json:",inline,omitempty"`
+
+	// RotateCertificates tells operator to initiate certificate rotation
+	// +optional
+	RotateCertificates bool `json:"rotateCertificates,omitempty"`
+
+	// Remove tells operator to remove TLS configuration
+	// +optional
+	Remove bool `json:"remove,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

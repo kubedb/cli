@@ -27,7 +27,7 @@ import (
 	"kmodules.xyz/client-go/apiextensions"
 )
 
-func (p *AerospikeVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+func (p AerospikeVersion) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralAerospikeVersion))
 }
 

@@ -29,8 +29,11 @@ import (
 
 type GitopsV1alpha1Interface interface {
 	RESTClient() rest.Interface
+	AerospikesGetter
 	CassandrasGetter
 	ClickHousesGetter
+	DB2sGetter
+	DocumentDBsGetter
 	DruidsGetter
 	ElasticsearchesGetter
 	HanaDBsGetter
@@ -65,12 +68,24 @@ type GitopsV1alpha1Client struct {
 	restClient rest.Interface
 }
 
+func (c *GitopsV1alpha1Client) Aerospikes(namespace string) AerospikeInterface {
+	return newAerospikes(c, namespace)
+}
+
 func (c *GitopsV1alpha1Client) Cassandras(namespace string) CassandraInterface {
 	return newCassandras(c, namespace)
 }
 
 func (c *GitopsV1alpha1Client) ClickHouses(namespace string) ClickHouseInterface {
 	return newClickHouses(c, namespace)
+}
+
+func (c *GitopsV1alpha1Client) DB2s(namespace string) DB2Interface {
+	return newDB2s(c, namespace)
+}
+
+func (c *GitopsV1alpha1Client) DocumentDBs(namespace string) DocumentDBInterface {
+	return newDocumentDBs(c, namespace)
 }
 
 func (c *GitopsV1alpha1Client) Druids(namespace string) DruidInterface {

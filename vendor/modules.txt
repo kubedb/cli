@@ -2694,7 +2694,7 @@ kmodules.xyz/resource-metrics/kubedb.com/v1
 kmodules.xyz/resource-metrics/kubedb.com/v1alpha2
 kmodules.xyz/resource-metrics/kubevault.com/v1alpha2
 kmodules.xyz/resource-metrics/ops.kubedb.com/v1alpha1
-# kubedb.dev/apimachinery v0.65.0-rc.2
+# kubedb.dev/apimachinery v0.65.0
 ## explicit; go 1.25.0
 kubedb.dev/apimachinery/apis
 kubedb.dev/apimachinery/apis/archiver/v1alpha1
@@ -2745,7 +2745,7 @@ kubedb.dev/apimachinery/pkg/factory
 kubedb.dev/apimachinery/pkg/secret
 kubedb.dev/apimachinery/pkg/utils
 kubedb.dev/apimachinery/pkg/utils/raft
-# kubedb.dev/db-client-go v0.20.0-rc.2
+# kubedb.dev/db-client-go v0.20.0
 ## explicit; go 1.25.5
 kubedb.dev/db-client-go/elasticsearch
 kubedb.dev/db-client-go/redis
@@ -2770,7 +2770,7 @@ kubeops.dev/petset/crds
 kubeops.dev/sidekick/apis/apps
 kubeops.dev/sidekick/apis/apps/v1alpha1
 kubeops.dev/sidekick/crds
-# kubestash.dev/apimachinery v0.28.0-rc.2
+# kubestash.dev/apimachinery v0.28.0
 ## explicit; go 1.25.0
 kubestash.dev/apimachinery/apis
 kubestash.dev/apimachinery/apis/core/v1alpha1

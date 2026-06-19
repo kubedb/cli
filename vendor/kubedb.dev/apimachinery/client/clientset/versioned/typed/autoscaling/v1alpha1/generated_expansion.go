@@ -18,9 +18,13 @@ limitations under the License.
 
 package v1alpha1
 
+type AerospikeAutoscalerExpansion interface{}
+
 type CassandraAutoscalerExpansion interface{}
 
 type ClickHouseAutoscalerExpansion interface{}
+
+type DB2AutoscalerExpansion interface{}
 
 type DocumentDBAutoscalerExpansion interface{}
 

@@ -21,6 +21,8 @@ const (
 	WeaviateOpsRequestTypeRestart WeaviateOpsRequestType = "Restart"
 	// WeaviateOpsRequestTypeReconfigure is a WeaviateOpsRequestType of type Reconfigure.
 	WeaviateOpsRequestTypeReconfigure WeaviateOpsRequestType = "Reconfigure"
+	// WeaviateOpsRequestTypeReconfigureTLS is a WeaviateOpsRequestType of type ReconfigureTLS.
+	WeaviateOpsRequestTypeReconfigureTLS WeaviateOpsRequestType = "ReconfigureTLS"
 	// WeaviateOpsRequestTypeRotateAuth is a WeaviateOpsRequestType of type RotateAuth.
 	WeaviateOpsRequestTypeRotateAuth WeaviateOpsRequestType = "RotateAuth"
 	// WeaviateOpsRequestTypeStorageMigration is a WeaviateOpsRequestType of type StorageMigration.
@@ -35,6 +37,7 @@ var _WeaviateOpsRequestTypeNames = []string{
 	string(WeaviateOpsRequestTypeVolumeExpansion),
 	string(WeaviateOpsRequestTypeRestart),
 	string(WeaviateOpsRequestTypeReconfigure),
+	string(WeaviateOpsRequestTypeReconfigureTLS),
 	string(WeaviateOpsRequestTypeRotateAuth),
 	string(WeaviateOpsRequestTypeStorageMigration),
 }
@@ -54,6 +57,7 @@ func WeaviateOpsRequestTypeValues() []WeaviateOpsRequestType {
 		WeaviateOpsRequestTypeVolumeExpansion,
 		WeaviateOpsRequestTypeRestart,
 		WeaviateOpsRequestTypeReconfigure,
+		WeaviateOpsRequestTypeReconfigureTLS,
 		WeaviateOpsRequestTypeRotateAuth,
 		WeaviateOpsRequestTypeStorageMigration,
 	}
@@ -77,6 +81,7 @@ var _WeaviateOpsRequestTypeValue = map[string]WeaviateOpsRequestType{
 	"VolumeExpansion":   WeaviateOpsRequestTypeVolumeExpansion,
 	"Restart":           WeaviateOpsRequestTypeRestart,
 	"Reconfigure":       WeaviateOpsRequestTypeReconfigure,
+	"ReconfigureTLS":    WeaviateOpsRequestTypeReconfigureTLS,
 	"RotateAuth":        WeaviateOpsRequestTypeRotateAuth,
 	"StorageMigration":  WeaviateOpsRequestTypeStorageMigration,
 }

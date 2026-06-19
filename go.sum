@@ -793,10 +793,10 @@ kmodules.xyz/resource-metadata v0.46.1 h1:mm4sWZvQMFJJiLdKlPGxD9Cj6f44SCdHB7Csbk
 kmodules.xyz/resource-metadata v0.46.1/go.mod h1:ejz7IVjhqmj6VH8CVfprocJK/IM++OeunrfUp51ZrIw=
 kmodules.xyz/resource-metrics v0.34.0 h1:cqscgTx3PONxHj6PIySK3sTlKKv8iKTGzRd+S6YSwXg=
 kmodules.xyz/resource-metrics v0.34.0/go.mod h1:R34IKtp5+NqcQz7AQJheBJK6Iem0LqrCbm/55Mn+ECQ=
-kubedb.dev/apimachinery v0.65.0-rc.2 h1:eLVxPxtf9DKtJQqWxSFwiItjDnllJUZy6VAFrNQAkGE=
-kubedb.dev/apimachinery v0.65.0-rc.2/go.mod h1:sfWGbWkFnv3bJhG1gfVMSbcRpU1OS2Sb+pO1RZSCBXg=
-kubedb.dev/db-client-go v0.20.0-rc.2 h1:yQtzBvpjygM3BPqAXeqkkYJCSgfuFcNa+EoPaAkRZo8=
-kubedb.dev/db-client-go v0.20.0-rc.2/go.mod h1:auOttJS4GV/PmFG35ptMtT96ocy+4yTwAqTfrGJ2aSc=
+kubedb.dev/apimachinery v0.65.0 h1:fAgu/jR+QImZhpSe1sTc6jISQ1LYETzrX8q85DuZ9GA=
+kubedb.dev/apimachinery v0.65.0/go.mod h1:TWiZCxq/9q0TN8+OjMS5pvhsLYPvtvb2aASZUPwETzA=
+kubedb.dev/db-client-go v0.20.0 h1:HmDLWUBOZwt1m40bls4yL8DuwegEhzHp4NG2k9IpPDk=
+kubedb.dev/db-client-go v0.20.0/go.mod h1:QTWcre0Q5OVa53t+HT1uTNeRRRIYlzCFKi6nUXjArjk=
 kubeops.dev/csi-driver-cacerts v0.5.1-0.20260418091014-4f539f46235c h1:ZKmBV3fFfCWQ3jDeWBbUi2J4WjJ2ff88n+cTqJ8ZXT8=
 kubeops.dev/csi-driver-cacerts v0.5.1-0.20260418091014-4f539f46235c/go.mod h1:VNbwC3gTWfmdQCVxd8mkVx+n1+0F1lOA5X3usyZN1rk=
 kubeops.dev/operator-shard-manager v0.0.6-0.20260418091213-65daf7da824d h1:/nZYflp2w1x+wQmxDtHR0Sbzl39fcuaJ66oqgVXBBwQ=
@@ -805,8 +805,8 @@ kubeops.dev/petset v0.0.17-0.20260418091244-7f666912d240 h1:6FyI0dCC/1aaJqdCqEty
 kubeops.dev/petset v0.0.17-0.20260418091244-7f666912d240/go.mod h1:zb++ZwjAon+cueexxhRSSxzJnNX1J/scqvDrGgeRHcQ=
 kubeops.dev/sidekick v0.0.15-0.20260418091208-a1cb9f4a3553 h1:metVCjSnZJmPcON1wUuedyve0lV8IPNXxuGt6FgDMi4=
 kubeops.dev/sidekick v0.0.15-0.20260418091208-a1cb9f4a3553/go.mod h1:JelNzrL+K2S3BvkxDi2bE9lxaP5Y+HeDQooXIlKBorM=
-kubestash.dev/apimachinery v0.28.0-rc.2 h1:58l08lH9Hfomaq5uVXF71OP5R4rtyiz/uP8x9ndfioo=
-kubestash.dev/apimachinery v0.28.0-rc.2/go.mod h1:zzvfyJ0ACaxAzk1to1cERIrIacHACASWcPbDkel9lyE=
+kubestash.dev/apimachinery v0.28.0 h1:0JwpV9AA4VcfxyoUTfrvJDcXAWBUg/CXCcdAGMx6IYI=
+kubestash.dev/apimachinery v0.28.0/go.mod h1:zzvfyJ0ACaxAzk1to1cERIrIacHACASWcPbDkel9lyE=
 open-cluster-management.io/api v1.2.0 h1:+yeQgJiErrur5S4s205UM37EcZ2XbC9pFSm0xgV5/hU=
 open-cluster-management.io/api v1.2.0/go.mod h1:YcmA6SpGEekIMxdoeVIIyOaBhMA6ImWRLXP4g8n8T+4=
 rsc.io/binaryregexp v0.2.0/go.mod h1:qTv7/COck+e2FymRvadv62gMdZztPaShugOCi3I+8D8=
