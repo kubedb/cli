@@ -52,7 +52,7 @@ import (
 )
 
 func PostgreSQlAPP(f cmdutil.Factory) *cobra.Command {
-	var userName, password, dns, ns string
+	var userName, password, dns, ns, authSecretName string
 	var yes bool
 
 	cmd := cobra.Command{
@@ -70,7 +70,7 @@ func PostgreSQlAPP(f cmdutil.Factory) *cobra.Command {
 			}
 
 			var buffer []byte
-			buffer, err := generateConfig(f, userName, password, dns, ns, args[0])
+			buffer, err := generateConfig(f, userName, password, dns, ns, authSecretName, args[0])
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -107,10 +107,11 @@ func PostgreSQlAPP(f cmdutil.Factory) *cobra.Command {
 		log.Fatal(err)
 	}
 	cmd.PersistentFlags().BoolVarP(&yes, "yes", "y", false, "permission for alter password  for the remote replica")
+	cmd.PersistentFlags().StringVarP(&authSecretName, "auth-secret", "s", "", "name for the auth secret on the remote cluster (default: <dbname>-remote-replica-auth)")
 	return &cmd
 }
 
-func generateConfig(f cmdutil.Factory, userName string, password string, dns string, ns string, dbname string) ([]byte, error) {
+func generateConfig(f cmdutil.Factory, userName string, password string, dns string, ns string, authSecretName string, dbname string) ([]byte, error) {
 	var buffer []byte
 	opts, err := common.NewPostgresOpts(f, dbname, ns)
 	if err != nil {
@@ -123,7 +124,7 @@ func generateConfig(f cmdutil.Factory, userName string, password string, dns str
 		return nil, fmt.Errorf("failed to get appbinding %v", err)
 	}
 
-	authBuff, authSecretName, err := generateAuthSecret(userName, password, ns, opts)
+	authBuff, authSecretName, err := generateAuthSecret(userName, password, ns, authSecretName, opts)
 	if err != nil {
 		return nil, fmt.Errorf("failed to generate auth secret ,%v", err)
 	}
@@ -222,7 +223,8 @@ func generateTlsSecret(userName string, apb *appApi.AppBinding, ns string, opts 
 	return buffer, tlsSecret.Name, nil
 }
 
-func generateAuthSecret(userName string, password string, ns string, opts *common.PostgresOpts) ([]byte, string, error) {
+func generateAuthSecret(userName string, password string, ns string, secretName string, opts *common.PostgresOpts) ([]byte, string, error) {
+	var buffer []byte
 	if userName != opts.Username {
 		// generate user if not present
 		err := generateUser(opts, userName, password)
@@ -232,6 +234,9 @@ func generateAuthSecret(userName string, password string, ns string, opts *commo
 	} else {
 		password = opts.Pass
 	}
+	if secretName == "" {
+		secretName = fmt.Sprintf("%s-remote-replica-auth", opts.DB.Name)
+	}
 	// generate auth secret
 	AuthSecret := core.Secret{
 		TypeMeta: metav1.TypeMeta{
@@ -239,7 +244,7 @@ func generateAuthSecret(userName string, password string, ns string, opts *commo
 			APIVersion: ApiversionV1,
 		},
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      fmt.Sprintf("%s-remote-replica-auth", opts.DB.Name),
+			Name:      secretName,
 			Namespace: ns,
 		},
 		StringData: map[string]string{
