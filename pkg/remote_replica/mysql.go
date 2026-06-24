@@ -133,49 +133,25 @@ func generateMySQLConfig(f cmdutil.Factory, userName string, password string, dn
 	}
 	buffer = append(buffer, authBuff...)
 
-	var tlsSecretName string
+	// generate secret
 	if apb.Spec.TLSSecret != nil {
-		var tlsBuff []byte
-		tlsBuff, tlsSecretName, err = generateMySQLTlsSecret(userName, apb, ns, opts)
+		tlsBuff, tlsSecretName, err := generateMySQLTlsSecret(userName, apb, ns, opts)
 		if err != nil {
 			return nil, fmt.Errorf("failed to generate tls secret %v", err)
 		}
 		buffer = append(buffer, tlsBuff...)
+		apb.Spec.TLSSecret.Name = tlsSecretName
 	}
 
-	// Deep-copy the source AppBinding and replace only the ObjectMeta with a
-	// clean one. This preserves all spec fields (appRef, parameters, type,
-	// version, clientConfig, etc.) so nothing is silently dropped, while
-	// ensuring server-managed metadata (resourceVersion, uid, generation,
-	// labels, annotations) never leaks into the generated YAML. A clean
-	// ObjectMeta means the last-applied annotation stays minimal, so
-	// repeated kubectl apply is idempotent and the 3-way merge never tries
-	// to remove metadata.resourceVersion.
-	remoteApb := apb.DeepCopy()
-	remoteApb.TypeMeta = metav1.TypeMeta{
-		APIVersion: AppcatApiVersion,
-		Kind:       AppcatKind,
-	}
-	remoteApb.ObjectMeta = metav1.ObjectMeta{
-		Name:      apb.Name,
-		Namespace: ns,
-	}
-	if remoteApb.Spec.ClientConfig.Service == nil {
-		remoteApb.Spec.ClientConfig.Service = &appApi.ServiceReference{}
-	}
-	remoteApb.Spec.ClientConfig.Service.Name = dns
-	if remoteApb.Spec.Secret == nil {
-		remoteApb.Spec.Secret = &appApi.TypedLocalObjectReference{}
-	}
-	remoteApb.Spec.Secret.Name = authSecretName
-	if tlsSecretName != "" {
-		if remoteApb.Spec.TLSSecret == nil {
-			remoteApb.Spec.TLSSecret = &appApi.TypedLocalObjectReference{}
-		}
-		remoteApb.Spec.TLSSecret.Name = tlsSecretName
-	}
+	apb.APIVersion = AppcatApiVersion
+	apb.Kind = AppcatKind
+	apb.Spec.ClientConfig.Service.Name = dns
+	apb.Spec.Secret.Name = authSecretName
+	apb.Annotations = nil
+	apb.ManagedFields = nil
+	apb.OwnerReferences = nil
 
-	appbindingYaml, err := yaml.Marshal(remoteApb)
+	appbindingYaml, err := yaml.Marshal(apb)
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal appbind yaml %v", err)
 	}
@@ -208,11 +184,7 @@ func generateMySQLTlsSecret(userName string, apb *appApi.AppBinding, ns string, 
 	}
 	tlsSecret.APIVersion = ApiversionV1
 	tlsSecret.Kind = KindSecret
-	tlsSecret.ResourceVersion = ""
-	tlsSecret.UID = ""
-	tlsSecret.CreationTimestamp = metav1.Time{}
 	tlsSecret.Annotations = nil
-	tlsSecret.Labels = nil
 	tlsSecret.ManagedFields = nil
 	tlsSecretYaml, err := yaml.Marshal(tlsSecret)
 	if err != nil {
