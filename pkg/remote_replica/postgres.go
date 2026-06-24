@@ -107,7 +107,7 @@ func PostgreSQlAPP(f cmdutil.Factory) *cobra.Command {
 		log.Fatal(err)
 	}
 	cmd.PersistentFlags().BoolVarP(&yes, "yes", "y", false, "permission for alter password  for the remote replica")
-	cmd.PersistentFlags().StringVarP(&authSecretName, "auth-secret", "s", "", "name for the auth secret on the remote cluster (default: <dbname>-remote-replica-auth)")
+	cmd.PersistentFlags().StringVar(&authSecretName, "auth-secret", "", "name for the auth secret on the remote cluster (default: <dbname>-remote-replica-auth)")
 	return &cmd
 }
 
