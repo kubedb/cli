@@ -197,7 +197,8 @@ func (opts *elasticsearchOpts) getDockerShellCommand(localPort int, dockerFlags,
 			return nil, err
 		}
 
-		dockerCommand = append(dockerCommand,
+		dockerCommand = append(
+			dockerCommand,
 			"-e", fmt.Sprintf("ADDRESS=https://localhost:%d", localPort),
 			"-e", fmt.Sprintf("CACERT=%s", caFile),
 			"-e", fmt.Sprintf("CERT=%s", certFile),

@@ -263,12 +263,14 @@ func (opts *mysqlOpts) getDockerShellCommand(localPort int, dockerFlags, mysqlEx
 			return nil, err
 		}
 
-		dockerCommand = append(dockerCommand,
+		dockerCommand = append(
+			dockerCommand,
 			"-v", fmt.Sprintf("%s:%s", caFile, caFile),
 			"-v", fmt.Sprintf("%s:%s", certFile, certFile),
 			"-v", fmt.Sprintf("%s:%s", keyFile, keyFile),
 		)
-		mysqlCommand = append(mysqlCommand,
+		mysqlCommand = append(
+			mysqlCommand,
 			fmt.Sprintf("--ssl-ca=%v", caFile),
 			fmt.Sprintf("--ssl-cert=%v", certFile),
 			fmt.Sprintf("--ssl-key=%v", keyFile),

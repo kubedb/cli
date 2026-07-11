@@ -278,7 +278,8 @@ func (opts *postgresOpts) getDockerShellCommand(localPort int, dockerFlags, post
 			return nil, err
 		}
 
-		dockerCommand = append(dockerCommand,
+		dockerCommand = append(
+			dockerCommand,
 			"-v", fmt.Sprintf("%s:%s", "/tmp/", "/root/.postgresql/"),
 		)
 	}

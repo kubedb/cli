@@ -129,7 +129,7 @@ func showAppBinding(ab *appcat.AppBinding, w describe.PrefixWriter) error {
 }
 
 func printUnstructuredContent(w describe.PrefixWriter, level int, content map[string]any, skipPrefix string, skip ...string) {
-	fields := []string{}
+	fields := make([]string, 0, len(content))
 	for field := range content {
 		fields = append(fields, field)
 	}
@@ -274,7 +274,8 @@ func showTopology(client kubernetes.Interface, namespace string, selector labels
 				types = append(types, key)
 			}
 		}
-		w.Write(LEVEL_0, "  %s\t%s\t%s\t%s\n",
+		w.Write(
+			LEVEL_0, "  %s\t%s\t%s\t%s\n",
 			strings.Join(types, "|"),
 			pod.Name,
 			pod.Status.StartTime,
