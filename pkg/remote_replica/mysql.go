@@ -161,7 +161,6 @@ func generateMySQLConfig(f cmdutil.Factory, userName string, password string, dn
 }
 
 func generateMySQLTlsSecret(userName string, apb *appApi.AppBinding, ns string, opts *common.MySQLOpts) ([]byte, string, error) {
-	var buffer []byte
 	_, err := ensureMySQLClientCert(opts, apb, opts.DB, dbapi.MySQLClientCert, userName)
 	if err != nil {
 		return nil, "", fmt.Errorf("failed to ensure client cert %v", err)
@@ -192,6 +191,7 @@ func generateMySQLTlsSecret(userName string, apb *appApi.AppBinding, ns string, 
 		return nil, "", fmt.Errorf("failed to marshal tls secret yaml %v", err)
 	}
 
+	buffer := make([]byte, 0, len(tlsSecretYaml)+4)
 	buffer = append(buffer, tlsSecretYaml...)
 	buffer = append(buffer, []byte("---\n")...)
 
@@ -199,7 +199,6 @@ func generateMySQLTlsSecret(userName string, apb *appApi.AppBinding, ns string, 
 }
 
 func generateMySQLAuthSecret(userName string, password string, ns string, opts *common.MySQLOpts) ([]byte, string, error) {
-	var buffer []byte
 	if userName != opts.Username {
 		// generate user if not present
 		err := generateMySQLUser(opts, userName, password)
@@ -230,6 +229,7 @@ func generateMySQLAuthSecret(userName string, password string, ns string, opts *
 	if err != nil {
 		return nil, "", fmt.Errorf("failed to marshal authsecret yaml %v", err)
 	}
+	buffer := make([]byte, 0, len(authSecretYaml)+4)
 	buffer = append(buffer, authSecretYaml...)
 	buffer = append(buffer, []byte("---\n")...)
 	return buffer, AuthSecret.Name, nil

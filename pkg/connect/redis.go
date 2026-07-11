@@ -213,9 +213,8 @@ func (opts *redisOpts) getShellCommand(kubectlFlags, redisExtraFlags []any) *she
 
 	db := opts.db
 	svcName := fmt.Sprintf("svc/%s", db.Name)
-	kubectlCommand := []any{
-		"exec", "-n", db.Namespace, svcName, "-c", "redis",
-	}
+	kubectlCommand := make([]any, 0, 6+len(kubectlFlags)+1)
+	kubectlCommand = append(kubectlCommand, "exec", "-n", db.Namespace, svcName, "-c", "redis")
 	kubectlCommand = append(kubectlCommand, kubectlFlags...)
 
 	redisCommand := []any{
@@ -292,9 +291,8 @@ func (opts *redisOpts) executeFile(fileName string) error {
 		return err
 	}
 
-	redisExtraFlags := []any{
-		"eval", string(fileData), fmt.Sprintf("%v", len(opts.keys)),
-	}
+	redisExtraFlags := make([]any, 0, 3+len(opts.keys)+len(opts.args))
+	redisExtraFlags = append(redisExtraFlags, "eval", string(fileData), fmt.Sprintf("%v", len(opts.keys)))
 	keysIfcArray := convertToInterfaceArray(opts.keys)
 	argsIfcArray := convertToInterfaceArray(opts.args)
 

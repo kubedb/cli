@@ -157,7 +157,6 @@ func generateConfig(f cmdutil.Factory, userName string, password string, dns str
 }
 
 func generateTlsSecret(userName string, apb *appApi.AppBinding, ns string, opts *common.PostgresOpts) ([]byte, string, error) {
-	var buffer []byte
 	_, err := ensureClientCert(opts, apb, opts.DB, dbapi.PostgresClientCert, userName)
 	if err != nil {
 		return nil, "", fmt.Errorf("failed to ensure client cert %v", err)
@@ -188,6 +187,7 @@ func generateTlsSecret(userName string, apb *appApi.AppBinding, ns string, opts 
 		return nil, "", fmt.Errorf("failed to marshal tls secret yaml %v", err)
 	}
 
+	buffer := make([]byte, 0, len(tlsSecretYaml)+4)
 	buffer = append(buffer, tlsSecretYaml...)
 	buffer = append(buffer, []byte("---\n")...)
 
@@ -195,7 +195,6 @@ func generateTlsSecret(userName string, apb *appApi.AppBinding, ns string, opts 
 }
 
 func generateAuthSecret(userName string, password string, ns string, opts *common.PostgresOpts) ([]byte, string, error) {
-	var buffer []byte
 	if userName != opts.Username {
 		// generate user if not present
 		err := generateUser(opts, userName, password)
@@ -226,6 +225,7 @@ func generateAuthSecret(userName string, password string, ns string, opts *commo
 	if err != nil {
 		return nil, "", fmt.Errorf("failed to marshal authsecret yaml %v", err)
 	}
+	buffer := make([]byte, 0, len(authSecretYaml)+4)
 	buffer = append(buffer, authSecretYaml...)
 	buffer = append(buffer, []byte("---\n")...)
 	return buffer, AuthSecret.Name, nil

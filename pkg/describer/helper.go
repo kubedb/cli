@@ -129,7 +129,7 @@ func showAppBinding(ab *appcat.AppBinding, w describe.PrefixWriter) error {
 }
 
 func printUnstructuredContent(w describe.PrefixWriter, level int, content map[string]any, skipPrefix string, skip ...string) {
-	fields := []string{}
+	fields := make([]string, 0, len(content))
 	for field := range content {
 		fields = append(fields, field)
 	}
