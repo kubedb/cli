@@ -268,6 +268,7 @@ func (p *PgBouncer) setPgBouncerContainerDefaults(podTemplate *ofstv2.PodTemplat
 	container := ofst_util.EnsureContainerExists(podTemplate, kubedb.PgBouncerContainerName)
 	p.setContainerDefaultResources(container, *kubedb.DefaultResources.DeepCopy())
 	p.SetContainerDefaultSecurityContext(container, pbVersion)
+	apis.SetDefaultResizePolicy(podTemplate.Spec.Containers, podTemplate.Spec.InitContainers)
 }
 
 func (p *PgBouncer) setContainerDefaultResources(container *core.Container, defaultResources core.ResourceRequirements) {

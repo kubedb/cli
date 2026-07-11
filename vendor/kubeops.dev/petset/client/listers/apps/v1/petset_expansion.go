@@ -94,8 +94,17 @@ func (s *petSetLister) GetManifestWorkPetSets(mw *apiworkv1.ManifestWork) ([]*ap
 		return nil, err
 	}
 
+	// Selector matching is subset matching, so two PetSets of one application with
+	// overlapping selectors (a data set and its arbiter) both match each other's
+	// ManifestWorks. The owner stamp written at ManifestWork creation resolves the
+	// owner exactly; unlabeled (pre-upgrade) ManifestWorks keep selector matching.
+	owner := mw.Labels[api.PetSetNameLabel]
+
 	var psList []*api.PetSet
 	for _, ps := range list {
+		if owner != "" && ps.Name != owner {
+			continue
+		}
 		selector, err := metav1.LabelSelectorAsSelector(ps.Spec.Selector)
 		if err != nil {
 			klog.Warningf("PetSet %s/%s has an invalid selector: %v", ps.Namespace, ps.Name, err)

@@ -172,6 +172,10 @@ type DocumentDBVerticalScalingSpec struct {
 	Coordinator  *ContainerResources              `json:"coordinator,omitempty"`
 	Arbiter      *PodResources                    `json:"arbiter,omitempty"`
 	ReadReplicas []DocumentDBReadReplicaResources `json:"readReplicas,omitempty"`
+	// Mode selects how the vertical scaling is actuated. Defaults to Restart.
+	// +optional
+	// +kubebuilder:default=Restart
+	Mode VerticalScalingMode `json:"mode,omitempty"`
 }
 
 type DocumentDBReadReplicaResources struct {

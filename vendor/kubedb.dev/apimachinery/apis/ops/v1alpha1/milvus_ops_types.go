@@ -128,6 +128,10 @@ type MilvusVerticalScalingSpec struct {
 	DataNode      *PodResources `json:"datanode,omitempty"`
 	QueryNode     *PodResources `json:"querynode,omitempty"`
 	StreamingNode *PodResources `json:"streamingnode,omitempty"`
+	// Mode selects how the vertical scaling is actuated. Defaults to Restart.
+	// +optional
+	// +kubebuilder:default=Restart
+	Mode VerticalScalingMode `json:"mode,omitempty"`
 }
 
 // MilvusVolumeExpansionSpec is the spec for Milvus volume expansion

@@ -739,6 +739,8 @@ func (d *Druid) setDefaultContainerResourceLimits(podTemplate *ofst.PodTemplateS
 	if initContainer != nil && (initContainer.Resources.Requests == nil && initContainer.Resources.Limits == nil) {
 		apis.SetDefaultResourceLimits(&initContainer.Resources, kubedb.DefaultInitContainerResource)
 	}
+
+	apis.SetDefaultResizePolicy(podTemplate.Spec.Containers, podTemplate.Spec.InitContainers)
 }
 
 func (d *Druid) GetPersistentSecrets() []string {

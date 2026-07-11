@@ -488,6 +488,7 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion) {
 		if dbContainer != nil {
 			apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResourcesMemoryIntensive)
 		}
+		apis.SetDefaultResizePolicy(e.Spec.Topology.Ingest.PodTemplate.Spec.Containers, e.Spec.Topology.Ingest.PodTemplate.Spec.InitContainers)
 		if e.Spec.Topology.Ingest.Replicas == nil {
 			e.Spec.Topology.Ingest.Replicas = pointer.Int32P(1)
 		}
@@ -506,6 +507,7 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion) {
 		if dbContainer != nil {
 			apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResourcesMemoryIntensive)
 		}
+		apis.SetDefaultResizePolicy(e.Spec.Topology.Master.PodTemplate.Spec.Containers, e.Spec.Topology.Master.PodTemplate.Spec.InitContainers)
 		if e.Spec.Topology.Master.Replicas == nil {
 			e.Spec.Topology.Master.Replicas = pointer.Int32P(1)
 		}
@@ -526,6 +528,7 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion) {
 			if dbContainer != nil {
 				apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResourcesMemoryIntensive)
 			}
+			apis.SetDefaultResizePolicy(e.Spec.Topology.Data.PodTemplate.Spec.Containers, e.Spec.Topology.Data.PodTemplate.Spec.InitContainers)
 			if e.Spec.Topology.Data.Replicas == nil {
 				e.Spec.Topology.Data.Replicas = pointer.Int32P(1)
 			}
@@ -546,6 +549,7 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion) {
 			if dbContainer != nil {
 				apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResourcesMemoryIntensive)
 			}
+			apis.SetDefaultResizePolicy(e.Spec.Topology.DataHot.PodTemplate.Spec.Containers, e.Spec.Topology.DataHot.PodTemplate.Spec.InitContainers)
 			if e.Spec.Topology.DataHot.Replicas == nil {
 				e.Spec.Topology.DataHot.Replicas = pointer.Int32P(1)
 			}
@@ -566,6 +570,7 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion) {
 			if dbContainer != nil {
 				apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResourcesMemoryIntensive)
 			}
+			apis.SetDefaultResizePolicy(e.Spec.Topology.DataWarm.PodTemplate.Spec.Containers, e.Spec.Topology.DataWarm.PodTemplate.Spec.InitContainers)
 			if e.Spec.Topology.DataWarm.Replicas == nil {
 				e.Spec.Topology.DataWarm.Replicas = pointer.Int32P(1)
 			}
@@ -586,6 +591,7 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion) {
 			if dbContainer != nil {
 				apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResourcesMemoryIntensive)
 			}
+			apis.SetDefaultResizePolicy(e.Spec.Topology.DataCold.PodTemplate.Spec.Containers, e.Spec.Topology.DataCold.PodTemplate.Spec.InitContainers)
 			if e.Spec.Topology.DataCold.Replicas == nil {
 				e.Spec.Topology.DataCold.Replicas = pointer.Int32P(1)
 			}
@@ -606,6 +612,7 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion) {
 			if dbContainer != nil {
 				apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResourcesMemoryIntensive)
 			}
+			apis.SetDefaultResizePolicy(e.Spec.Topology.DataFrozen.PodTemplate.Spec.Containers, e.Spec.Topology.DataFrozen.PodTemplate.Spec.InitContainers)
 			if e.Spec.Topology.DataFrozen.Replicas == nil {
 				e.Spec.Topology.DataFrozen.Replicas = pointer.Int32P(1)
 			}
@@ -626,6 +633,7 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion) {
 			if dbContainer != nil {
 				apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResourcesMemoryIntensive)
 			}
+			apis.SetDefaultResizePolicy(e.Spec.Topology.DataContent.PodTemplate.Spec.Containers, e.Spec.Topology.DataContent.PodTemplate.Spec.InitContainers)
 			if e.Spec.Topology.DataContent.Replicas == nil {
 				e.Spec.Topology.DataContent.Replicas = pointer.Int32P(1)
 			}
@@ -646,6 +654,7 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion) {
 			if dbContainer != nil {
 				apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResourcesMemoryIntensive)
 			}
+			apis.SetDefaultResizePolicy(e.Spec.Topology.ML.PodTemplate.Spec.Containers, e.Spec.Topology.ML.PodTemplate.Spec.InitContainers)
 			if e.Spec.Topology.ML.Replicas == nil {
 				e.Spec.Topology.ML.Replicas = pointer.Int32P(1)
 			}
@@ -666,6 +675,7 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion) {
 			if dbContainer != nil {
 				apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResourcesMemoryIntensive)
 			}
+			apis.SetDefaultResizePolicy(e.Spec.Topology.Transform.PodTemplate.Spec.Containers, e.Spec.Topology.Transform.PodTemplate.Spec.InitContainers)
 			if e.Spec.Topology.Transform.Replicas == nil {
 				e.Spec.Topology.Transform.Replicas = pointer.Int32P(1)
 			}
@@ -681,6 +691,7 @@ func (e *Elasticsearch) SetDefaults(esVersion *catalog.ElasticsearchVersion) {
 		if dbContainer != nil {
 			apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResourcesMemoryIntensive)
 		}
+		apis.SetDefaultResizePolicy(e.Spec.PodTemplate.Spec.Containers, e.Spec.PodTemplate.Spec.InitContainers)
 		if e.Spec.Replicas == nil {
 			e.Spec.Replicas = pointer.Int32P(1)
 		}

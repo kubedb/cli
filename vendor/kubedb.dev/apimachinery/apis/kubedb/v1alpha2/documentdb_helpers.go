@@ -231,9 +231,9 @@ func (d *DocumentDB) SetDefaults(_ client.Client, documentDBVersion catalogv1alp
 			// So 5s is a safe upper limit of global round-trip time. As the election timeout should be an order of magnitude
 			// bigger than broadcast time, in the case of ~5s for a globally distributed cluster, then 50 seconds becomes
 			// a reasonable maximum.
-			Period: metav1.Duration{Duration: 300 * time.Millisecond},
+			Period: metav1.Duration{Duration: 1 * time.Second},
 			// the amount of HeartbeatTick can be missed before the failOver
-			ElectionTick: 10,
+			ElectionTick: 15,
 			// this value should be one.
 			HeartbeatTick: 1,
 			// we have set this default to 67108864. if the difference between primary and replica is more then this,
@@ -258,6 +258,7 @@ func (d *DocumentDB) SetDefaults(_ client.Client, documentDBVersion catalogv1alp
 	d.SetInitContainerDefaults(d.Spec.PodTemplate, &documentDBVersion)
 	d.SetDocumentDBContainerDefaults(d.Spec.PodTemplate, &documentDBVersion)
 	d.SetCoordinatorContainerDefaults(d.Spec.PodTemplate, &documentDBVersion)
+	apis.SetDefaultResizePolicy(d.Spec.PodTemplate.Spec.Containers, d.Spec.PodTemplate.Spec.InitContainers)
 	d.SetDefaultReplicationMode()
 	d.SetHealthCheckerDefaults()
 }
@@ -371,7 +372,7 @@ func (d *DocumentDB) initializePodTemplates() {
 }
 
 func (d *DocumentDB) GetPersistentSecrets() []string {
-	var secrets []string
+	secrets := make([]string, 0, 2)
 	secrets = append(secrets, d.GetAuthSecretName())
 	secrets = append(secrets, d.GetAdminAuthSecretName())
 	return secrets

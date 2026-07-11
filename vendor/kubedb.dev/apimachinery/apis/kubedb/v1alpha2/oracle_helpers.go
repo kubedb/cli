@@ -329,12 +329,14 @@ func (o *Oracle) SetDefaults(kc client.Client) {
 		o.SetDefaultPodSecurityContext(o.Spec.DataGuard.Observer.PodTemplate, oraVersion)
 		o.SetObserverInitContainerDefaults(o.Spec.DataGuard.Observer.PodTemplate, oraVersion)
 		o.SetOracleObserverContainerDefaults(o.Spec.DataGuard.Observer.PodTemplate, oraVersion)
+		apis.SetDefaultResizePolicy(o.Spec.DataGuard.Observer.PodTemplate.Spec.Containers, o.Spec.DataGuard.Observer.PodTemplate.Spec.InitContainers)
 	}
 
 	o.SetDefaultPodSecurityContext(o.Spec.PodTemplate, oraVersion)
 	o.SetOracleContainerDefaults(o.Spec.PodTemplate, oraVersion)
 	o.SetCoordinatorContainerDefaults(o.Spec.PodTemplate, oraVersion)
 	o.SetInitContainerDefaults(o.Spec.PodTemplate, oraVersion)
+	apis.SetDefaultResizePolicy(o.Spec.PodTemplate.Spec.Containers, o.Spec.PodTemplate.Spec.InitContainers)
 	o.SetHealthCheckerDefaults()
 	o.Spec.Monitor.SetDefaults()
 	o.SetTcpsDefaults()

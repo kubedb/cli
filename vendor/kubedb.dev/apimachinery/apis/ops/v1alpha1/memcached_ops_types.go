@@ -104,6 +104,10 @@ type MemcachedVerticalScalingSpec struct {
 	Memcached         *PodResources                      `json:"memcached,omitempty"`
 	Exporter          *ContainerResources                `json:"exporter,omitempty"`
 	ReadinessCriteria *MemcachedReplicaReadinessCriteria `json:"readinessCriteria,omitempty"`
+	// Mode selects how the vertical scaling is actuated. Defaults to Restart.
+	// +optional
+	// +kubebuilder:default=Restart
+	Mode VerticalScalingMode `json:"mode,omitempty"`
 }
 
 // MemcachedVolumeExpansionSpec is the spec for Memcached volume expansion

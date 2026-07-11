@@ -110,6 +110,10 @@ type SinglestoreVerticalScalingSpec struct {
 	Leaf *PodResources `json:"leaf,omitempty"`
 	// Resource spec for Coordinator container
 	Coordinator *ContainerResources `json:"coordinator,omitempty"`
+	// Mode selects how the vertical scaling is actuated. Defaults to Restart.
+	// +optional
+	// +kubebuilder:default=Restart
+	Mode VerticalScalingMode `json:"mode,omitempty"`
 }
 
 // SinglestoreVolumeExpansionSpec is the spec for Singlestore volume expansion

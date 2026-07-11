@@ -1,0 +1,262 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  labels:
+    app.kubernetes.io/name: kubedb
+  name: branches.courier.kubedb.com
+spec:
+  group: courier.kubedb.com
+  names:
+    kind: Branch
+    listKind: BranchList
+    plural: branches
+    singular: branch
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .status.phase
+      name: Phase
+      type: string
+    - jsonPath: .status.mode
+      name: Mode
+      type: string
+    - jsonPath: .status.targetRef.name
+      name: Target
+      type: string
+    - jsonPath: .status.freshness
+      name: Freshness
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        properties:
+          apiVersion:
+            type: string
+          kind:
+            type: string
+          metadata:
+            type: object
+          spec:
+            properties:
+              dataMassageImage:
+                type: string
+              deletionPolicy:
+                default: Delete
+                enum:
+                - Delete
+                - Orphan
+                type: string
+              historyLimit:
+                properties:
+                  failed:
+                    default: 2
+                    format: int32
+                    type: integer
+                  success:
+                    default: 3
+                    format: int32
+                    type: integer
+                type: object
+              resetRootPassword:
+                type: boolean
+              schedule:
+                properties:
+                  cron:
+                    type: string
+                required:
+                - cron
+                type: object
+              source:
+                properties:
+                  databaseRef:
+                    properties:
+                      apiGroup:
+                        type: string
+                      kind:
+                        type: string
+                      name:
+                        type: string
+                    required:
+                    - kind
+                    - name
+                    type: object
+                    x-kubernetes-map-type: atomic
+                  namespace:
+                    type: string
+                required:
+                - databaseRef
+                type: object
+              target:
+                properties:
+                  clusterName:
+                    type: string
+                  issuerRef:
+                    properties:
+                      apiGroup:
+                        type: string
+                      kind:
+                        type: string
+                      name:
+                        type: string
+                    required:
+                    - kind
+                    - name
+                    type: object
+                    x-kubernetes-map-type: atomic
+                  name:
+                    type: string
+                  namespace:
+                    type: string
+                  resources:
+                    properties:
+                      claims:
+                        items:
+                          properties:
+                            name:
+                              type: string
+                            request:
+                              type: string
+                          required:
+                          - name
+                          type: object
+                        type: array
+                        x-kubernetes-list-map-keys:
+                        - name
+                        x-kubernetes-list-type: map
+                      limits:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        type: object
+                      requests:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        type: object
+                    type: object
+                  storageClassName:
+                    type: string
+                required:
+                - name
+                - namespace
+                type: object
+              volumeSnapshotClassName:
+                type: string
+            required:
+            - source
+            - target
+            type: object
+          status:
+            properties:
+              conditions:
+                items:
+                  properties:
+                    lastTransitionTime:
+                      format: date-time
+                      type: string
+                    message:
+                      type: string
+                    observedGeneration:
+                      format: int64
+                      type: integer
+                    reason:
+                      type: string
+                    severity:
+                      type: string
+                    status:
+                      type: string
+                    type:
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - status
+                  - type
+                  type: object
+                type: array
+                x-kubernetes-list-map-keys:
+                - type
+                x-kubernetes-list-type: map
+              freshness:
+                type: string
+              history:
+                items:
+                  properties:
+                    at:
+                      format: date-time
+                      type: string
+                    message:
+                      type: string
+                    result:
+                      enum:
+                      - Succeeded
+                      - Failed
+                      type: string
+                  type: object
+                type: array
+              lastRefreshAt:
+                format: date-time
+                type: string
+              mode:
+                enum:
+                - Local
+                - Initiator
+                - Creator
+                type: string
+              phase:
+                enum:
+                - Pending
+                - Snapshotting
+                - Cloning
+                - Provisioning
+                - Massaging
+                - Ready
+                - Refreshing
+                - Deleting
+                - Failed
+                type: string
+              snapshot:
+                properties:
+                  ref:
+                    type: string
+                  type:
+                    enum:
+                    - VolumeGroupSnapshot
+                    - VolumeSnapshot
+                    type: string
+                type: object
+              targetRef:
+                properties:
+                  apiVersion:
+                    type: string
+                  fieldPath:
+                    type: string
+                  kind:
+                    type: string
+                  name:
+                    type: string
+                  namespace:
+                    type: string
+                  resourceVersion:
+                    type: string
+                  uid:
+                    type: string
+                type: object
+                x-kubernetes-map-type: atomic
+            type: object
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

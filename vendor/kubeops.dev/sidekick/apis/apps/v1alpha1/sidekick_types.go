@@ -40,7 +40,7 @@ const (
 	PodSelectionPolicyLast  LeaderSelectionPolicy = "Last"
 )
 
-// +kubebuilder:validation:Enum=Pending;Current;Failed;Succeeded
+// +kubebuilder:validation:Enum=Pending;Current;Failed;Succeeded;Degraded
 type SideKickPhase string
 
 const (
@@ -48,6 +48,9 @@ const (
 	SideKickPhaseFailed    SideKickPhase = "Failed"
 	SidekickPhaseSucceeded SideKickPhase = "Succeeded"
 	SideKickPhasePending   SideKickPhase = "Pending"
+	// SideKickPhaseDegraded means the sidekick pod is expected to run but is
+	// currently missing, pending, failed (retryable) or has non-running containers.
+	SideKickPhaseDegraded SideKickPhase = "Degraded"
 )
 
 type LeaderSpec struct {

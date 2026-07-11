@@ -4,22 +4,19 @@ metadata:
   creationTimestamp: null
   labels:
     app.kubernetes.io/name: kubedb
-  name: migrators.migrator.kubedb.com
+  name: postgresmigrations.courier.kubedb.com
 spec:
-  group: migrator.kubedb.com
+  group: courier.kubedb.com
   names:
-    kind: Migrator
-    listKind: MigratorList
-    plural: migrators
-    singular: migrator
+    kind: PostgresMigration
+    listKind: PostgresMigrationList
+    plural: postgresmigrations
+    singular: postgresmigration
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
     - jsonPath: .status.phase
       name: Phase
-      type: string
-    - jsonPath: .status.progress.dbType
-      name: DBType
       type: string
     - jsonPath: .status.progress.info.Stage
       name: Stage
@@ -2796,482 +2793,130 @@ spec:
                 type: object
               source:
                 properties:
-                  mariadb:
+                  connectionInfo:
                     properties:
-                      connectionInfo:
+                      appBinding:
                         properties:
-                          appBinding:
-                            properties:
-                              name:
-                                type: string
-                              namespace:
-                                type: string
-                            required:
-                            - name
-                            type: object
-                          dbName:
+                          name:
                             type: string
-                          maxConnections:
-                            format: int32
-                            type: integer
-                          tls:
-                            properties:
-                              caFile:
-                                type: string
-                              certFile:
-                                type: string
-                              insecureSkipVerify:
-                                type: boolean
-                              keyFile:
-                                type: string
-                              serverName:
-                                type: string
-                            type: object
-                          url:
+                          namespace:
                             type: string
-                        type: object
-                      schema:
-                        properties:
-                          database:
-                            items:
-                              type: string
-                            type: array
-                          enabled:
-                            type: boolean
-                          excludeDatabase:
-                            items:
-                              type: string
-                            type: array
                         required:
-                        - enabled
+                        - name
                         type: object
-                      snapshot:
+                      dbName:
+                        type: string
+                      maxConnections:
+                        format: int32
+                        type: integer
+                      tls:
                         properties:
-                          enabled:
+                          caFile:
+                            type: string
+                          certFile:
+                            type: string
+                          insecureSkipVerify:
                             type: boolean
-                          pipeline:
-                            properties:
-                              buffer:
-                                type: integer
-                              read_batch_size:
-                                type: integer
-                              sinkers:
-                                type: integer
-                              workers:
-                                type: integer
-                              write_batch_size:
-                                type: integer
-                            required:
-                            - buffer
-                            - read_batch_size
-                            - sinkers
-                            - workers
-                            - write_batch_size
-                            type: object
+                          keyFile:
+                            type: string
+                          serverName:
+                            type: string
                         type: object
-                      streaming:
-                        properties:
-                          enabled:
-                            type: boolean
-                        type: object
-                    required:
-                    - connectionInfo
+                      url:
+                        type: string
                     type: object
-                  mongodb:
+                  logicalReplication:
                     properties:
-                      connectionInfo:
+                      copyData:
+                        default: true
+                        type: boolean
+                      publication:
                         properties:
-                          appBinding:
-                            properties:
-                              name:
-                                type: string
-                              namespace:
-                                type: string
-                            required:
-                            - name
-                            type: object
-                          dbName:
+                          args:
+                            items:
+                              type: string
+                            type: array
+                          mode:
+                            default: default
+                            enum:
+                            - default
+                            - table
+                            - allTable
+                            - tableInSchema
                             type: string
-                          maxConnections:
-                            format: int32
-                            type: integer
-                          tls:
-                            properties:
-                              caFile:
-                                type: string
-                              certFile:
-                                type: string
-                              insecureSkipVerify:
-                                type: boolean
-                              keyFile:
-                                type: string
-                              serverName:
-                                type: string
-                            type: object
-                          url:
+                          name:
                             type: string
                         type: object
-                      mongoshake:
+                      subscription:
                         properties:
-                          checkpointStartPosition:
-                            format: int64
-                            type: integer
-                          extraConfiguration:
-                            additionalProperties:
-                              type: string
-                            type: object
-                          filterDdlEnable:
-                            type: boolean
-                          filterNamespaceBlack:
-                            items:
-                              type: string
-                            type: array
-                          filterNamespaceWhite:
-                            items:
-                              type: string
-                            type: array
-                          filterOpTypes:
-                            items:
-                              type: string
-                            type: array
-                          filterOplogGids:
-                            type: boolean
-                          filterPassSpecialDb:
-                            items:
-                              type: string
-                            type: array
-                          syncMode:
+                          name:
                             type: string
-                          transformNamespace:
-                            items:
-                              type: string
-                            type: array
                         type: object
-                    required:
-                    - connectionInfo
                     type: object
-                  mysql:
+                  pgDump:
                     properties:
-                      connectionInfo:
-                        properties:
-                          appBinding:
-                            properties:
-                              name:
-                                type: string
-                              namespace:
-                                type: string
-                            required:
-                            - name
-                            type: object
-                          dbName:
-                            type: string
-                          maxConnections:
-                            format: int32
-                            type: integer
-                          tls:
-                            properties:
-                              caFile:
-                                type: string
-                              certFile:
-                                type: string
-                              insecureSkipVerify:
-                                type: boolean
-                              keyFile:
-                                type: string
-                              serverName:
-                                type: string
-                            type: object
-                          url:
-                            type: string
-                        type: object
+                      excludeSchema:
+                        items:
+                          type: string
+                        type: array
+                      excludeTable:
+                        items:
+                          type: string
+                        type: array
+                      extraOptions:
+                        items:
+                          type: string
+                        type: array
                       schema:
-                        properties:
-                          database:
-                            items:
-                              type: string
-                            type: array
-                          enabled:
-                            type: boolean
-                          excludeDatabase:
-                            items:
-                              type: string
-                            type: array
-                        required:
-                        - enabled
-                        type: object
-                      snapshot:
-                        properties:
-                          enabled:
-                            type: boolean
-                          pipeline:
-                            properties:
-                              buffer:
-                                type: integer
-                              read_batch_size:
-                                type: integer
-                              sinkers:
-                                type: integer
-                              workers:
-                                type: integer
-                              write_batch_size:
-                                type: integer
-                            required:
-                            - buffer
-                            - read_batch_size
-                            - sinkers
-                            - workers
-                            - write_batch_size
-                            type: object
-                        type: object
-                      streaming:
-                        properties:
-                          enabled:
-                            type: boolean
-                        type: object
-                    required:
-                    - connectionInfo
+                        items:
+                          type: string
+                        type: array
+                      schemaOnly:
+                        type: boolean
+                      table:
+                        items:
+                          type: string
+                        type: array
                     type: object
-                  postgres:
-                    properties:
-                      connectionInfo:
-                        properties:
-                          appBinding:
-                            properties:
-                              name:
-                                type: string
-                              namespace:
-                                type: string
-                            required:
-                            - name
-                            type: object
-                          dbName:
-                            type: string
-                          maxConnections:
-                            format: int32
-                            type: integer
-                          tls:
-                            properties:
-                              caFile:
-                                type: string
-                              certFile:
-                                type: string
-                              insecureSkipVerify:
-                                type: boolean
-                              keyFile:
-                                type: string
-                              serverName:
-                                type: string
-                            type: object
-                          url:
-                            type: string
-                        type: object
-                      logicalReplication:
-                        properties:
-                          copyData:
-                            default: true
-                            type: boolean
-                          publication:
-                            properties:
-                              args:
-                                items:
-                                  type: string
-                                type: array
-                              mode:
-                                default: default
-                                enum:
-                                - default
-                                - table
-                                - allTable
-                                - tableInSchema
-                                type: string
-                              name:
-                                type: string
-                            type: object
-                          subscription:
-                            properties:
-                              name:
-                                type: string
-                            type: object
-                        type: object
-                      pgDump:
-                        properties:
-                          excludeSchema:
-                            items:
-                              type: string
-                            type: array
-                          excludeTable:
-                            items:
-                              type: string
-                            type: array
-                          extraOptions:
-                            items:
-                              type: string
-                            type: array
-                          schema:
-                            items:
-                              type: string
-                            type: array
-                          schemaOnly:
-                            type: boolean
-                          table:
-                            items:
-                              type: string
-                            type: array
-                        type: object
-                    required:
-                    - connectionInfo
-                    type: object
+                required:
+                - connectionInfo
                 type: object
               target:
                 properties:
-                  mariadb:
+                  connectionInfo:
                     properties:
-                      connectionInfo:
+                      appBinding:
                         properties:
-                          appBinding:
-                            properties:
-                              name:
-                                type: string
-                              namespace:
-                                type: string
-                            required:
-                            - name
-                            type: object
-                          dbName:
+                          name:
                             type: string
-                          maxConnections:
-                            format: int32
-                            type: integer
-                          tls:
-                            properties:
-                              caFile:
-                                type: string
-                              certFile:
-                                type: string
-                              insecureSkipVerify:
-                                type: boolean
-                              keyFile:
-                                type: string
-                              serverName:
-                                type: string
-                            type: object
-                          url:
+                          namespace:
+                            type: string
+                        required:
+                        - name
+                        type: object
+                      dbName:
+                        type: string
+                      maxConnections:
+                        format: int32
+                        type: integer
+                      tls:
+                        properties:
+                          caFile:
+                            type: string
+                          certFile:
+                            type: string
+                          insecureSkipVerify:
+                            type: boolean
+                          keyFile:
+                            type: string
+                          serverName:
                             type: string
                         type: object
-                    required:
-                    - connectionInfo
+                      url:
+                        type: string
                     type: object
-                  mongodb:
-                    properties:
-                      connectionInfo:
-                        properties:
-                          appBinding:
-                            properties:
-                              name:
-                                type: string
-                              namespace:
-                                type: string
-                            required:
-                            - name
-                            type: object
-                          dbName:
-                            type: string
-                          maxConnections:
-                            format: int32
-                            type: integer
-                          tls:
-                            properties:
-                              caFile:
-                                type: string
-                              certFile:
-                                type: string
-                              insecureSkipVerify:
-                                type: boolean
-                              keyFile:
-                                type: string
-                              serverName:
-                                type: string
-                            type: object
-                          url:
-                            type: string
-                        type: object
-                    required:
-                    - connectionInfo
-                    type: object
-                  mysql:
-                    properties:
-                      connectionInfo:
-                        properties:
-                          appBinding:
-                            properties:
-                              name:
-                                type: string
-                              namespace:
-                                type: string
-                            required:
-                            - name
-                            type: object
-                          dbName:
-                            type: string
-                          maxConnections:
-                            format: int32
-                            type: integer
-                          tls:
-                            properties:
-                              caFile:
-                                type: string
-                              certFile:
-                                type: string
-                              insecureSkipVerify:
-                                type: boolean
-                              keyFile:
-                                type: string
-                              serverName:
-                                type: string
-                            type: object
-                          url:
-                            type: string
-                        type: object
-                    required:
-                    - connectionInfo
-                    type: object
-                  postgres:
-                    properties:
-                      connectionInfo:
-                        properties:
-                          appBinding:
-                            properties:
-                              name:
-                                type: string
-                              namespace:
-                                type: string
-                            required:
-                            - name
-                            type: object
-                          dbName:
-                            type: string
-                          maxConnections:
-                            format: int32
-                            type: integer
-                          tls:
-                            properties:
-                              caFile:
-                                type: string
-                              certFile:
-                                type: string
-                              insecureSkipVerify:
-                                type: boolean
-                              keyFile:
-                                type: string
-                              serverName:
-                                type: string
-                            type: object
-                          url:
-                            type: string
-                        type: object
-                    required:
-                    - connectionInfo
-                    type: object
+                required:
+                - connectionInfo
                 type: object
             required:
             - source

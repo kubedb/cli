@@ -89,6 +89,10 @@ type HazelcastOpsRequestSpec struct {
 type HazelcastVerticalScalingSpec struct {
 	// Resource spec for hazelcast nodes
 	Hazelcast *PodResources `json:"hazelcast,omitempty"`
+	// Mode selects how the vertical scaling is actuated. Defaults to Restart.
+	// +optional
+	// +kubebuilder:default=Restart
+	Mode VerticalScalingMode `json:"mode,omitempty"`
 }
 
 type HazelcastVolumeExpansionSpec struct {

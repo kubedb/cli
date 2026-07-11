@@ -134,6 +134,10 @@ type KafkaVerticalScalingSpec struct {
 	Broker *PodResources `json:"broker,omitempty"`
 	// Resource spec for controller
 	Controller *PodResources `json:"controller,omitempty"`
+	// Mode selects how the vertical scaling is actuated. Defaults to Restart.
+	// +optional
+	// +kubebuilder:default=Restart
+	Mode VerticalScalingMode `json:"mode,omitempty"`
 }
 
 // KafkaVolumeExpansionSpec is the spec for Kafka volume expansion

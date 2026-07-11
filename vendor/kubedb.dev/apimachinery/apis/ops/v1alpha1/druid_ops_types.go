@@ -94,6 +94,10 @@ type DruidVerticalScalingSpec struct {
 	Historicals    *PodResources `json:"historicals,omitempty"`
 	Brokers        *PodResources `json:"brokers,omitempty"`
 	Routers        *PodResources `json:"routers,omitempty"`
+	// Mode selects how the vertical scaling is actuated. Defaults to Restart.
+	// +optional
+	// +kubebuilder:default=Restart
+	Mode VerticalScalingMode `json:"mode,omitempty"`
 }
 
 // DruidHorizontalScalingSpec contains the horizontal scaling information of a Druid cluster

@@ -71,6 +71,11 @@ type PostgresTLSSpec struct {
 	// ClientAuthMode for sidecar or sharding. (default will be md5. [md5;scram;cert])
 	// +optional
 	ClientAuthMode dbapi.PostgresClientAuthMode `json:"clientAuthMode,omitempty"`
+
+	// RotateGrpcCertificates tells operator to rotate the gRPC TLS certificates used by pg-coordinator.
+	// This is independent of RotateCertificates (DB-level certs). Both can be set together.
+	// +optional
+	RotateGrpcCertificates bool `json:"rotateGrpcCertificates,omitempty"`
 }
 
 // PostgresOpsRequestSpec is the spec for PostgresOpsRequest
@@ -196,6 +201,10 @@ type PostgresVerticalScalingSpec struct {
 	Coordinator  *ContainerResources    `json:"coordinator,omitempty"`
 	Arbiter      *PodResources          `json:"arbiter,omitempty"`
 	ReadReplicas []ReadReplicaResources `json:"readReplicas,omitempty"`
+	// Mode selects how the vertical scaling is actuated. Defaults to Restart.
+	// +optional
+	// +kubebuilder:default=Restart
+	Mode VerticalScalingMode `json:"mode,omitempty"`
 }
 
 type ReadReplicaResources struct {

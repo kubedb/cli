@@ -140,6 +140,8 @@ func (i *Ignite) SetDefaults(kc client.Client) {
 		apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.IgniteDefaultResources)
 	}
 
+	apis.SetDefaultResizePolicy(i.Spec.PodTemplate.Spec.Containers, i.Spec.PodTemplate.Spec.InitContainers)
+
 	i.SetHealthCheckerDefaults()
 
 	i.Spec.Monitor.SetDefaults()

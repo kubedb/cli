@@ -27,9 +27,9 @@ require (
 	kmodules.xyz/client-go v0.34.3
 	kmodules.xyz/custom-resources v0.34.0
 	kmodules.xyz/monitoring-agent-api v0.34.1
-	kubedb.dev/apimachinery v0.65.0
-	kubedb.dev/db-client-go v0.20.0
-	kubeops.dev/petset v0.0.17-0.20260418091244-7f666912d240
+	kubedb.dev/apimachinery v0.66.0
+	kubedb.dev/db-client-go v0.21.0
+	kubeops.dev/petset v0.1.1-0.20260709161836-19b3570c41ab
 	sigs.k8s.io/controller-runtime v0.22.4
 	sigs.k8s.io/yaml v1.6.0
 	stash.appscode.dev/apimachinery v0.42.1
@@ -123,7 +123,7 @@ require (
 	github.com/monochromegane/go-gitignore v0.0.0-20200626010858-205db1a8cc00 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/mxk/go-flowrate v0.0.0-20140419014527-cca7078d478f // indirect
-	github.com/onsi/gomega v1.36.2 // indirect
+	github.com/onsi/gomega v1.39.0 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.1.1 // indirect
 	github.com/opensearch-project/opensearch-go v1.1.0 // indirect
@@ -188,8 +188,8 @@ require (
 	kmodules.xyz/resource-metrics v0.34.0 // indirect
 	kubeops.dev/csi-driver-cacerts v0.5.1-0.20260418091014-4f539f46235c // indirect
 	kubeops.dev/operator-shard-manager v0.0.6-0.20260418091213-65daf7da824d // indirect
-	kubeops.dev/sidekick v0.0.15-0.20260418091208-a1cb9f4a3553 // indirect
-	kubestash.dev/apimachinery v0.28.0 // indirect
+	kubeops.dev/sidekick v0.0.16-0.20260711064558-9f0ad344e447 // indirect
+	kubestash.dev/apimachinery v0.29.0 // indirect
 	open-cluster-management.io/api v1.2.0 // indirect
 	sigs.k8s.io/cli-utils v0.37.2 // indirect
 	sigs.k8s.io/gateway-api v1.4.0 // indirect

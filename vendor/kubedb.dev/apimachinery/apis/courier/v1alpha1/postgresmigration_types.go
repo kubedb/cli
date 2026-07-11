@@ -16,6 +16,75 @@ limitations under the License.
 
 package v1alpha1
 
+import (
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	ofst "kmodules.xyz/offshoot-api/api/v1"
+)
+
+const (
+	ResourceKindPostgresMigration     = "PostgresMigration"
+	ResourceSingularPostgresMigration = "postgresmigration"
+	ResourcePluralPostgresMigrations  = "postgresmigrations"
+)
+
+// +genclient
+// +k8s:openapi-gen=true
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+
+// +kubebuilder:object:root=true
+// +kubebuilder:resource:path=postgresmigrations,singular=postgresmigration,shortName=pgmig,categories={kubedb,appscode,all}
+// +kubebuilder:subresource:status
+// +kubebuilder:resource:scope=Namespaced
+// +kubebuilder:printcolumn:name="Phase",type="string",JSONPath=".status.phase"
+// +kubebuilder:printcolumn:name="Stage",type="string",JSONPath=".status.progress.info.Stage"
+// +kubebuilder:printcolumn:name="Lag",type="string",JSONPath=".status.progress.info.Lag"
+// +kubebuilder:printcolumn:name="Progress",type="string",JSONPath=".status.progress.info.Progress"
+// +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
+type PostgresMigration struct {
+	metav1.TypeMeta `json:",inline"`
+
+	// metadata is a standard object metadata
+	// +optional
+	metav1.ObjectMeta `json:"metadata,omitzero"`
+
+	// spec defines the desired state of PostgresMigration
+	// +required
+	Spec PostgresMigrationSpec `json:"spec"`
+
+	// status defines the observed state of PostgresMigration.
+	// It reuses the shared MigrationStatus so that the Migration duck type can
+	// project it and the operator's status patches replay onto it unchanged.
+	// +optional
+	Status MigrationStatus `json:"status,omitzero"`
+}
+
+// PostgresMigrationSpec defines the desired state of PostgresMigration
+type PostgresMigrationSpec struct {
+	// Source defines the source Postgres database configuration
+	Source PostgresSource `json:"source"`
+
+	// Target defines the target Postgres database configuration
+	Target PostgresTarget `json:"target"`
+
+	// JobDefaults specifies default settings for migration jobs
+	// +optional
+	JobDefaults *JobDefaults `json:"jobDefaults,omitempty"`
+
+	// JobTemplate specifies runtime configurations for the migration Job
+	// +optional
+	JobTemplate *ofst.PodTemplateSpec `json:"jobTemplate,omitempty"`
+}
+
+// PostgresMigrationList contains a list of PostgresMigration
+
+// +kubebuilder:object:root=true
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+type PostgresMigrationList struct {
+	metav1.TypeMeta `json:",inline"`
+	metav1.ListMeta `json:"metadata,omitzero"`
+	Items           []PostgresMigration `json:"items"`
+}
+
 type PostgresSource struct {
 	// ConnectionInfo refers to the source Postgres database connection information.
 	ConnectionInfo ConnectionInfo `yaml:"connectionInfo" json:"connectionInfo"`
@@ -109,4 +178,8 @@ type Subscription struct {
 	// Name is the identifier of the PostgreSQL subscription.
 	// This name will be used when creating or referencing the subscription in logical replication.
 	Name string `yaml:"name" json:"name,omitempty"`
+}
+
+func init() {
+	SchemeBuilder.Register(&PostgresMigration{}, &PostgresMigrationList{})
 }

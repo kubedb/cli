@@ -375,6 +375,8 @@ func (r *RabbitMQ) setDefaultContainerSecurityContext(rmVersion *catalog.RabbitM
 		initContainer.SecurityContext = &core.SecurityContext{}
 	}
 	r.assignDefaultInitContainerSecurityContext(rmVersion, initContainer.SecurityContext)
+
+	apis.SetDefaultResizePolicy(podTemplate.Spec.Containers, podTemplate.Spec.InitContainers)
 }
 
 func (r *RabbitMQ) assignDefaultInitContainerSecurityContext(rmVersion *catalog.RabbitMQVersion, rc *core.SecurityContext) {

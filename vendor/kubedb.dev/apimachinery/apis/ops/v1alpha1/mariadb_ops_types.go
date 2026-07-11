@@ -125,6 +125,10 @@ type MariaDBVerticalScalingSpec struct {
 	MaxScale    *PodResources       `json:"maxscale,omitempty"`
 	Exporter    *ContainerResources `json:"exporter,omitempty"`
 	Coordinator *ContainerResources `json:"coordinator,omitempty"`
+	// Mode selects how the vertical scaling is actuated. Defaults to Restart.
+	// +optional
+	// +kubebuilder:default=Restart
+	Mode VerticalScalingMode `json:"mode,omitempty"`
 }
 
 // MariaDBVolumeExpansionSpec is the spec for MariaDB volume expansion

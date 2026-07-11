@@ -20,32 +20,48 @@ import (
 	kmapi "kmodules.xyz/client-go/api/v1"
 )
 
-// MigrationConfig defines the desired state of Migrator
+// MigrationConfig defines the desired state of Migration
 type MigrationConfig struct {
 	Source Source `yaml:"source" json:"source"`
 	Target Target `yaml:"target" json:"target"`
 }
 
 // Source defines the source database configuration
+//
+// Source is a projection-only union used by the Migration duck type; it inlines
+// every engine's source struct, which share JSON field names, so it cannot (and
+// need not) be represented as an OpenAPI schema. Migration is never served.
+// +k8s:openapi-gen=false
 type Source struct {
 	// Postgres refers to the source Postgres database configuration
-	Postgres *PostgresSource `yaml:"postgres" json:"postgres,omitempty"`
+	*PostgresSource `json:",inline,omitempty"`
 	// MySQL refers to the source MySQL database configuration
-	MySQL *MySQLSource `yaml:"mysql" json:"mysql,omitempty"`
+	*MySQLSource `json:",inline,omitempty"`
 	// MariaDB refers to the source MariaDB database configuration
-	MariaDB *MariaDBSource `yaml:"mariadb" json:"mariadb,omitempty"`
-	MongoDB *MongoSource   `yaml:"mongodb" json:"mongodb,omitempty"`
+	*MariaDBSource `json:",inline,omitempty"`
+	// MongoSource refers to the source MongoDB database configuration
+	*MongoDBSource `json:",inline,omitempty"`
+	// MSSQLServer refers to the source MSSQL Server database configuration
+	*MSSQLServerSource `json:",inline,omitempty"`
 }
 
 // Target defines the target database configuration
+//
+// Target is a projection-only union used by the Migration duck type; it inlines
+// every engine's target struct, which share JSON field names, so it cannot (and
+// need not) be represented as an OpenAPI schema. Migration is never served.
+// +k8s:openapi-gen=false
 type Target struct {
 	// Postgres refers to the target Postgres database configuration
-	Postgres *PostgresTarget `yaml:"postgres" json:"postgres,omitempty"`
-	MongoDB  *MongoTarget    `yaml:"mongodb" json:"mongodb,omitempty"`
+	*PostgresTarget `json:",inline,omitempty"`
+	// MongoTarget refers to the target Postgres database configuration
+	*MongoDBTarget `json:",inline,omitempty"`
 	// MySQL refers to the target MySQL database configuration
-	MySQL *MySQLTarget `yaml:"mysql" json:"mysql,omitempty"`
+	*MySQLTarget `json:",inline,omitempty"`
 	// MariaDB refers to the target MariaDB database configuration
-	MariaDB *MariaDBTarget `yaml:"mariadb" json:"mariadb,omitempty"`
+	*MariaDBTarget `json:",inline,omitempty"`
+	// MSSQLServer refers to the target MSSQL Server database configuration
+	*MSSQLServerTarget `json:",inline,omitempty"`
 }
 
 type ConnectionInfo struct {
@@ -88,19 +104,19 @@ type TLSConfig struct {
 	ServerName string `yaml:"serverName" json:"serverName,omitempty"`
 }
 
-type DBMigratorImages struct {
+type DBCourierImages struct {
 	// CLI specifies the migrator CLI image
 	// +optional
-	CLI DBMigratorCLI `json:"cli"`
+	CLI DBCourierCLI `json:"cli"`
 	// StatusReporter is the sidecar image used to report migration progress
 	// +optional
-	StatusReporter DBMigratorStatusReporter `json:"statusReporter"`
+	StatusReporter DBCourierStatusReporter `json:"statusReporter"`
 }
 
-type DBMigratorCLI struct {
+type DBCourierCLI struct {
 	Image string `json:"image"`
 }
 
-type DBMigratorStatusReporter struct {
+type DBCourierStatusReporter struct {
 	Image string `json:"image"`
 }

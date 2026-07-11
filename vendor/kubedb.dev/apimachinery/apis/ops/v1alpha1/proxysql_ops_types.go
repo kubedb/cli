@@ -103,6 +103,10 @@ type ProxySQLHorizontalScalingSpec struct {
 // ProxySQLVerticalScalingSpec is the spec for ProxySQL vertical scaling
 type ProxySQLVerticalScalingSpec struct {
 	ProxySQL *PodResources `json:"proxysql,omitempty"`
+	// Mode selects how the vertical scaling is actuated. Defaults to Restart.
+	// +optional
+	// +kubebuilder:default=Restart
+	Mode VerticalScalingMode `json:"mode,omitempty"`
 }
 
 type ProxySQLCustomConfiguration struct {

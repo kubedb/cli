@@ -426,6 +426,8 @@ func (r *Cassandra) setDefaultContainerSecurityContext(csVersion *catalog.Cassan
 		initContainer.SecurityContext = &core.SecurityContext{}
 	}
 	r.assignDefaultContainerSecurityContext(csVersion, initContainer.SecurityContext)
+
+	apis.SetDefaultResizePolicy(podTemplate.Spec.Containers, podTemplate.Spec.InitContainers)
 }
 
 func (r *Cassandra) assignDefaultContainerSecurityContext(csVersion *catalog.CassandraVersion, rc *core.SecurityContext) {

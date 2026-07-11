@@ -298,6 +298,7 @@ func (m *Memcached) setDefaultContainerResourceLimits(podTemplate *ofstv2.PodTem
 	if dbContainer != nil {
 		apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResources)
 	}
+	apis.SetDefaultResizePolicy(podTemplate.Spec.Containers, podTemplate.Spec.InitContainers)
 }
 
 // CertificateName returns the default certificate name and/or certificate secret name for a certificate alias

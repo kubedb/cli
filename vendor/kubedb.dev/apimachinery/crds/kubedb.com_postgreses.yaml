@@ -5434,6 +5434,32 @@ spec:
                 - Synchronous
                 - Asynchronous
                 type: string
+              synchronousReplicationConfig:
+                properties:
+                  commitLevel:
+                    enum:
+                    - "On"
+                    - RemoteApply
+                    - RemoteWrite
+                    - Local
+                    - "Off"
+                    type: string
+                  mode:
+                    enum:
+                    - Any
+                    - First
+                    type: string
+                  numSyncReplicas:
+                    format: int32
+                    type: integer
+                  standbyNames:
+                    items:
+                      type: string
+                    type: array
+                    x-kubernetes-list-type: atomic
+                  useWildcard:
+                    type: boolean
+                type: object
               tls:
                 properties:
                   certificates:

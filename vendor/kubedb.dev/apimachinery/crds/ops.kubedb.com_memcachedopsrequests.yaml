@@ -319,6 +319,12 @@ spec:
                         - value
                         type: object
                     type: object
+                  mode:
+                    default: Restart
+                    enum:
+                    - Restart
+                    - InPlace
+                    type: string
                   readinessCriteria:
                     type: object
                 type: object

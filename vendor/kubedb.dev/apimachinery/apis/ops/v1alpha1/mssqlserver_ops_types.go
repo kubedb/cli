@@ -110,6 +110,10 @@ type MSSQLServerVerticalScalingSpec struct {
 	Exporter    *ContainerResources `json:"exporter,omitempty"`
 	Coordinator *ContainerResources `json:"coordinator,omitempty"`
 	Arbiter     *PodResources       `json:"arbiter,omitempty"`
+	// Mode selects how the vertical scaling is actuated. Defaults to Restart.
+	// +optional
+	// +kubebuilder:default=Restart
+	Mode VerticalScalingMode `json:"mode,omitempty"`
 }
 
 // MSSQLServerVolumeExpansionSpec is the spec for MSSQLServer volume expansion

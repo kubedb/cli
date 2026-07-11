@@ -23,44 +23,26 @@ import (
 	ofst "kmodules.xyz/offshoot-api/api/v1"
 )
 
-const (
-	ResourceKindMigrator     = "Migrator"
-	ResourceSingularMigrator = "migrator"
-	ResourcePluralMigrator   = "migrators"
-)
-
-// +genclient
-// +k8s:openapi-gen=true
+// +k8s:openapi-gen=false
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
-
-// +kubebuilder:object:root=true
-// +kubebuilder:resource:path=migrators,singular=migrator,shortName=mgtr,categories={kubedb,appscode,all}
-// +kubebuilder:subresource:status
-// +kubebuilder:resource:scope=Namespaced
-// +kubebuilder:printcolumn:name="Phase",type="string",JSONPath=".status.phase"
-// +kubebuilder:printcolumn:name="DBType",type="string",JSONPath=".status.progress.dbType"
-// +kubebuilder:printcolumn:name="Stage",type="string",JSONPath=".status.progress.info.Stage"
-// +kubebuilder:printcolumn:name="Lag",type="string",JSONPath=".status.progress.info.Lag"
-// +kubebuilder:printcolumn:name="Progress",type="string",JSONPath=".status.progress.info.Progress"
-// +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
-type Migrator struct {
+type Migration struct {
 	metav1.TypeMeta `json:",inline"`
 
 	// metadata is a standard object metadata
 	// +optional
 	metav1.ObjectMeta `json:"metadata,omitzero"`
 
-	// spec defines the desired state of Migrator
+	// spec defines the desired state of Migration
 	// +required
-	Spec MigratorSpec `json:"spec"`
+	Spec MigrationSpec `json:"spec"`
 
-	// status defines the observed state of Migrator
+	// status defines the observed state of Migration
 	// +optional
-	Status MigratorStatus `json:"status,omitzero"`
+	Status MigrationStatus `json:"status,omitzero"`
 }
 
-// MigratorSpec defines the desired state of Migrator
-type MigratorSpec struct {
+// MigrationSpec defines the desired state of Migration
+type MigrationSpec struct {
 	// Source defines the source database configuration
 	Source *Source `json:"source" protobuf:"bytes,1,opt,name=source"`
 
@@ -97,12 +79,12 @@ type JobDefaults struct {
 	ActiveDeadlineSeconds *int64 `json:"activeDeadlineSeconds,omitempty"`
 }
 
-// MigratorStatus defines the observed state of Migrator.
-type MigratorStatus struct {
+// MigrationStatus defines the observed state of Migration.
+type MigrationStatus struct {
 	// Phase represents the current phase of migration
 	// +optional
 	// +kubebuilder:default:=Pending
-	Phase MigratorPhase `json:"phase,omitempty"`
+	Phase MigrationPhase `json:"phase,omitempty"`
 
 	// Progress contains the current progress of migration
 	// +optional
@@ -115,18 +97,18 @@ type MigratorStatus struct {
 	Conditions []kmapi.Condition `json:"conditions,omitempty"`
 }
 
-// MigratorPhase represents the current phase of migration
-type MigratorPhase string
+// MigrationPhase represents the current phase of migration
+type MigrationPhase string
 
 const (
-	// MigratorPhasePending indicates the migration is pending
-	MigratorPhasePending MigratorPhase = "Pending"
-	// MigratorPhaseRunning indicates the migration is in progress
-	MigratorPhaseRunning MigratorPhase = "Running"
-	// MigratorPhaseSucceeded indicates the migration completed successfully
-	MigratorPhaseSucceeded MigratorPhase = "Succeeded"
-	// MigratorPhaseFailed indicates the migration failed
-	MigratorPhaseFailed MigratorPhase = "Failed"
+	// MigrationPhasePending indicates the migration is pending
+	MigrationPhasePending MigrationPhase = "Pending"
+	// MigrationPhaseRunning indicates the migration is in progress
+	MigrationPhaseRunning MigrationPhase = "Running"
+	// MigrationPhaseSucceeded indicates the migration completed successfully
+	MigrationPhaseSucceeded MigrationPhase = "Succeeded"
+	// MigrationPhaseFailed indicates the migration failed
+	MigrationPhaseFailed MigrationPhase = "Failed"
 )
 
 // Progress contains the current progress of migration
@@ -140,16 +122,15 @@ type Progress struct {
 	Info map[string]string `json:"info,omitempty"`
 }
 
-// MigratorList contains a list of Migrator
+// MigrationList contains a list of Migration
 
-// +kubebuilder:object:root=true
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
-type MigratorList struct {
+type MigrationList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitzero"`
-	Items           []Migrator `json:"items"`
+	Items           []Migration `json:"items"`
 }
 
 func init() {
-	SchemeBuilder.Register(&Migrator{}, &MigratorList{})
+	SchemeBuilder.Register(&Migration{}, &MigrationList{})
 }

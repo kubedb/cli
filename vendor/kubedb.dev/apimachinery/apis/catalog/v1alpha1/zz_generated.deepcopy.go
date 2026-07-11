@@ -2079,6 +2079,7 @@ func (in *MSSQLServerVersionSpec) DeepCopyInto(out *MSSQLServerVersionSpec) {
 		}
 	}
 	out.GitSyncer = in.GitSyncer
+	out.Courier = in.Courier
 	return
 }
 
@@ -2302,7 +2303,7 @@ func (in *MariaDBVersionSpec) DeepCopyInto(out *MariaDBVersionSpec) {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
-	out.Migrator = in.Migrator
+	out.Courier = in.Courier
 	return
 }
 
@@ -2724,7 +2725,7 @@ func (in *MongoDBVersionSpec) DeepCopyInto(out *MongoDBVersionSpec) {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
-	out.Migrator = in.Migrator
+	out.Courier = in.Courier
 	return
 }
 
@@ -3003,7 +3004,7 @@ func (in *MySQLVersionSpec) DeepCopyInto(out *MySQLVersionSpec) {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
-	out.Migrator = in.Migrator
+	out.Courier = in.Courier
 	return
 }
 
@@ -4002,7 +4003,7 @@ func (in *PostgresVersionSpec) DeepCopyInto(out *PostgresVersionSpec) {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
-	out.Migrator = in.Migrator
+	out.Courier = in.Courier
 	return
 }
 

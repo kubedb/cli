@@ -289,7 +289,8 @@ func (es *ESClientV5) CountNodes() (int64, error) {
 }
 
 func (es *ESClientV5) AddVotingConfigExclusions(nodes []string) error {
-	url := fmt.Sprintf("/_cluster/voting_config_exclusions/%s?timeout=120s",
+	url := fmt.Sprintf(
+		"/_cluster/voting_config_exclusions/%s?timeout=120s",
 		strings.Join(nodes, ","),
 	)
 

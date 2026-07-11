@@ -114,6 +114,18 @@ const (
 	VolumeExpansionModeOffline VolumeExpansionMode = "Offline"
 )
 
+// +kubebuilder:validation:Enum=Restart;InPlace
+type VerticalScalingMode string
+
+const (
+	// VerticalScalingModeRestart actuates a vertical scaling by patching the
+	// pod template and restarting the pods (the default, restart-based path).
+	VerticalScalingModeRestart VerticalScalingMode = "Restart"
+	// VerticalScalingModeInPlace actuates a vertical scaling in place via the
+	// pods/resize subresource, falling back to restart when infeasible.
+	VerticalScalingModeInPlace VerticalScalingMode = "InPlace"
+)
+
 type RestartSpec struct{}
 
 type Reprovision struct{}

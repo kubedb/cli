@@ -93,16 +93,18 @@ const (
 	ReconfigureTLSSucceeded = "ReconfigureTLSSucceeded"
 	ReconfigureTLSFailed    = "ReconfigureTLSFailed"
 
-	RemoveTLS                  = "RemoveTLS"
-	RemoveTLSSucceeded         = "RemoveTLSSucceeded"
-	RemoveTLSFailed            = "RemoveTLSFailed"
-	AddTLS                     = "AddTLS"
-	AddTLSSucceeded            = "AddTLSSucceeded"
-	AddTLSFailed               = "AddTLSFailed"
-	Issuing                    = "Issuing"
-	IssueCertificatesSucceeded = "IssueCertificatesSucceeded"
-	CertificateSynced          = "CertificateSynced"
-	IssueCertificatesFailed    = "IssueCertificatesFailed"
+	RemoveTLS                      = "RemoveTLS"
+	RemoveTLSSucceeded             = "RemoveTLSSucceeded"
+	RemoveTLSFailed                = "RemoveTLSFailed"
+	AddTLS                         = "AddTLS"
+	AddTLSSucceeded                = "AddTLSSucceeded"
+	AddTLSFailed                   = "AddTLSFailed"
+	Issuing                        = "Issuing"
+	IssueCertificatesSucceeded     = "IssueCertificatesSucceeded"
+	CertificateSynced              = "CertificateSynced"
+	IssueCertificatesFailed        = "IssueCertificatesFailed"
+	IssueGrpcCertificatesSucceeded = "IssueGrpcCertificatesSucceeded"
+	GrpcCertificateSynced          = "GrpcCertificateSynced"
 )
 
 // RotateAuth

@@ -401,6 +401,7 @@ func (c *ClickHouse) SetDefaults(kc client.Client) {
 			apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.ClickHouseDefaultResources)
 		}
 		c.setDefaultContainerSecurityContext(&chVersion, cluster.PodTemplate)
+		apis.SetDefaultResizePolicy(cluster.PodTemplate.Spec.Containers, cluster.PodTemplate.Spec.InitContainers)
 		c.Spec.ClusterTopology.Cluster = cluster
 
 		if c.Spec.ClusterTopology.ClickHouseKeeper != nil && !c.Spec.ClusterTopology.ClickHouseKeeper.ExternallyManaged && c.Spec.ClusterTopology.ClickHouseKeeper.Spec != nil {
@@ -420,6 +421,7 @@ func (c *ClickHouse) SetDefaults(kc client.Client) {
 			if dbContainer != nil {
 				apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResources)
 			}
+			apis.SetDefaultResizePolicy(c.Spec.ClusterTopology.ClickHouseKeeper.Spec.PodTemplate.Spec.Containers, c.Spec.ClusterTopology.ClickHouseKeeper.Spec.PodTemplate.Spec.InitContainers)
 		}
 	} else {
 		if c.Spec.Replicas == nil {
@@ -440,6 +442,7 @@ func (c *ClickHouse) SetDefaults(kc client.Client) {
 		if dbContainer != nil {
 			apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.ClickHouseDefaultResources)
 		}
+		apis.SetDefaultResizePolicy(c.Spec.PodTemplate.Spec.Containers, c.Spec.PodTemplate.Spec.InitContainers)
 	}
 	c.SetTLSDefaults()
 	c.SetHealthCheckerDefaults()

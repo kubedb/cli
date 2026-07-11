@@ -116,14 +116,18 @@ type PgpoolBackendConfigurationSpec struct {
 }
 
 type PgpoolCustomConfigurationSpec struct {
-	*ReconfigurationSpec `json:",inline,omitempty"`
-	Backend              *PgpoolBackendConfigurationSpec `json:"backend,omitempty"`
+	ReconfigurationSpec `json:",inline,omitempty"`
+	Backend             *PgpoolBackendConfigurationSpec `json:"backend,omitempty"`
 }
 
 // PgpoolVerticalScalingSpec contains the vertical scaling information of a Pgpool cluster
 type PgpoolVerticalScalingSpec struct {
 	// Resource spec for nodes
 	Node *PodResources `json:"node,omitempty"`
+	// Mode selects how the vertical scaling is actuated. Defaults to Restart.
+	// +optional
+	// +kubebuilder:default=Restart
+	Mode VerticalScalingMode `json:"mode,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

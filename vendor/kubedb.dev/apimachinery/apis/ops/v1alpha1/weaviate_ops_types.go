@@ -107,6 +107,10 @@ type WeaviateHorizontalScalingSpec struct {
 type WeaviateVerticalScalingSpec struct {
 	// Resource spec for nodes
 	Node *PodResources `json:"node,omitempty"`
+	// Mode selects how the vertical scaling is actuated. Defaults to Restart.
+	// +optional
+	// +kubebuilder:default=Restart
+	Mode VerticalScalingMode `json:"mode,omitempty"`
 }
 
 // WeaviateVolumeExpansionSpec is the spec for Weaviate volume expansion

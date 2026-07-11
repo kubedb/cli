@@ -700,6 +700,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MetadataStorage":                               schema_apimachinery_apis_kubedb_v1alpha2_MetadataStorage(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Milvus":                                        schema_apimachinery_apis_kubedb_v1alpha2_Milvus(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MilvusApp":                                     schema_apimachinery_apis_kubedb_v1alpha2_MilvusApp(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MilvusBind":                                    schema_apimachinery_apis_kubedb_v1alpha2_MilvusBind(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MilvusDataNode":                                schema_apimachinery_apis_kubedb_v1alpha2_MilvusDataNode(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MilvusDistributedSpec":                         schema_apimachinery_apis_kubedb_v1alpha2_MilvusDistributedSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MilvusList":                                    schema_apimachinery_apis_kubedb_v1alpha2_MilvusList(ref),
@@ -773,6 +774,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ProxySQLStatus":                                schema_apimachinery_apis_kubedb_v1alpha2_ProxySQLStatus(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Qdrant":                                        schema_apimachinery_apis_kubedb_v1alpha2_Qdrant(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.QdrantApp":                                     schema_apimachinery_apis_kubedb_v1alpha2_QdrantApp(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.QdrantBind":                                    schema_apimachinery_apis_kubedb_v1alpha2_QdrantBind(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.QdrantList":                                    schema_apimachinery_apis_kubedb_v1alpha2_QdrantList(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.QdrantSpec":                                    schema_apimachinery_apis_kubedb_v1alpha2_QdrantSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.QdrantStatus":                                  schema_apimachinery_apis_kubedb_v1alpha2_QdrantStatus(ref),
@@ -823,6 +825,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Topology":                                      schema_apimachinery_apis_kubedb_v1alpha2_Topology(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Weaviate":                                      schema_apimachinery_apis_kubedb_v1alpha2_Weaviate(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.WeaviateApp":                                   schema_apimachinery_apis_kubedb_v1alpha2_WeaviateApp(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.WeaviateBind":                                  schema_apimachinery_apis_kubedb_v1alpha2_WeaviateBind(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.WeaviateConfiguration":                         schema_apimachinery_apis_kubedb_v1alpha2_WeaviateConfiguration(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.WeaviateList":                                  schema_apimachinery_apis_kubedb_v1alpha2_WeaviateList(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.WeaviateSpec":                                  schema_apimachinery_apis_kubedb_v1alpha2_WeaviateSpec(ref),
@@ -873,6 +876,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.singlestoreApp":                                schema_apimachinery_apis_kubedb_v1alpha2_singlestoreApp(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.singlestoreStatsService":                       schema_apimachinery_apis_kubedb_v1alpha2_singlestoreStatsService(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.solrStatsService":                              schema_apimachinery_apis_kubedb_v1alpha2_solrStatsService(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.weaviateStatsService":                          schema_apimachinery_apis_kubedb_v1alpha2_weaviateStatsService(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.zookeeperStatsService":                         schema_apimachinery_apis_kubedb_v1alpha2_zookeeperStatsService(ref),
 	}
 }
@@ -37426,6 +37430,13 @@ func schema_apimachinery_apis_kubedb_v1alpha2_HanaDBSpec(ref common.ReferenceCal
 							Ref:         ref("k8s.io/api/core/v1.PersistentVolumeClaimSpec"),
 						},
 					},
+					"enforceVolumePermission": {
+						SchemaProps: spec.SchemaProps{
+							Description: "EnforceVolumePermission runs a root init container to make the HanaDB data volume writable by the runtime user. Use this when storage provisioners create volumes that are not writable by HanaDB. fsGroup is not used because /run_hana rejects SGID on /hana/mounts.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
 					"authSecret": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Database authentication secret",
@@ -40144,6 +40155,26 @@ func schema_apimachinery_apis_kubedb_v1alpha2_MilvusApp(ref common.ReferenceCall
 	}
 }
 
+func schema_apimachinery_apis_kubedb_v1alpha2_MilvusBind(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"Milvus": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Milvus"),
+						},
+					},
+				},
+				Required: []string{"Milvus"},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Milvus"},
+	}
+}
+
 func schema_apimachinery_apis_kubedb_v1alpha2_MilvusDataNode(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -42095,6 +42126,11 @@ func schema_apimachinery_apis_kubedb_v1alpha2_Neo4jTLSConfig(ref common.Referenc
 						},
 					},
 					"cluster": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ProtocolTLSConfig"),
+						},
+					},
+					"backup": {
 						SchemaProps: spec.SchemaProps{
 							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ProtocolTLSConfig"),
 						},
@@ -44292,6 +44328,26 @@ func schema_apimachinery_apis_kubedb_v1alpha2_Qdrant(ref common.ReferenceCallbac
 }
 
 func schema_apimachinery_apis_kubedb_v1alpha2_QdrantApp(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"Qdrant": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Qdrant"),
+						},
+					},
+				},
+				Required: []string{"Qdrant"},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Qdrant"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1alpha2_QdrantBind(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -46991,6 +47047,26 @@ func schema_apimachinery_apis_kubedb_v1alpha2_WeaviateApp(ref common.ReferenceCa
 	}
 }
 
+func schema_apimachinery_apis_kubedb_v1alpha2_WeaviateBind(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"Weaviate": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Weaviate"),
+						},
+					},
+				},
+				Required: []string{"Weaviate"},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Weaviate"},
+	}
+}
+
 func schema_apimachinery_apis_kubedb_v1alpha2_WeaviateConfiguration(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -47190,12 +47266,18 @@ func schema_apimachinery_apis_kubedb_v1alpha2_WeaviateSpec(ref common.ReferenceC
 							Ref:         ref("kmodules.xyz/client-go/api/v1.HealthCheckSpec"),
 						},
 					},
+					"monitor": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Monitor is used to monitor database instance",
+							Ref:         ref("kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec"),
+						},
+					},
 				},
 				Required: []string{"version"},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ReplicationConfig", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.WeaviateConfiguration", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.WeaviateTLSConfig"},
+			"k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ReplicationConfig", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.WeaviateConfiguration", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.WeaviateTLSConfig"},
 	}
 }
 
@@ -48400,6 +48482,26 @@ func schema_apimachinery_apis_kubedb_v1alpha2_solrStatsService(ref common.Refere
 		},
 		Dependencies: []string{
 			"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Solr"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1alpha2_weaviateStatsService(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"Weaviate": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Weaviate"),
+						},
+					},
+				},
+				Required: []string{"Weaviate"},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Weaviate"},
 	}
 }
 

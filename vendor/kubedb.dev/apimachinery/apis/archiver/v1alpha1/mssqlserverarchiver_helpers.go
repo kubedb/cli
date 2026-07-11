@@ -35,7 +35,7 @@ func (m *MSSQLServerArchiver) GetConsumers() *api.AllowedConsumers {
 var _ ListAccessor = MSSQLServerArchiverList{}
 
 func (l MSSQLServerArchiverList) GetItems() []Accessor {
-	var accessors []Accessor
+	accessors := make([]Accessor, 0, len(l.Items))
 	for _, item := range l.Items {
 		accessors = append(accessors, &item)
 	}

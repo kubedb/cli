@@ -97,6 +97,10 @@ type PgBouncerHorizontalScalingSpec struct {
 type PgBouncerVerticalScalingSpec struct {
 	PgBouncer *PodResources       `json:"pgbouncer,omitempty"`
 	Exporter  *ContainerResources `json:"exporter,omitempty"`
+	// Mode selects how the vertical scaling is actuated. Defaults to Restart.
+	// +optional
+	// +kubebuilder:default=Restart
+	Mode VerticalScalingMode `json:"mode,omitempty"`
 }
 
 type PgBouncerTLSSpec struct {

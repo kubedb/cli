@@ -769,6 +769,8 @@ func (h *HanaDB) setDefaultContainerResourceLimits(podTemplate *ofst.PodTemplate
 			apis.SetDefaultResourceLimits(&coordinatorContainer.Resources, kubedb.CoordinatorDefaultResources)
 		}
 	}
+
+	apis.SetDefaultResizePolicy(podTemplate.Spec.Containers, podTemplate.Spec.InitContainers)
 }
 
 func (h *HanaDB) ReplicasAreReady(lister pslister.PetSetLister) (bool, string, error) {

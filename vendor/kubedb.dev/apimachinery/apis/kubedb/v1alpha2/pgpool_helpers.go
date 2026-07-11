@@ -409,6 +409,7 @@ func (p *Pgpool) SetDefaults(client client.Client) {
 	p.SetHealthCheckerDefaults()
 	p.SetSecurityContext(&ppVersion, p.Spec.PodTemplate)
 	p.setContainerResourceLimits(p.Spec.PodTemplate)
+	apis.SetDefaultResizePolicy(p.Spec.PodTemplate.Spec.Containers, p.Spec.PodTemplate.Spec.InitContainers)
 }
 
 func (p *Pgpool) GetPersistentSecrets() []string {

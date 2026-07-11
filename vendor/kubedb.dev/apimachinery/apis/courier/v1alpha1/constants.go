@@ -65,6 +65,28 @@ const (
 	MySQLCli    = "mysql"
 	MariaDBCli  = "mariadb"
 	MariaDBDump = "mariadb-dump"
+
+	// SqlPackage is the Microsoft SqlPackage CLI used for MSSQL schema
+	// extract/publish via .dacpac.
+	SqlPackage = "SqlPackage"
+)
+
+// ============ MSSQL Server Constants ==================
+const (
+	// MSSQLDefaultStreamingPollInterval is the default poll interval used by
+	// the MSSQL CDC streaming phase when none is set in the user config.
+	MSSQLDefaultStreamingPollInterval = "5s"
+	// MSSQLDefaultSchema is the default SQL Server schema name (typically "dbo").
+	MSSQLDefaultSchema = "dbo"
+
+	// CDC operation codes returned by cdc.fn_cdc_get_all_changes_<capture>.
+	MSSQLCDCOpDelete       = 1
+	MSSQLCDCOpInsert       = 2
+	MSSQLCDCOpUpdateBefore = 3
+	MSSQLCDCOpUpdateAfter  = 4
+
+	// PositionMethodLSN identifies CDC LSN-based streaming checkpoints.
+	PositionMethodLSN = "lsn"
 )
 
 // ============ Snapshot Pipeline Constant ==================

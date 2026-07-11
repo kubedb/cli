@@ -338,6 +338,8 @@ func (p *PerconaXtraDB) setDefaultContainerResourceLimits(podTemplate *ofstv2.Po
 	if coordinatorContainer != nil && (coordinatorContainer.Resources.Requests == nil && coordinatorContainer.Resources.Limits == nil) {
 		apis.SetDefaultResourceLimits(&coordinatorContainer.Resources, kubedb.CoordinatorDefaultResources)
 	}
+
+	apis.SetDefaultResizePolicy(podTemplate.Spec.Containers, podTemplate.Spec.InitContainers)
 }
 
 func (p *PerconaXtraDB) SetHealthCheckerDefaults() {

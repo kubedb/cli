@@ -105,6 +105,10 @@ type PerconaXtraDBVerticalScalingSpec struct {
 	PerconaXtraDB *PodResources       `json:"perconaxtradb,omitempty"`
 	Exporter      *ContainerResources `json:"exporter,omitempty"`
 	Coordinator   *ContainerResources `json:"coordinator,omitempty"`
+	// Mode selects how the vertical scaling is actuated. Defaults to Restart.
+	// +optional
+	// +kubebuilder:default=Restart
+	Mode VerticalScalingMode `json:"mode,omitempty"`
 }
 
 // PerconaXtraDBVolumeExpansionSpec is the spec for PerconaXtraDB volume expansion
