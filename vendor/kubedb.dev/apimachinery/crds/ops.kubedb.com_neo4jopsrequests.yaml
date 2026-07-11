@@ -141,6 +141,15 @@ spec:
                 type: string
               tls:
                 properties:
+                  backup:
+                    properties:
+                      mode:
+                        enum:
+                        - Disabled
+                        - TLS
+                        - mTLS
+                        type: string
+                    type: object
                   bolt:
                     properties:
                       mode:
@@ -314,6 +323,12 @@ spec:
                 type: object
               verticalScaling:
                 properties:
+                  mode:
+                    default: Restart
+                    enum:
+                    - Restart
+                    - InPlace
+                    type: string
                   server:
                     properties:
                       nodeSelectionPolicy:

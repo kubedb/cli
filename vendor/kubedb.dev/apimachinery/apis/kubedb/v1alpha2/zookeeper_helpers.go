@@ -236,6 +236,8 @@ func (z *ZooKeeper) SetDefaults(kc client.Client) {
 		apis.SetDefaultResourceLimits(&initContainer.Resources, kubedb.DefaultInitContainerResource)
 	}
 
+	apis.SetDefaultResizePolicy(z.Spec.PodTemplate.Spec.Containers, z.Spec.PodTemplate.Spec.InitContainers)
+
 	if z.Spec.EnableSSL {
 		z.SetTLSDefaults()
 	}

@@ -116,6 +116,8 @@ type Neo4jTLSConfig struct {
 	HTTP *ProtocolTLSConfig `json:"http,omitempty"`
 	// +optional
 	Cluster *ProtocolTLSConfig `json:"cluster,omitempty"`
+	// +optional
+	Backup *ProtocolTLSConfig `json:"backup,omitempty"`
 	// Keystore encryption secret
 	// +optional
 	KeystoreCredSecret *SecretReference `json:"keystoreCredSecret,omitempty"`

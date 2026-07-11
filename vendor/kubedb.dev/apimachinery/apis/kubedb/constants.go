@@ -904,6 +904,8 @@ const (
 
 	MilvusGrpcPortName    = "grpc"
 	MilvusMetricsPortName = "metrics"
+	MilvusHttpPortName    = "http"
+	MilvusUIPortName      = "ui"
 	MilvusGrpcPort        = int32(19530)
 
 	MilvusVolumeNameData = "data"
@@ -929,6 +931,8 @@ const (
 	MinioSecretKey     = "secretkey"
 
 	MilvusMetricsPort       = 9091
+	MilvusUIPort            = 9091
+	MilvusHttpPort          = 8080
 	MilvusPortDataNode      = 21124
 	MilvusPortQueryNode     = 21123
 	MilvusPortStreamingNode = 22222
@@ -1578,18 +1582,20 @@ const (
 )
 
 const (
-	WeaviateHTTPPortName   = "http"
-	WeaviateHTTPPort       = 8080
-	WeaviateHTTPSPortName  = "https"
-	WeaviateHTTPSPort      = 8443
-	WeaviateGRPCPortName   = "grpc"
-	WeaviateGRPCPort       = 50051
-	WeaviateRAFTPortName   = "raft"
-	WeaviateRAFTPort       = 8300
-	WeaviateGOSSIPPortName = "gossip"
-	WeaviateGOSSIPPort     = 7102
-	WeaviateDATAPortName   = "data"
-	WeaviateDATAPort       = 7103
+	WeaviateHTTPPortName    = "http"
+	WeaviateHTTPPort        = 8080
+	WeaviateHTTPSPortName   = "https"
+	WeaviateHTTPSPort       = 8443
+	WeaviateMetricsPortName = "metrics"
+	WeaviateMetricsPort     = 2112
+	WeaviateGRPCPortName    = "grpc"
+	WeaviateGRPCPort        = 50051
+	WeaviateRAFTPortName    = "raft"
+	WeaviateRAFTPort        = 8300
+	WeaviateGOSSIPPortName  = "gossip"
+	WeaviateGOSSIPPort      = 7102
+	WeaviateDATAPortName    = "data"
+	WeaviateDATAPort        = 7103
 
 	WeaviateClassNameKubeDBSystem = "KubeDBSystem"
 
@@ -2397,8 +2403,9 @@ const (
 	HanaDBVolumeMountScripts = "/scripts"
 
 	// Container names
-	HanaDBContainerName            = "hanadb"
-	HanaDBCoordinatorContainerName = "hanadb-coordinator"
+	HanaDBContainerName                     = "hanadb"
+	HanaDBCoordinatorContainerName          = "hanadb-coordinator"
+	HanaDBVolumePermissionInitContainerName = "hanadb-volume-permissions"
 
 	// Mount paths
 	HanaDBDataDir         = "/hana/mounts"
@@ -2479,6 +2486,11 @@ const (
 	KubeSlicePodIPVolumeName                   = "podip"
 	KubeSlicePodIPFileName                     = "podip"
 	KubeSliceNSMContainerName                  = "cmd-nsc-grpc"
+
+	// BranchedFromAnnotation gates the KubeDB provisioner's "branched" mode: a Database carrying it is
+	// adopted onto cloned PVCs (created by the Courier Branch operator) instead of being provisioned
+	// empty. Its value records the branch provenance, e.g. {"cluster": "prod-east", "source": "demo/prod-pg"}.
+	BranchedFromAnnotation = "kubedb.com/branched-from"
 
 	// Archiver
 	OwnerDatabasesAnnotation                  = "kubedb.com/owner-databases"

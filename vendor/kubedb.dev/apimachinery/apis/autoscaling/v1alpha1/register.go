@@ -53,7 +53,8 @@ func Resource(resource string) schema.GroupResource {
 
 // Adds the list of known types to api.Scheme.
 func addKnownTypes(scheme *runtime.Scheme) error {
-	scheme.AddKnownTypes(SchemeGroupVersion,
+	scheme.AddKnownTypes(
+		SchemeGroupVersion,
 		&AerospikeAutoscaler{},
 		&AerospikeAutoscalerList{},
 		&CassandraAutoscaler{},
@@ -120,7 +121,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&ZooKeeperAutoscalerList{},
 	)
 
-	scheme.AddKnownTypes(SchemeGroupVersion,
+	scheme.AddKnownTypes(
+		SchemeGroupVersion,
 		&metav1.Status{},
 	)
 	metav1.AddToGroupVersion(scheme, SchemeGroupVersion)

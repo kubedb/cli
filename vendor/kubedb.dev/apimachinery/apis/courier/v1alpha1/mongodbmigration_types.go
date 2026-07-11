@@ -16,13 +16,84 @@ limitations under the License.
 
 package v1alpha1
 
-type MongoSource struct {
+import (
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	ofst "kmodules.xyz/offshoot-api/api/v1"
+)
+
+const (
+	ResourceKindMongoDBMigration     = "MongoDBMigration"
+	ResourceSingularMongoDBMigration = "mongodbmigration"
+	ResourcePluralMongoDBMigrations  = "mongodbmigrations"
+)
+
+// +genclient
+// +k8s:openapi-gen=true
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+
+// +kubebuilder:object:root=true
+// +kubebuilder:resource:path=mongodbmigrations,singular=mongodbmigration,shortName=momig,categories={kubedb,appscode,all}
+// +kubebuilder:subresource:status
+// +kubebuilder:resource:scope=Namespaced
+// +kubebuilder:printcolumn:name="Phase",type="string",JSONPath=".status.phase"
+// +kubebuilder:printcolumn:name="Stage",type="string",JSONPath=".status.progress.info.Stage"
+// +kubebuilder:printcolumn:name="Lag",type="string",JSONPath=".status.progress.info.Lag"
+// +kubebuilder:printcolumn:name="Progress",type="string",JSONPath=".status.progress.info.Progress"
+// +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
+type MongoDBMigration struct {
+	metav1.TypeMeta `json:",inline"`
+
+	// metadata is a standard object metadata
+	// +optional
+	metav1.ObjectMeta `json:"metadata,omitzero"`
+
+	// spec defines the desired state of MongoDBMigration
+	// +required
+	Spec MongoDBMigrationSpec `json:"spec"`
+
+	// status defines the observed state of MongoDBMigration.
+	// It reuses the shared MigrationStatus so that the Migration duck type can
+	// project it and the operator's status patches replay onto it unchanged.
+	// +optional
+	Status MigrationStatus `json:"status,omitzero"`
+}
+
+// MongoDBMigrationSpec defines the desired state of MongoDBMigration
+type MongoDBMigrationSpec struct {
+	// Source defines the source MongoDB database configuration
+	Source MongoDBSource `json:"source"`
+
+	// Target defines the target MongoDB database configuration
+	Target MongoDBTarget `json:"target"`
+
+	// JobDefaults specifies default settings for migration jobs
+	// +optional
+	JobDefaults *JobDefaults `json:"jobDefaults,omitempty"`
+
+	// JobTemplate specifies runtime configurations for the migration Job
+	// +optional
+	JobTemplate *ofst.PodTemplateSpec `json:"jobTemplate,omitempty"`
+}
+
+// MongoDBMigrationList contains a list of MongoDBMigration
+
+// +kubebuilder:object:root=true
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+type MongoDBMigrationList struct {
+	metav1.TypeMeta `json:",inline"`
+	metav1.ListMeta `json:"metadata,omitzero"`
+	Items           []MongoDBMigration `json:"items"`
+}
+
+type MongoDBSource struct {
 	ConnectionInfo ConnectionInfo `yaml:"connectionInfo" json:"connectionInfo"`
 	Mongoshake     *Mongoshake    `yaml:"mongoshake" json:"mongoshake,omitempty"`
 }
-type MongoTarget struct {
+
+type MongoDBTarget struct {
 	ConnectionInfo ConnectionInfo `yaml:"connectionInfo" json:"connectionInfo"`
 }
+
 type Mongoshake struct {
 	// SyncMode controls synchronization mode.
 	// Supported values: all, full, incr
@@ -80,4 +151,8 @@ type Mongoshake struct {
 	// Key-value pairs passed directly without schema validation.
 	// +optional
 	ExtraConfiguration map[string]string `yaml:"extraConfiguration" json:"extraConfiguration,omitempty"`
+}
+
+func init() {
+	SchemeBuilder.Register(&MongoDBMigration{}, &MongoDBMigrationList{})
 }

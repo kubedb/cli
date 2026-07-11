@@ -101,6 +101,9 @@ spec:
                   replicas:
                     format: int32
                     type: integer
+                  shards:
+                    format: int32
+                    type: integer
                 type: object
               maxRetries:
                 default: 1
@@ -271,6 +274,12 @@ spec:
                 type: object
               verticalScaling:
                 properties:
+                  mode:
+                    default: Restart
+                    enum:
+                    - Restart
+                    - InPlace
+                    type: string
                   node:
                     properties:
                       nodeSelectionPolicy:

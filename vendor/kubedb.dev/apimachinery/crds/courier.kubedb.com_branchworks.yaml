@@ -1,0 +1,247 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  labels:
+    app.kubernetes.io/name: kubedb
+  name: branchworks.courier.kubedb.com
+spec:
+  group: courier.kubedb.com
+  names:
+    kind: BranchWork
+    listKind: BranchWorkList
+    plural: branchworks
+    singular: branchwork
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .spec.targetCluster
+      name: TargetCluster
+      type: string
+    - jsonPath: .status.branch.phase
+      name: Phase
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        properties:
+          apiVersion:
+            type: string
+          kind:
+            type: string
+          metadata:
+            type: object
+          spec:
+            properties:
+              deleteOption:
+                enum:
+                - Delete
+                - Orphan
+                type: string
+              manifests:
+                items:
+                  type: object
+                  x-kubernetes-preserve-unknown-fields: true
+                type: array
+              refreshGeneration:
+                format: int64
+                type: integer
+              targetCluster:
+                type: string
+            required:
+            - targetCluster
+            type: object
+          status:
+            properties:
+              branch:
+                properties:
+                  conditions:
+                    items:
+                      properties:
+                        lastTransitionTime:
+                          format: date-time
+                          type: string
+                        message:
+                          type: string
+                        observedGeneration:
+                          format: int64
+                          type: integer
+                        reason:
+                          type: string
+                        severity:
+                          type: string
+                        status:
+                          type: string
+                        type:
+                          type: string
+                      required:
+                      - lastTransitionTime
+                      - status
+                      - type
+                      type: object
+                    type: array
+                    x-kubernetes-list-map-keys:
+                    - type
+                    x-kubernetes-list-type: map
+                  freshness:
+                    type: string
+                  history:
+                    items:
+                      properties:
+                        at:
+                          format: date-time
+                          type: string
+                        message:
+                          type: string
+                        result:
+                          enum:
+                          - Succeeded
+                          - Failed
+                          type: string
+                      type: object
+                    type: array
+                  lastRefreshAt:
+                    format: date-time
+                    type: string
+                  mode:
+                    enum:
+                    - Local
+                    - Initiator
+                    - Creator
+                    type: string
+                  phase:
+                    enum:
+                    - Pending
+                    - Snapshotting
+                    - Cloning
+                    - Provisioning
+                    - Massaging
+                    - Ready
+                    - Refreshing
+                    - Deleting
+                    - Failed
+                    type: string
+                  snapshot:
+                    properties:
+                      ref:
+                        type: string
+                      type:
+                        enum:
+                        - VolumeGroupSnapshot
+                        - VolumeSnapshot
+                        type: string
+                    type: object
+                  targetRef:
+                    properties:
+                      apiVersion:
+                        type: string
+                      fieldPath:
+                        type: string
+                      kind:
+                        type: string
+                      name:
+                        type: string
+                      namespace:
+                        type: string
+                      resourceVersion:
+                        type: string
+                      uid:
+                        type: string
+                    type: object
+                    x-kubernetes-map-type: atomic
+                type: object
+              conditions:
+                items:
+                  properties:
+                    lastTransitionTime:
+                      format: date-time
+                      type: string
+                    message:
+                      type: string
+                    observedGeneration:
+                      format: int64
+                      type: integer
+                    reason:
+                      type: string
+                    severity:
+                      type: string
+                    status:
+                      type: string
+                    type:
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - status
+                  - type
+                  type: object
+                type: array
+                x-kubernetes-list-map-keys:
+                - type
+                x-kubernetes-list-type: map
+              manifests:
+                items:
+                  properties:
+                    conditions:
+                      items:
+                        properties:
+                          lastTransitionTime:
+                            format: date-time
+                            type: string
+                          message:
+                            type: string
+                          observedGeneration:
+                            format: int64
+                            type: integer
+                          reason:
+                            type: string
+                          severity:
+                            type: string
+                          status:
+                            type: string
+                          type:
+                            type: string
+                        required:
+                        - lastTransitionTime
+                        - status
+                        - type
+                        type: object
+                      type: array
+                      x-kubernetes-list-map-keys:
+                      - type
+                      x-kubernetes-list-type: map
+                    ordinal:
+                      format: int32
+                      type: integer
+                    resourceMeta:
+                      properties:
+                        group:
+                          type: string
+                        kind:
+                          type: string
+                        name:
+                          type: string
+                        namespace:
+                          type: string
+                        resource:
+                          type: string
+                        version:
+                          type: string
+                      type: object
+                  required:
+                  - ordinal
+                  type: object
+                type: array
+              observedRefreshGeneration:
+                format: int64
+                type: integer
+            type: object
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

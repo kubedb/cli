@@ -84,6 +84,12 @@ So, the project field is not required in the placementPolicy API . But if want t
 type ClusterSpreadConstraint struct {
 	DistributionRules []DistributionRule `json:"distributionRules"`
 	Slice             KubeSliceConfig    `json:"slice"`
+
+	// FailoverPolicy, when set, marks this as a cross data center (DC/DR) deployment
+	// and selects how the common DC failover service drives failover for it.
+	// When nil, the placement is not managed for DC/DR.
+	// +optional
+	FailoverPolicy *FailoverPolicy `json:"failoverPolicy,omitempty"`
 }
 
 type DistributionRule struct {
@@ -91,6 +97,74 @@ type DistributionRule struct {
 	ReplicaIndices   []int32     `json:"replicaIndices"`
 	StorageClassName string      `json:"storageClassName,omitempty"`
 	Monitoring       *Monitoring `json:"monitoring,omitempty"`
+
+	// Role describes how this data center participates in DC/DR failover.
+	// Member: data bearing and primary eligible (a candidate for the primary DC).
+	// Arbiter: votes only, holds no data, never primary.
+	// Witness: data bearing but never primary (for engines like MongoDB whose
+	// witness must carry data to satisfy majority writes, yet must not be elected).
+	// Defaults to Member when empty.
+	// +kubebuilder:validation:Enum=Member;Arbiter;Witness
+	// +optional
+	Role DCRole `json:"role,omitempty"`
+}
+
+// DCRole is the role a data center plays in DC/DR failover.
+type DCRole string
+
+const (
+	// DCRoleMember is data bearing and primary eligible.
+	DCRoleMember DCRole = "Member"
+	// DCRoleArbiter votes only, holds no data, and is never primary.
+	DCRoleArbiter DCRole = "Arbiter"
+	// DCRoleWitness is data bearing but never primary.
+	DCRoleWitness DCRole = "Witness"
+)
+
+// FailoverMode is the data center topology of a DC/DR deployment.
+type FailoverMode string
+
+const (
+	// FailoverModeTwoDC is two Members plus one Arbiter or Witness.
+	FailoverModeTwoDC FailoverMode = "TwoDC"
+	// FailoverModeThreeDC is three Members, all primary eligible.
+	FailoverModeThreeDC FailoverMode = "ThreeDC"
+)
+
+// FailoverScope selects which primary DC Lease a workload follows.
+type FailoverScope string
+
+const (
+	// FailoverScopeGlobal follows the single global primary-dc Lease, so all
+	// globally scoped workloads fail over together.
+	FailoverScopeGlobal FailoverScope = "Global"
+	// FailoverScopeGroup follows a per group primary-dc-<group> Lease, so the
+	// group fails over independently of other groups.
+	FailoverScopeGroup FailoverScope = "Group"
+)
+
+// FailoverPolicy selects the mode and the failover trigger granularity.
+type FailoverPolicy struct {
+	// Mode is the DC topology. It can be derived from the per rule roles
+	// (two Members plus an Arbiter or Witness is TwoDC, three Members is ThreeDC);
+	// when set it is validated against the roles.
+	// +kubebuilder:validation:Enum=TwoDC;ThreeDC
+	// +optional
+	Mode FailoverMode `json:"mode,omitempty"`
+
+	// Trigger selects which primary DC Lease this workload follows.
+	Trigger FailoverTrigger `json:"trigger"`
+}
+
+// FailoverTrigger picks the Lease scope that drives this workload's failover.
+type FailoverTrigger struct {
+	// Scope is Global or Group.
+	// +kubebuilder:validation:Enum=Global;Group
+	Scope FailoverScope `json:"scope"`
+
+	// Group is required when Scope is Group; it names the primary-dc-<group> Lease.
+	// +optional
+	Group string `json:"group,omitempty"`
 }
 
 type Monitoring struct {

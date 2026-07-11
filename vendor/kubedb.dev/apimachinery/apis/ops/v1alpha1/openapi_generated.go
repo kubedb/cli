@@ -33772,6 +33772,13 @@ func schema_apimachinery_apis_ops_v1alpha1_AerospikeVerticalScalingSpec(ref comm
 							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources"),
 						},
 					},
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Mode selects how the vertical scaling is actuated. Defaults to Restart.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 				},
 			},
 		},
@@ -34164,6 +34171,13 @@ func schema_apimachinery_apis_ops_v1alpha1_CassandraVerticalScalingSpec(ref comm
 							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
 						},
 					},
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Mode selects how the vertical scaling is actuated. Defaults to Restart.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 				},
 			},
 		},
@@ -34211,6 +34225,13 @@ func schema_apimachinery_apis_ops_v1alpha1_ClickHouseHorizontalScalingSpec(ref c
 					"replicas": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Number of node",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"shards": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Number of shards to scale up to. Scale-up only; the new shards start empty (no data is rebalanced from existing shards).",
 							Type:        []string{"integer"},
 							Format:      "int32",
 						},
@@ -34541,6 +34562,13 @@ func schema_apimachinery_apis_ops_v1alpha1_ClickHouseVerticalScalingSpec(ref com
 							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
 						},
 					},
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Mode selects how the vertical scaling is actuated. Defaults to Restart.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 				},
 			},
 		},
@@ -34785,6 +34813,13 @@ func schema_apimachinery_apis_ops_v1alpha1_DB2VerticalScalingSpec(ref common.Ref
 					"exporter": {
 						SchemaProps: spec.SchemaProps{
 							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources"),
+						},
+					},
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Mode selects how the vertical scaling is actuated. Defaults to Restart.",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 				},
@@ -35531,6 +35566,13 @@ func schema_apimachinery_apis_ops_v1alpha1_DocumentDBVerticalScalingSpec(ref com
 							},
 						},
 					},
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Mode selects how the vertical scaling is actuated. Defaults to Restart.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 				},
 			},
 		},
@@ -35903,6 +35945,13 @@ func schema_apimachinery_apis_ops_v1alpha1_DruidVerticalScalingSpec(ref common.R
 					"routers": {
 						SchemaProps: spec.SchemaProps{
 							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
+						},
+					},
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Mode selects how the vertical scaling is actuated. Defaults to Restart.",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 				},
@@ -36552,6 +36601,13 @@ func schema_apimachinery_apis_ops_v1alpha1_ElasticsearchVerticalScalingSpec(ref 
 							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
 						},
 					},
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Mode selects how the vertical scaling is actuated. Defaults to Restart.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 				},
 			},
 		},
@@ -36897,6 +36953,13 @@ func schema_apimachinery_apis_ops_v1alpha1_HanaDBVerticalScalingSpec(ref common.
 							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources"),
 						},
 					},
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Mode selects how the vertical scaling is actuated. Defaults to Restart.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 				},
 			},
 		},
@@ -37180,6 +37243,13 @@ func schema_apimachinery_apis_ops_v1alpha1_HazelcastVerticalScalingSpec(ref comm
 						SchemaProps: spec.SchemaProps{
 							Description: "Resource spec for hazelcast nodes",
 							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
+						},
+					},
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Mode selects how the vertical scaling is actuated. Defaults to Restart.",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 				},
@@ -37521,6 +37591,13 @@ func schema_apimachinery_apis_ops_v1alpha1_IgniteVerticalScalingSpec(ref common.
 						SchemaProps: spec.SchemaProps{
 							Description: "Resource spec for nodes",
 							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
+						},
+					},
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Mode selects how the vertical scaling is actuated. Defaults to Restart.",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 				},
@@ -37903,6 +37980,13 @@ func schema_apimachinery_apis_ops_v1alpha1_KafkaVerticalScalingSpec(ref common.R
 							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
 						},
 					},
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Mode selects how the vertical scaling is actuated. Defaults to Restart.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 				},
 			},
 		},
@@ -38281,6 +38365,13 @@ func schema_apimachinery_apis_ops_v1alpha1_MSSQLServerVerticalScalingSpec(ref co
 					"arbiter": {
 						SchemaProps: spec.SchemaProps{
 							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
+						},
+					},
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Mode selects how the vertical scaling is actuated. Defaults to Restart.",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 				},
@@ -38739,6 +38830,13 @@ func schema_apimachinery_apis_ops_v1alpha1_MariaDBVerticalScalingSpec(ref common
 							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources"),
 						},
 					},
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Mode selects how the vertical scaling is actuated. Defaults to Restart.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 				},
 			},
 		},
@@ -39130,6 +39228,13 @@ func schema_apimachinery_apis_ops_v1alpha1_MemcachedVerticalScalingSpec(ref comm
 					"readinessCriteria": {
 						SchemaProps: spec.SchemaProps{
 							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.MemcachedReplicaReadinessCriteria"),
+						},
+					},
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Mode selects how the vertical scaling is actuated. Defaults to Restart.",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 				},
@@ -39547,6 +39652,13 @@ func schema_apimachinery_apis_ops_v1alpha1_MilvusVerticalScalingSpec(ref common.
 					"streamingnode": {
 						SchemaProps: spec.SchemaProps{
 							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
+						},
+					},
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Mode selects how the vertical scaling is actuated. Defaults to Restart.",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 				},
@@ -40069,6 +40181,13 @@ func schema_apimachinery_apis_ops_v1alpha1_MongoDBVerticalScalingSpec(ref common
 					"coordinator": {
 						SchemaProps: spec.SchemaProps{
 							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources"),
+						},
+					},
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Mode selects how the vertical scaling is actuated. Defaults to Restart.",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 				},
@@ -40601,6 +40720,13 @@ func schema_apimachinery_apis_ops_v1alpha1_MySQLVerticalScalingSpec(ref common.R
 							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources"),
 						},
 					},
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Mode selects how the vertical scaling is actuated. Defaults to Restart.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 				},
 			},
 		},
@@ -40905,6 +41031,11 @@ func schema_apimachinery_apis_ops_v1alpha1_Neo4jTLSSpec(ref common.ReferenceCall
 							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ProtocolTLSConfig"),
 						},
 					},
+					"backup": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ProtocolTLSConfig"),
+						},
+					},
 					"keystoreCredSecret": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Keystore encryption secret",
@@ -40963,6 +41094,13 @@ func schema_apimachinery_apis_ops_v1alpha1_Neo4jVerticalScalingSpec(ref common.R
 						SchemaProps: spec.SchemaProps{
 							Description: "Resource spec for neo4j servers",
 							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
+						},
+					},
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Mode selects how the vertical scaling is actuated. Defaults to Restart.",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 				},
@@ -41238,6 +41376,12 @@ func schema_apimachinery_apis_ops_v1alpha1_OracleOpsRequestSpec(ref common.Refer
 							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.OracleMigrationSpec"),
 						},
 					},
+					"tls": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies information necessary for TLS reconfiguration",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.TLSSpec"),
+						},
+					},
 					"timeout": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.",
@@ -41256,7 +41400,7 @@ func schema_apimachinery_apis_ops_v1alpha1_OracleOpsRequestSpec(ref common.Refer
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.AuthSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.OracleMigrationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.OracleReconfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.OracleVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.OracleVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.AuthSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.OracleMigrationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.OracleReconfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.OracleVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.OracleVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.TLSSpec"},
 	}
 }
 
@@ -41327,6 +41471,13 @@ func schema_apimachinery_apis_ops_v1alpha1_OracleVerticalScalingSpec(ref common.
 						SchemaProps: spec.SchemaProps{
 							Description: "Resource spec for nodes",
 							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
+						},
+					},
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Mode selects how the vertical scaling is actuated. Defaults to Restart.",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 				},
@@ -41747,6 +41898,13 @@ func schema_apimachinery_apis_ops_v1alpha1_PerconaXtraDBVerticalScalingSpec(ref 
 							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources"),
 						},
 					},
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Mode selects how the vertical scaling is actuated. Defaults to Restart.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 				},
 			},
 		},
@@ -42085,6 +42243,13 @@ func schema_apimachinery_apis_ops_v1alpha1_PgBouncerVerticalScalingSpec(ref comm
 					"exporter": {
 						SchemaProps: spec.SchemaProps{
 							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources"),
+						},
+					},
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Mode selects how the vertical scaling is actuated. Defaults to Restart.",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 				},
@@ -42493,6 +42658,13 @@ func schema_apimachinery_apis_ops_v1alpha1_PgpoolVerticalScalingSpec(ref common.
 						SchemaProps: spec.SchemaProps{
 							Description: "Resource spec for nodes",
 							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
+						},
+					},
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Mode selects how the vertical scaling is actuated. Defaults to Restart.",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 				},
@@ -43023,6 +43195,13 @@ func schema_apimachinery_apis_ops_v1alpha1_PostgresTLSSpec(ref common.ReferenceC
 							Format:      "",
 						},
 					},
+					"rotateGrpcCertificates": {
+						SchemaProps: spec.SchemaProps{
+							Description: "RotateGrpcCertificates tells operator to rotate the gRPC TLS certificates used by pg-coordinator. This is independent of RotateCertificates (DB-level certs). Both can be set together.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
 				},
 			},
 		},
@@ -43129,6 +43308,13 @@ func schema_apimachinery_apis_ops_v1alpha1_PostgresVerticalScalingSpec(ref commo
 									},
 								},
 							},
+						},
+					},
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Mode selects how the vertical scaling is actuated. Defaults to Restart.",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 				},
@@ -43503,6 +43689,13 @@ func schema_apimachinery_apis_ops_v1alpha1_ProxySQLVerticalScalingSpec(ref commo
 							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
 						},
 					},
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Mode selects how the vertical scaling is actuated. Defaults to Restart.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 				},
 			},
 		},
@@ -43834,6 +44027,13 @@ func schema_apimachinery_apis_ops_v1alpha1_QdrantVerticalScalingSpec(ref common.
 							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
 						},
 					},
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Mode selects how the vertical scaling is actuated. Defaults to Restart.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 				},
 			},
 		},
@@ -44132,6 +44332,13 @@ func schema_apimachinery_apis_ops_v1alpha1_RabbitMQVerticalScalingSpec(ref commo
 						SchemaProps: spec.SchemaProps{
 							Description: "Resource spec for nodes",
 							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
+						},
+					},
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Mode selects how the vertical scaling is actuated. Defaults to Restart.",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 				},
@@ -45091,6 +45298,13 @@ func schema_apimachinery_apis_ops_v1alpha1_RedisSentinelVerticalScalingSpec(ref 
 							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources"),
 						},
 					},
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Mode selects how the vertical scaling is actuated. Defaults to Restart.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 				},
 			},
 		},
@@ -45227,6 +45441,13 @@ func schema_apimachinery_apis_ops_v1alpha1_RedisVerticalScalingSpec(ref common.R
 					"coordinator": {
 						SchemaProps: spec.SchemaProps{
 							Ref: ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources"),
+						},
+					},
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Mode selects how the vertical scaling is actuated. Defaults to Restart.",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 				},
@@ -45695,6 +45916,13 @@ func schema_apimachinery_apis_ops_v1alpha1_SinglestoreVerticalScalingSpec(ref co
 							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.ContainerResources"),
 						},
 					},
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Mode selects how the vertical scaling is actuated. Defaults to Restart.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 				},
 			},
 		},
@@ -46069,6 +46297,13 @@ func schema_apimachinery_apis_ops_v1alpha1_SolrVerticalScalingSpec(ref common.Re
 						SchemaProps: spec.SchemaProps{
 							Description: "Resource spec for overseer nodes",
 							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
+						},
+					},
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Mode selects how the vertical scaling is actuated. Defaults to Restart.",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 				},
@@ -46599,6 +46834,13 @@ func schema_apimachinery_apis_ops_v1alpha1_WeaviateVerticalScalingSpec(ref commo
 							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
 						},
 					},
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Mode selects how the vertical scaling is actuated. Defaults to Restart.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 				},
 			},
 		},
@@ -46891,6 +47133,13 @@ func schema_apimachinery_apis_ops_v1alpha1_ZooKeeperVerticalScalingSpec(ref comm
 						SchemaProps: spec.SchemaProps{
 							Description: "Resource spec for nodes",
 							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.PodResources"),
+						},
+					},
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Mode selects how the vertical scaling is actuated. Defaults to Restart.",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 				},

@@ -35,7 +35,7 @@ func (m *MySQLArchiver) GetConsumers() *api.AllowedConsumers {
 var _ ListAccessor = MySQLArchiverList{}
 
 func (l MySQLArchiverList) GetItems() []Accessor {
-	var accessors []Accessor
+	accessors := make([]Accessor, 0, len(l.Items))
 	for _, item := range l.Items {
 		accessors = append(accessors, &item)
 	}

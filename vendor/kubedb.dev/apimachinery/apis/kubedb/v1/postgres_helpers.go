@@ -332,6 +332,21 @@ func (p *Postgres) SetDefaults(postgresVersion *catalog.PostgresVersion) {
 	if p.Spec.StandbyMode == nil {
 		p.Spec.StandbyMode = ptr.To(HotPostgresStandbyMode)
 	}
+	if p.Spec.StreamingMode != nil && *p.Spec.StreamingMode == SynchronousPostgresStreamingMode {
+		if p.Spec.SynchronousReplicationConfig == nil {
+			p.Spec.SynchronousReplicationConfig = &PostgresSynchronousReplicationSpec{}
+		}
+		cfg := p.Spec.SynchronousReplicationConfig
+		if cfg.Mode == nil {
+			cfg.Mode = ptr.To(PostgresSyncReplicationModeAny)
+		}
+		if cfg.NumSyncReplicas == nil {
+			cfg.NumSyncReplicas = ptr.To(int32(1))
+		}
+		if cfg.CommitLevel == nil {
+			cfg.CommitLevel = ptr.To(PostgresSynchronousCommitRemoteWrite)
+		}
+	}
 	if p.Spec.StorageType == "" {
 		p.Spec.StorageType = StorageTypeDurable
 	}
@@ -405,6 +420,7 @@ func (p *Postgres) SetDefaults(postgresVersion *catalog.PostgresVersion) {
 	p.SetPostgresContainerDefaults(&p.Spec.PodTemplate, postgresVersion)
 	p.SetCoordinatorContainerDefaults(&p.Spec.PodTemplate, postgresVersion)
 	p.SetInitContainerDefaults(&p.Spec.PodTemplate, postgresVersion)
+	apis.SetDefaultResizePolicy(p.Spec.PodTemplate.Spec.Containers, p.Spec.PodTemplate.Spec.InitContainers)
 
 	// Need to set FSGroup equal to  p.Spec.PodTemplate.Spec.ContainerSecurityContext.RunAsGroup.
 	// So that /var/pv directory have the group permission for the RunAsGroup user GID.

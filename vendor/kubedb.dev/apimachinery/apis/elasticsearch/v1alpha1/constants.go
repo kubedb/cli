@@ -95,7 +95,7 @@ const (
 )
 
 var (
-	ElasticsearchDashboardGracefulDeletionPeriod = (int64)(time.Duration(3 * time.Second))
+	ElasticsearchDashboardGracefulDeletionPeriod = int64(time.Duration(3 * time.Second))
 
 	DashboardsDefaultResources = core.ResourceRequirements{
 		Requests: core.ResourceList{

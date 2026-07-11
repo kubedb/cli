@@ -102,6 +102,10 @@ type IgniteHorizontalScalingSpec struct {
 type IgniteVerticalScalingSpec struct {
 	// Resource spec for nodes
 	Ignite *PodResources `json:"node,omitempty"`
+	// Mode selects how the vertical scaling is actuated. Defaults to Restart.
+	// +optional
+	// +kubebuilder:default=Restart
+	Mode VerticalScalingMode `json:"mode,omitempty"`
 }
 
 // IgniteVolumeExpansionSpec is the spec for Ignite volume expansion

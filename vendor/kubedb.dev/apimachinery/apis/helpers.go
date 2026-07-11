@@ -35,6 +35,22 @@ type ResourceInfo interface {
 	CustomResourceDefinition() *apiextensions.CustomResourceDefinition
 }
 
+// SetDefaultResizePolicy sets a NotRequired in-place resize policy for cpu & memory
+// on every passed container whose ResizePolicy is not already set.
+func SetDefaultResizePolicy(containers ...[]core.Container) {
+	for _, list := range containers {
+		for i := range list {
+			if list[i].ResizePolicy != nil {
+				continue
+			}
+			list[i].ResizePolicy = []core.ContainerResizePolicy{
+				{ResourceName: core.ResourceCPU, RestartPolicy: core.NotRequired},
+				{ResourceName: core.ResourceMemory, RestartPolicy: core.NotRequired},
+			}
+		}
+	}
+}
+
 func SetDefaultResourceLimits(req *core.ResourceRequirements, defaultResources core.ResourceRequirements) {
 	// if request is set,
 	//		- limit set:

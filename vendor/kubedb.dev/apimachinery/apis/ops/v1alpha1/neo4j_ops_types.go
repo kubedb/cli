@@ -133,6 +133,10 @@ type Neo4jHorizontalScalingSpec struct {
 type Neo4jVerticalScalingSpec struct {
 	// Resource spec for neo4j servers
 	Server *PodResources `json:"server,omitempty"`
+	// Mode selects how the vertical scaling is actuated. Defaults to Restart.
+	// +optional
+	// +kubebuilder:default=Restart
+	Mode VerticalScalingMode `json:"mode,omitempty"`
 }
 
 type Neo4jTLSSpec struct {

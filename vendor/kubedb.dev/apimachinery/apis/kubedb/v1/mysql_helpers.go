@@ -356,6 +356,8 @@ func (m *MySQL) SetDefaults(myVersion *v1alpha1.MySQLVersion) error {
 			if routerContainer != nil && (routerContainer.Resources.Requests == nil && routerContainer.Resources.Limits == nil) {
 				apis.SetDefaultResourceLimits(&routerContainer.Resources, kubedb.CoordinatorDefaultResources)
 			}
+
+			apis.SetDefaultResizePolicy(m.Spec.Topology.InnoDBCluster.Router.PodTemplate.Spec.Containers, m.Spec.Topology.InnoDBCluster.Router.PodTemplate.Spec.InitContainers)
 		}
 	}
 
@@ -596,6 +598,8 @@ func (m *MySQL) setDefaultContainerResourceLimits(podTemplate *ofstv2.PodTemplat
 			apis.SetDefaultResourceLimits(&coordinatorContainer.Resources, kubedb.CoordinatorDefaultResources)
 		}
 	}
+
+	apis.SetDefaultResizePolicy(podTemplate.Spec.Containers, podTemplate.Spec.InitContainers)
 }
 
 func (m *MySQL) ConfigSecretName() string {

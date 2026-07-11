@@ -95,6 +95,10 @@ type SolrVerticalScalingSpec struct {
 	Overseer *PodResources `json:"overseer,omitempty"`
 	// Resource spec for overseer nodes
 	Coordinator *PodResources `json:"coordinator,omitempty"`
+	// Mode selects how the vertical scaling is actuated. Defaults to Restart.
+	// +optional
+	// +kubebuilder:default=Restart
+	Mode VerticalScalingMode `json:"mode,omitempty"`
 }
 
 type SolrVolumeExpansionSpec struct {

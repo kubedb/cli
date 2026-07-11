@@ -130,6 +130,7 @@ func (a *Aerospike) SetDefaults(arVersion *catalog.AerospikeVersion) {
 	}
 	apis.SetDefaultResourceLimits(&container.Resources, kubedb.DefaultResources)
 	a.Spec.PodTemplate.Spec.Containers = coreutil.UpsertContainer(a.Spec.PodTemplate.Spec.Containers, *container)
+	apis.SetDefaultResizePolicy(a.Spec.PodTemplate.Spec.Containers, a.Spec.PodTemplate.Spec.InitContainers)
 }
 
 func (a Aerospike) setDefaultContainerSecurityContext(arVersion *catalog.AerospikeVersion, podTemplate *ofst.PodTemplateSpec) {

@@ -107,6 +107,10 @@ type CassandraUpdateVersionSpec struct {
 type CassandraVerticalScalingSpec struct {
 	// Resource spec for nodes
 	Node *PodResources `json:"node,omitempty"`
+	// Mode selects how the vertical scaling is actuated. Defaults to Restart.
+	// +optional
+	// +kubebuilder:default=Restart
+	Mode VerticalScalingMode `json:"mode,omitempty"`
 }
 
 // CassandraVolumeExpansionSpec is the spec for Cassandra volume expansion

@@ -18,11 +18,11 @@ limitations under the License.
 // +k8s:openapi-gen=true
 // +k8s:defaulter-gen=TypeMeta
 // +kubebuilder:object:generate=true
-// +groupName=migrator.kubedb.com
+// +groupName=courier.kubedb.com
 package v1alpha1
 
 import (
-	"kubedb.dev/apimachinery/apis/migrator"
+	"kubedb.dev/apimachinery/apis/courier"
 
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"sigs.k8s.io/controller-runtime/pkg/scheme"
@@ -30,7 +30,7 @@ import (
 
 var (
 	// SchemeGroupVersion is group version used to register these objects
-	SchemeGroupVersion = schema.GroupVersion{Group: migrator.GroupName, Version: "v1alpha1"}
+	SchemeGroupVersion = schema.GroupVersion{Group: courier.GroupName, Version: "v1alpha1"}
 
 	// SchemeBuilder is used to add go types to the GroupVersionKind scheme
 	SchemeBuilder = &scheme.Builder{GroupVersion: SchemeGroupVersion}

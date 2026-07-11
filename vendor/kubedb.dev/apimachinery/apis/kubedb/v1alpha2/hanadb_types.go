@@ -113,6 +113,13 @@ type HanaDBSpec struct {
 	// Storage to specify how storage shall be used
 	Storage *core.PersistentVolumeClaimSpec `json:"storage,omitempty"`
 
+	// EnforceVolumePermission runs a root init container to make the HanaDB data
+	// volume writable by the runtime user. Use this when storage provisioners
+	// create volumes that are not writable by HanaDB. fsGroup is not used because
+	// /run_hana rejects SGID on /hana/mounts.
+	// +optional
+	EnforceVolumePermission bool `json:"enforceVolumePermission,omitempty"`
+
 	// Database authentication secret
 	// +optional
 	AuthSecret *SecretReference `json:"authSecret,omitempty"`

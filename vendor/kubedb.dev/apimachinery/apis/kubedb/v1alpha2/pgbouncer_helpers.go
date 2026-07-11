@@ -247,7 +247,7 @@ func (p *PgBouncer) GetPersistentSecrets() []string {
 	if p == nil {
 		return nil
 	}
-	var secrets []string
+	secrets := make([]string, 0, 3)
 	secrets = append(secrets, p.GetAuthSecretName())
 	secrets = append(secrets, p.GetBackendSecretName())
 	secrets = append(secrets, p.ConfigSecretName())

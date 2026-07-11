@@ -16,7 +16,75 @@ limitations under the License.
 
 package v1alpha1
 
-import kmapi "kmodules.xyz/client-go/api/v1"
+import (
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	kmapi "kmodules.xyz/client-go/api/v1"
+	ofst "kmodules.xyz/offshoot-api/api/v1"
+)
+
+const (
+	ResourceKindMySQLMigration     = "MySQLMigration"
+	ResourceSingularMySQLMigration = "mysqlmigration"
+	ResourcePluralMySQLMigrations  = "mysqlmigrations"
+)
+
+// +genclient
+// +k8s:openapi-gen=true
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+
+// +kubebuilder:object:root=true
+// +kubebuilder:resource:path=mysqlmigrations,singular=mysqlmigration,shortName=mymig,categories={kubedb,appscode,all}
+// +kubebuilder:subresource:status
+// +kubebuilder:resource:scope=Namespaced
+// +kubebuilder:printcolumn:name="Phase",type="string",JSONPath=".status.phase"
+// +kubebuilder:printcolumn:name="Stage",type="string",JSONPath=".status.progress.info.Stage"
+// +kubebuilder:printcolumn:name="Lag",type="string",JSONPath=".status.progress.info.Lag"
+// +kubebuilder:printcolumn:name="Progress",type="string",JSONPath=".status.progress.info.Progress"
+// +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
+type MySQLMigration struct {
+	metav1.TypeMeta `json:",inline"`
+
+	// metadata is a standard object metadata
+	// +optional
+	metav1.ObjectMeta `json:"metadata,omitzero"`
+
+	// spec defines the desired state of MySQLMigration
+	// +required
+	Spec MySQLMigrationSpec `json:"spec"`
+
+	// status defines the observed state of MySQLMigration.
+	// It reuses the shared MigrationStatus so that the Migration duck type can
+	// project it and the operator's status patches replay onto it unchanged.
+	// +optional
+	Status MigrationStatus `json:"status,omitzero"`
+}
+
+// MySQLMigrationSpec defines the desired state of MySQLMigration
+type MySQLMigrationSpec struct {
+	// Source defines the source MySQL database configuration
+	Source MySQLSource `json:"source"`
+
+	// Target defines the target MySQL database configuration
+	Target MySQLTarget `json:"target"`
+
+	// JobDefaults specifies default settings for migration jobs
+	// +optional
+	JobDefaults *JobDefaults `json:"jobDefaults,omitempty"`
+
+	// JobTemplate specifies runtime configurations for the migration Job
+	// +optional
+	JobTemplate *ofst.PodTemplateSpec `json:"jobTemplate,omitempty"`
+}
+
+// MySQLMigrationList contains a list of MySQLMigration
+
+// +kubebuilder:object:root=true
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+type MySQLMigrationList struct {
+	metav1.TypeMeta `json:",inline"`
+	metav1.ListMeta `json:"metadata,omitzero"`
+	Items           []MySQLMigration `json:"items"`
+}
 
 type MySQLSource struct {
 	// ConnectionInfo refers to the source MySQL database connection information.
@@ -72,4 +140,8 @@ type MySQLSnapshotPipeline struct {
 	Buffer         *int `yaml:"buffer" json:"buffer"`
 	ReadBatchSize  *int `yaml:"readBatchSize" json:"read_batch_size"`
 	WriteBatchSize *int `yaml:"writeBatchSize" json:"write_batch_size"`
+}
+
+func init() {
+	SchemeBuilder.Register(&MySQLMigration{}, &MySQLMigrationList{})
 }

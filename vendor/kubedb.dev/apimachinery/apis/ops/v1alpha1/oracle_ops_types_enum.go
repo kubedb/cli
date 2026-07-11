@@ -15,6 +15,8 @@ const (
 	OracleOpsRequestTypeRestart OracleOpsRequestType = "Restart"
 	// OracleOpsRequestTypeReconfigure is a OracleOpsRequestType of type Reconfigure.
 	OracleOpsRequestTypeReconfigure OracleOpsRequestType = "Reconfigure"
+	// OracleOpsRequestTypeReconfigureTLS is a OracleOpsRequestType of type ReconfigureTLS.
+	OracleOpsRequestTypeReconfigureTLS OracleOpsRequestType = "ReconfigureTLS"
 	// OracleOpsRequestTypeStorageMigration is a OracleOpsRequestType of type StorageMigration.
 	OracleOpsRequestTypeStorageMigration OracleOpsRequestType = "StorageMigration"
 	// OracleOpsRequestTypeVerticalScaling is a OracleOpsRequestType of type VerticalScaling.
@@ -30,6 +32,7 @@ var ErrInvalidOracleOpsRequestType = fmt.Errorf("not a valid OracleOpsRequestTyp
 var _OracleOpsRequestTypeNames = []string{
 	string(OracleOpsRequestTypeRestart),
 	string(OracleOpsRequestTypeReconfigure),
+	string(OracleOpsRequestTypeReconfigureTLS),
 	string(OracleOpsRequestTypeStorageMigration),
 	string(OracleOpsRequestTypeVerticalScaling),
 	string(OracleOpsRequestTypeVolumeExpansion),
@@ -48,6 +51,7 @@ func OracleOpsRequestTypeValues() []OracleOpsRequestType {
 	return []OracleOpsRequestType{
 		OracleOpsRequestTypeRestart,
 		OracleOpsRequestTypeReconfigure,
+		OracleOpsRequestTypeReconfigureTLS,
 		OracleOpsRequestTypeStorageMigration,
 		OracleOpsRequestTypeVerticalScaling,
 		OracleOpsRequestTypeVolumeExpansion,
@@ -70,6 +74,7 @@ func (x OracleOpsRequestType) IsValid() bool {
 var _OracleOpsRequestTypeValue = map[string]OracleOpsRequestType{
 	"Restart":          OracleOpsRequestTypeRestart,
 	"Reconfigure":      OracleOpsRequestTypeReconfigure,
+	"ReconfigureTLS":   OracleOpsRequestTypeReconfigureTLS,
 	"StorageMigration": OracleOpsRequestTypeStorageMigration,
 	"VerticalScaling":  OracleOpsRequestTypeVerticalScaling,
 	"VolumeExpansion":  OracleOpsRequestTypeVolumeExpansion,

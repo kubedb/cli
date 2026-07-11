@@ -22,16 +22,16 @@ import (
 	cutil "kmodules.xyz/client-go/conditions"
 )
 
-func SetMigratorJobTriggeredConditionToTrue(migrator *Migrator) {
+func SetMigratorJobTriggeredConditionToTrue(migrator *Migration) {
 	newCond := kmapi.Condition{
 		Type:    MigratorJobTriggered,
 		Status:  metav1.ConditionTrue,
-		Message: "Migrator job has been triggered.",
+		Message: "Migration job has been triggered.",
 	}
 	migrator.Status.Conditions = cutil.SetCondition(migrator.Status.Conditions, newCond)
 }
 
-func SetMigratorJobTriggeredConditionToFalse(migrator *Migrator, err error) {
+func SetMigratorJobTriggeredConditionToFalse(migrator *Migration, err error) {
 	newCond := kmapi.Condition{
 		Type:    MigratorJobTriggered,
 		Status:  metav1.ConditionFalse,
@@ -40,21 +40,21 @@ func SetMigratorJobTriggeredConditionToFalse(migrator *Migrator, err error) {
 	migrator.Status.Conditions = cutil.SetCondition(migrator.Status.Conditions, newCond)
 }
 
-func (m *Migrator) CalculatePhase() MigratorPhase {
+func (m *Migration) CalculatePhase() MigrationPhase {
 	if cutil.IsConditionTrue(m.Status.Conditions, MigrationSucceeded) {
-		return MigratorPhaseSucceeded
+		return MigrationPhaseSucceeded
 	}
 	if cutil.IsConditionTrue(m.Status.Conditions, MigrationFailed) {
-		return MigratorPhaseFailed
+		return MigrationPhaseFailed
 	}
 	if cutil.IsConditionTrue(m.Status.Conditions, MigrationRunning) {
-		return MigratorPhaseRunning
+		return MigrationPhaseRunning
 	}
-	return MigratorPhasePending
+	return MigrationPhasePending
 }
 
 // SetMigrationRunningCondition sets the condition indicating migration is in progress
-func SetMigrationRunningCondition(migrator *Migrator) {
+func SetMigrationRunningCondition(migrator *Migration) {
 	newCond := kmapi.Condition{
 		Type:    MigrationRunning,
 		Status:  metav1.ConditionTrue,
@@ -65,7 +65,7 @@ func SetMigrationRunningCondition(migrator *Migrator) {
 }
 
 // SetMigrationSucceededCondition sets the condition indicating migration completed successfully
-func SetMigrationSucceededCondition(migrator *Migrator) {
+func SetMigrationSucceededCondition(migrator *Migration) {
 	newCond := kmapi.Condition{
 		Type:    MigrationSucceeded,
 		Status:  metav1.ConditionTrue,
@@ -85,7 +85,7 @@ func SetMigrationSucceededCondition(migrator *Migrator) {
 }
 
 // SetMigrationFailedCondition sets the condition indicating migration failed
-func SetMigrationFailedCondition(migrator *Migrator, err error) {
+func SetMigrationFailedCondition(migrator *Migration, err error) {
 	newCond := kmapi.Condition{
 		Type:    MigrationFailed,
 		Status:  metav1.ConditionTrue,

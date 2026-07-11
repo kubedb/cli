@@ -122,7 +122,8 @@ func (q *Qdrant) ServiceDNS() string {
 }
 
 func (q *Qdrant) PodDNS(ordinal string) string {
-	return fmt.Sprintf("%s-%s.%s.%s.svc",
+	return fmt.Sprintf(
+		"%s-%s.%s.%s.svc",
 		q.OffshootName(),
 		ordinal,
 		q.GoverningServiceName(),
@@ -429,4 +430,28 @@ func (q *Qdrant) setDefaultContainerResourceLimits(podTemplate *ofst.PodTemplate
 	if dbContainer != nil {
 		apis.SetDefaultResourceLimits(&dbContainer.Resources, kubedb.DefaultResources)
 	}
+
+	apis.SetDefaultResizePolicy(podTemplate.Spec.Containers, podTemplate.Spec.InitContainers)
+}
+
+type QdrantBind struct {
+	*Qdrant
+}
+
+var _ DBBindInterface = &QdrantBind{}
+
+func (q *QdrantBind) ServiceNames() (string, string) {
+	return q.ServiceName(), q.ServiceName()
+}
+
+func (q *QdrantBind) Ports() (int, int) {
+	return kubedb.QdrantHTTPPort, kubedb.QdrantHTTPPort
+}
+
+func (q *QdrantBind) SecretName() string {
+	return q.GetAuthSecretName()
+}
+
+func (q *QdrantBind) CertSecretName() string {
+	return q.GetCertSecretName(QdrantClientCert)
 }

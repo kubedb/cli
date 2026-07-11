@@ -101,6 +101,10 @@ type RedisSentinelHorizontalScalingSpec struct {
 type RedisSentinelVerticalScalingSpec struct {
 	RedisSentinel *PodResources       `json:"redissentinel,omitempty"`
 	Exporter      *ContainerResources `json:"exporter,omitempty"`
+	// Mode selects how the vertical scaling is actuated. Defaults to Restart.
+	// +optional
+	// +kubebuilder:default=Restart
+	Mode VerticalScalingMode `json:"mode,omitempty"`
 }
 
 // RedisSentinelVolumeExpansionSpec is the spec for RedisSentinel volume expansion

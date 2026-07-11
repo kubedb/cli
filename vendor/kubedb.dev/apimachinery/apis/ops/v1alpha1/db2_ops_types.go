@@ -64,6 +64,10 @@ type DB2OpsRequestSpec struct {
 type DB2VerticalScalingSpec struct {
 	DB2      *PodResources       `json:"db2,omitempty"`
 	Exporter *ContainerResources `json:"exporter,omitempty"`
+	// Mode selects how the vertical scaling is actuated. Defaults to Restart.
+	// +optional
+	// +kubebuilder:default=Restart
+	Mode VerticalScalingMode `json:"mode,omitempty"`
 }
 
 // +kubebuilder:validation:Enum=VerticalScaling;Restart

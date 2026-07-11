@@ -658,6 +658,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1.PostgresReplication":                                 schema_apimachinery_apis_kubedb_v1_PostgresReplication(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.PostgresSpec":                                        schema_apimachinery_apis_kubedb_v1_PostgresSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.PostgresStatus":                                      schema_apimachinery_apis_kubedb_v1_PostgresStatus(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1.PostgresSynchronousReplicationSpec":                  schema_apimachinery_apis_kubedb_v1_PostgresSynchronousReplicationSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.PostgresTuningConfig":                                schema_apimachinery_apis_kubedb_v1_PostgresTuningConfig(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.ProxySQL":                                            schema_apimachinery_apis_kubedb_v1_ProxySQL(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.ProxySQLConfiguration":                               schema_apimachinery_apis_kubedb_v1_ProxySQLConfiguration(ref),
@@ -38035,6 +38036,12 @@ func schema_apimachinery_apis_kubedb_v1_PostgresSpec(ref common.ReferenceCallbac
 							Format:      "",
 						},
 					},
+					"synchronousReplicationConfig": {
+						SchemaProps: spec.SchemaProps{
+							Description: "SynchronousReplicationConfig holds fine-grained config for synchronous replication. Only applicable when StreamingMode is Synchronous.",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1.PostgresSynchronousReplicationSpec"),
+						},
+					},
 					"mode": {
 						SchemaProps: spec.SchemaProps{
 							Type:   []string{"string"},
@@ -38205,7 +38212,7 @@ func schema_apimachinery_apis_kubedb_v1_PostgresSpec(ref common.ReferenceCallbac
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.AllowedConsumers", "kubedb.dev/apimachinery/apis/kubedb/v1.ArbiterSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.Archiver", "kubedb.dev/apimachinery/apis/kubedb/v1.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgreLeaderElectionConfig", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgresConfiguration", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgresReplication", "kubedb.dev/apimachinery/apis/kubedb/v1.ReadReplicaSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.RemoteReplicaSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.AllowedConsumers", "kubedb.dev/apimachinery/apis/kubedb/v1.ArbiterSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.Archiver", "kubedb.dev/apimachinery/apis/kubedb/v1.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgreLeaderElectionConfig", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgresConfiguration", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgresReplication", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgresSynchronousReplicationSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.ReadReplicaSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.RemoteReplicaSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"},
 	}
 }
 
@@ -38253,6 +38260,67 @@ func schema_apimachinery_apis_kubedb_v1_PostgresStatus(ref common.ReferenceCallb
 		},
 		Dependencies: []string{
 			"kmodules.xyz/client-go/api/v1.Condition", "kubedb.dev/apimachinery/apis/kubedb/v1.Age"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1_PostgresSynchronousReplicationSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "PostgresSynchronousReplicationSpec configures fine-grained synchronous replication behavior. Only applicable when spec.streamingMode is Synchronous.\n\nSample configurations:\n\n\t# Case 1 — Minimal: all defaults (Any 1, RemoteWrite, auto-generated pod list)\n\tstreamingMode: Synchronous\n\t# synchronousReplicationConfig omitted → ANY 1 (\"pg-0\",\"pg-1\",\"pg-2\")\n\n\t# Case 2 — Quorum: wait for any 2 of N standbys\n\tsynchronousReplicationConfig:\n\t  mode: Any\n\t  numSyncReplicas: 2\n\t  commitLevel: RemoteWrite\n\n\t# Case 3 — Priority: ordered list, first live standby wins\n\tsynchronousReplicationConfig:\n\t  mode: First\n\t  numSyncReplicas: 1\n\t  commitLevel: On\n\n\t# Case 4 — Explicit standby names with Any mode\n\tsynchronousReplicationConfig:\n\t  mode: Any\n\t  numSyncReplicas: 2\n\t  standbyNames: [pg-1, pg-2, pg-3]\n\t  commitLevel: RemoteWrite\n\n\t# Case 5 — Explicit standby names with First mode (order = priority)\n\tsynchronousReplicationConfig:\n\t  mode: First\n\t  numSyncReplicas: 1\n\t  standbyNames: [pg-3, pg-1, pg-2]   # pg-3 has highest priority\n\t  commitLevel: RemoteApply\n\n\t# Case 6 — Strongest durability: WAL flushed on standby before commit returns\n\tsynchronousReplicationConfig:\n\t  mode: Any\n\t  numSyncReplicas: 1\n\t  commitLevel: On\n\n\t# Case 7 — Relaxed durability: only local WAL flush, standby not waited on\n\tsynchronousReplicationConfig:\n\t  mode: Any\n\t  numSyncReplicas: 1\n\t  commitLevel: Local\n\n\t# Case 8 — No WAL flush guarantee at all\n\tsynchronousReplicationConfig:\n\t  mode: Any\n\t  numSyncReplicas: 1\n\t  commitLevel: Off\n\n\t# Case 9 — Wildcard: accept any connected standby (useful when standby\n\t#           application_names are unknown, e.g. external DR replicas).\n\t#           Mutually exclusive with standbyNames.\n\t#           With First mode, avoid wildcard — priority order is non-deterministic.\n\tsynchronousReplicationConfig:\n\t  mode: Any\n\t  numSyncReplicas: 1\n\t  useWildcard: true\n\t  # renders: ANY 1 (*)\n\n\t# Case 10 — Wildcard quorum: any 2 standbys regardless of name\n\tsynchronousReplicationConfig:\n\t  mode: Any\n\t  numSyncReplicas: 2\n\t  useWildcard: true\n\t  # renders: ANY 2 (*)",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Mode controls how standbys are selected: Any (quorum) or First (priority). Defaults to Any.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"numSyncReplicas": {
+						SchemaProps: spec.SchemaProps{
+							Description: "NumSyncReplicas is the number of synchronous standby replicas to wait for. Must be >= 1 and less than spec.replicas. Defaults to 1.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"commitLevel": {
+						SchemaProps: spec.SchemaProps{
+							Description: "CommitLevel maps to PostgreSQL's synchronous_commit parameter, controlling the durability vs. performance trade-off for synchronous standbys. Defaults to RemoteWrite.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"standbyNames": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-list-type": "atomic",
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "StandbyNames is an explicit ordered list of standby application_names to include in synchronous_standby_names. When set, only these names participate in synchronous replication instead of the auto-generated list of all pod names. For FIRST mode the order determines priority (first entry = highest priority). Must not contain duplicates or empty strings. When absent, all standby pods are included in ascending pod-index order. Mutually exclusive with UseWildcard.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"useWildcard": {
+						SchemaProps: spec.SchemaProps{
+							Description: "UseWildcard, when true, uses '*' in synchronous_standby_names to match any connected standby regardless of its application_name. Useful when standby names are not known in advance (e.g. external DR replicas with custom application_name). Avoid combining with mode: First — connection-order priority is non-deterministic. Mutually exclusive with StandbyNames.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
 	}
 }
 

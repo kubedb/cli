@@ -79,6 +79,10 @@ type HanaDBVerticalScalingSpec struct {
 	HanaDB      *PodResources       `json:"hanadb,omitempty"`
 	Coordinator *ContainerResources `json:"coordinator,omitempty"`
 	Exporter    *ContainerResources `json:"exporter,omitempty"`
+	// Mode selects how the vertical scaling is actuated. Defaults to Restart.
+	// +optional
+	// +kubebuilder:default=Restart
+	Mode VerticalScalingMode `json:"mode,omitempty"`
 }
 
 // HanaDBVolumeExpansionSpec is the spec for HanaDB volume expansion.

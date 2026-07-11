@@ -774,6 +774,8 @@ func (m *MongoDB) setPodTemplateDefaultValues(podTemplate *ofstv2.PodTemplateSpe
 		container = ofst_util.EnsureContainerExists(podTemplate, kubedb.ReplicationModeDetectorContainerName)
 		m.setContainerDefaultValues(container, mgVersion, kubedb.CoordinatorDefaultResources, isArbiter...)
 	}
+
+	apis.SetDefaultResizePolicy(podTemplate.Spec.Containers, podTemplate.Spec.InitContainers)
 }
 
 func (m *MongoDB) setContainerDefaultValues(container *core.Container, mgVersion *v1alpha1.MongoDBVersion,

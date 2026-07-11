@@ -184,6 +184,19 @@ spec:
                             format: int32
                             type: integer
                           type: array
+                        role:
+                          description: |-
+                            Role describes how this data center participates in DC/DR failover.
+                            Member: data bearing and primary eligible (a candidate for the primary DC).
+                            Arbiter: votes only, holds no data, never primary.
+                            Witness: data bearing but never primary (for engines like MongoDB whose
+                            witness must carry data to satisfy majority writes, yet must not be elected).
+                            Defaults to Member when empty.
+                          enum:
+                          - Member
+                          - Arbiter
+                          - Witness
+                          type: string
                         storageClassName:
                           type: string
                       required:
@@ -191,6 +204,41 @@ spec:
                       - replicaIndices
                       type: object
                     type: array
+                  failoverPolicy:
+                    description: |-
+                      FailoverPolicy, when set, marks this as a cross data center (DC/DR) deployment
+                      and selects how the common DC failover service drives failover for it.
+                      When nil, the placement is not managed for DC/DR.
+                    properties:
+                      mode:
+                        description: |-
+                          Mode is the DC topology. It can be derived from the per rule roles
+                          (two Members plus an Arbiter or Witness is TwoDC, three Members is ThreeDC);
+                          when set it is validated against the roles.
+                        enum:
+                        - TwoDC
+                        - ThreeDC
+                        type: string
+                      trigger:
+                        description: Trigger selects which primary DC Lease this workload
+                          follows.
+                        properties:
+                          group:
+                            description: Group is required when Scope is Group; it
+                              names the primary-dc-<group> Lease.
+                            type: string
+                          scope:
+                            description: Scope is Global or Group.
+                            enum:
+                            - Global
+                            - Group
+                            type: string
+                        required:
+                        - scope
+                        type: object
+                    required:
+                    - trigger
+                    type: object
                   slice:
                     properties:
                       projectNamespace:

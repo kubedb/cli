@@ -68,6 +68,9 @@ type OracleOpsRequestSpec struct {
 	Restart *RestartSpec `json:"restart,omitempty"`
 	// Specifies information necessary for migrating storage
 	Migration *OracleMigrationSpec `json:"migration,omitempty"`
+	// Specifies information necessary for TLS reconfiguration
+	// +optional
+	TLS *TLSSpec `json:"tls,omitempty"`
 	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
 	Timeout *metav1.Duration `json:"timeout,omitempty"`
 	// ApplyOption is to control the execution of OpsRequest depending on the database state.
@@ -88,14 +91,18 @@ type OracleMigrationSpec struct {
 	OldPVReclaimPolicy core.PersistentVolumeReclaimPolicy `json:"oldPVReclaimPolicy,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=Restart;Reconfigure;StorageMigration;VerticalScaling;VolumeExpansion;RotateAuth
-// ENUM(Restart, Reconfigure, StorageMigration, VerticalScaling, VolumeExpansion, RotateAuth)
+// +kubebuilder:validation:Enum=Restart;Reconfigure;ReconfigureTLS;StorageMigration;VerticalScaling;VolumeExpansion;RotateAuth
+// ENUM(Restart, Reconfigure, ReconfigureTLS, StorageMigration, VerticalScaling, VolumeExpansion, RotateAuth)
 type OracleOpsRequestType string
 
 // OracleVerticalScalingSpec contains the vertical scaling information of an Oracle cluster
 type OracleVerticalScalingSpec struct {
 	// Resource spec for nodes
 	Node *PodResources `json:"node,omitempty"`
+	// Mode selects how the vertical scaling is actuated. Defaults to Restart.
+	// +optional
+	// +kubebuilder:default=Restart
+	Mode VerticalScalingMode `json:"mode,omitempty"`
 }
 
 // OracleVolumeExpansionSpec is the spec for Oracle volume expansion

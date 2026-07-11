@@ -64,6 +64,10 @@ type AerospikeOpsRequestSpec struct {
 type AerospikeVerticalScalingSpec struct {
 	Aerospike *PodResources       `json:"aerospike,omitempty"`
 	Exporter  *ContainerResources `json:"exporter,omitempty"`
+	// Mode selects how the vertical scaling is actuated. Defaults to Restart.
+	// +optional
+	// +kubebuilder:default=Restart
+	Mode VerticalScalingMode `json:"mode,omitempty"`
 }
 
 // +kubebuilder:validation:Enum=VerticalScaling;Restart

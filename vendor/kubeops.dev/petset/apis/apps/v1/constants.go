@@ -23,4 +23,9 @@ const (
 	RolePVC                      = "pvc"
 	DeletionPolicyAnnotation     = GroupName + "/deletion-policy"
 	DeletionPolicyOrphan         = "Orphan"
+	// PetSetNameLabel identifies the PetSet that owns a ManifestWork. Ownership must
+	// not be resolved by selector alone: two PetSets of the same application (for
+	// example a data set and its arbiter) can have subset-overlapping selectors, and
+	// label-subset matching then attributes each other's ManifestWorks to both.
+	PetSetNameLabel = GroupName + "/petset-name"
 )

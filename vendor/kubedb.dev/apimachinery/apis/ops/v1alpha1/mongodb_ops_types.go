@@ -171,6 +171,10 @@ type MongoDBVerticalScalingSpec struct {
 	Hidden       *PodResources       `json:"hidden,omitempty"`
 	Exporter     *ContainerResources `json:"exporter,omitempty"`
 	Coordinator  *ContainerResources `json:"coordinator,omitempty"`
+	// Mode selects how the vertical scaling is actuated. Defaults to Restart.
+	// +optional
+	// +kubebuilder:default=Restart
+	Mode VerticalScalingMode `json:"mode,omitempty"`
 }
 
 // MongoDBVolumeExpansionSpec is the spec for mongodb volume expansion

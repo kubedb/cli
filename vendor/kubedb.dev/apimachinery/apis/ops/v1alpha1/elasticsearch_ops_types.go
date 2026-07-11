@@ -137,6 +137,10 @@ type ElasticsearchVerticalScalingSpec struct {
 	ML           *PodResources       `json:"ml,omitempty"`
 	Transform    *PodResources       `json:"transform,omitempty"`
 	Coordinating *PodResources       `json:"coordinating,omitempty"`
+	// Mode selects how the vertical scaling is actuated. Defaults to Restart.
+	// +optional
+	// +kubebuilder:default=Restart
+	Mode VerticalScalingMode `json:"mode,omitempty"`
 }
 
 // ElasticsearchVolumeExpansionSpec is the spec for Elasticsearch volume expansion

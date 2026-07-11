@@ -79,6 +79,11 @@ type PostgresSpec struct {
 	// Streaming mode
 	StreamingMode *PostgresStreamingMode `json:"streamingMode,omitempty"`
 
+	// SynchronousReplicationConfig holds fine-grained config for synchronous replication.
+	// Only applicable when StreamingMode is Synchronous.
+	// +optional
+	SynchronousReplicationConfig *PostgresSynchronousReplicationSpec `json:"synchronousReplicationConfig,omitempty"`
+
 	// + optional
 	Mode *PostgreSQLMode `json:"mode,omitempty"`
 	// RemoteReplica implies that the instance will be a MySQL Read Only Replica,
@@ -380,6 +385,141 @@ const (
 	SynchronousPostgresStreamingMode  PostgresStreamingMode = "Synchronous"
 	AsynchronousPostgresStreamingMode PostgresStreamingMode = "Asynchronous"
 )
+
+// PostgresSyncReplicationMode defines how standby replicas are selected for synchronous replication.
+// +kubebuilder:validation:Enum=Any;First
+type PostgresSyncReplicationMode string
+
+const (
+	// PostgresSyncReplicationModeAny uses quorum-based selection: wait for any NumSyncReplicas standbys.
+	PostgresSyncReplicationModeAny PostgresSyncReplicationMode = "Any"
+	// PostgresSyncReplicationModeFirst uses priority-based selection: wait for the first NumSyncReplicas standbys in list order.
+	PostgresSyncReplicationModeFirst PostgresSyncReplicationMode = "First"
+)
+
+// PostgresSynchronousCommitLevel maps to PostgreSQL's synchronous_commit parameter.
+// +kubebuilder:validation:Enum=On;RemoteApply;RemoteWrite;Local;Off
+type PostgresSynchronousCommitLevel string
+
+const (
+	// PostgresSynchronousCommitOn waits until the standby has written and flushed WAL to disk.
+	PostgresSynchronousCommitOn PostgresSynchronousCommitLevel = "On"
+	// PostgresSynchronousCommitRemoteApply waits until the standby has applied the WAL.
+	PostgresSynchronousCommitRemoteApply PostgresSynchronousCommitLevel = "RemoteApply"
+	// PostgresSynchronousCommitRemoteWrite waits until the standby has written WAL to its OS buffer (default).
+	PostgresSynchronousCommitRemoteWrite PostgresSynchronousCommitLevel = "RemoteWrite"
+	// PostgresSynchronousCommitLocal waits for local WAL flush only; standby is not waited on.
+	PostgresSynchronousCommitLocal PostgresSynchronousCommitLevel = "Local"
+	// PostgresSynchronousCommitOff allows commit without waiting for WAL flush.
+	PostgresSynchronousCommitOff PostgresSynchronousCommitLevel = "Off"
+)
+
+// PostgresSynchronousReplicationSpec configures fine-grained synchronous replication behavior.
+// Only applicable when spec.streamingMode is Synchronous.
+//
+// Sample configurations:
+//
+//	# Case 1 — Minimal: all defaults (Any 1, RemoteWrite, auto-generated pod list)
+//	streamingMode: Synchronous
+//	# synchronousReplicationConfig omitted → ANY 1 ("pg-0","pg-1","pg-2")
+//
+//	# Case 2 — Quorum: wait for any 2 of N standbys
+//	synchronousReplicationConfig:
+//	  mode: Any
+//	  numSyncReplicas: 2
+//	  commitLevel: RemoteWrite
+//
+//	# Case 3 — Priority: ordered list, first live standby wins
+//	synchronousReplicationConfig:
+//	  mode: First
+//	  numSyncReplicas: 1
+//	  commitLevel: On
+//
+//	# Case 4 — Explicit standby names with Any mode
+//	synchronousReplicationConfig:
+//	  mode: Any
+//	  numSyncReplicas: 2
+//	  standbyNames: [pg-1, pg-2, pg-3]
+//	  commitLevel: RemoteWrite
+//
+//	# Case 5 — Explicit standby names with First mode (order = priority)
+//	synchronousReplicationConfig:
+//	  mode: First
+//	  numSyncReplicas: 1
+//	  standbyNames: [pg-3, pg-1, pg-2]   # pg-3 has highest priority
+//	  commitLevel: RemoteApply
+//
+//	# Case 6 — Strongest durability: WAL flushed on standby before commit returns
+//	synchronousReplicationConfig:
+//	  mode: Any
+//	  numSyncReplicas: 1
+//	  commitLevel: On
+//
+//	# Case 7 — Relaxed durability: only local WAL flush, standby not waited on
+//	synchronousReplicationConfig:
+//	  mode: Any
+//	  numSyncReplicas: 1
+//	  commitLevel: Local
+//
+//	# Case 8 — No WAL flush guarantee at all
+//	synchronousReplicationConfig:
+//	  mode: Any
+//	  numSyncReplicas: 1
+//	  commitLevel: Off
+//
+//	# Case 9 — Wildcard: accept any connected standby (useful when standby
+//	#           application_names are unknown, e.g. external DR replicas).
+//	#           Mutually exclusive with standbyNames.
+//	#           With First mode, avoid wildcard — priority order is non-deterministic.
+//	synchronousReplicationConfig:
+//	  mode: Any
+//	  numSyncReplicas: 1
+//	  useWildcard: true
+//	  # renders: ANY 1 (*)
+//
+//	# Case 10 — Wildcard quorum: any 2 standbys regardless of name
+//	synchronousReplicationConfig:
+//	  mode: Any
+//	  numSyncReplicas: 2
+//	  useWildcard: true
+//	  # renders: ANY 2 (*)
+type PostgresSynchronousReplicationSpec struct {
+	// Mode controls how standbys are selected: Any (quorum) or First (priority).
+	// Defaults to Any.
+	// +optional
+	Mode *PostgresSyncReplicationMode `json:"mode,omitempty"`
+
+	// NumSyncReplicas is the number of synchronous standby replicas to wait for.
+	// Must be >= 1 and less than spec.replicas.
+	// Defaults to 1.
+	// +optional
+	NumSyncReplicas *int32 `json:"numSyncReplicas,omitempty"`
+
+	// CommitLevel maps to PostgreSQL's synchronous_commit parameter, controlling the
+	// durability vs. performance trade-off for synchronous standbys.
+	// Defaults to RemoteWrite.
+	// +optional
+	CommitLevel *PostgresSynchronousCommitLevel `json:"commitLevel,omitempty"`
+
+	// StandbyNames is an explicit ordered list of standby application_names to include in
+	// synchronous_standby_names. When set, only these names participate in synchronous
+	// replication instead of the auto-generated list of all pod names.
+	// For FIRST mode the order determines priority (first entry = highest priority).
+	// Must not contain duplicates or empty strings.
+	// When absent, all standby pods are included in ascending pod-index order.
+	// Mutually exclusive with UseWildcard.
+	// +optional
+	// +listType=atomic
+	StandbyNames []string `json:"standbyNames,omitempty"`
+
+	// UseWildcard, when true, uses '*' in synchronous_standby_names to match any
+	// connected standby regardless of its application_name. Useful when standby names
+	// are not known in advance (e.g. external DR replicas with custom application_name).
+	// Avoid combining with mode: First — connection-order priority is non-deterministic.
+	// Mutually exclusive with StandbyNames.
+	// +optional
+	UseWildcard *bool `json:"useWildcard,omitempty"`
+}
 
 // ref: https://www.postgresql.org/docs/13/libpq-ssl.html
 // +kubebuilder:validation:Enum=disable;allow;prefer;require;verify-ca;verify-full
