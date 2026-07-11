@@ -144,7 +144,7 @@ func describeDeployment(d *appsv1.Deployment, running, waiting, succeeded, faile
 	w.Write(LEVEL_1, "CreationTimestamp:\t%s\n", timeToString(&d.CreationTimestamp))
 	printLabelsMultiline(LEVEL_1, w, "Labels", d.Labels)
 	printAnnotationsMultiline(LEVEL_1, w, "Annotations", d.Annotations)
-	w.Write(LEVEL_1, "Replicas:\t%d desired | %d updated | %d total | %d available | %d unavailable\n", *(d.Spec.Replicas), d.Status.UpdatedReplicas, d.Status.Replicas, d.Status.AvailableReplicas, d.Status.UnavailableReplicas)
+	w.Write(LEVEL_1, "Replicas:\t%d desired | %d updated | %d total | %d available | %d unavailable\n", *d.Spec.Replicas, d.Status.UpdatedReplicas, d.Status.Replicas, d.Status.AvailableReplicas, d.Status.UnavailableReplicas)
 	w.Write(LEVEL_1, "Pods Status:\t%d Running / %d Waiting / %d Succeeded / %d Failed\n", running, waiting, succeeded, failed)
 }
 
@@ -574,7 +574,8 @@ func DescribeEvents(el *core.EventList, w describe.PrefixWriter) {
 		} else {
 			interval = translateTimestamp(e.FirstTimestamp)
 		}
-		w.Write(LEVEL_1, "%v\t%v\t%s\t%v\t%v\n",
+		w.Write(
+			LEVEL_1, "%v\t%v\t%s\t%v\t%v\n",
 			e.Type,
 			e.Reason,
 			interval,

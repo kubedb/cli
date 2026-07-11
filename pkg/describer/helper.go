@@ -274,7 +274,8 @@ func showTopology(client kubernetes.Interface, namespace string, selector labels
 				types = append(types, key)
 			}
 		}
-		w.Write(LEVEL_0, "  %s\t%s\t%s\t%s\n",
+		w.Write(
+			LEVEL_0, "  %s\t%s\t%s\t%s\n",
 			strings.Join(types, "|"),
 			pod.Name,
 			pod.Status.StartTime,

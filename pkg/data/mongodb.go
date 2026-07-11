@@ -357,7 +357,8 @@ func (opts *mongoDBOpts) getShellCommand(command string) (*shell.Session, error)
 		}
 		mgCommand = append(mgCommand, c...)
 	} else {
-		mgCommand = append(mgCommand,
+		mgCommand = append(
+			mgCommand,
 			KubeDBDatabaseName, "--quiet",
 			fmt.Sprintf("--username=%s", opts.username),
 			fmt.Sprintf("--password=%s", opts.pass),

@@ -223,7 +223,8 @@ func (opts *redisOpts) getShellCommand(kubectlFlags, redisExtraFlags []any) *she
 	}
 
 	if db.Spec.TLS != nil {
-		redisCommand = append(redisCommand,
+		redisCommand = append(
+			redisCommand,
 			"--tls",
 			"--cert", "/certs/client.crt",
 			"--key", "/certs/client.key",

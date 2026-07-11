@@ -2,27 +2,22 @@ version: "2"
 linters:
   default: standard
   enable:
+    - bodyclose
+    - prealloc
     - unparam
+  exclusions:
+    paths:
+      - generated.*\.go
+      - client
+      - vendor
 
 formatters:
   enable:
-    - gofmt
+    - gofumpt
     - goimports
-  settings:
-    gofmt:
-      rewrite-rules:
-        - pattern: 'interface{}'
-          replacement: 'any'
 
 issues:
   max-same-issues: 100
-
-  exclude-files:
-    - generated.*\\.go
-
-  exclude-dirs:
-    - client
-    - vendor
 
 run:
   timeout: 10m

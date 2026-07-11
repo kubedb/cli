@@ -327,7 +327,8 @@ func ensureMySQLClientCert(opts *common.MySQLOpts, apb *appApi.AppBinding, mysql
 			}
 
 			return in
-		}, metav1.PatchOptions{})
+		}, metav1.PatchOptions{},
+	)
 
 	return vt, err
 }

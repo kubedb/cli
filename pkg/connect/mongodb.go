@@ -265,7 +265,8 @@ func (opts *mongodbOpts) getDockerShellCommand(localPort int, dockerFlags, mongo
 			return nil, err
 		}
 
-		dockerCommand = append(dockerCommand,
+		dockerCommand = append(
+			dockerCommand,
 			"-v", fmt.Sprintf("%s:%s", caFile, caFile),
 			"-v", fmt.Sprintf("%s:%s", pemFile, pemFile),
 		)

@@ -338,7 +338,8 @@ func ensureClientCert(opts *common.PostgresOpts, apb *appApi.AppBinding, postgre
 			}
 
 			return in
-		}, metav1.PatchOptions{})
+		}, metav1.PatchOptions{},
+	)
 
 	return vt, err
 }

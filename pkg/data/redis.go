@@ -457,7 +457,8 @@ func (opts *redisOpts) getShellCommand(podIP string, redisCommand []any) *shell.
 	}
 
 	if db.Spec.TLS != nil {
-		redisBaseCommand = append(redisBaseCommand,
+		redisBaseCommand = append(
+			redisBaseCommand,
 			"--tls",
 			"--cert", "/certs/client.crt",
 			"--key", "/certs/client.key",
