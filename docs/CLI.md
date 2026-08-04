@@ -216,6 +216,8 @@ coordination-plane outage.
 # run against the SPOKE of the DC being pinned
 kubectl dba dc-dr pin-primary (--scope LEASE | --db DB) --yes
 kubectl dba dc-dr pin-primary --scope LEASE --remove --yes
+# the pinned DC is DEAD and its pin is stuck: run from any live cluster
+kubectl dba dc-dr pin-primary --scope LEASE --remove --force --yes --coord-kubeconfig coord.yaml
 ```
 
 Creates the human-owned `<scope>-override` ConfigMap on that DC's spoke, which is
@@ -254,6 +256,32 @@ any other DC the agent refuses it and logs why, so it never promotes a standby);
 it stands there is no split-brain protection for the scope and nothing takes over if
 that DC dies; and on control-plane recovery the recreated Lease is claimed first-come,
 so keep the pin until the authority is back with the right holder, then remove it.
+
+### --remove --force: the pinned DC died with its pin standing
+
+The override-hold annotation on the Lease is normally cleared only by the pinned DC's
+own agent (when it sees its ConfigMap gone). If that DC is dead, the annotation stays
+and every handoff refuses. `--remove --force` breaks that deadlock: run it from **any
+live cluster** with the `--coord-*` flags; the ConfigMap delete on the current cluster
+is attempted, a failure is reported and skipped, and the `override-hold` annotation is
+then cleared directly on the Lease. Live-proven in the bank dc-loss drill:
+
+```
+$ kubectl dba dc-dr pin-primary --scope primary-dc-bankpg --remove --force --yes \
+    --coord-kubeconfig /tmp/bank-coord.yaml                          # from dr, dc dead
+Could not remove ConfigMap dc-failover/primary-dc-bankpg-override on the current cluster
+(configmaps "primary-dc-bankpg-override" not found); proceeding to clear the Lease
+annotation because --force is set.
+Cleared the override-hold annotation on Lease dc-failover/primary-dc-bankpg directly
+(the pinned DC's agent is not alive to do it).
+Members now contend normally; the surviving DC can acquire once its holds are removed.
+```
+
+ONLY for a dead DC. If the pinned DC is alive, its coordinator still honors the local
+ConfigMap (it keeps its leader writable), so force-clearing just the annotation while
+another DC promotes is a split brain. Alive DC: plain `--remove` on its spoke first.
+The stale ConfigMap on the dead cluster is refused by its returning agent (it is no
+longer the last known holder), but delete it during failback before re-pinning.
 
 ## pin-standby
 

@@ -18,7 +18,8 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"github.com/spf13/pflag"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/types"
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
 	"k8s.io/kubectl/pkg/util/i18n"
 	"k8s.io/kubectl/pkg/util/templates"
@@ -40,7 +41,7 @@ const (
 // unreachable. So the ordinary kubeconfig flags must point at that DC's spoke.
 func NewCmdPin(f cmdutil.Factory, kind pinKind) *cobra.Command {
 	var scopeName, dbName string
-	var remove, yes bool
+	var remove, force, yes bool
 	var cf CoordFlags
 
 	use, short, long, example := pinPrimaryTexts()
@@ -91,9 +92,29 @@ func NewCmdPin(f cmdutil.Factory, kind pinKind) *cobra.Command {
 			}
 			action, err := markerConfigMap(ctx, f, cf.LeaseNS, cmName, remove)
 			if err != nil {
-				return err
+				if !(remove && force) {
+					return err
+				}
+				// The pinned data center is dead or unreachable: exactly the situation
+				// --force exists for. The ConfigMap on its spoke is unreachable garbage;
+				// what actually blocks the failover is the override-hold annotation on
+				// the Lease, which only that DC's own (dead) agent would ever clear.
+				fmt.Fprintf(out, "Could not remove ConfigMap %s/%s on the current cluster (%v); proceeding to clear the Lease annotation because --force is set.\n", cf.LeaseNS, cmName, err)
+				action = "unreachable, skipped"
 			}
 			fmt.Fprintf(out, "ConfigMap %s/%s %s on the current cluster.\n", cf.LeaseNS, cmName, action)
+			if kind == pinPrimary && remove && force {
+				coord, cerr := cf.CoordClient(ctx, f)
+				if cerr != nil {
+					return fmt.Errorf("--force needs the coordination plane to clear the override-hold annotation, but it is unreachable: %w", cerr)
+				}
+				patch := `{"metadata":{"annotations":{"dr.open-cluster-management.io/override-hold":null}}}`
+				if _, err := coord.CoordinationV1().Leases(cf.LeaseNS).Patch(ctx, lease, types.MergePatchType, []byte(patch), metav1.PatchOptions{}); err != nil {
+					return fmt.Errorf("failed to clear override-hold on Lease %s/%s: %w", cf.LeaseNS, lease, err)
+				}
+				fmt.Fprintf(out, "Cleared the override-hold annotation on Lease %s/%s directly (the pinned DC's agent is not alive to do it).\n", cf.LeaseNS, lease)
+				fmt.Fprintf(out, "Members now contend normally; the surviving DC can acquire once its holds are removed.\n")
+			}
 			if kind == pinPrimary {
 				if remove {
 					fmt.Fprintf(out, "The break-glass pin is cleared; normal contention resumes and the override-hold annotation drops from the Lease within seconds.\n")
@@ -120,11 +141,13 @@ func NewCmdPin(f cmdutil.Factory, kind pinKind) *cobra.Command {
 	cmd.Flags().StringVar(&scopeName, "scope", "", "Primary-DC Lease name of the scope (for example primary-dc or primary-dc-orders)")
 	cmd.Flags().StringVar(&dbName, "db", "", "Resolve the scope from this database instead (requires the kubeconfig to reach the hub)")
 	cmd.Flags().BoolVar(&remove, "remove", false, "Remove the pin instead of creating it")
+	if kind == pinPrimary {
+		cmd.Flags().BoolVar(&force, "force", false, "With --remove: also clear the override-hold annotation directly on the Lease, for when the pinned DC is dead and its agent cannot clear it (run against any live cluster; needs the --coord-* flags to reach the coordination plane)")
+		AddCoordFlags(cmd, &cf)
+	} else {
+		cmd.Flags().StringVar(&cf.LeaseNS, "coord-namespace", DefaultCoordNamespace, "Namespace on this spoke that holds the marker ConfigMaps")
+	}
 	cmd.Flags().BoolVar(&yes, "yes", false, "Confirm")
-	// Only the marker namespace is meaningful here; the pin never touches the
-	// coordination plane itself.
-	cmd.Flags().StringVar(&cf.LeaseNS, "coord-namespace", DefaultCoordNamespace, "Namespace on this spoke that holds the marker ConfigMaps")
-	cmd.Flags().VisitAll(func(fl *pflag.Flag) {})
 	return cmd
 }
 
