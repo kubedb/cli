@@ -224,7 +224,6 @@ func generateTlsSecret(userName string, apb *appApi.AppBinding, ns string, opts 
 }
 
 func generateAuthSecret(userName string, password string, ns string, secretName string, opts *common.PostgresOpts) ([]byte, string, error) {
-	var buffer []byte
 	if userName != opts.Username {
 		// generate user if not present
 		err := generateUser(opts, userName, password)
