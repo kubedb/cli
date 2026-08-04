@@ -280,8 +280,13 @@ Members now contend normally; the surviving DC can acquire once its holds are re
 ONLY for a dead DC. If the pinned DC is alive, its coordinator still honors the local
 ConfigMap (it keeps its leader writable), so force-clearing just the annotation while
 another DC promotes is a split brain. Alive DC: plain `--remove` on its spoke first.
-The stale ConfigMap on the dead cluster is refused by its returning agent (it is no
-longer the last known holder), but delete it during failback before re-pinning.
+
+The stale ConfigMap on the dead cluster is a live grenade for failback: the returning
+agent refuses to mirror it (no longer the last known holder), but the returning
+COORDINATOR honors it unconditionally and brings the old primary back up writable
+while the other DC holds the Lease. Live-observed as a real two-primaries window in
+the bank drill. Failback step 1, before restoring the database workload on the
+returning DC: `pin-primary --scope LEASE --remove --yes` against that spoke.
 
 ## pin-standby
 
@@ -306,6 +311,12 @@ Removing the hold takes effect immediately: the agent re-evaluates that scope's
 contention the moment the ConfigMap disappears. Verified live, a handoff that had been
 vetoed for 30s completed 10 seconds after the hold was released, with no further
 action.
+
+Timing caveat, live-burned in the bank failback drill: pin only a DC that is already
+streaming. A DC that just lost a failover still needs its one-time rewind onto the
+winner's timeline, and the hold refuses exactly that (by design, "data untouched"),
+so pinning too early leaves the DC down and fenced instead of standby. Re-apply the
+hold only once `pg_stat_replication` on the primary shows that DC's leader.
 
 ## active-dc
 
