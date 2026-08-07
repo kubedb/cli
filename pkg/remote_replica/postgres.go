@@ -212,8 +212,9 @@ func generateConfig(f cmdutil.Factory, userName string, password string, dns str
 // generateReplicaSpec emits a ready-to-apply remote replica Postgres manifest sized from
 // the source's spec. It copies the fields that describe capacity (version, replicas,
 // storage, the postgres container's resources, standby mode) and adds what a remote
-// replica needs: the remoteReplica sourceRef pointing at the generated AppBinding, the
-// generated auth secret, and a disabled write check (a hot standby is read-only).
+// replica needs: the remoteReplica sourceRef pointing at the generated AppBinding and
+// the generated auth secret. The health checker needs no tuning here — it already skips
+// write checks for remote replicas on its own.
 //
 // Deliberately NOT copied: spec.tls (the remote cluster has its own issuer),
 // spec.monitor, archiver, init, and any custom sidecars. clientAuthMode falls back from
@@ -258,7 +259,6 @@ func generateReplicaSpec(src *dbapi.Postgres, name, ns, sourceRefName, authSecre
 			Namespace: ns,
 		},
 	}
-	replica.Spec.HealthChecker.DisableWriteCheck = true
 
 	// Marshal via a map so the empty status stanza is dropped from the manifest.
 	jsonBytes, err := json.Marshal(replica)
@@ -270,6 +270,13 @@ func generateReplicaSpec(src *dbapi.Postgres, name, ns, sourceRefName, authSecre
 		return nil, err
 	}
 	delete(m, "status")
+	// healthChecker has no omitempty and would render as an empty stanza; the
+	// operator's defaulting fills it, and it already handles remote replicas.
+	if spec, ok := m["spec"].(map[string]interface{}); ok {
+		if hc, ok := spec["healthChecker"].(map[string]interface{}); ok && len(hc) == 0 {
+			delete(spec, "healthChecker")
+		}
+	}
 	return yaml.Marshal(m)
 }
 
