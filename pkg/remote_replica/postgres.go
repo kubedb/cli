@@ -55,6 +55,8 @@ import (
 
 func PostgreSQlAPP(f cmdutil.Factory) *cobra.Command {
 	var userName, password, dns, ns, authSecretName, replicaName string
+	var caCertPath, caKeyPath string
+	var clientSANs []string
 	var port int32
 	var yes bool
 
@@ -71,6 +73,11 @@ func PostgreSQlAPP(f cmdutil.Factory) *cobra.Command {
 			if err := userPrompt(yes); err != nil {
 				log.Fatal(err)
 			}
+			// Issuing a certificate needs the CA's PRIVATE key; ca.crt alone cannot
+			// sign anything, so the pair travels together.
+			if (caCertPath == "") != (caKeyPath == "") {
+				log.Fatal("--ca-cert and --ca-key must be provided together")
+			}
 
 			// Accept -d host:port as a convenience. An explicit --port always wins.
 			if host, p, found := strings.Cut(dns, ":"); found && strings.Count(dns, ":") == 1 {
@@ -83,7 +90,11 @@ func PostgreSQlAPP(f cmdutil.Factory) *cobra.Command {
 			}
 
 			var buffer []byte
-			buffer, err := generateConfig(f, userName, password, dns, ns, authSecretName, replicaName, port, args[0])
+			buffer, err := generateConfig(f, userName, password, dns, ns, authSecretName, replicaName, port, args[0], tlsIssueOptions{
+				CACertPath: caCertPath,
+				CAKeyPath:  caKeyPath,
+				DNSSANs:    clientSANs,
+			})
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -123,10 +134,22 @@ func PostgreSQlAPP(f cmdutil.Factory) *cobra.Command {
 	cmd.PersistentFlags().StringVar(&authSecretName, "auth-secret", "", "name for the auth secret on the remote cluster (default: <dbname>-remote-replica-auth)")
 	cmd.PersistentFlags().Int32Var(&port, "port", 5432, "port the source is reachable on from the remote cluster; written into the generated AppBinding (also accepted as -d host:port)")
 	cmd.PersistentFlags().StringVar(&replicaName, "replica-name", "", "when set, also emit a ready-to-apply remote replica Postgres manifest with this name, sized from the source spec")
+	cmd.PersistentFlags().StringVar(&caCertPath, "ca-cert", "", "path to a CA certificate PEM; when set (together with --ca-key) the client certificate is issued locally from this CA instead of through cert-manager")
+	cmd.PersistentFlags().StringVar(&caKeyPath, "ca-key", "", "path to the CA private key PEM matching --ca-cert; required to sign the client certificate")
+	cmd.PersistentFlags().StringSliceVar(&clientSANs, "client-sans", nil, "comma separated DNS names to set as SANs on the generated client certificate")
 	return &cmd
 }
 
-func generateConfig(f cmdutil.Factory, userName string, password string, dns string, ns string, authSecretName string, replicaName string, port int32, dbname string) ([]byte, error) {
+// tlsIssueOptions carries how the client certificate for the remote replica is
+// obtained: locally signed from a user-supplied CA pair, or issued by
+// cert-manager on the source cluster (the default when the source has TLS).
+type tlsIssueOptions struct {
+	CACertPath string
+	CAKeyPath  string
+	DNSSANs    []string
+}
+
+func generateConfig(f cmdutil.Factory, userName string, password string, dns string, ns string, authSecretName string, replicaName string, port int32, dbname string, tlsOpt tlsIssueOptions) ([]byte, error) {
 	var buffer []byte
 	opts, err := common.NewPostgresOpts(f, dbname, ns)
 	if err != nil {
@@ -146,9 +169,20 @@ func generateConfig(f cmdutil.Factory, userName string, password string, dns str
 	buffer = append(buffer, authBuff...)
 
 	var tlsSecretName string
-	if apb.Spec.TLSSecret != nil {
+	switch {
+	case tlsOpt.CACertPath != "":
+		// The user supplied a CA pair: sign the client certificate locally and skip
+		// cert-manager entirely. This also covers sources whose TLS was configured
+		// outside cert-manager (hardened/bring-your-own-CA setups).
 		var tlsBuff []byte
-		tlsBuff, tlsSecretName, err = generateTlsSecret(userName, apb, ns, opts)
+		tlsBuff, tlsSecretName, err = generateTlsSecretFromLocalCA(userName, ns, tlsOpt.CACertPath, tlsOpt.CAKeyPath, tlsOpt.DNSSANs, opts)
+		if err != nil {
+			return nil, fmt.Errorf("failed to generate tls secret from --ca-cert: %v", err)
+		}
+		buffer = append(buffer, tlsBuff...)
+	case apb.Spec.TLSSecret != nil:
+		var tlsBuff []byte
+		tlsBuff, tlsSecretName, err = generateTlsSecret(userName, apb, ns, tlsOpt.DNSSANs, opts)
 		if err != nil {
 			return nil, fmt.Errorf("failed to generate tls secret %v", err)
 		}
@@ -280,8 +314,8 @@ func generateReplicaSpec(src *dbapi.Postgres, name, ns, sourceRefName, authSecre
 	return yaml.Marshal(m)
 }
 
-func generateTlsSecret(userName string, apb *appApi.AppBinding, ns string, opts *common.PostgresOpts) ([]byte, string, error) {
-	_, err := ensureClientCert(opts, apb, opts.DB, dbapi.PostgresClientCert, userName)
+func generateTlsSecret(userName string, apb *appApi.AppBinding, ns string, extraSANs []string, opts *common.PostgresOpts) ([]byte, string, error) {
+	_, err := ensureClientCert(opts, apb, opts.DB, dbapi.PostgresClientCert, userName, extraSANs)
 	if err != nil {
 		return nil, "", fmt.Errorf("failed to ensure client cert %v", err)
 	}
@@ -406,7 +440,7 @@ func generateUser(opts *common.PostgresOpts, name string, password string) error
 	return nil
 }
 
-func ensureClientCert(opts *common.PostgresOpts, apb *appApi.AppBinding, postgres *dbapi.Postgres, alias dbapi.PostgresCertificateAlias, username string) (kutil.VerbType, error) {
+func ensureClientCert(opts *common.PostgresOpts, apb *appApi.AppBinding, postgres *dbapi.Postgres, alias dbapi.PostgresCertificateAlias, username string, extraSANs []string) (kutil.VerbType, error) {
 	var duration, renewBefore *metav1.Duration
 	var subject *cm_api.X509Subject
 	var dnsNames, ipAddresses, uriSANs, emailSANs []string
@@ -448,7 +482,7 @@ func ensureClientCert(opts *common.PostgresOpts, apb *appApi.AppBinding, postgre
 			in.Spec.Subject = subject
 			in.Spec.Duration = duration
 			in.Spec.RenewBefore = renewBefore
-			in.Spec.DNSNames = sets.NewString(dnsNames...).List()
+			in.Spec.DNSNames = sets.NewString(append(dnsNames, extraSANs...)...).List()
 			in.Spec.IPAddresses = sets.NewString(ipAddresses...).List()
 			in.Spec.URIs = sets.NewString(uriSANs...).List()
 			in.Spec.EmailAddresses = sets.NewString(emailSANs...).List()
