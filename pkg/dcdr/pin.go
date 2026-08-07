@@ -74,35 +74,35 @@ func NewCmdPin(f cmdutil.Factory, kind pinKind) *cobra.Command {
 					return err
 				}
 				lease = s.LeaseName
-				fmt.Fprintf(out, "Resolved scope %s from database %s (%s).\n", lease, dbName, s.Source)
+				_, _ = fmt.Fprintf(out, "Resolved scope %s from database %s (%s).\n", lease, dbName, s.Source)
 			}
 			cmName := lease + suffix
 			if !remove && !yes {
 				if kind == pinPrimary {
-					fmt.Fprintf(out, "Would create ConfigMap %s/%s on the CURRENT cluster.\n", cf.LeaseNS, cmName)
-					fmt.Fprintf(out, "This is a STANDING BYPASS of split-brain protection: the local leader stays writable regardless of what the failover authority says, and the scope cannot fail over while it exists.\n")
+					_, _ = fmt.Fprintf(out, "Would create ConfigMap %s/%s on the CURRENT cluster.\n", cf.LeaseNS, cmName)
+					_, _ = fmt.Fprintf(out, "This is a STANDING BYPASS of split-brain protection: the local leader stays writable regardless of what the failover authority says, and the scope cannot fail over while it exists.\n")
 				} else {
-					fmt.Fprintf(out, "Would create ConfigMap %s/%s on the CURRENT cluster; this data center will never promote while it exists.\n", cf.LeaseNS, cmName)
+					_, _ = fmt.Fprintf(out, "Would create ConfigMap %s/%s on the CURRENT cluster; this data center will never promote while it exists.\n", cf.LeaseNS, cmName)
 				}
 				return fmt.Errorf("re-run with --yes to proceed (or --remove --yes to clear an existing pin)")
 			}
 			if remove && !yes {
-				fmt.Fprintf(out, "Would delete ConfigMap %s/%s on the CURRENT cluster.\n", cf.LeaseNS, cmName)
+				_, _ = fmt.Fprintf(out, "Would delete ConfigMap %s/%s on the CURRENT cluster.\n", cf.LeaseNS, cmName)
 				return fmt.Errorf("re-run with --yes to proceed")
 			}
 			action, err := markerConfigMap(ctx, f, cf.LeaseNS, cmName, remove)
 			if err != nil {
-				if !(remove && force) {
+				if !remove || !force {
 					return err
 				}
 				// The pinned data center is dead or unreachable: exactly the situation
 				// --force exists for. The ConfigMap on its spoke is unreachable garbage;
 				// what actually blocks the failover is the override-hold annotation on
 				// the Lease, which only that DC's own (dead) agent would ever clear.
-				fmt.Fprintf(out, "Could not remove ConfigMap %s/%s on the current cluster (%v); proceeding to clear the Lease annotation because --force is set.\n", cf.LeaseNS, cmName, err)
+				_, _ = fmt.Fprintf(out, "Could not remove ConfigMap %s/%s on the current cluster (%v); proceeding to clear the Lease annotation because --force is set.\n", cf.LeaseNS, cmName, err)
 				action = "unreachable, skipped"
 			}
-			fmt.Fprintf(out, "ConfigMap %s/%s %s on the current cluster.\n", cf.LeaseNS, cmName, action)
+			_, _ = fmt.Fprintf(out, "ConfigMap %s/%s %s on the current cluster.\n", cf.LeaseNS, cmName, action)
 			if kind == pinPrimary && remove && force {
 				coord, cerr := cf.CoordClient(ctx, f)
 				if cerr != nil {
@@ -112,27 +112,27 @@ func NewCmdPin(f cmdutil.Factory, kind pinKind) *cobra.Command {
 				if _, err := coord.CoordinationV1().Leases(cf.LeaseNS).Patch(ctx, lease, types.MergePatchType, []byte(patch), metav1.PatchOptions{}); err != nil {
 					return fmt.Errorf("failed to clear override-hold on Lease %s/%s: %w", cf.LeaseNS, lease, err)
 				}
-				fmt.Fprintf(out, "Cleared the override-hold annotation on Lease %s/%s directly (the pinned DC's agent is not alive to do it).\n", cf.LeaseNS, lease)
-				fmt.Fprintf(out, "Members now contend normally; the surviving DC can acquire once its holds are removed.\n")
+				_, _ = fmt.Fprintf(out, "Cleared the override-hold annotation on Lease %s/%s directly (the pinned DC's agent is not alive to do it).\n", cf.LeaseNS, lease)
+				_, _ = fmt.Fprintf(out, "Members now contend normally; the surviving DC can acquire once its holds are removed.\n")
 			}
 			if kind == pinPrimary {
 				if remove {
-					fmt.Fprintf(out, "The break-glass pin is cleared; normal contention resumes and the override-hold annotation drops from the Lease within seconds.\n")
+					_, _ = fmt.Fprintf(out, "The break-glass pin is cleared; normal contention resumes and the override-hold annotation drops from the Lease within seconds.\n")
 				} else {
-					fmt.Fprintf(out, "This data center is now PINNED primary for scope %s:\n", lease)
-					fmt.Fprintf(out, "  - its agent mirrors the pin onto the Lease, so no other Member contends;\n")
-					fmt.Fprintf(out, "  - its coordinator keeps the local leader writable even if the marker goes stale (a control-plane outage no longer fences it).\n")
-					fmt.Fprintf(out, "  IMPORTANT: only honored on the scope's LAST KNOWN HOLDER. On any other DC the agent refuses it and logs why; it never promotes a standby.\n")
-					fmt.Fprintf(out, "  IMPORTANT: while pinned, that DC dying means NO failover happens. Remove the pin as soon as the emergency ends:\n")
-					fmt.Fprintf(out, "    kubectl dba dc-dr pin-primary --scope %s --remove --yes\n", lease)
+					_, _ = fmt.Fprintf(out, "This data center is now PINNED primary for scope %s:\n", lease)
+					_, _ = fmt.Fprintf(out, "  - its agent mirrors the pin onto the Lease, so no other Member contends;\n")
+					_, _ = fmt.Fprintf(out, "  - its coordinator keeps the local leader writable even if the marker goes stale (a control-plane outage no longer fences it).\n")
+					_, _ = fmt.Fprintf(out, "  IMPORTANT: only honored on the scope's LAST KNOWN HOLDER. On any other DC the agent refuses it and logs why; it never promotes a standby.\n")
+					_, _ = fmt.Fprintf(out, "  IMPORTANT: while pinned, that DC dying means NO failover happens. Remove the pin as soon as the emergency ends:\n")
+					_, _ = fmt.Fprintf(out, "    kubectl dba dc-dr pin-primary --scope %s --remove --yes\n", lease)
 				}
 			} else {
 				if remove {
-					fmt.Fprintf(out, "The standby-hold is cleared. NOTE: this DC resumes contending on the NEXT Lease event; if the Lease is idle, a pending handoff may take until the agent's informer resync. Touching the Lease (for example dc-dr handoff --to <dc>) makes it immediate.\n")
+					_, _ = fmt.Fprintf(out, "The standby-hold is cleared. NOTE: this DC resumes contending on the NEXT Lease event; if the Lease is idle, a pending handoff may take until the agent's informer resync. Touching the Lease (for example dc-dr handoff --to <dc>) makes it immediate.\n")
 				} else {
-					fmt.Fprintf(out, "This data center is now HELD as a standby for scope %s: it never contends for the Lease, never promotes, and refuses destructive cross-DC rewinds of its data.\n", lease)
-					fmt.Fprintf(out, "  It is ignored while this DC is the ACTIVE one (demoting the active DC without a quiesce is unsafe): move the primary away with a switchover first.\n")
-					fmt.Fprintf(out, "  Remove with:  kubectl dba dc-dr pin-standby --scope %s --remove --yes\n", lease)
+					_, _ = fmt.Fprintf(out, "This data center is now HELD as a standby for scope %s: it never contends for the Lease, never promotes, and refuses destructive cross-DC rewinds of its data.\n", lease)
+					_, _ = fmt.Fprintf(out, "  It is ignored while this DC is the ACTIVE one (demoting the active DC without a quiesce is unsafe): move the primary away with a switchover first.\n")
+					_, _ = fmt.Fprintf(out, "  Remove with:  kubectl dba dc-dr pin-standby --scope %s --remove --yes\n", lease)
 				}
 			}
 			return nil

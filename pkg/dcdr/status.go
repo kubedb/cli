@@ -89,25 +89,25 @@ func NewCmdStatus(f cmdutil.Factory) *cobra.Command {
 			protected, protectedSet, _ := unstructured.NestedBool(db.Object, "status", "disasterRecovery", "protected")
 			protMsg, _, _ := unstructured.NestedString(db.Object, "status", "disasterRecovery", "protectionMessage")
 
-			fmt.Fprintf(out, "Database:      %s/%s (%s)\n", ns, args[0], dbPhase)
-			fmt.Fprintf(out, "Failover scope: %s\n                (%s)\n", scope.LeaseName, scope.Source)
+			_, _ = fmt.Fprintf(out, "Database:      %s/%s (%s)\n", ns, args[0], dbPhase)
+			_, _ = fmt.Fprintf(out, "Failover scope: %s\n                (%s)\n", scope.LeaseName, scope.Source)
 			if len(scope.MemberDCs) > 0 {
-				fmt.Fprintf(out, "Member DCs:    %s\n", strings.Join(scope.MemberDCs, ", "))
+				_, _ = fmt.Fprintf(out, "Member DCs:    %s\n", strings.Join(scope.MemberDCs, ", "))
 			}
-			fmt.Fprintf(out, "Active DC:     %s   DR phase: %s\n", orNone(activeDC), orNone(drPhase))
+			_, _ = fmt.Fprintf(out, "Active DC:     %s   DR phase: %s\n", orNone(activeDC), orNone(drPhase))
 			if protectedSet {
-				fmt.Fprintf(out, "Protected:     %v", protected)
+				_, _ = fmt.Fprintf(out, "Protected:     %v", protected)
 				if protMsg != "" {
-					fmt.Fprintf(out, "  (%s)", protMsg)
+					_, _ = fmt.Fprintf(out, "  (%s)", protMsg)
 				}
-				fmt.Fprintln(out)
+				_, _ = fmt.Fprintln(out)
 			}
 
 			// Per-DC table.
 			dcs, found, _ := unstructured.NestedSlice(db.Object, "status", "disasterRecovery", "dataCenters")
 			if found && len(dcs) > 0 {
-				fmt.Fprintf(out, "\nData centers:\n")
-				fmt.Fprintf(out, "  %-10s %-9s %-9s %-9s %-12s %s\n", "NAME", "ROLE", "WRITABLE", "HEALTHY", "LAG(BYTES)", "STREAMER")
+				_, _ = fmt.Fprintf(out, "\nData centers:\n")
+				_, _ = fmt.Fprintf(out, "  %-10s %-9s %-9s %-9s %-12s %s\n", "NAME", "ROLE", "WRITABLE", "HEALTHY", "LAG(BYTES)", "STREAMER")
 				for _, d := range dcs {
 					dm, ok := d.(map[string]any)
 					if !ok {
@@ -122,7 +122,7 @@ func NewCmdStatus(f cmdutil.Factory) *cobra.Command {
 						lag = fmt.Sprintf("%v", v)
 					}
 					streamer, _ := dm["crossDCStreamer"].(string)
-					fmt.Fprintf(out, "  %-10s %-9s %-9s %-9s %-12s %s\n", name, orNone(role), writable, healthy, lag, orNone(streamer))
+					_, _ = fmt.Fprintf(out, "  %-10s %-9s %-9s %-9s %-12s %s\n", name, orNone(role), writable, healthy, lag, orNone(streamer))
 				}
 			}
 
@@ -132,37 +132,37 @@ func NewCmdStatus(f cmdutil.Factory) *cobra.Command {
 			aborting := ann[AnnSwitchoverAbort] != ""
 			started := ann[AnnSwitchoverStart]
 			if target != "" || quiesced || aborting {
-				fmt.Fprintf(out, "\nPlanned switchover")
+				_, _ = fmt.Fprintf(out, "\nPlanned switchover")
 				if target != "" {
-					fmt.Fprintf(out, " to %q", target)
+					_, _ = fmt.Fprintf(out, " to %q", target)
 				}
 				if started != "" {
 					if t, perr := time.Parse(time.RFC3339, started); perr == nil {
-						fmt.Fprintf(out, ", started %s ago", time.Since(t).Round(time.Second))
+						_, _ = fmt.Fprintf(out, ", started %s ago", time.Since(t).Round(time.Second))
 					}
 				}
-				fmt.Fprintln(out, ":")
+				_, _ = fmt.Fprintln(out, ":")
 				if aborting {
-					fmt.Fprintf(out, "  ABORT requested (%s is set). The hub clears the quiesce and restores writes to %s.\n", AnnSwitchoverAbort, orNone(activeDC))
-					fmt.Fprintf(out, "  Re-run this command until the switchover annotations are gone and DR phase is Steady.\n")
+					_, _ = fmt.Fprintf(out, "  ABORT requested (%s is set). The hub clears the quiesce and restores writes to %s.\n", AnnSwitchoverAbort, orNone(activeDC))
+					_, _ = fmt.Fprintf(out, "  Re-run this command until the switchover annotations are gone and DR phase is Steady.\n")
 					return nil
 				}
 				renderSwitchoverSteps(out, target, activeDC, quiesced, dcs)
-				fmt.Fprintf(out, "\n  Abort:  kubectl dba dc-dr abort %s -n %s\n", args[0], ns)
-				fmt.Fprintf(out, "  Re-run this command to see the next step; it does not follow.\n")
+				_, _ = fmt.Fprintf(out, "\n  Abort:  kubectl dba dc-dr abort %s -n %s\n", args[0], ns)
+				_, _ = fmt.Fprintf(out, "  Re-run this command to see the next step; it does not follow.\n")
 				return nil
 			}
 
-			fmt.Fprintf(out, "\nNo switchover in flight.\n")
+			_, _ = fmt.Fprintf(out, "\nNo switchover in flight.\n")
 			if drPhase == "FailingOver" {
-				fmt.Fprintf(out, "DR phase is FailingOver with no switchover annotation, so this is an UNPLANNED failover.\n")
-				fmt.Fprintf(out, "  If it is not completing: kubectl dba dc-dr debug failover %s -n %s\n", args[0], ns)
+				_, _ = fmt.Fprintf(out, "DR phase is FailingOver with no switchover annotation, so this is an UNPLANNED failover.\n")
+				_, _ = fmt.Fprintf(out, "  If it is not completing: kubectl dba dc-dr debug failover %s -n %s\n", args[0], ns)
 			}
 			if protectedSet && !protected {
-				fmt.Fprintf(out, "Protection is NOT confirmed. If a promotion is held by the RPO budget:\n")
-				fmt.Fprintf(out, "  kubectl dba dc-dr accept-data-loss %s -n %s --yes\n", args[0], ns)
+				_, _ = fmt.Fprintf(out, "Protection is NOT confirmed. If a promotion is held by the RPO budget:\n")
+				_, _ = fmt.Fprintf(out, "  kubectl dba dc-dr accept-data-loss %s -n %s --yes\n", args[0], ns)
 			}
-			fmt.Fprintf(out, "Trigger one:  kubectl dba dc-dr switchover %s -n %s --to <dc>\n", args[0], ns)
+			_, _ = fmt.Fprintf(out, "Trigger one:  kubectl dba dc-dr switchover %s -n %s --to <dc>\n", args[0], ns)
 			return nil
 		},
 	}
@@ -248,31 +248,31 @@ func renderSwitchoverSteps(out interface{ Write([]byte) (int, error) }, target, 
 		step6 = stepCurrent
 	}
 
-	fmt.Fprintf(out, "  %s 1. target %q validated: healthy and lag known, within the switchover budget\n", step1.mark(), target)
-	fmt.Fprintf(out, "  %s 2. quiesce requested on the active DC (%s)\n", step2.mark(), orNone(activeDC))
-	fmt.Fprintf(out, "  %s 3. quiesce IN EFFECT: active primary write-locked, its LSN frozen\n", step3.mark())
+	_, _ = fmt.Fprintf(out, "  %s 1. target %q validated: healthy and lag known, within the switchover budget\n", step1.mark(), target)
+	_, _ = fmt.Fprintf(out, "  %s 2. quiesce requested on the active DC (%s)\n", step2.mark(), orNone(activeDC))
+	_, _ = fmt.Fprintf(out, "  %s 3. quiesce IN EFFECT: active primary write-locked, its LSN frozen\n", step3.mark())
 	lagText := "unknown"
 	if targetLag != nil {
 		lagText = fmt.Sprintf("%v bytes", targetLag)
 	}
-	fmt.Fprintf(out, "  %s 4. target caught up to the frozen LSN (now %s, needs <= %d)\n", step4.mark(), lagText, zeroRPOLagBytes)
-	fmt.Fprintf(out, "  %s 5. primary-DC Lease handed off to %q\n", step5.mark(), target)
-	fmt.Fprintf(out, "  %s 6. old DC demoted to standby, annotations cleared, DR phase back to Steady\n", step6.mark())
+	_, _ = fmt.Fprintf(out, "  %s 4. target caught up to the frozen LSN (now %s, needs <= %d)\n", step4.mark(), lagText, zeroRPOLagBytes)
+	_, _ = fmt.Fprintf(out, "  %s 5. primary-DC Lease handed off to %q\n", step5.mark(), target)
+	_, _ = fmt.Fprintf(out, "  %s 6. old DC demoted to standby, annotations cleared, DR phase back to Steady\n", step6.mark())
 
-	fmt.Fprintf(out, "\n  NEXT: ")
+	_, _ = fmt.Fprintf(out, "\n  NEXT: ")
 	switch {
 	case step1 == stepCurrent:
-		fmt.Fprintf(out, "waiting for the target's health and lag to be observable. If it never becomes healthy the switchover cannot start.\n")
+		_, _ = fmt.Fprintf(out, "waiting for the target's health and lag to be observable. If it never becomes healthy the switchover cannot start.\n")
 	case step3 == stepCurrent:
-		fmt.Fprintf(out, "waiting for the write-lock to take hold on %s. This needs the active primary to be UP and reachable; a dead primary can never satisfy it (use the failover path).\n", orNone(activeDC))
+		_, _ = fmt.Fprintf(out, "waiting for the write-lock to take hold on %s. This needs the active primary to be UP and reachable; a dead primary can never satisfy it (use the failover path).\n", orNone(activeDC))
 	case step4 == stepCurrent:
-		fmt.Fprintf(out, "waiting for %q to replay the last %s. This is the only step whose duration depends on your write volume.\n", target, lagText)
+		_, _ = fmt.Fprintf(out, "waiting for %q to replay the last %s. This is the only step whose duration depends on your write volume.\n", target, lagText)
 	case step5 == stepCurrent:
-		fmt.Fprintf(out, "handing off the Lease; the target promotes within seconds.\n")
+		_, _ = fmt.Fprintf(out, "handing off the Lease; the target promotes within seconds.\n")
 	case step6 == stepCurrent:
-		fmt.Fprintf(out, "the Lease has moved to %q. The old DC self-fences and re-cascades, then the annotations clear and the phase returns to Steady.\n", target)
+		_, _ = fmt.Fprintf(out, "the Lease has moved to %q. The old DC self-fences and re-cascades, then the annotations clear and the phase returns to Steady.\n", target)
 	default:
-		fmt.Fprintf(out, "the operator picks it up on its next reconcile.\n")
+		_, _ = fmt.Fprintf(out, "the operator picks it up on its next reconcile.\n")
 	}
 }
 

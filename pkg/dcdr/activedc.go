@@ -90,33 +90,33 @@ func NewCmdActiveDC(f cmdutil.Factory) *cobra.Command {
 				holder = *lease.Spec.HolderIdentity
 			}
 			if quiet {
-				fmt.Fprintln(out, holder)
+				_, _ = fmt.Fprintln(out, holder)
 				return nil
 			}
-			fmt.Fprintf(out, "Active DC:  %s\n", orNone(holder))
-			fmt.Fprintf(out, "Lease:      %s/%s  (scope from %s)\n", cf.LeaseNS, scope.LeaseName, scope.Source)
+			_, _ = fmt.Fprintf(out, "Active DC:  %s\n", orNone(holder))
+			_, _ = fmt.Fprintf(out, "Lease:      %s/%s  (scope from %s)\n", cf.LeaseNS, scope.LeaseName, scope.Source)
 			if lease.Spec.RenewTime != nil {
 				age := time.Since(lease.Spec.RenewTime.Time).Round(time.Second)
 				dur := int32(0)
 				if lease.Spec.LeaseDurationSeconds != nil {
 					dur = *lease.Spec.LeaseDurationSeconds
 				}
-				fmt.Fprintf(out, "Renewed:    %s ago (lease duration %ds)\n", age, dur)
+				_, _ = fmt.Fprintf(out, "Renewed:    %s ago (lease duration %ds)\n", age, dur)
 				if dur > 0 && age > time.Duration(dur)*time.Second {
-					fmt.Fprintf(out, "  WARNING: the Lease is EXPIRED. Its holder stopped renewing, so a healthy Member DC may acquire it at any moment.\n")
+					_, _ = fmt.Fprintf(out, "  WARNING: the Lease is EXPIRED. Its holder stopped renewing, so a healthy Member DC may acquire it at any moment.\n")
 				}
 			}
 			if lease.Spec.LeaseTransitions != nil {
-				fmt.Fprintf(out, "Transitions:%d\n", *lease.Spec.LeaseTransitions)
+				_, _ = fmt.Fprintf(out, "Transitions:%d\n", *lease.Spec.LeaseTransitions)
 			}
 			if v := lease.Annotations[AnnLeaseMemberDCs]; v != "" {
-				fmt.Fprintf(out, "Members:    %s\n", v)
+				_, _ = fmt.Fprintf(out, "Members:    %s\n", v)
 			}
 			if v := lease.Annotations[AnnLeaseHandoffTo]; v != "" {
-				fmt.Fprintf(out, "Handoff to: %s (a coordinated handoff is in flight)\n", v)
+				_, _ = fmt.Fprintf(out, "Handoff to: %s (a coordinated handoff is in flight)\n", v)
 			}
 			if v := lease.Annotations["dr.open-cluster-management.io/override-hold"]; v != "" {
-				fmt.Fprintf(out, "PINNED:     break-glass override holds this scope on %s; it cannot fail over until the override ConfigMap is removed from that DC's spoke.\n", v)
+				_, _ = fmt.Fprintf(out, "PINNED:     break-glass override holds this scope on %s; it cannot fail over until the override ConfigMap is removed from that DC's spoke.\n", v)
 			}
 			if len(args) == 1 {
 				// Cross-check the CR's own view, which lags the Lease by a reconcile.
@@ -124,7 +124,7 @@ func NewCmdActiveDC(f cmdutil.Factory) *cobra.Command {
 				if err == nil {
 					crActive, _, _ := unstructured.NestedString(db.Object, "status", "disasterRecovery", "activeDC")
 					if crActive != "" && crActive != holder {
-						fmt.Fprintf(out, "\nNOTE: the database %s/%s still reports activeDC=%s in its status; the Lease is the authority and the status trails it by a reconcile.\n", ns, args[0], crActive)
+						_, _ = fmt.Fprintf(out, "\nNOTE: the database %s/%s still reports activeDC=%s in its status; the Lease is the authority and the status trails it by a reconcile.\n", ns, args[0], crActive)
 					}
 				}
 			}

@@ -96,5 +96,5 @@ func NewCmdSwitchover(f cmdutil.Factory) *cobra.Command {
 }
 
 func printfErr(cmd *cobra.Command) func(string, ...any) {
-	return func(format string, a ...any) { fmt.Fprintf(cmd.ErrOrStderr(), format, a...) }
+	return func(format string, a ...any) { _, _ = fmt.Fprintf(cmd.ErrOrStderr(), format, a...) }
 }

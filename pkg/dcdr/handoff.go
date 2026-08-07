@@ -97,7 +97,7 @@ func NewCmdHandoff(f cmdutil.Factory) *cobra.Command {
 				holder = *lease.Spec.HolderIdentity
 			}
 			if holder == to {
-				fmt.Fprintf(out, "No-op: %s already holds %s.\n", to, scope.LeaseName)
+				_, _ = fmt.Fprintf(out, "No-op: %s already holds %s.\n", to, scope.LeaseName)
 				return nil
 			}
 			if members := lease.Annotations[AnnLeaseMemberDCs]; members != "" {
@@ -109,7 +109,7 @@ func NewCmdHandoff(f cmdutil.Factory) *cobra.Command {
 				return fmt.Errorf("scope %s is PINNED to %q by a break-glass override; remove that DC's override ConfigMap first (kubectl dba dc-dr pin-primary --remove), or the handoff cannot complete", scope.LeaseName, pin)
 			}
 			if !yes {
-				fmt.Fprintf(out, "Would move %s from %s to %s. Every database in this scope fails over together, without a quiesce (loss bounded by the RPO budget, not zero).\n", scope.LeaseName, orNone(holder), to)
+				_, _ = fmt.Fprintf(out, "Would move %s from %s to %s. Every database in this scope fails over together, without a quiesce (loss bounded by the RPO budget, not zero).\n", scope.LeaseName, orNone(holder), to)
 				return fmt.Errorf("re-run with --yes to proceed")
 			}
 			// Re-requesting the SAME target must still fire an agent-visible event.
@@ -128,10 +128,10 @@ func NewCmdHandoff(f cmdutil.Factory) *cobra.Command {
 			if _, err := coord.CoordinationV1().Leases(cf.LeaseNS).Patch(ctx, scope.LeaseName, types.MergePatchType, []byte(patch), metav1.PatchOptions{}); err != nil {
 				return fmt.Errorf("failed to annotate Lease %s/%s: %w", cf.LeaseNS, scope.LeaseName, err)
 			}
-			fmt.Fprintf(out, "Handoff of %s requested: %s -> %s.\n", scope.LeaseName, orNone(holder), to)
-			fmt.Fprintf(out, "The holder releases within seconds and %s acquires on its next retry tick; the annotation clears itself.\n", to)
-			fmt.Fprintf(out, "Verify:  kubectl dba dc-dr active-dc --lease %s\n", scope.LeaseName)
-			fmt.Fprintf(out, "NOTE: if the target is held by a standby-hold ConfigMap it will refuse; clear it with dc-dr pin-standby --remove.\n")
+			_, _ = fmt.Fprintf(out, "Handoff of %s requested: %s -> %s.\n", scope.LeaseName, orNone(holder), to)
+			_, _ = fmt.Fprintf(out, "The holder releases within seconds and %s acquires on its next retry tick; the annotation clears itself.\n", to)
+			_, _ = fmt.Fprintf(out, "Verify:  kubectl dba dc-dr active-dc --lease %s\n", scope.LeaseName)
+			_, _ = fmt.Fprintf(out, "NOTE: if the target is held by a standby-hold ConfigMap it will refuse; clear it with dc-dr pin-standby --remove.\n")
 			return nil
 		},
 	}

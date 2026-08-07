@@ -64,12 +64,12 @@ func (fd finding) print(w io.Writer) {
 			mark = "WARN"
 		}
 	}
-	fmt.Fprintf(w, "  [%s] %s\n", mark, fd.title)
+	_, _ = fmt.Fprintf(w, "  [%s] %s\n", mark, fd.title)
 	if fd.detail != "" {
-		fmt.Fprintf(w, "         %s\n", fd.detail)
+		_, _ = fmt.Fprintf(w, "         %s\n", fd.detail)
 	}
 	if !fd.ok && fd.remedy != "" {
-		fmt.Fprintf(w, "         -> %s\n", fd.remedy)
+		_, _ = fmt.Fprintf(w, "         -> %s\n", fd.remedy)
 	}
 }
 
@@ -113,7 +113,7 @@ func newCmdDebugFailover(f cmdutil.Factory) *cobra.Command {
 			if err != nil {
 				return err
 			}
-			fmt.Fprintf(out, "Diagnosing failover for %s/%s\n\n", ns, args[0])
+			_, _ = fmt.Fprintf(out, "Diagnosing failover for %s/%s\n\n", ns, args[0])
 
 			var findings []finding
 
@@ -204,9 +204,9 @@ func newCmdDebugFailover(f cmdutil.Factory) *cobra.Command {
 			findings = append(findings, checkConditions(db)...)
 
 			printFindings(out, findings)
-			fmt.Fprintf(out, "\nAlso useful:\n")
-			fmt.Fprintf(out, "  kubectl dba dc-dr status %s -n %s\n", args[0], ns)
-			fmt.Fprintf(out, "  kubectl dba dc-dr active-dc %s -n %s\n", args[0], ns)
+			_, _ = fmt.Fprintf(out, "\nAlso useful:\n")
+			_, _ = fmt.Fprintf(out, "  kubectl dba dc-dr status %s -n %s\n", args[0], ns)
+			_, _ = fmt.Fprintf(out, "  kubectl dba dc-dr active-dc %s -n %s\n", args[0], ns)
 			return nil
 		},
 	}
@@ -334,7 +334,7 @@ func printFindings(w io.Writer, fs []finding) {
 			blocking++
 		}
 	}
-	fmt.Fprintf(w, "\n%d blocking condition(s) found.\n", blocking)
+	_, _ = fmt.Fprintf(w, "\n%d blocking condition(s) found.\n", blocking)
 }
 
 // newCmdDebugSwitchover explains a planned switchover that will not complete.
@@ -363,8 +363,8 @@ func newCmdDebugSwitchover(f cmdutil.Factory) *cobra.Command {
 			ann := db.GetAnnotations()
 			target := ann[AnnSwitchoverTo]
 			if target == "" && ann[AnnQuiesceActive] == "" {
-				fmt.Fprintf(out, "No switchover is in flight on %s/%s.\n", ns, args[0])
-				fmt.Fprintf(out, "Start one:  kubectl dba dc-dr switchover %s -n %s --to <dc>\n", args[0], ns)
+				_, _ = fmt.Fprintf(out, "No switchover is in flight on %s/%s.\n", ns, args[0])
+				_, _ = fmt.Fprintf(out, "Start one:  kubectl dba dc-dr switchover %s -n %s --to <dc>\n", args[0], ns)
 				return nil
 			}
 			var findings []finding
@@ -420,8 +420,8 @@ func newCmdDebugSwitchover(f cmdutil.Factory) *cobra.Command {
 				findings = append(findings, finding{title: fmt.Sprintf("target %q is a known data center", target), detail: "it is not present in status.disasterRecovery.dataCenters", remedy: "check the target name against the PlacementPolicy's Member DCs", blocker: true})
 			}
 			printFindings(out, findings)
-			fmt.Fprintf(out, "\n  kubectl dba dc-dr status %s -n %s\n", args[0], ns)
-			fmt.Fprintf(out, "  kubectl dba dc-dr abort %s -n %s\n", args[0], ns)
+			_, _ = fmt.Fprintf(out, "\n  kubectl dba dc-dr status %s -n %s\n", args[0], ns)
+			_, _ = fmt.Fprintf(out, "  kubectl dba dc-dr abort %s -n %s\n", args[0], ns)
 			return nil
 		},
 	}
@@ -492,10 +492,10 @@ func newCmdDebugFence(f cmdutil.Factory) *cobra.Command {
 			if activeDC != "" && holder != "" && activeDC != holder {
 				findings = append(findings, finding{title: "the database agrees with the authority", detail: fmt.Sprintf("status says %q, the Lease says %q", activeDC, holder), remedy: "the status trails the Lease by a reconcile; if it persists, the hub operator is not reconciling this database"})
 			}
-			fmt.Fprintf(out, "Fence diagnosis for %s/%s (scope %s)\n\n", ns, args[0], scope.LeaseName)
+			_, _ = fmt.Fprintf(out, "Fence diagnosis for %s/%s (scope %s)\n\n", ns, args[0], scope.LeaseName)
 			printFindings(out, findings)
-			fmt.Fprintf(out, "\nThe marker each data center actually reads lives on its OWN spoke:\n")
-			fmt.Fprintf(out, "  kubectl --kubeconfig <spoke> -n %s get cm %s -o jsonpath='{.data}'\n", cf.LeaseNS, scope.LeaseName)
+			_, _ = fmt.Fprintf(out, "\nThe marker each data center actually reads lives on its OWN spoke:\n")
+			_, _ = fmt.Fprintf(out, "  kubectl --kubeconfig <spoke> -n %s get cm %s -o jsonpath='{.data}'\n", cf.LeaseNS, scope.LeaseName)
 			return nil
 		},
 	}
