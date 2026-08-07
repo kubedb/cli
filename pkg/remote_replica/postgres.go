@@ -18,10 +18,12 @@ package remote_replica
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -52,7 +54,10 @@ import (
 )
 
 func PostgreSQlAPP(f cmdutil.Factory) *cobra.Command {
-	var userName, password, dns, ns string
+	var userName, password, dns, ns, authSecretName, replicaName string
+	var caCertPath, caKeyPath string
+	var clientSANs []string
+	var port int32
 	var yes bool
 
 	cmd := cobra.Command{
@@ -68,9 +73,28 @@ func PostgreSQlAPP(f cmdutil.Factory) *cobra.Command {
 			if err := userPrompt(yes); err != nil {
 				log.Fatal(err)
 			}
+			// Issuing a certificate needs the CA's PRIVATE key; ca.crt alone cannot
+			// sign anything, so the pair travels together.
+			if (caCertPath == "") != (caKeyPath == "") {
+				log.Fatal("--ca-cert and --ca-key must be provided together")
+			}
+
+			// Accept -d host:port as a convenience. An explicit --port always wins.
+			if host, p, found := strings.Cut(dns, ":"); found && strings.Count(dns, ":") == 1 {
+				if v, convErr := strconv.Atoi(p); convErr == nil && v > 0 && v < 65536 {
+					if !cmd.Flags().Changed("port") {
+						port = int32(v)
+					}
+					dns = host
+				}
+			}
 
 			var buffer []byte
-			buffer, err := generateConfig(f, userName, password, dns, ns, args[0])
+			buffer, err := generateConfig(f, userName, password, dns, ns, authSecretName, replicaName, port, args[0], tlsIssueOptions{
+				CACertPath: caCertPath,
+				CAKeyPath:  caKeyPath,
+				DNSSANs:    clientSANs,
+			})
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -107,10 +131,25 @@ func PostgreSQlAPP(f cmdutil.Factory) *cobra.Command {
 		log.Fatal(err)
 	}
 	cmd.PersistentFlags().BoolVarP(&yes, "yes", "y", false, "permission for alter password  for the remote replica")
+	cmd.PersistentFlags().StringVar(&authSecretName, "auth-secret", "", "name for the auth secret on the remote cluster (default: <dbname>-remote-replica-auth)")
+	cmd.PersistentFlags().Int32Var(&port, "port", 5432, "port the source is reachable on from the remote cluster; written into the generated AppBinding (also accepted as -d host:port)")
+	cmd.PersistentFlags().StringVar(&replicaName, "replica-name", "", "when set, also emit a ready-to-apply remote replica Postgres manifest with this name, sized from the source spec")
+	cmd.PersistentFlags().StringVar(&caCertPath, "ca-cert", "", "path to a CA certificate PEM; when set (together with --ca-key) the client certificate is issued locally from this CA instead of through cert-manager")
+	cmd.PersistentFlags().StringVar(&caKeyPath, "ca-key", "", "path to the CA private key PEM matching --ca-cert; required to sign the client certificate")
+	cmd.PersistentFlags().StringSliceVar(&clientSANs, "client-sans", nil, "comma separated DNS names to set as SANs on the generated client certificate")
 	return &cmd
 }
 
-func generateConfig(f cmdutil.Factory, userName string, password string, dns string, ns string, dbname string) ([]byte, error) {
+// tlsIssueOptions carries how the client certificate for the remote replica is
+// obtained: locally signed from a user-supplied CA pair, or issued by
+// cert-manager on the source cluster (the default when the source has TLS).
+type tlsIssueOptions struct {
+	CACertPath string
+	CAKeyPath  string
+	DNSSANs    []string
+}
+
+func generateConfig(f cmdutil.Factory, userName string, password string, dns string, ns string, authSecretName string, replicaName string, port int32, dbname string, tlsOpt tlsIssueOptions) ([]byte, error) {
 	var buffer []byte
 	opts, err := common.NewPostgresOpts(f, dbname, ns)
 	if err != nil {
@@ -123,41 +162,160 @@ func generateConfig(f cmdutil.Factory, userName string, password string, dns str
 		return nil, fmt.Errorf("failed to get appbinding %v", err)
 	}
 
-	authBuff, authSecretName, err := generateAuthSecret(userName, password, ns, opts)
+	authBuff, authSecretName, err := generateAuthSecret(userName, password, ns, authSecretName, opts)
 	if err != nil {
 		return nil, fmt.Errorf("failed to generate auth secret ,%v", err)
 	}
 	buffer = append(buffer, authBuff...)
 
-	// generate secret
-	if apb.Spec.TLSSecret != nil {
-		tlsBuff, tlsSecretName, err := generateTlsSecret(userName, apb, ns, opts)
+	var tlsSecretName string
+	switch {
+	case tlsOpt.CACertPath != "":
+		// The user supplied a CA pair: sign the client certificate locally and skip
+		// cert-manager entirely. This also covers sources whose TLS was configured
+		// outside cert-manager (hardened/bring-your-own-CA setups).
+		var tlsBuff []byte
+		tlsBuff, tlsSecretName, err = generateTlsSecretFromLocalCA(userName, ns, tlsOpt.CACertPath, tlsOpt.CAKeyPath, tlsOpt.DNSSANs, opts)
+		if err != nil {
+			return nil, fmt.Errorf("failed to generate tls secret from --ca-cert: %v", err)
+		}
+		buffer = append(buffer, tlsBuff...)
+	case apb.Spec.TLSSecret != nil:
+		var tlsBuff []byte
+		tlsBuff, tlsSecretName, err = generateTlsSecret(userName, apb, ns, tlsOpt.DNSSANs, opts)
 		if err != nil {
 			return nil, fmt.Errorf("failed to generate tls secret %v", err)
 		}
 		buffer = append(buffer, tlsBuff...)
-		apb.Spec.TLSSecret.Name = tlsSecretName
 	}
 
-	apb.APIVersion = AppcatApiVersion
-	apb.Kind = AppcatKind
-	apb.Spec.ClientConfig.Service.Name = dns
-	apb.Spec.Secret.Name = authSecretName
-	apb.Annotations = nil
-	apb.ManagedFields = nil
-	apb.OwnerReferences = nil
+	// Deep-copy the source AppBinding and replace only the ObjectMeta with a
+	// clean one. This preserves all spec fields (appRef, parameters, type,
+	// version, clientConfig, etc.) so nothing is silently dropped, while
+	// ensuring server-managed metadata (resourceVersion, uid, generation,
+	// labels, annotations) never leaks into the generated YAML. A clean
+	// ObjectMeta means the last-applied annotation stays minimal, so
+	// repeated kubectl apply is idempotent and the 3-way merge never tries
+	// to remove metadata.resourceVersion.
+	remoteApb := apb.DeepCopy()
+	remoteApb.TypeMeta = metav1.TypeMeta{
+		APIVersion: AppcatApiVersion,
+		Kind:       AppcatKind,
+	}
+	remoteApb.ObjectMeta = metav1.ObjectMeta{
+		Name:      apb.Name,
+		Namespace: ns,
+	}
+	if remoteApb.Spec.ClientConfig.Service == nil {
+		remoteApb.Spec.ClientConfig.Service = &appApi.ServiceReference{}
+	}
+	remoteApb.Spec.ClientConfig.Service.Name = dns
+	// The port the source is reachable on FROM THE REMOTE CLUSTER (a load balancer
+	// frontend, not necessarily 5432). The operator injects it as PRIMARY_PORT into
+	// the remote replica containers.
+	remoteApb.Spec.ClientConfig.Service.Port = port
+	if remoteApb.Spec.Secret == nil {
+		remoteApb.Spec.Secret = &appApi.TypedLocalObjectReference{}
+	}
+	remoteApb.Spec.Secret.Name = authSecretName
+	if tlsSecretName != "" {
+		if remoteApb.Spec.TLSSecret == nil {
+			remoteApb.Spec.TLSSecret = &appApi.TypedLocalObjectReference{}
+		}
+		remoteApb.Spec.TLSSecret.Name = tlsSecretName
+	}
 
-	appbindingYaml, err := yaml.Marshal(apb)
+	appbindingYaml, err := yaml.Marshal(remoteApb)
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal appbind yaml %v", err)
 	}
 
 	buffer = append(buffer, appbindingYaml...)
+
+	if replicaName != "" {
+		replicaYaml, err := generateReplicaSpec(opts.DB, replicaName, ns, apb.Name, authSecretName)
+		if err != nil {
+			return nil, fmt.Errorf("failed to generate replica spec %v", err)
+		}
+		buffer = append(buffer, []byte("---\n")...)
+		buffer = append(buffer, replicaYaml...)
+	}
 	return buffer, nil
 }
 
-func generateTlsSecret(userName string, apb *appApi.AppBinding, ns string, opts *common.PostgresOpts) ([]byte, string, error) {
-	_, err := ensureClientCert(opts, apb, opts.DB, dbapi.PostgresClientCert, userName)
+// generateReplicaSpec emits a ready-to-apply remote replica Postgres manifest sized from
+// the source's spec. It copies the fields that describe capacity (version, replicas,
+// storage, the postgres container's resources, standby mode) and adds what a remote
+// replica needs: the remoteReplica sourceRef pointing at the generated AppBinding and
+// the generated auth secret. The health checker needs no tuning here — it already skips
+// write checks for remote replicas on its own.
+//
+// Deliberately NOT copied: spec.tls (the remote cluster has its own issuer),
+// spec.monitor, archiver, init, and any custom sidecars. clientAuthMode falls back from
+// cert to md5, since cert auth requires the TLS stanza that is not carried over.
+// deletionPolicy is set to Halt regardless of the source: a DR replica's PVCs should
+// survive an accidental CR deletion. Treat the result as a starting point — a secondary
+// site is often sized differently on purpose.
+func generateReplicaSpec(src *dbapi.Postgres, name, ns, sourceRefName, authSecretName string) ([]byte, error) {
+	replica := dbapi.Postgres{}
+	replica.APIVersion = dbapi.SchemeGroupVersion.String()
+	replica.Kind = dbapi.ResourceKindPostgres
+	replica.Name = name
+	replica.Namespace = ns
+
+	replica.Spec.Version = src.Spec.Version
+	replica.Spec.Replicas = src.Spec.Replicas
+	replica.Spec.StorageType = src.Spec.StorageType
+	replica.Spec.Storage = src.Spec.Storage
+	replica.Spec.StandbyMode = src.Spec.StandbyMode
+	replica.Spec.DeletionPolicy = dbapi.DeletionPolicyHalt
+
+	replica.Spec.ClientAuthMode = src.Spec.ClientAuthMode
+	if replica.Spec.ClientAuthMode == dbapi.ClientAuthModeCert {
+		replica.Spec.ClientAuthMode = dbapi.ClientAuthModeMD5
+	}
+
+	for _, c := range src.Spec.PodTemplate.Spec.Containers {
+		if c.Name == "postgres" {
+			replica.Spec.PodTemplate.Spec.Containers = []core.Container{{
+				Name:      c.Name,
+				Resources: c.Resources,
+			}}
+			break
+		}
+	}
+
+	replica.Spec.AuthSecret = &dbapi.SecretReference{}
+	replica.Spec.AuthSecret.Name = authSecretName
+	replica.Spec.RemoteReplica = &dbapi.RemoteReplicaSpec{
+		SourceRef: core.ObjectReference{
+			Name:      sourceRefName,
+			Namespace: ns,
+		},
+	}
+
+	// Marshal via a map so the empty status stanza is dropped from the manifest.
+	jsonBytes, err := json.Marshal(replica)
+	if err != nil {
+		return nil, err
+	}
+	var m map[string]interface{}
+	if err := json.Unmarshal(jsonBytes, &m); err != nil {
+		return nil, err
+	}
+	delete(m, "status")
+	// healthChecker has no omitempty and would render as an empty stanza; the
+	// operator's defaulting fills it, and it already handles remote replicas.
+	if spec, ok := m["spec"].(map[string]interface{}); ok {
+		if hc, ok := spec["healthChecker"].(map[string]interface{}); ok && len(hc) == 0 {
+			delete(spec, "healthChecker")
+		}
+	}
+	return yaml.Marshal(m)
+}
+
+func generateTlsSecret(userName string, apb *appApi.AppBinding, ns string, extraSANs []string, opts *common.PostgresOpts) ([]byte, string, error) {
+	_, err := ensureClientCert(opts, apb, opts.DB, dbapi.PostgresClientCert, userName, extraSANs)
 	if err != nil {
 		return nil, "", fmt.Errorf("failed to ensure client cert %v", err)
 	}
@@ -180,7 +338,11 @@ func generateTlsSecret(userName string, apb *appApi.AppBinding, ns string, opts 
 	}
 	tlsSecret.APIVersion = "v1"
 	tlsSecret.Kind = "Secret"
+	tlsSecret.ResourceVersion = ""
+	tlsSecret.UID = ""
+	tlsSecret.CreationTimestamp = metav1.Time{}
 	tlsSecret.Annotations = nil
+	tlsSecret.Labels = nil
 	tlsSecret.ManagedFields = nil
 	tlsSecretYaml, err := yaml.Marshal(tlsSecret)
 	if err != nil {
@@ -194,7 +356,7 @@ func generateTlsSecret(userName string, apb *appApi.AppBinding, ns string, opts 
 	return buffer, tlsSecret.Name, nil
 }
 
-func generateAuthSecret(userName string, password string, ns string, opts *common.PostgresOpts) ([]byte, string, error) {
+func generateAuthSecret(userName string, password string, ns string, secretName string, opts *common.PostgresOpts) ([]byte, string, error) {
 	if userName != opts.Username {
 		// generate user if not present
 		err := generateUser(opts, userName, password)
@@ -204,6 +366,9 @@ func generateAuthSecret(userName string, password string, ns string, opts *commo
 	} else {
 		password = opts.Pass
 	}
+	if secretName == "" {
+		secretName = fmt.Sprintf("%s-remote-replica-auth", opts.DB.Name)
+	}
 	// generate auth secret
 	AuthSecret := core.Secret{
 		TypeMeta: metav1.TypeMeta{
@@ -211,7 +376,7 @@ func generateAuthSecret(userName string, password string, ns string, opts *commo
 			APIVersion: ApiversionV1,
 		},
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      fmt.Sprintf("%s-remote-replica-auth", opts.DB.Name),
+			Name:      secretName,
 			Namespace: ns,
 		},
 		StringData: map[string]string{
@@ -275,7 +440,7 @@ func generateUser(opts *common.PostgresOpts, name string, password string) error
 	return nil
 }
 
-func ensureClientCert(opts *common.PostgresOpts, apb *appApi.AppBinding, postgres *dbapi.Postgres, alias dbapi.PostgresCertificateAlias, username string) (kutil.VerbType, error) {
+func ensureClientCert(opts *common.PostgresOpts, apb *appApi.AppBinding, postgres *dbapi.Postgres, alias dbapi.PostgresCertificateAlias, username string, extraSANs []string) (kutil.VerbType, error) {
 	var duration, renewBefore *metav1.Duration
 	var subject *cm_api.X509Subject
 	var dnsNames, ipAddresses, uriSANs, emailSANs []string
@@ -317,7 +482,7 @@ func ensureClientCert(opts *common.PostgresOpts, apb *appApi.AppBinding, postgre
 			in.Spec.Subject = subject
 			in.Spec.Duration = duration
 			in.Spec.RenewBefore = renewBefore
-			in.Spec.DNSNames = sets.NewString(dnsNames...).List()
+			in.Spec.DNSNames = sets.NewString(append(dnsNames, extraSANs...)...).List()
 			in.Spec.IPAddresses = sets.NewString(ipAddresses...).List()
 			in.Spec.URIs = sets.NewString(uriSANs...).List()
 			in.Spec.EmailAddresses = sets.NewString(emailSANs...).List()
