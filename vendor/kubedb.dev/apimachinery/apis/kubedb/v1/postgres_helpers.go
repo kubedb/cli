@@ -203,6 +203,20 @@ func (p Postgres) GetAuthSecretName() string {
 	return meta_util.NameWithSuffix(p.OffshootName(), "auth")
 }
 
+// GetBranchedDataPVCNames returns the data-PVC names a KubeDB Courier branch is
+// expected to have cloned for this Postgres.
+func (p Postgres) GetBranchedDataPVCNames() []string {
+	replicas := int32(1)
+	if p.Spec.Replicas != nil && *p.Spec.Replicas > 0 {
+		replicas = *p.Spec.Replicas
+	}
+	names := make([]string, 0, replicas)
+	for i := int32(0); i < replicas; i++ {
+		names = append(names, fmt.Sprintf("%s-%s-%d", kubedb.PostgresDataVolumeName, p.OffshootName(), i))
+	}
+	return names
+}
+
 func (p Postgres) GetStorageClassName() string {
 	return *p.Spec.Storage.StorageClassName
 }
@@ -634,7 +648,7 @@ func (p *PostgresSpec) GetPersistentSecrets() []string {
 	}
 
 	var secrets []string
-	if p.AuthSecret != nil {
+	if !IsVirtualAuthSecretReferred(p.AuthSecret) && p.AuthSecret != nil && p.AuthSecret.Name != "" {
 		secrets = append(secrets, p.AuthSecret.Name)
 	}
 	return secrets
@@ -706,4 +720,12 @@ func (m *Postgres) SetHealthCheckerDefaults() {
 
 func (m *Postgres) IsRemoteReplica() bool {
 	return m.Spec.RemoteReplica != nil
+}
+
+func (p *Postgres) GetDeletionPolicy() string {
+	return string(p.Spec.DeletionPolicy)
+}
+
+func (p *Postgres) GetPersistentSecrets() []string {
+	return p.Spec.GetPersistentSecrets()
 }

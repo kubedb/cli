@@ -74,11 +74,6 @@ func (k *Kafka) ResourceFQN() string {
 	return fmt.Sprintf("%s.%s", k.ResourcePlural(), kubedb.GroupName)
 }
 
-// Owner returns owner reference to resources
-func (k *Kafka) Owner() *meta.OwnerReference {
-	return meta.NewControllerRef(k, SchemeGroupVersion.WithKind(k.ResourceKind()))
-}
-
 func (k *Kafka) OffshootName() string {
 	return k.Name
 }
@@ -229,7 +224,7 @@ func (k *Kafka) ConfigSecretName(role KafkaNodeRoleType) string {
 
 func (k *Kafka) GetPersistentSecrets() []string {
 	var secrets []string
-	if k.Spec.AuthSecret != nil {
+	if !IsVirtualAuthSecretReferred(k.Spec.AuthSecret) && k.Spec.AuthSecret != nil && k.Spec.AuthSecret.Name != "" {
 		secrets = append(secrets, k.Spec.AuthSecret.Name)
 	}
 	if k.Spec.KeystoreCredSecret != nil {
@@ -482,4 +477,8 @@ func (k *Kafka) ReplicasAreReady(lister appslister.StatefulSetLister) (bool, str
 		expectedItems = 2
 	}
 	return checkReplicas(lister.StatefulSets(k.Namespace), labels.SelectorFromSet(k.OffshootLabels()), expectedItems)
+}
+
+func (k *Kafka) GetDeletionPolicy() string {
+	return string(k.Spec.DeletionPolicy)
 }

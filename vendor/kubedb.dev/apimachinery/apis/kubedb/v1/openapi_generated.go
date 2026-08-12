@@ -659,6 +659,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1.PostgresSpec":                                        schema_apimachinery_apis_kubedb_v1_PostgresSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.PostgresStatus":                                      schema_apimachinery_apis_kubedb_v1_PostgresStatus(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.PostgresSynchronousReplicationSpec":                  schema_apimachinery_apis_kubedb_v1_PostgresSynchronousReplicationSpec(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1.PostgresTDESpec":                                     schema_apimachinery_apis_kubedb_v1_PostgresTDESpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.PostgresTuningConfig":                                schema_apimachinery_apis_kubedb_v1_PostgresTuningConfig(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.ProxySQL":                                            schema_apimachinery_apis_kubedb_v1_ProxySQL(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.ProxySQLConfiguration":                               schema_apimachinery_apis_kubedb_v1_ProxySQLConfiguration(ref),
@@ -687,6 +688,10 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1.SemiSyncSpec":                                        schema_apimachinery_apis_kubedb_v1_SemiSyncSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.Shards":                                              schema_apimachinery_apis_kubedb_v1_Shards(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.SystemUserSecretsSpec":                               schema_apimachinery_apis_kubedb_v1_SystemUserSecretsSpec(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1.TDEFileProvider":                                     schema_apimachinery_apis_kubedb_v1_TDEFileProvider(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1.TDEKMIPProvider":                                     schema_apimachinery_apis_kubedb_v1_TDEKMIPProvider(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1.TDEKeyProvider":                                      schema_apimachinery_apis_kubedb_v1_TDEKeyProvider(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1.TDEVaultProvider":                                    schema_apimachinery_apis_kubedb_v1_TDEVaultProvider(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.elasticsearchApp":                                    schema_apimachinery_apis_kubedb_v1_elasticsearchApp(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.elasticsearchStatsService":                           schema_apimachinery_apis_kubedb_v1_elasticsearchStatsService(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.kafkaStatsService":                                   schema_apimachinery_apis_kubedb_v1_kafkaStatsService(ref),
@@ -38207,12 +38212,18 @@ func schema_apimachinery_apis_kubedb_v1_PostgresSpec(ref common.ReferenceCallbac
 							},
 						},
 					},
+					"tde": {
+						SchemaProps: spec.SchemaProps{
+							Description: "TDE configures Transparent Data Encryption (encryption at rest) using the Percona pg_tde extension. It is only valid when the referenced PostgresVersion has spec.tde.supported = true (a Percona distribution).",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1.PostgresTDESpec"),
+						},
+					},
 				},
 				Required: []string{"version"},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.AllowedConsumers", "kubedb.dev/apimachinery/apis/kubedb/v1.ArbiterSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.Archiver", "kubedb.dev/apimachinery/apis/kubedb/v1.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgreLeaderElectionConfig", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgresConfiguration", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgresReplication", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgresSynchronousReplicationSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.ReadReplicaSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.RemoteReplicaSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.AllowedConsumers", "kubedb.dev/apimachinery/apis/kubedb/v1.ArbiterSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.Archiver", "kubedb.dev/apimachinery/apis/kubedb/v1.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgreLeaderElectionConfig", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgresConfiguration", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgresReplication", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgresSynchronousReplicationSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgresTDESpec", "kubedb.dev/apimachinery/apis/kubedb/v1.ReadReplicaSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.RemoteReplicaSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"},
 	}
 }
 
@@ -38321,6 +38332,57 @@ func schema_apimachinery_apis_kubedb_v1_PostgresSynchronousReplicationSpec(ref c
 				},
 			},
 		},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1_PostgresTDESpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "PostgresTDESpec configures Transparent Data Encryption (encryption at rest) for a Postgres instance using the Percona pg_tde extension.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"keyProvider": {
+						SchemaProps: spec.SchemaProps{
+							Description: "KeyProvider selects and configures the KMS that backs the principal key.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1.TDEKeyProvider"),
+						},
+					},
+					"encryptWAL": {
+						SchemaProps: spec.SchemaProps{
+							Description: "EncryptWAL turns on cluster-wide WAL encryption (pg_tde.wal_encrypt=on). It requires a global provider (Vault or KMIP) and a rolling restart.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"enforceEncryption": {
+						SchemaProps: spec.SchemaProps{
+							Description: "EnforceEncryption sets pg_tde.enforce_encryption=on so that no unencrypted table can be created.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"defaultEncryptedTables": {
+						SchemaProps: spec.SchemaProps{
+							Description: "DefaultEncryptedTables makes tde_heap the default table access method (default_table_access_method=tde_heap) so all new tables are encrypted.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"cipher": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Cipher selects the encryption algorithm. One of aes_128 (default) or aes_256.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"keyProvider"},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/kubedb/v1.TDEKeyProvider"},
 	}
 }
 
@@ -39943,6 +40005,152 @@ func schema_apimachinery_apis_kubedb_v1_SystemUserSecretsSpec(ref common.Referen
 		},
 		Dependencies: []string{
 			"kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1_TDEFileProvider(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "TDEFileProvider configures a local keyring file provider (standalone only).",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"path": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Path is the keyring file path on a mounted volume outside PGDATA.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"path"},
+			},
+		},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1_TDEKMIPProvider(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "TDEKMIPProvider configures a KMIP server global key provider.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"address": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Address is the KMIP server host.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"port": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Port is the KMIP server port.",
+							Default:     0,
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"credentialSecretRef": {
+						SchemaProps: spec.SchemaProps{
+							Description: "CredentialSecretRef references a Secret holding the KMIP client credentials under the keys \"ca.crt\", \"client.crt\" and \"client.key\". It is mounted outside PGDATA at an identical path on every pod.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
+						},
+					},
+				},
+				Required: []string{"address", "port", "credentialSecretRef"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.LocalObjectReference"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1_TDEKeyProvider(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "TDEKeyProvider selects exactly one KMS backend for the principal key.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"vault": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Vault configures a HashiCorp Vault (KVv2) global key provider.",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1.TDEVaultProvider"),
+						},
+					},
+					"kmip": {
+						SchemaProps: spec.SchemaProps{
+							Description: "KMIP configures a KMIP server global key provider.",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1.TDEKMIPProvider"),
+						},
+					},
+					"file": {
+						SchemaProps: spec.SchemaProps{
+							Description: "File configures a local keyring file provider. Discouraged: it is only valid for a single-node (standalone) Postgres and cannot back WAL encryption.",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1.TDEFileProvider"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kubedb.dev/apimachinery/apis/kubedb/v1.TDEFileProvider", "kubedb.dev/apimachinery/apis/kubedb/v1.TDEKMIPProvider", "kubedb.dev/apimachinery/apis/kubedb/v1.TDEVaultProvider"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1_TDEVaultProvider(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "TDEVaultProvider configures a HashiCorp Vault KVv2 global key provider.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"address": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Address is the Vault server URL, e.g. https://vault.example.com:8200.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"mountPath": {
+						SchemaProps: spec.SchemaProps{
+							Description: "MountPath is the KVv2 secrets engine mount, e.g. \"secret\".",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"tokenSecretRef": {
+						SchemaProps: spec.SchemaProps{
+							Description: "TokenSecretRef references a Secret holding the Vault token under the key \"token\". It is mounted outside PGDATA at an identical path on every pod.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
+						},
+					},
+					"caSecretRef": {
+						SchemaProps: spec.SchemaProps{
+							Description: "CASecretRef optionally references a Secret holding the CA bundle used to verify Vault's TLS certificate under the key \"ca.crt\".",
+							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
+						},
+					},
+					"namespace": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Namespace is an optional Vault Enterprise namespace.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"address", "mountPath", "tokenSecretRef"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.LocalObjectReference"},
 	}
 }
 

@@ -23,6 +23,7 @@ import (
 	cmscheme "github.com/cert-manager/cert-manager/pkg/client/clientset/versioned/scheme"
 	vsapi "github.com/kubernetes-csi/external-snapshotter/client/v8/apis/volumesnapshot/v1"
 	promscheme "github.com/prometheus-operator/prometheus-operator/pkg/client/versioned/scheme"
+	vsscheme "go.virtual-secrets.dev/apimachinery/client/clientset/versioned/scheme"
 	crdscheme "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset/scheme"
 	"k8s.io/apimachinery/pkg/runtime"
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
@@ -99,6 +100,11 @@ func NewUncachedClient(cfg *rest.Config) (client.Client, error) {
 	}
 
 	if err := vsapi.AddToScheme(scheme); err != nil {
+		return nil, err
+	}
+
+	// virtual-secrets (virtual-secrets.dev Secret/SecretMount + config SecretStore/SecretMetadata)
+	if err := vsscheme.AddToScheme(scheme); err != nil {
 		return nil, err
 	}
 

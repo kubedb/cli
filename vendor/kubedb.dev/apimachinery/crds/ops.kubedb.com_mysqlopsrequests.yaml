@@ -223,6 +223,19 @@ spec:
                     type: string
                   requireSSL:
                     type: boolean
+                  targetTopologyMode:
+                    allOf:
+                    - enum:
+                      - GroupReplication
+                      - InnoDBCluster
+                      - RemoteReplica
+                      - SemiSync
+                    - enum:
+                      - GroupReplication
+                      - InnoDBCluster
+                      - SemiSync
+                    default: GroupReplication
+                    type: string
                 required:
                 - mode
                 type: object

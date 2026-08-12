@@ -11,6 +11,10 @@ import (
 )
 
 const (
+	// HanaDBOpsRequestTypeUpdateVersion is a HanaDBOpsRequestType of type UpdateVersion.
+	HanaDBOpsRequestTypeUpdateVersion HanaDBOpsRequestType = "UpdateVersion"
+	// HanaDBOpsRequestTypeHorizontalScaling is a HanaDBOpsRequestType of type HorizontalScaling.
+	HanaDBOpsRequestTypeHorizontalScaling HanaDBOpsRequestType = "HorizontalScaling"
 	// HanaDBOpsRequestTypeVerticalScaling is a HanaDBOpsRequestType of type VerticalScaling.
 	HanaDBOpsRequestTypeVerticalScaling HanaDBOpsRequestType = "VerticalScaling"
 	// HanaDBOpsRequestTypeVolumeExpansion is a HanaDBOpsRequestType of type VolumeExpansion.
@@ -30,6 +34,8 @@ const (
 var ErrInvalidHanaDBOpsRequestType = fmt.Errorf("not a valid HanaDBOpsRequestType, try [%s]", strings.Join(_HanaDBOpsRequestTypeNames, ", "))
 
 var _HanaDBOpsRequestTypeNames = []string{
+	string(HanaDBOpsRequestTypeUpdateVersion),
+	string(HanaDBOpsRequestTypeHorizontalScaling),
 	string(HanaDBOpsRequestTypeVerticalScaling),
 	string(HanaDBOpsRequestTypeVolumeExpansion),
 	string(HanaDBOpsRequestTypeRestart),
@@ -49,6 +55,8 @@ func HanaDBOpsRequestTypeNames() []string {
 // HanaDBOpsRequestTypeValues returns a list of the values for HanaDBOpsRequestType
 func HanaDBOpsRequestTypeValues() []HanaDBOpsRequestType {
 	return []HanaDBOpsRequestType{
+		HanaDBOpsRequestTypeUpdateVersion,
+		HanaDBOpsRequestTypeHorizontalScaling,
 		HanaDBOpsRequestTypeVerticalScaling,
 		HanaDBOpsRequestTypeVolumeExpansion,
 		HanaDBOpsRequestTypeRestart,
@@ -72,13 +80,15 @@ func (x HanaDBOpsRequestType) IsValid() bool {
 }
 
 var _HanaDBOpsRequestTypeValue = map[string]HanaDBOpsRequestType{
-	"VerticalScaling":  HanaDBOpsRequestTypeVerticalScaling,
-	"VolumeExpansion":  HanaDBOpsRequestTypeVolumeExpansion,
-	"Restart":          HanaDBOpsRequestTypeRestart,
-	"Reconfigure":      HanaDBOpsRequestTypeReconfigure,
-	"ReconfigureTLS":   HanaDBOpsRequestTypeReconfigureTLS,
-	"RotateAuth":       HanaDBOpsRequestTypeRotateAuth,
-	"StorageMigration": HanaDBOpsRequestTypeStorageMigration,
+	"UpdateVersion":     HanaDBOpsRequestTypeUpdateVersion,
+	"HorizontalScaling": HanaDBOpsRequestTypeHorizontalScaling,
+	"VerticalScaling":   HanaDBOpsRequestTypeVerticalScaling,
+	"VolumeExpansion":   HanaDBOpsRequestTypeVolumeExpansion,
+	"Restart":           HanaDBOpsRequestTypeRestart,
+	"Reconfigure":       HanaDBOpsRequestTypeReconfigure,
+	"ReconfigureTLS":    HanaDBOpsRequestTypeReconfigureTLS,
+	"RotateAuth":        HanaDBOpsRequestTypeRotateAuth,
+	"StorageMigration":  HanaDBOpsRequestTypeStorageMigration,
 }
 
 // ParseHanaDBOpsRequestType attempts to convert a string to a HanaDBOpsRequestType.

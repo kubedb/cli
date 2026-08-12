@@ -73,11 +73,6 @@ func (h *Hazelcast) GetAuthSecretName() string {
 	return meta_util.NameWithSuffix(h.OffshootName(), "auth")
 }
 
-// Owner returns owner reference to resources
-func (h *Hazelcast) Owner() *meta.OwnerReference {
-	return meta.NewControllerRef(h, SchemeGroupVersion.WithKind(h.ResourceKind()))
-}
-
 func (h *Hazelcast) ServiceAccountName() string {
 	return h.OffshootName()
 }
@@ -467,4 +462,12 @@ func (d *HazelcastBind) SecretName() string {
 
 func (d *HazelcastBind) CertSecretName() string {
 	return d.GetCertSecretName(HazelcastClientCert)
+}
+
+func (h *Hazelcast) GetDeletionPolicy() string {
+	return string(h.Spec.DeletionPolicy)
+}
+
+func (h *Hazelcast) AsOwner() *meta.OwnerReference {
+	return meta.NewControllerRef(h, SchemeGroupVersion.WithKind(h.ResourceKind()))
 }

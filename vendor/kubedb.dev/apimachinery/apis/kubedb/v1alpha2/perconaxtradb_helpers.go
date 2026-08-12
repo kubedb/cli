@@ -353,7 +353,7 @@ func (p *PerconaXtraDBSpec) GetPersistentSecrets() []string {
 	}
 
 	var secrets []string
-	if p.AuthSecret != nil {
+	if !IsVirtualAuthSecretReferred(p.AuthSecret) && p.AuthSecret != nil && p.AuthSecret.Name != "" {
 		secrets = append(secrets, p.AuthSecret.Name)
 	}
 	if p.SystemUserSecrets != nil && p.SystemUserSecrets.ReplicationUserSecret != nil {
@@ -394,4 +394,12 @@ func (p *PerconaXtraDB) CertMountPath(alias PerconaXtraDBCertificateAlias) strin
 
 func (p *PerconaXtraDB) CertFilePath(certAlias PerconaXtraDBCertificateAlias, certFileName string) string {
 	return filepath.Join(p.CertMountPath(certAlias), certFileName)
+}
+
+func (p *PerconaXtraDB) GetDeletionPolicy() string {
+	return string(p.Spec.TerminationPolicy)
+}
+
+func (p *PerconaXtraDB) GetPersistentSecrets() []string {
+	return p.Spec.GetPersistentSecrets()
 }

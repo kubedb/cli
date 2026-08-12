@@ -382,7 +382,7 @@ func (m *MySQLSpec) GetPersistentSecrets() []string {
 	}
 
 	var secrets []string
-	if m.AuthSecret != nil {
+	if !IsVirtualAuthSecretReferred(m.AuthSecret) && m.AuthSecret != nil && m.AuthSecret.Name != "" {
 		secrets = append(secrets, m.AuthSecret.Name)
 	}
 	return secrets
@@ -485,4 +485,12 @@ func (m *MySQL) assignDefaultContainerSecurityContext(myVersion *v1alpha1.MySQLV
 	if sc.SeccompProfile == nil {
 		sc.SeccompProfile = secomp.DefaultSeccompProfile()
 	}
+}
+
+func (m *MySQL) GetDeletionPolicy() string {
+	return string(m.Spec.TerminationPolicy)
+}
+
+func (m *MySQL) GetPersistentSecrets() []string {
+	return m.Spec.GetPersistentSecrets()
 }

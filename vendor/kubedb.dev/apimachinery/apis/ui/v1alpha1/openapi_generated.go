@@ -578,6 +578,8 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kmodules.xyz/offshoot-api/api/v1.VolumeSource":                                              schema_kmodulesxyz_offshoot_api_api_v1_VolumeSource(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.AggregatedStats":                                   schema_apimachinery_apis_ui_v1alpha1_AggregatedStats(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseConfiguration":                             schema_apimachinery_apis_ui_v1alpha1_DatabaseConfiguration(ref),
+		"kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseConfigurationList":                         schema_apimachinery_apis_ui_v1alpha1_DatabaseConfigurationList(ref),
+		"kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseConfigurationOptions":                      schema_apimachinery_apis_ui_v1alpha1_DatabaseConfigurationOptions(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseConfigurationRequest":                      schema_apimachinery_apis_ui_v1alpha1_DatabaseConfigurationRequest(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseConfigurationResponse":                     schema_apimachinery_apis_ui_v1alpha1_DatabaseConfigurationResponse(ref),
 		"kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseConnection":                                schema_apimachinery_apis_ui_v1alpha1_DatabaseConnection(ref),
@@ -33498,6 +33500,12 @@ func schema_apimachinery_apis_ui_v1alpha1_DatabaseConfiguration(ref common.Refer
 							Format:      "",
 						},
 					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
+						},
+					},
 					"request": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Request describes the attributes for the graph request.",
@@ -33514,7 +33522,98 @@ func schema_apimachinery_apis_ui_v1alpha1_DatabaseConfiguration(ref common.Refer
 			},
 		},
 		Dependencies: []string{
-			"kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseConfigurationRequest", "kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseConfigurationResponse"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseConfigurationRequest", "kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseConfigurationResponse"},
+	}
+}
+
+func schema_apimachinery_apis_ui_v1alpha1_DatabaseConfigurationList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "DatabaseConfigurationList contains a list of DatabaseConfiguration",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+						},
+					},
+					"items": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseConfiguration"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"items"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "kubedb.dev/apimachinery/apis/ui/v1alpha1.DatabaseConfiguration"},
+	}
+}
+
+func schema_apimachinery_apis_ui_v1alpha1_DatabaseConfigurationOptions(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "DatabaseConfigurationOptions carries the query parameters of a DatabaseConfiguration get request, which has no body to hold DatabaseConfigurationRequest.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"keys": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Keys filters the reported secrets to those containing at least one matching key.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
 	}
 }
 

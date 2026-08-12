@@ -87,10 +87,6 @@ func (m *Milvus) GetConnectionScheme() string {
 	return scheme
 }
 
-func (m *Milvus) Owner() *metav1.OwnerReference {
-	return metav1.NewControllerRef(m, SchemeGroupVersion.WithKind(m.ResourceKind()))
-}
-
 func (m *Milvus) OffshootName() string {
 	return m.Name
 }
@@ -576,4 +572,12 @@ func (m *MilvusBind) SecretName() string {
 
 func (m *MilvusBind) CertSecretName() string {
 	return m.GetCertSecretName(MilvusCertificateTypeClient)
+}
+
+func (m *Milvus) GetDeletionPolicy() string {
+	return string(m.Spec.DeletionPolicy)
+}
+
+func (m *Milvus) AsOwner() *metav1.OwnerReference {
+	return metav1.NewControllerRef(m, SchemeGroupVersion.WithKind(m.ResourceKind()))
 }

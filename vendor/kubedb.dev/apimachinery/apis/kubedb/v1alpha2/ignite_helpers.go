@@ -98,11 +98,6 @@ func (i *Ignite) GetPersistentSecrets() []string {
 	return secrets
 }
 
-// Owner returns owner reference to resources
-func (i *Ignite) Owner() *meta.OwnerReference {
-	return meta.NewControllerRef(i, SchemeGroupVersion.WithKind(i.ResourceKind()))
-}
-
 func (i *Ignite) SetDefaults(kc client.Client) {
 	if i.Spec.Replicas == nil {
 		i.Spec.Replicas = pointer.Int32P(1)
@@ -384,4 +379,8 @@ func (i Ignite) SetTLSDefaults() {
 	}
 	i.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(i.Spec.TLS.Certificates, string(IgniteServerCert), i.IgniteCertificateName(IgniteServerCert))
 	i.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(i.Spec.TLS.Certificates, string(IgniteClientCert), i.IgniteCertSecretVolumeName(IgniteClientCert))
+}
+
+func (i *Ignite) GetDeletionPolicy() string {
+	return string(i.Spec.DeletionPolicy)
 }

@@ -64,6 +64,69 @@ const (
 	DocDBClientAuthModeCert DocDBClientAuthMode = "cert"
 )
 
+// DocumentDBCertificateAlias represents the type of certificate.
+// +kubebuilder:validation:Enum=server;client;gateway;grpc-ca;grpc-server;grpc-client
+type DocumentDBCertificateAlias string
+
+const (
+	// DocumentDBServerCert is the Postgres server certificate (Postgres serves TLS).
+	DocumentDBServerCert DocumentDBCertificateAlias = "server"
+	// DocumentDBClientCert is the client certificate used for streaming replication (mutual TLS).
+	DocumentDBClientCert DocumentDBCertificateAlias = "client"
+	// DocumentDBGatewayCert is the MongoDB-wire gateway (edge) certificate served on port 10260.
+	DocumentDBGatewayCert DocumentDBCertificateAlias = "gateway"
+	// DocumentDBGRPCCaCert is the self-signed CA that isolates the coordinator's internal raft gRPC.
+	DocumentDBGRPCCaCert DocumentDBCertificateAlias = "grpc-ca"
+	// DocumentDBGRPCServerCert is the coordinator gRPC server certificate (served on /grpc/server).
+	DocumentDBGRPCServerCert DocumentDBCertificateAlias = "grpc-server"
+	// DocumentDBGRPCClientCert is the coordinator gRPC client certificate (mounted at /grpc/client).
+	DocumentDBGRPCClientCert DocumentDBCertificateAlias = "grpc-client"
+)
+
+// DocumentDBSSLMode mirrors PostgresSSLMode for the DocumentDB Postgres server.
+// ref: https://www.postgresql.org/docs/current/libpq-ssl.html
+// +kubebuilder:validation:Enum=disable;allow;prefer;require;verify-ca;verify-full
+type DocumentDBSSLMode string
+
+const (
+	// DocumentDBSSLModeDisable ensures the server does not use TLS/SSL.
+	DocumentDBSSLModeDisable DocumentDBSSLMode = "disable"
+	// DocumentDBSSLModeAllow uses encryption only if the server insists on it.
+	DocumentDBSSLModeAllow DocumentDBSSLMode = "allow"
+	// DocumentDBSSLModePrefer uses encryption if the server supports it.
+	DocumentDBSSLModePrefer DocumentDBSSLMode = "prefer"
+	// DocumentDBSSLModeRequire encrypts data without server identity verification.
+	DocumentDBSSLModeRequire DocumentDBSSLMode = "require"
+	// DocumentDBSSLModeVerifyCA encrypts data and verifies the server CA.
+	DocumentDBSSLModeVerifyCA DocumentDBSSLMode = "verify-ca"
+	// DocumentDBSSLModeVerifyFull encrypts data and fully verifies the server identity.
+	DocumentDBSSLModeVerifyFull DocumentDBSSLMode = "verify-full"
+)
+
+// DocumentDBTLSConfig contains tls configurations (via cert-manager) for the two security
+// domains DocumentDB serves, plus a toggle for whether the MongoDB-wire gateway listener
+// enforces mutual TLS. The database plane and the client-facing gateway can be issued by
+// different CAs; see DBTLS and GatewayTLS.
+type DocumentDBTLSConfig struct {
+	// DBTLS provisions the database-plane certificates: the Postgres server certificate and
+	// the streaming-replication client certificate. This traffic is internal, so it typically
+	// belongs to an internal CA. Required when spec.tls is set.
+	// +optional
+	DBTLS *kmapi.TLSConfig `json:"dbTLS,omitempty"`
+
+	// GatewayTLS provisions the MongoDB-wire gateway certificate, which is client-facing and
+	// often needs a public or edge CA. If unset, the gateway certificate is issued from DBTLS,
+	// so a single issuer still covers everything.
+	// +optional
+	GatewayTLS *kmapi.TLSConfig `json:"gatewayTLS,omitempty"`
+
+	// GatewayMutualTLSEnabled controls whether the MongoDB-wire gateway listener requires
+	// clients to present a valid certificate (mutual TLS), independent of the general TLS config.
+	// If unset, mutual TLS is enabled for the gateway for backward compatibility.
+	// +optional
+	GatewayMutualTLSEnabled *bool `json:"gatewayMutualTLSEnabled,omitempty"`
+}
+
 // +genclient
 // +k8s:openapi-gen=true
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
@@ -97,8 +160,16 @@ type DocumentDBSpec struct {
 	// Streaming mode
 	StreamingMode *DocDBStreamingMode `json:"streamingMode,omitempty"`
 
-	// ClientAuthMode for sidecar or sharding. (default will be md5. [md5;scram;cert])
+	// ClientAuthMode for sidecar or sharding. (default will be scram. [scram;cert])
 	ClientAuthMode DocDBClientAuthMode `json:"clientAuthMode,omitempty"`
+
+	// SSLMode for the DocumentDB Postgres server. [disable;allow;prefer;require;verify-ca;verify-full]
+	// +optional
+	SSLMode DocumentDBSSLMode `json:"sslMode,omitempty"`
+
+	// TLS contains tls configurations for client and server (via cert-manager), and gateway mTLS settings.
+	// +optional
+	TLS *DocumentDBTLSConfig `json:"tls,omitempty"`
 
 	// StorageType can be durable (default) or ephemeral
 	StorageType StorageType `json:"storageType,omitempty"`

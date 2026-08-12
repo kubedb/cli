@@ -885,12 +885,13 @@ func (e *Elasticsearch) SetDefaultInternalUsersAndRoleMappings(esVersion *catalo
 				if userSpec.SecretName == "" {
 					userSpec.SecretName = e.GetAuthSecretName()
 				}
-				e.Spec.AuthSecret = &SecretReference{
-					TypedLocalObjectReference: appcat.TypedLocalObjectReference{
-						Kind: "Secret",
-						Name: userSpec.SecretName,
-					},
+				if e.Spec.AuthSecret == nil {
+					e.Spec.AuthSecret = &SecretReference{}
 				}
+				if e.Spec.AuthSecret.Kind == "" {
+					e.Spec.AuthSecret.Kind = kubedb.ResourceKindSecret
+				}
+				e.Spec.AuthSecret.Name = userSpec.SecretName
 			}
 		} else if userSpec.SecretName == "" {
 			userSpec.SecretName = e.DefaultUserCredSecretName(username)
@@ -1112,4 +1113,8 @@ func (esTopology *ElasticsearchClusterTopology) ToMap() map[ElasticsearchNodeRol
 		topology[ElasticsearchNodeRoleTypeCoordinating] = *esTopology.Coordinating
 	}
 	return topology
+}
+
+func (e *Elasticsearch) GetDeletionPolicy() string {
+	return string(e.Spec.DeletionPolicy)
 }

@@ -27,8 +27,8 @@ require (
 	kmodules.xyz/client-go v0.34.3
 	kmodules.xyz/custom-resources v0.34.0
 	kmodules.xyz/monitoring-agent-api v0.34.1
-	kubedb.dev/apimachinery v0.66.0
-	kubedb.dev/db-client-go v0.21.0
+	kubedb.dev/apimachinery v0.66.0-rc.0
+	kubedb.dev/db-client-go v0.21.0-rc.0
 	kubeops.dev/petset v0.1.1-0.20260709161836-19b3570c41ab
 	sigs.k8s.io/controller-runtime v0.22.4
 	sigs.k8s.io/yaml v1.6.0
@@ -152,10 +152,10 @@ require (
 	go.opentelemetry.io/otel v1.43.0 // indirect
 	go.opentelemetry.io/otel/metric v1.43.0 // indirect
 	go.opentelemetry.io/otel/trace v1.43.0 // indirect
-	go.virtual-secrets.dev/apimachinery v0.0.1 // indirect
+	go.virtual-secrets.dev/apimachinery v0.1.0 // indirect
 	golang.org/x/crypto v0.52.0 // indirect
 	golang.org/x/net v0.55.0 // indirect
-	golang.org/x/oauth2 v0.34.0 // indirect
+	golang.org/x/oauth2 v0.36.0 // indirect
 	golang.org/x/sync v0.20.0 // indirect
 	golang.org/x/sys v0.45.0 // indirect
 	golang.org/x/term v0.43.0 // indirect

@@ -342,7 +342,7 @@ func (m *MariaDBSpec) GetPersistentSecrets() []string {
 	}
 
 	var secrets []string
-	if m.AuthSecret != nil {
+	if !IsVirtualAuthSecretReferred(m.AuthSecret) && m.AuthSecret != nil && m.AuthSecret.Name != "" {
 		secrets = append(secrets, m.AuthSecret.Name)
 	}
 	return secrets
@@ -381,4 +381,12 @@ func (m *MariaDB) CertMountPath(alias MariaDBCertificateAlias) string {
 
 func (m *MariaDB) CertFilePath(certAlias MariaDBCertificateAlias, certFileName string) string {
 	return filepath.Join(m.CertMountPath(certAlias), certFileName)
+}
+
+func (m *MariaDB) GetDeletionPolicy() string {
+	return string(m.Spec.TerminationPolicy)
+}
+
+func (m *MariaDB) GetPersistentSecrets() []string {
+	return m.Spec.GetPersistentSecrets()
 }

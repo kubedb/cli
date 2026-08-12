@@ -429,3 +429,7 @@ func (p *PerconaXtraDB) ConfigSecretName() string {
 	uid := string(p.UID)
 	return meta_util.NameWithSuffix(p.OffshootName(), uid[len(uid)-6:])
 }
+
+func (p *PerconaXtraDB) GetDeletionPolicy() string {
+	return string(p.Spec.DeletionPolicy)
+}

@@ -106,11 +106,6 @@ func (p *Pgpool) ServiceName() string {
 	return p.OffshootName()
 }
 
-// Owner returns owner reference to resources
-func (p *Pgpool) Owner() *meta.OwnerReference {
-	return meta.NewControllerRef(p, SchemeGroupVersion.WithKind(p.ResourceKind()))
-}
-
 func (p *Pgpool) PodLabels(extraLabels ...map[string]string) map[string]string {
 	var labels map[string]string
 	if p.Spec.PodTemplate != nil {
@@ -425,4 +420,12 @@ func (p *Pgpool) ReplicasAreReady(lister pslister.PetSetLister) (bool, string, e
 	// Desire number of petSets
 	expectedItems := 1
 	return checkReplicasOfPetSet(lister.PetSets(p.Namespace), labels.SelectorFromSet(p.OffshootLabels()), expectedItems)
+}
+
+func (p *Pgpool) GetDeletionPolicy() string {
+	return string(p.Spec.DeletionPolicy)
+}
+
+func (p *Pgpool) AsOwner() *meta.OwnerReference {
+	return meta.NewControllerRef(p, SchemeGroupVersion.WithKind(p.ResourceKind()))
 }

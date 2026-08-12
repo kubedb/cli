@@ -178,6 +178,99 @@ type PostgresSpec struct {
 
 	// +optional
 	ReadReplicas []ReadReplicaSpec `json:"readReplicas,omitempty"`
+
+	// TDE configures Transparent Data Encryption (encryption at rest) using the
+	// Percona pg_tde extension. It is only valid when the referenced
+	// PostgresVersion has spec.tde.supported = true (a Percona distribution).
+	// +optional
+	TDE *PostgresTDESpec `json:"tde,omitempty"`
+}
+
+// PostgresTDESpec configures Transparent Data Encryption (encryption at rest)
+// for a Postgres instance using the Percona pg_tde extension.
+type PostgresTDESpec struct {
+	// KeyProvider selects and configures the KMS that backs the principal key.
+	KeyProvider TDEKeyProvider `json:"keyProvider"`
+
+	// EncryptWAL turns on cluster-wide WAL encryption (pg_tde.wal_encrypt=on).
+	// It requires a global provider (Vault or KMIP) and a rolling restart.
+	// +optional
+	EncryptWAL bool `json:"encryptWAL,omitempty"`
+
+	// EnforceEncryption sets pg_tde.enforce_encryption=on so that no unencrypted
+	// table can be created.
+	// +optional
+	EnforceEncryption bool `json:"enforceEncryption,omitempty"`
+
+	// DefaultEncryptedTables makes tde_heap the default table access method
+	// (default_table_access_method=tde_heap) so all new tables are encrypted.
+	// +optional
+	DefaultEncryptedTables bool `json:"defaultEncryptedTables,omitempty"`
+
+	// Cipher selects the encryption algorithm. One of aes_128 (default) or aes_256.
+	// +kubebuilder:validation:Enum=aes_128;aes_256
+	// +optional
+	Cipher string `json:"cipher,omitempty"`
+}
+
+// TDEKeyProvider selects exactly one KMS backend for the principal key.
+type TDEKeyProvider struct {
+	// Vault configures a HashiCorp Vault (KVv2) global key provider.
+	// +optional
+	Vault *TDEVaultProvider `json:"vault,omitempty"`
+
+	// KMIP configures a KMIP server global key provider.
+	// +optional
+	KMIP *TDEKMIPProvider `json:"kmip,omitempty"`
+
+	// File configures a local keyring file provider. Discouraged: it is only
+	// valid for a single-node (standalone) Postgres and cannot back WAL encryption.
+	// +optional
+	File *TDEFileProvider `json:"file,omitempty"`
+}
+
+// TDEVaultProvider configures a HashiCorp Vault KVv2 global key provider.
+type TDEVaultProvider struct {
+	// Address is the Vault server URL, e.g. https://vault.example.com:8200.
+	Address string `json:"address"`
+
+	// MountPath is the KVv2 secrets engine mount, e.g. "secret".
+	MountPath string `json:"mountPath"`
+
+	// TokenSecretRef references a Secret holding the Vault token under the key
+	// "token". It is mounted outside PGDATA at an identical path on every pod.
+	TokenSecretRef core.LocalObjectReference `json:"tokenSecretRef"`
+
+	// CASecretRef optionally references a Secret holding the CA bundle used to
+	// verify Vault's TLS certificate under the key "ca.crt".
+	// +optional
+	CASecretRef *core.LocalObjectReference `json:"caSecretRef,omitempty"`
+
+	// Namespace is an optional Vault Enterprise namespace.
+	// +optional
+	Namespace string `json:"namespace,omitempty"`
+}
+
+// TDEKMIPProvider configures a KMIP server global key provider.
+type TDEKMIPProvider struct {
+	// Address is the KMIP server host.
+	Address string `json:"address"`
+
+	// Port is the KMIP server port.
+	// +kubebuilder:validation:Minimum=1
+	// +kubebuilder:validation:Maximum=65535
+	Port int32 `json:"port"`
+
+	// CredentialSecretRef references a Secret holding the KMIP client credentials
+	// under the keys "ca.crt", "client.crt" and "client.key". It is mounted
+	// outside PGDATA at an identical path on every pod.
+	CredentialSecretRef core.LocalObjectReference `json:"credentialSecretRef"`
+}
+
+// TDEFileProvider configures a local keyring file provider (standalone only).
+type TDEFileProvider struct {
+	// Path is the keyring file path on a mounted volume outside PGDATA.
+	Path string `json:"path"`
 }
 
 type PostgresConfiguration struct {

@@ -11,6 +11,8 @@ import (
 )
 
 const (
+	// WeaviateOpsRequestTypeUpdateVersion is a WeaviateOpsRequestType of type UpdateVersion.
+	WeaviateOpsRequestTypeUpdateVersion WeaviateOpsRequestType = "UpdateVersion"
 	// WeaviateOpsRequestTypeHorizontalScaling is a WeaviateOpsRequestType of type HorizontalScaling.
 	WeaviateOpsRequestTypeHorizontalScaling WeaviateOpsRequestType = "HorizontalScaling"
 	// WeaviateOpsRequestTypeVerticalScaling is a WeaviateOpsRequestType of type VerticalScaling.
@@ -32,6 +34,7 @@ const (
 var ErrInvalidWeaviateOpsRequestType = fmt.Errorf("not a valid WeaviateOpsRequestType, try [%s]", strings.Join(_WeaviateOpsRequestTypeNames, ", "))
 
 var _WeaviateOpsRequestTypeNames = []string{
+	string(WeaviateOpsRequestTypeUpdateVersion),
 	string(WeaviateOpsRequestTypeHorizontalScaling),
 	string(WeaviateOpsRequestTypeVerticalScaling),
 	string(WeaviateOpsRequestTypeVolumeExpansion),
@@ -52,6 +55,7 @@ func WeaviateOpsRequestTypeNames() []string {
 // WeaviateOpsRequestTypeValues returns a list of the values for WeaviateOpsRequestType
 func WeaviateOpsRequestTypeValues() []WeaviateOpsRequestType {
 	return []WeaviateOpsRequestType{
+		WeaviateOpsRequestTypeUpdateVersion,
 		WeaviateOpsRequestTypeHorizontalScaling,
 		WeaviateOpsRequestTypeVerticalScaling,
 		WeaviateOpsRequestTypeVolumeExpansion,
@@ -76,6 +80,7 @@ func (x WeaviateOpsRequestType) IsValid() bool {
 }
 
 var _WeaviateOpsRequestTypeValue = map[string]WeaviateOpsRequestType{
+	"UpdateVersion":     WeaviateOpsRequestTypeUpdateVersion,
 	"HorizontalScaling": WeaviateOpsRequestTypeHorizontalScaling,
 	"VerticalScaling":   WeaviateOpsRequestTypeVerticalScaling,
 	"VolumeExpansion":   WeaviateOpsRequestTypeVolumeExpansion,

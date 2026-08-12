@@ -96,6 +96,22 @@ type PostgresVersionSpec struct {
 	// Courier defines the courier related CLI/Tools images for this Postgres version
 	// +optional
 	Courier v1alpha1.DBCourierImages `json:"courier,omitempty"`
+	// TDE describes Transparent Data Encryption (pg_tde) support for this version.
+	// +optional
+	TDE *PostgresVersionTDE `json:"tde,omitempty"`
+}
+
+// PostgresVersionTDE describes Transparent Data Encryption support for a
+// PostgresVersion. It is only non-nil for Percona Server for PostgreSQL builds
+// that bundle the pg_tde extension and the tde_heap access method.
+type PostgresVersionTDE struct {
+	// Supported is true when this image bundles pg_tde and a Percona Server for
+	// PostgreSQL build capable of the tde_heap access method.
+	Supported bool `json:"supported"`
+	// ExtensionName is the extension to preload and CREATE. Defaults to "pg_tde".
+	// +optional
+	// +kubebuilder:default="pg_tde"
+	ExtensionName string `json:"extensionName,omitempty"`
 }
 
 // PostgresVersionInitContainer is the Postgres init container image

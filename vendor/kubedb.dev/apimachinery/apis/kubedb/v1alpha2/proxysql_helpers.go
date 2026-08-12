@@ -220,7 +220,7 @@ func (p *ProxySQLSpec) GetPersistentSecrets() []string {
 	}
 
 	var secrets []string
-	if p.AuthSecret != nil {
+	if !IsVirtualAuthSecretReferred(p.AuthSecret) && p.AuthSecret != nil && p.AuthSecret.Name != "" {
 		secrets = append(secrets, p.AuthSecret.Name)
 	}
 	return secrets
@@ -253,4 +253,12 @@ func (m *ProxySQL) CertificateName(alias ProxySQLCertificateAlias) string {
 func (m *ProxySQL) IsCluster() bool {
 	r := m.Spec.Replicas
 	return *r > 1
+}
+
+func (p *ProxySQL) GetDeletionPolicy() string {
+	return string(p.Spec.TerminationPolicy)
+}
+
+func (p *ProxySQL) GetPersistentSecrets() []string {
+	return p.Spec.GetPersistentSecrets()
 }

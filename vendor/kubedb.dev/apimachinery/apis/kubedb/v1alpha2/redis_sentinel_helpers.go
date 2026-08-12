@@ -240,7 +240,7 @@ func (rs *RedisSentinel) GetPersistentSecrets() []string {
 	}
 
 	var secrets []string
-	if rs.Spec.AuthSecret != nil {
+	if !IsVirtualAuthSecretReferred(rs.Spec.AuthSecret) && rs.Spec.AuthSecret != nil && rs.Spec.AuthSecret.Name != "" {
 		secrets = append(secrets, rs.Spec.AuthSecret.Name)
 	}
 	return secrets
@@ -345,4 +345,8 @@ func (rs *RedisSentinel) ReplicasAreReady(lister appslister.StatefulSetLister) (
 	// Desire number of statefulSets
 	expectedItems := 1
 	return checkReplicas(lister.StatefulSets(rs.Namespace), labels.SelectorFromSet(rs.OffshootLabels()), expectedItems)
+}
+
+func (rs *RedisSentinel) GetDeletionPolicy() string {
+	return string(rs.Spec.TerminationPolicy)
 }

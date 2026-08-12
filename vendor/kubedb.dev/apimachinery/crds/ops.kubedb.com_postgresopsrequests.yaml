@@ -118,6 +118,12 @@ spec:
                     type: string
                 type: object
                 x-kubernetes-map-type: atomic
+              enableWALEncryption:
+                properties:
+                  keyName:
+                    pattern: ^[A-Za-z0-9_-]{1,128}$
+                    type: string
+                type: object
               forceFailOver:
                 properties:
                   candidates:
@@ -393,6 +399,12 @@ spec:
                 type: object
               restart:
                 type: object
+              rotatePrincipalKey:
+                properties:
+                  keyName:
+                    pattern: ^[A-Za-z0-9_-]{1,128}$
+                    type: string
+                type: object
               setRaftKeyPair:
                 properties:
                   keyPair:
@@ -538,6 +550,8 @@ spec:
                 - ForceFailOver
                 - SetRaftKeyPair
                 - StorageMigration
+                - RotatePrincipalKey
+                - EnableWALEncryption
                 type: string
               updateVersion:
                 properties:

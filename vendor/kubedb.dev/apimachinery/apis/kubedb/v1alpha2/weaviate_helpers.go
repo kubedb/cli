@@ -64,14 +64,7 @@ func (w *Weaviate) AppBindingMeta() appcat.AppBindingMeta {
 
 func (w *Weaviate) GetPersistentSecrets() []string {
 	var secrets []string
-	if !w.Spec.DisableSecurity {
-		secrets = append(secrets, w.GetAuthSecretName())
-	}
-	if w.Spec.TLS != nil {
-		secrets = append(secrets, w.GetCertSecretName(WeaviateServerCert))
-		secrets = append(secrets, w.GetCertSecretName(WeaviateClientCert))
-	}
-	if !IsVirtualAuthSecretReferred(w.Spec.AuthSecret) && w.Spec.AuthSecret != nil && w.Spec.AuthSecret.Name != "" {
+	if !w.Spec.DisableSecurity && !IsVirtualAuthSecretReferred(w.Spec.AuthSecret) && w.Spec.AuthSecret != nil && w.Spec.AuthSecret.Name != "" {
 		secrets = append(secrets, w.GetAuthSecretName())
 	}
 	return secrets
@@ -99,11 +92,6 @@ func (w *Weaviate) AsOwner() *meta.OwnerReference {
 
 func (w *Weaviate) ResourceFQN() string {
 	return fmt.Sprintf("%s.%s", w.ResourcePlural(), kubedb.GroupName)
-}
-
-// Owner returns owner reference to resources
-func (w *Weaviate) Owner() *meta.OwnerReference {
-	return meta.NewControllerRef(w, SchemeGroupVersion.WithKind(w.ResourceKind()))
 }
 
 func (w *Weaviate) OffshootName() string {
@@ -252,12 +240,12 @@ func (w *Weaviate) setDefaultContainerSecurityContext(wvVersion *catalog.Weaviat
 		container = &core.Container{
 			Name: kubedb.WeaviateContainerName,
 		}
-		podTemplate.Spec.Containers = coreutil.UpsertContainer(podTemplate.Spec.Containers, *container)
 	}
 	if container.SecurityContext == nil {
 		container.SecurityContext = &core.SecurityContext{}
 	}
 	w.assignDefaultContainerSecurityContext(wvVersion, container.SecurityContext)
+	podTemplate.Spec.Containers = coreutil.UpsertContainer(podTemplate.Spec.Containers, *container)
 }
 
 func (w *Weaviate) assignDefaultContainerSecurityContext(wvVersion *catalog.WeaviateVersion, rc *core.SecurityContext) {
@@ -274,6 +262,9 @@ func (w *Weaviate) assignDefaultContainerSecurityContext(wvVersion *catalog.Weav
 	}
 	if rc.RunAsUser == nil {
 		rc.RunAsUser = wvVersion.Spec.SecurityContext.RunAsUser
+	}
+	if rc.RunAsGroup == nil {
+		rc.RunAsGroup = wvVersion.Spec.SecurityContext.RunAsUser
 	}
 	if rc.SeccompProfile == nil {
 		rc.SeccompProfile = secomp.DefaultSeccompProfile()
@@ -427,4 +418,8 @@ func (w *WeaviateBind) SecretName() string {
 
 func (w *WeaviateBind) CertSecretName() string {
 	return w.GetCertSecretName(WeaviateClientCert)
+}
+
+func (w *Weaviate) GetDeletionPolicy() string {
+	return string(w.Spec.DeletionPolicy)
 }

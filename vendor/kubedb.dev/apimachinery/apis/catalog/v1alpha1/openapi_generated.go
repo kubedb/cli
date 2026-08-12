@@ -757,6 +757,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionList":                          schema_apimachinery_apis_catalog_v1alpha1_PostgresVersionList(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionPodSecurityPolicy":             schema_apimachinery_apis_catalog_v1alpha1_PostgresVersionPodSecurityPolicy(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionSpec":                          schema_apimachinery_apis_catalog_v1alpha1_PostgresVersionSpec(ref),
+		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionTDE":                           schema_apimachinery_apis_catalog_v1alpha1_PostgresVersionTDE(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionTLSSpec":                       schema_apimachinery_apis_catalog_v1alpha1_PostgresVersionTLSSpec(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.ProxySQLVersion":                              schema_apimachinery_apis_catalog_v1alpha1_ProxySQLVersion(ref),
 		"kubedb.dev/apimachinery/apis/catalog/v1alpha1.ProxySQLVersionExporter":                      schema_apimachinery_apis_catalog_v1alpha1_ProxySQLVersionExporter(ref),
@@ -40514,12 +40515,47 @@ func schema_apimachinery_apis_catalog_v1alpha1_PostgresVersionSpec(ref common.Re
 							Ref:         ref("kubedb.dev/apimachinery/apis/courier/v1alpha1.DBCourierImages"),
 						},
 					},
+					"tde": {
+						SchemaProps: spec.SchemaProps{
+							Description: "TDE describes Transparent Data Encryption (pg_tde) support for this version.",
+							Ref:         ref("kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionTDE"),
+						},
+					},
 				},
 				Required: []string{"version", "db", "exporter", "coordinator", "podSecurityPolicies"},
 			},
 		},
 		Dependencies: []string{
-			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ArchiverSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ChartInfo", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.GitSyncer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresSecurityContext", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionCoordinator", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionPodSecurityPolicy", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionTLSSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints", "kubedb.dev/apimachinery/apis/courier/v1alpha1.DBCourierImages"},
+			"kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1.StashAddonSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ArchiverSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.ChartInfo", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.GitSyncer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresSecurityContext", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionCoordinator", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionDatabase", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionExporter", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionInitContainer", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionPodSecurityPolicy", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionTDE", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.PostgresVersionTLSSpec", "kubedb.dev/apimachinery/apis/catalog/v1alpha1.UpdateConstraints", "kubedb.dev/apimachinery/apis/courier/v1alpha1.DBCourierImages"},
+	}
+}
+
+func schema_apimachinery_apis_catalog_v1alpha1_PostgresVersionTDE(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "PostgresVersionTDE describes Transparent Data Encryption support for a PostgresVersion. It is only non-nil for Percona Server for PostgreSQL builds that bundle the pg_tde extension and the tde_heap access method.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"supported": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Supported is true when this image bundles pg_tde and a Percona Server for PostgreSQL build capable of the tde_heap access method.",
+							Default:     false,
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"extensionName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ExtensionName is the extension to preload and CREATE. Defaults to \"pg_tde\".",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"supported"},
+			},
+		},
 	}
 }
 

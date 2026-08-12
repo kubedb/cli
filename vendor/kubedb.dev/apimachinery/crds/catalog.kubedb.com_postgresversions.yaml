@@ -245,6 +245,16 @@ spec:
                     - restoreTask
                     type: object
                 type: object
+              tde:
+                properties:
+                  extensionName:
+                    default: pg_tde
+                    type: string
+                  supported:
+                    type: boolean
+                required:
+                - supported
+                type: object
               tls:
                 properties:
                   disableSSLSessionResumption:

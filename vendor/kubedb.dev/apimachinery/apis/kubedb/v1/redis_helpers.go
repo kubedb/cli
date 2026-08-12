@@ -489,3 +489,11 @@ func (r *Redis) ReplicasAreReady(lister pslister.PetSetLister) (bool, string, er
 	}
 	return checkReplicas(lister.PetSets(r.Namespace), labels.SelectorFromSet(r.OffshootLabels()), expectedItems)
 }
+
+func (r *Redis) GetDeletionPolicy() string {
+	return string(r.Spec.DeletionPolicy)
+}
+
+func (r *Redis) GetPersistentSecrets() []string {
+	return r.Spec.GetPersistentSecrets()
+}

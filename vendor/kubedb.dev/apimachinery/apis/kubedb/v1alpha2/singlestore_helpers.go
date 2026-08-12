@@ -82,11 +82,6 @@ func (s *Singlestore) ResourceFQN() string {
 	return fmt.Sprintf("%s.%s", s.ResourcePlural(), kubedb.GroupName)
 }
 
-// Owner returns owner reference to resources
-func (s *Singlestore) Owner() *meta.OwnerReference {
-	return meta.NewControllerRef(s, SchemeGroupVersion.WithKind(s.ResourceKind()))
-}
-
 type singlestoreStatsService struct {
 	*Singlestore
 }
@@ -566,4 +561,12 @@ func (d *SinglestoreBind) SecretName() string {
 
 func (d *SinglestoreBind) CertSecretName() string {
 	return d.GetCertSecretName(SinglestoreClientCert)
+}
+
+func (s *Singlestore) GetDeletionPolicy() string {
+	return string(s.Spec.DeletionPolicy)
+}
+
+func (s *Singlestore) AsOwner() *meta.OwnerReference {
+	return meta.NewControllerRef(s, SchemeGroupVersion.WithKind(s.ResourceKind()))
 }

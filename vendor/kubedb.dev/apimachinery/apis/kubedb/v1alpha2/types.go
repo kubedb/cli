@@ -310,6 +310,15 @@ type ArbiterSpec struct {
 	Tolerations []core.Toleration `json:"tolerations,omitempty"`
 }
 
+type BackupSpec struct {
+	// S3Secret references the Secret holding the S3 credentials.
+	// +optional
+	S3Secret *core.LocalObjectReference `json:"s3Secret,omitempty"`
+	// GCSSecret references the Secret holding the GCS service account key.
+	// +optional
+	GCSSecret *core.LocalObjectReference `json:"gcsSecret,omitempty"`
+}
+
 type DBBindInterface interface {
 	ServiceNames() (string, string) // (DBServiceName, UIServiceName)
 	Ports() (int, int)              // (DBPort, UIPort)
