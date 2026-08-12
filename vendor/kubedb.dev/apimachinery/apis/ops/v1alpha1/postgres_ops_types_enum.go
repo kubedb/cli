@@ -35,6 +35,10 @@ const (
 	PostgresOpsRequestTypeSetRaftKeyPair PostgresOpsRequestType = "SetRaftKeyPair"
 	// PostgresOpsRequestTypeStorageMigration is a PostgresOpsRequestType of type StorageMigration.
 	PostgresOpsRequestTypeStorageMigration PostgresOpsRequestType = "StorageMigration"
+	// PostgresOpsRequestTypeRotatePrincipalKey is a PostgresOpsRequestType of type RotatePrincipalKey.
+	PostgresOpsRequestTypeRotatePrincipalKey PostgresOpsRequestType = "RotatePrincipalKey"
+	// PostgresOpsRequestTypeEnableWALEncryption is a PostgresOpsRequestType of type EnableWALEncryption.
+	PostgresOpsRequestTypeEnableWALEncryption PostgresOpsRequestType = "EnableWALEncryption"
 )
 
 var ErrInvalidPostgresOpsRequestType = fmt.Errorf("not a valid PostgresOpsRequestType, try [%s]", strings.Join(_PostgresOpsRequestTypeNames, ", "))
@@ -52,6 +56,8 @@ var _PostgresOpsRequestTypeNames = []string{
 	string(PostgresOpsRequestTypeForceFailOver),
 	string(PostgresOpsRequestTypeSetRaftKeyPair),
 	string(PostgresOpsRequestTypeStorageMigration),
+	string(PostgresOpsRequestTypeRotatePrincipalKey),
+	string(PostgresOpsRequestTypeEnableWALEncryption),
 }
 
 // PostgresOpsRequestTypeNames returns a list of possible string values of PostgresOpsRequestType.
@@ -76,6 +82,8 @@ func PostgresOpsRequestTypeValues() []PostgresOpsRequestType {
 		PostgresOpsRequestTypeForceFailOver,
 		PostgresOpsRequestTypeSetRaftKeyPair,
 		PostgresOpsRequestTypeStorageMigration,
+		PostgresOpsRequestTypeRotatePrincipalKey,
+		PostgresOpsRequestTypeEnableWALEncryption,
 	}
 }
 
@@ -92,18 +100,20 @@ func (x PostgresOpsRequestType) IsValid() bool {
 }
 
 var _PostgresOpsRequestTypeValue = map[string]PostgresOpsRequestType{
-	"UpdateVersion":     PostgresOpsRequestTypeUpdateVersion,
-	"HorizontalScaling": PostgresOpsRequestTypeHorizontalScaling,
-	"VerticalScaling":   PostgresOpsRequestTypeVerticalScaling,
-	"VolumeExpansion":   PostgresOpsRequestTypeVolumeExpansion,
-	"Restart":           PostgresOpsRequestTypeRestart,
-	"Reconfigure":       PostgresOpsRequestTypeReconfigure,
-	"ReconfigureTLS":    PostgresOpsRequestTypeReconfigureTLS,
-	"RotateAuth":        PostgresOpsRequestTypeRotateAuth,
-	"ReconnectStandby":  PostgresOpsRequestTypeReconnectStandby,
-	"ForceFailOver":     PostgresOpsRequestTypeForceFailOver,
-	"SetRaftKeyPair":    PostgresOpsRequestTypeSetRaftKeyPair,
-	"StorageMigration":  PostgresOpsRequestTypeStorageMigration,
+	"UpdateVersion":       PostgresOpsRequestTypeUpdateVersion,
+	"HorizontalScaling":   PostgresOpsRequestTypeHorizontalScaling,
+	"VerticalScaling":     PostgresOpsRequestTypeVerticalScaling,
+	"VolumeExpansion":     PostgresOpsRequestTypeVolumeExpansion,
+	"Restart":             PostgresOpsRequestTypeRestart,
+	"Reconfigure":         PostgresOpsRequestTypeReconfigure,
+	"ReconfigureTLS":      PostgresOpsRequestTypeReconfigureTLS,
+	"RotateAuth":          PostgresOpsRequestTypeRotateAuth,
+	"ReconnectStandby":    PostgresOpsRequestTypeReconnectStandby,
+	"ForceFailOver":       PostgresOpsRequestTypeForceFailOver,
+	"SetRaftKeyPair":      PostgresOpsRequestTypeSetRaftKeyPair,
+	"StorageMigration":    PostgresOpsRequestTypeStorageMigration,
+	"RotatePrincipalKey":  PostgresOpsRequestTypeRotatePrincipalKey,
+	"EnableWALEncryption": PostgresOpsRequestTypeEnableWALEncryption,
 }
 
 // ParsePostgresOpsRequestType attempts to convert a string to a PostgresOpsRequestType.

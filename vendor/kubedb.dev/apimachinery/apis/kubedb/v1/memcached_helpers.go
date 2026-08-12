@@ -71,11 +71,6 @@ func (m Memcached) GetMemcachedAuthSecretName() string {
 	return meta_util.NameWithSuffix(m.OffshootName(), "auth")
 }
 
-// Owner returns owner reference to resources
-func (m *Memcached) Owner() *metav1.OwnerReference {
-	return metav1.NewControllerRef(m, SchemeGroupVersion.WithKind(m.ResourceKind()))
-}
-
 func (m Memcached) OffshootLabels() map[string]string {
 	return m.offshootLabels(m.OffshootSelectors(), nil)
 }
@@ -335,4 +330,12 @@ func (m *Memcached) SetTLSDefaults() {
 	m.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(m.Spec.TLS.Certificates, string(MemcachedServerCert), m.CertificateName(MemcachedServerCert))
 	m.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(m.Spec.TLS.Certificates, string(MemcachedClientCert), m.CertificateName(MemcachedClientCert))
 	m.Spec.TLS.Certificates = kmapi.SetMissingSecretNameForCertificate(m.Spec.TLS.Certificates, string(MemcachedMetricsExporterCert), m.CertificateName(MemcachedMetricsExporterCert))
+}
+
+func (m *Memcached) GetDeletionPolicy() string {
+	return string(m.Spec.DeletionPolicy)
+}
+
+func (m *Memcached) GetPersistentSecrets() []string {
+	return m.Spec.GetPersistentSecrets()
 }

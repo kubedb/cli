@@ -54,6 +54,10 @@ type HanaDBTLSSpec struct {
 type HanaDBOpsRequestSpec struct {
 	DatabaseRef core.LocalObjectReference `json:"databaseRef"`
 	Type        HanaDBOpsRequestType      `json:"type"`
+	// Specifies information necessary for updating HanaDB version
+	UpdateVersion *HanaDBUpdateVersionSpec `json:"updateVersion,omitempty"`
+	// Specifies information necessary for horizontal scaling
+	HorizontalScaling *HanaDBHorizontalScalingSpec `json:"horizontalScaling,omitempty"`
 	// Specifies information necessary for vertical scaling
 	VerticalScaling *HanaDBVerticalScalingSpec `json:"verticalScaling,omitempty"`
 	// Specifies information necessary for volume expansion
@@ -74,6 +78,18 @@ type HanaDBOpsRequestSpec struct {
 	MaxRetries int32 `json:"maxRetries,omitempty"`
 }
 
+// HanaDBUpdateVersionSpec contains the update version information of a HanaDB cluster.
+type HanaDBUpdateVersionSpec struct {
+	// Specifies the target version name from catalog
+	TargetVersion string `json:"targetVersion,omitempty"`
+}
+
+// HanaDBHorizontalScalingSpec contains the horizontal scaling information of a HanaDB cluster.
+type HanaDBHorizontalScalingSpec struct {
+	// Number of replicas of HanaDB system replication cluster.
+	Replicas *int32 `json:"replicas,omitempty"`
+}
+
 // HanaDBVerticalScalingSpec is the spec for HanaDB vertical scaling.
 type HanaDBVerticalScalingSpec struct {
 	HanaDB      *PodResources       `json:"hanadb,omitempty"`
@@ -91,8 +107,8 @@ type HanaDBVolumeExpansionSpec struct {
 	Mode   VolumeExpansionMode `json:"mode"`
 }
 
-// +kubebuilder:validation:Enum=VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS;RotateAuth;StorageMigration
-// ENUM(VerticalScaling, VolumeExpansion, Restart, Reconfigure, ReconfigureTLS, RotateAuth, StorageMigration)
+// +kubebuilder:validation:Enum=UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS;RotateAuth;StorageMigration
+// ENUM(UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Restart, Reconfigure, ReconfigureTLS, RotateAuth, StorageMigration)
 type HanaDBOpsRequestType string
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

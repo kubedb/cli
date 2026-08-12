@@ -418,3 +418,7 @@ func PgBouncerDefaultConfig() string {
 		"listen_addr = *"
 	return defaultConfig
 }
+
+func (p *PgBouncer) GetDeletionPolicy() string {
+	return string(p.Spec.DeletionPolicy)
+}

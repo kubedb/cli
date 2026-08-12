@@ -18,6 +18,8 @@ limitations under the License.
 package v1alpha1
 
 import (
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+
 	core "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -70,7 +72,7 @@ type SolrOpsRequestSpec struct {
 	// Specifies information necessary for restarting database
 	Restart *RestartSpec `json:"restart,omitempty"`
 	// Specifies information necessary for custom configuration of solr
-	Configuration *ReconfigurationSpec `json:"configuration,omitempty"`
+	Configuration *SolrReconfigurationSpec `json:"configuration,omitempty"`
 	// Specifies information necessary for configuring TLS
 	TLS *TLSSpec `json:"tls,omitempty"`
 	// Specifies information necessary for configuring authSecret of the database
@@ -84,6 +86,17 @@ type SolrOpsRequestSpec struct {
 	Apply ApplyOption `json:"apply,omitempty"`
 	// +kubebuilder:default=1
 	MaxRetries int32 `json:"maxRetries,omitempty"`
+}
+
+// SolrReconfigurationSpec is the Solr-specific reconfiguration spec.
+// It embeds the generic ReconfigurationSpec and adds the object storage
+// credentials Solr needs in order to authenticate with a backup repository.
+type SolrReconfigurationSpec struct {
+	ReconfigurationSpec `json:",inline,omitempty"`
+	// BackupSpec references the Secrets holding the object storage credentials
+	// for the backup repositories. The Secrets must be in the database namespace.
+	// +optional
+	BackupSpec *dbapi.BackupSpec `json:"backup,omitempty"`
 }
 
 type SolrVerticalScalingSpec struct {

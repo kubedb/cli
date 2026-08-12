@@ -160,11 +160,6 @@ func (o *Oracle) ServiceAccountName() string {
 	return o.OffshootName()
 }
 
-// Owner returns owner reference to resources
-func (o *Oracle) Owner() *meta.OwnerReference {
-	return meta.NewControllerRef(o, SchemeGroupVersion.WithKind(o.ResourceKind()))
-}
-
 func (o *Oracle) GetAuthSecretName() string {
 	if o.Spec.AuthSecret != nil && o.Spec.AuthSecret.Name != "" {
 		return o.Spec.AuthSecret.Name
@@ -543,4 +538,12 @@ func (p *Oracle) GetCertSecretName(alias OracleCertificateAlias) string {
 		}
 	}
 	return p.CertificateName(alias)
+}
+
+func (o *Oracle) GetDeletionPolicy() string {
+	return string(o.Spec.DeletionPolicy)
+}
+
+func (o *Oracle) AsOwner() *meta.OwnerReference {
+	return meta.NewControllerRef(o, SchemeGroupVersion.WithKind(o.ResourceKind()))
 }

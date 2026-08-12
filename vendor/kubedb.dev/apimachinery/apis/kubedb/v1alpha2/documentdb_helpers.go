@@ -26,16 +26,19 @@ import (
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
+	promapi "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1"
 	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/utils/ptr"
+	kmapi "kmodules.xyz/client-go/api/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	metautil "kmodules.xyz/client-go/meta"
 	"kmodules.xyz/client-go/policy/secomp"
 	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
+	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofstv2 "kmodules.xyz/offshoot-api/api/v2"
 	ofst_util "kmodules.xyz/offshoot-api/util"
 	pslister "kubeops.dev/petset/client/listers/apps/v1"
@@ -44,11 +47,6 @@ import (
 
 func (d *DocumentDB) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralDocumentDB))
-}
-
-// Owner returns owner reference to resources
-func (d *DocumentDB) Owner() *metav1.OwnerReference {
-	return metav1.NewControllerRef(d, SchemeGroupVersion.WithKind(d.ResourceKind()))
 }
 
 // AsOwner returns owner reference to resources
@@ -166,6 +164,130 @@ func (d *DocumentDB) PetSetName() string {
 	return d.OffshootName()
 }
 
+// CertificateName returns the default certificate name / certificate secret name for a certificate alias.
+func (d *DocumentDB) CertificateName(alias DocumentDBCertificateAlias) string {
+	return metautil.NameWithSuffix(d.Name, fmt.Sprintf("%s-cert", string(alias)))
+}
+
+// GetGRPCIssuerName is the cert-manager CA Issuer that signs the coordinator's gRPC leaf certs.
+func (d *DocumentDB) GetGRPCIssuerName() string {
+	return metautil.NameWithSuffix(d.OffshootName(), "grpc-issuer")
+}
+
+// GetGRPCSelfSignedIssuerName is the self-signed bootstrap Issuer that signs the grpc-ca certificate.
+func (d *DocumentDB) GetGRPCSelfSignedIssuerName() string {
+	return metautil.NameWithSuffix(d.OffshootName(), "grpc-selfsigned")
+}
+
+// tlsConfigUsable reports whether a config can actually issue certificates. A config with no
+// issuerRef cannot, so it reads as "not configured" rather than as an empty configuration.
+func tlsConfigUsable(c *kmapi.TLSConfig) bool {
+	return c != nil && c.IssuerRef != nil
+}
+
+// DBTLSConfig returns the TLS config that signs the database-plane certificates: the Postgres
+// server certificate and the streaming-replication client certificate.
+func (d *DocumentDB) DBTLSConfig() *kmapi.TLSConfig {
+	if d.Spec.TLS == nil {
+		return nil
+	}
+	return d.Spec.TLS.DBTLS
+}
+
+// GatewayTLSConfig returns the TLS config that signs the MongoDB-wire gateway certificate.
+// It falls back to DBTLS so that setting only dbTLS still covers the gateway with one issuer.
+func (d *DocumentDB) GatewayTLSConfig() *kmapi.TLSConfig {
+	if d.Spec.TLS == nil {
+		return nil
+	}
+	if d.Spec.TLS.GatewayTLS != nil {
+		return d.Spec.TLS.GatewayTLS
+	}
+	return d.Spec.TLS.DBTLS
+}
+
+// TLSConfigForAlias routes a certificate alias to the config that owns it. The grpc-* aliases
+// are signed by an operator-managed self-signed CA and belong to neither, so they return nil.
+func (d *DocumentDB) TLSConfigForAlias(alias DocumentDBCertificateAlias) *kmapi.TLSConfig {
+	switch alias {
+	case DocumentDBServerCert, DocumentDBClientCert:
+		return d.DBTLSConfig()
+	case DocumentDBGatewayCert:
+		return d.GatewayTLSConfig()
+	}
+	return nil
+}
+
+// AllCertificates returns the union of both configs' certificate specs, deduplicated by alias
+// with the gateway config winning for the gateway alias. Callers that enumerate "every managed
+// certificate" — rotation, sync, and cleanup — must use this: iterating a single config's list
+// makes the other config's certificates look unrecognized, and cleanup then deletes them.
+func (d *DocumentDB) AllCertificates() []kmapi.CertificateSpec {
+	if d.Spec.TLS == nil {
+		return nil
+	}
+	var out []kmapi.CertificateSpec
+	seen := map[string]bool{}
+	// Gateway first so its entry wins if the same alias appears in both lists.
+	for _, c := range []*kmapi.TLSConfig{d.Spec.TLS.GatewayTLS, d.Spec.TLS.DBTLS} {
+		if c == nil {
+			continue
+		}
+		for _, cert := range c.Certificates {
+			if seen[cert.Alias] {
+				continue
+			}
+			seen[cert.Alias] = true
+			out = append(out, cert)
+		}
+	}
+	return out
+}
+
+// IsTLSEnabled reports whether cert-manager TLS is actually configured. A DocumentDBTLSConfig
+// carrying only GatewayMutualTLSEnabled (left behind by a ReconfigureTLS removal, so the
+// preference survives a later re-add) is not TLS enabled.
+func (d *DocumentDB) IsTLSEnabled() bool {
+	return tlsConfigUsable(d.DBTLSConfig()) || tlsConfigUsable(d.GatewayTLSConfig())
+}
+
+// GetCertSecretName returns the secret name for a certificate alias if provided,
+// otherwise returns the default certificate secret name for the given alias.
+func (d *DocumentDB) GetCertSecretName(alias DocumentDBCertificateAlias) string {
+	if cfg := d.TLSConfigForAlias(alias); cfg != nil {
+		name, ok := kmapi.GetCertificateSecretName(cfg.Certificates, string(alias))
+		if ok {
+			return name
+		}
+	}
+	return d.CertificateName(alias)
+}
+
+// SetTLSDefaults fills missing secret names for each certificate alias, mirroring postgres.
+// Each config is defaulted independently, so a gatewayTLS with its own issuer still gets its
+// secret name filled even when it is configured alongside a separate dbTLS.
+func (d *DocumentDB) SetTLSDefaults() {
+	if d.Spec.TLS == nil {
+		return
+	}
+	if db := d.DBTLSConfig(); tlsConfigUsable(db) {
+		db.Certificates = kmapi.SetMissingSecretNameForCertificate(db.Certificates, string(DocumentDBServerCert), d.CertificateName(DocumentDBServerCert))
+		db.Certificates = kmapi.SetMissingSecretNameForCertificate(db.Certificates, string(DocumentDBClientCert), d.CertificateName(DocumentDBClientCert))
+	}
+	if gw := d.GatewayTLSConfig(); tlsConfigUsable(gw) {
+		gw.Certificates = kmapi.SetMissingSecretNameForCertificate(gw.Certificates, string(DocumentDBGatewayCert), d.CertificateName(DocumentDBGatewayCert))
+	}
+}
+
+// GatewayMutualTLSEnabled reports whether the MongoDB-wire gateway listener requires mutual TLS.
+// It stays gated on TLS actually being configured: the toggle is meaningless without certs.
+func (d *DocumentDB) GatewayMutualTLSEnabled() bool {
+	if !d.IsTLSEnabled() {
+		return false
+	}
+	return d.Spec.TLS.GatewayMutualTLSEnabled == nil || *d.Spec.TLS.GatewayMutualTLSEnabled
+}
+
 func (d *DocumentDB) ServiceAccountName() string {
 	return d.OffshootName()
 }
@@ -186,6 +308,47 @@ func (d *DocumentDB) AppBindingMeta() appcat.AppBindingMeta {
 	return &documentDBApp{d}
 }
 
+type documentDBStatsService struct {
+	*DocumentDB
+}
+
+func (d documentDBStatsService) GetNamespace() string {
+	return d.DocumentDB.GetNamespace()
+}
+
+func (d documentDBStatsService) ServiceName() string {
+	return d.OffshootName() + "-stats"
+}
+
+func (d documentDBStatsService) ServiceMonitorName() string {
+	return d.ServiceName()
+}
+
+func (d documentDBStatsService) ServiceMonitorAdditionalLabels() map[string]string {
+	return d.OffshootLabels()
+}
+
+func (d documentDBStatsService) Path() string {
+	return kubedb.DefaultStatsPath
+}
+
+func (d documentDBStatsService) Scheme() string {
+	sc := promapi.SchemeHTTP
+	return sc.String()
+}
+
+func (d documentDBStatsService) TLSConfig() *promapi.TLSConfig {
+	return nil
+}
+
+func (d *DocumentDB) StatsService() mona.StatsAccessor {
+	return &documentDBStatsService{d}
+}
+
+func (d *DocumentDB) StatsServiceLabels() map[string]string {
+	return d.ServiceLabels(StatsServiceAlias, map[string]string{kubedb.LabelRole: kubedb.RoleStats})
+}
+
 func (d *DocumentDB) SetDefaults(_ client.Client, documentDBVersion catalogv1alpha1.DocumentDBVersion) {
 	if d == nil {
 		return
@@ -199,6 +362,14 @@ func (d *DocumentDB) SetDefaults(_ client.Client, documentDBVersion catalogv1alp
 	if d.Spec.ClientAuthMode == "" {
 		d.Spec.ClientAuthMode = DocDBClientAuthModeScram
 	}
+	if d.Spec.SSLMode == "" {
+		if d.IsTLSEnabled() {
+			d.Spec.SSLMode = DocumentDBSSLModeVerifyFull
+		} else {
+			d.Spec.SSLMode = DocumentDBSSLModeDisable
+		}
+	}
+	d.SetTLSDefaults()
 	if d.Spec.StorageType == "" {
 		d.Spec.StorageType = StorageTypeDurable
 	}
@@ -373,7 +544,9 @@ func (d *DocumentDB) initializePodTemplates() {
 
 func (d *DocumentDB) GetPersistentSecrets() []string {
 	secrets := make([]string, 0, 2)
-	secrets = append(secrets, d.GetAuthSecretName())
+	if !IsVirtualAuthSecretReferred(d.Spec.AuthSecret) && d.Spec.AuthSecret != nil && d.Spec.AuthSecret.Name != "" {
+		secrets = append(secrets, d.GetAuthSecretName())
+	}
 	secrets = append(secrets, d.GetAdminAuthSecretName())
 	return secrets
 }
@@ -427,4 +600,8 @@ func GetSharedBufferSizeForDocumentdb(resource *resource.Quantity) string {
 	}
 
 	return sharedBuffer
+}
+
+func (d *DocumentDB) GetDeletionPolicy() string {
+	return string(d.Spec.DeletionPolicy)
 }

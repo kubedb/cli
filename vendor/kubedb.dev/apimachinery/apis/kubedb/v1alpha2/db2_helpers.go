@@ -25,6 +25,7 @@ import (
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
+	promapi "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1"
 	"gomodules.xyz/pointer"
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
@@ -32,6 +33,8 @@ import (
 	"k8s.io/utils/ptr"
 	"kmodules.xyz/client-go/apiextensions"
 	metautil "kmodules.xyz/client-go/meta"
+	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
+	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v2"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
@@ -69,11 +72,6 @@ func (d *DB2) GoverningServiceName() string {
 	return metautil.NameWithSuffix(d.ServiceName(), "pods")
 }
 
-// Owner returns owner reference to resources
-func (d *DB2) Owner() *meta.OwnerReference {
-	return meta.NewControllerRef(d, SchemeGroupVersion.WithKind(d.ResourceKind()))
-}
-
 func (d *DB2) ResourceKind() string {
 	return ResourceKindDB2
 }
@@ -94,6 +92,63 @@ func (d *DB2) OffshootLabels() map[string]string {
 func (d *DB2) offshootLabels(selector, override map[string]string) map[string]string {
 	selector[metautil.ComponentLabelKey] = kubedb.ComponentDatabase
 	return metautil.FilterKeys(SchemeGroupVersion.Group, selector, metautil.OverwriteKeys(nil, d.Labels, override))
+}
+
+type db2App struct {
+	*DB2
+}
+
+func (d db2App) Name() string {
+	return d.DB2.Name
+}
+
+func (d db2App) Type() appcat.AppType {
+	return appcat.AppType(fmt.Sprintf("%s/%s", kubedb.GroupName, ResourceSingularDB2))
+}
+
+func (d *DB2) AppBindingMeta() appcat.AppBindingMeta {
+	return &db2App{d}
+}
+
+type db2StatsService struct {
+	*DB2
+}
+
+func (d db2StatsService) GetNamespace() string {
+	return d.DB2.GetNamespace()
+}
+
+func (d db2StatsService) ServiceName() string {
+	return d.OffshootName() + "-stats"
+}
+
+func (d db2StatsService) ServiceMonitorName() string {
+	return d.ServiceName()
+}
+
+func (d db2StatsService) ServiceMonitorAdditionalLabels() map[string]string {
+	return d.OffshootLabels()
+}
+
+func (d db2StatsService) Path() string {
+	return kubedb.DefaultStatsPath
+}
+
+func (d db2StatsService) Scheme() string {
+	sc := promapi.SchemeHTTP
+	return sc.String()
+}
+
+func (d db2StatsService) TLSConfig() *promapi.TLSConfig {
+	return nil
+}
+
+func (d *DB2) StatsService() mona.StatsAccessor {
+	return &db2StatsService{d}
+}
+
+func (d *DB2) StatsServiceLabels() map[string]string {
+	return d.ServiceLabels(StatsServiceAlias, map[string]string{kubedb.LabelRole: kubedb.RoleStats})
 }
 
 func (d *DB2) PodLabels(podTemplate *ofst.PodTemplateSpec, extraLabels ...map[string]string) map[string]string {
@@ -169,4 +224,12 @@ func (d *DB2) SetHealthCheckerDefaults() {
 	if d.Spec.HealthChecker.FailureThreshold == nil {
 		d.Spec.HealthChecker.FailureThreshold = pointer.Int32P(3)
 	}
+}
+
+func (d *DB2) GetDeletionPolicy() string {
+	return string(d.Spec.DeletionPolicy)
+}
+
+func (d *DB2) AsOwner() *meta.OwnerReference {
+	return meta.NewControllerRef(d, SchemeGroupVersion.WithKind(d.ResourceKind()))
 }

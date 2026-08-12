@@ -86,8 +86,6 @@ spec:
                     x-kubernetes-list-map-keys:
                     - type
                     x-kubernetes-list-type: map
-                  freshness:
-                    type: string
                   history:
                     items:
                       properties:
@@ -103,7 +101,10 @@ spec:
                           type: string
                       type: object
                     type: array
-                  lastRefreshAt:
+                  lastRefreshTime:
+                    format: date-time
+                    type: string
+                  lastSuccessfulRefreshTime:
                     format: date-time
                     type: string
                   mode:
@@ -112,46 +113,74 @@ spec:
                     - Initiator
                     - Creator
                     type: string
+                  nextRefreshTime:
+                    format: date-time
+                    type: string
                   phase:
                     enum:
                     - Pending
                     - Snapshotting
                     - Cloning
                     - Provisioning
-                    - Massaging
+                    - ActionsRunning
                     - Ready
                     - Refreshing
                     - Deleting
                     - Failed
                     type: string
+                  refreshGeneration:
+                    format: int64
+                    type: integer
+                  resources:
+                    properties:
+                      authSecret:
+                        type: string
+                      clonedPVCs:
+                        items:
+                          type: string
+                        type: array
+                      configSecret:
+                        type: string
+                      postActionJob:
+                        type: string
+                    type: object
                   snapshot:
                     properties:
-                      ref:
+                      generation:
+                        format: int64
+                        type: integer
+                      groupRef:
                         type: string
-                      type:
+                      members:
+                        items:
+                          properties:
+                            creationTime:
+                              format: date-time
+                              type: string
+                            name:
+                              type: string
+                            readyToUse:
+                              type: boolean
+                            restoreSize:
+                              anyOf:
+                              - type: integer
+                              - type: string
+                              pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                              x-kubernetes-int-or-string: true
+                            sourcePVC:
+                              type: string
+                          required:
+                          - name
+                          type: object
+                        type: array
+                      ready:
+                        type: boolean
+                      strategy:
                         enum:
                         - VolumeGroupSnapshot
                         - VolumeSnapshot
                         type: string
                     type: object
-                  targetRef:
-                    properties:
-                      apiVersion:
-                        type: string
-                      fieldPath:
-                        type: string
-                      kind:
-                        type: string
-                      name:
-                        type: string
-                      namespace:
-                        type: string
-                      resourceVersion:
-                        type: string
-                      uid:
-                        type: string
-                    type: object
-                    x-kubernetes-map-type: atomic
                 type: object
               conditions:
                 items:

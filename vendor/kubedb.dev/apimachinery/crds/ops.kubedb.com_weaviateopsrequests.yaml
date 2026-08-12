@@ -235,6 +235,7 @@ spec:
                 type: object
               type:
                 enum:
+                - UpdateVersion
                 - HorizontalScaling
                 - VerticalScaling
                 - VolumeExpansion
@@ -244,6 +245,11 @@ spec:
                 - RotateAuth
                 - StorageMigration
                 type: string
+              updateVersion:
+                properties:
+                  targetVersion:
+                    type: string
+                type: object
               verticalScaling:
                 properties:
                   mode:

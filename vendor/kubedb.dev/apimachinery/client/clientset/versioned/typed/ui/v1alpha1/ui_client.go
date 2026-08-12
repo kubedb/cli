@@ -65,8 +65,8 @@ type UiV1alpha1Client struct {
 	restClient rest.Interface
 }
 
-func (c *UiV1alpha1Client) DatabaseConfigurations() DatabaseConfigurationInterface {
-	return newDatabaseConfigurations(c)
+func (c *UiV1alpha1Client) DatabaseConfigurations(namespace string) DatabaseConfigurationInterface {
+	return newDatabaseConfigurations(c, namespace)
 }
 
 func (c *UiV1alpha1Client) DatabaseConnections(namespace string) DatabaseConnectionInterface {

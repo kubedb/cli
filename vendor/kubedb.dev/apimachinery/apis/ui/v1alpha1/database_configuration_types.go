@@ -28,16 +28,15 @@ const (
 )
 
 // +genclient
-// +genclient:nonNamespaced
-// +genclient:skipVerbs=get,list,update,delete,watch
-// +genclient:onlyVerbs=create
+// +genclient:skipVerbs=update,delete,watch
 // +k8s:openapi-gen=true
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 // +kubebuilder:object:root=true
-// +kubebuilder:resource:path=databaseconfigurations,singular=databaseconfiguration,scope=Cluster
+// +kubebuilder:resource:path=databaseconfigurations,singular=databaseconfiguration,scope=Namespaced
 type DatabaseConfiguration struct {
-	metav1.TypeMeta `json:",inline"`
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
 	// Request describes the attributes for the graph request.
 	// +optional
 	Request *DatabaseConfigurationRequest `json:"request,omitempty"`
@@ -64,4 +63,23 @@ type SingleComponentConfiguration struct {
 	SecretName string `json:"secretName,omitempty"`
 	// +optional
 	ApplyConfig map[string]string `json:"applyConfig,omitempty"`
+}
+
+// DatabaseConfigurationList contains a list of DatabaseConfiguration
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+type DatabaseConfigurationList struct {
+	metav1.TypeMeta `json:",inline"`
+	metav1.ListMeta `json:"metadata,omitempty"`
+	Items           []DatabaseConfiguration `json:"items"`
+}
+
+// DatabaseConfigurationOptions carries the query parameters of a DatabaseConfiguration
+// get request, which has no body to hold DatabaseConfigurationRequest.
+// +k8s:openapi-gen=true
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+type DatabaseConfigurationOptions struct {
+	metav1.TypeMeta `json:",inline"`
+	// Keys filters the reported secrets to those containing at least one matching key.
+	// +optional
+	Keys []string `json:"keys,omitempty"`
 }

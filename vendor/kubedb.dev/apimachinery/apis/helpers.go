@@ -24,6 +24,11 @@ import (
 
 const (
 	Finalizer = "kubedb.com"
+
+	// ResourcePolicyKeepOnAnnotation, when set to ResourcePolicyKeepOnHalt on a
+	// generated resource (e.g. a Service), makes the halt path skip deleting it.
+	ResourcePolicyKeepOnAnnotation = "kubedb.com/resource-policy-keep-on"
+	ResourcePolicyKeepOnHalt       = "halt"
 )
 
 type ResourceInfo interface {

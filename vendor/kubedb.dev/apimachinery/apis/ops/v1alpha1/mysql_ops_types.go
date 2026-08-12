@@ -107,7 +107,18 @@ type MySQLHorizontalScalingSpec struct {
 }
 
 type MySQLReplicationModeTransformSpec struct {
-	// Group Replication can be deployed in either "Single-Primary" or "Multi-Primary" mode
+	// TargetTopologyMode is the clustered topology to transform the database into, i.e. the
+	// value that ends up in the database's spec.topology.mode. Supported values are
+	// "GroupReplication", "InnoDBCluster" and "SemiSync". This enables promoting a standalone
+	// MySQL (or transforming a remote replica) into a clustered topology.
+	// +kubebuilder:validation:Enum=GroupReplication;InnoDBCluster;SemiSync
+	// +kubebuilder:default=GroupReplication
+	// +optional
+	TargetTopologyMode *dbapi.MySQLMode `json:"targetTopologyMode,omitempty"`
+
+	// Mode is the Group Replication primary mode, i.e. the primary mode *within* the group:
+	// either "Single-Primary" or "Multi-Primary". It applies only when targetTopologyMode is
+	// "GroupReplication" or "InnoDBCluster"; it is ignored for "SemiSync", which has no group.
 	// +kubebuilder:default=Single-Primary
 	Mode *dbapi.MySQLGroupMode `json:"mode"`
 

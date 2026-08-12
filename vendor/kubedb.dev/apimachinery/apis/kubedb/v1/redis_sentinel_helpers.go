@@ -373,3 +373,7 @@ func (rs *RedisSentinel) ReplicasAreReady(lister pslister.PetSetLister) (bool, s
 	expectedItems := 1
 	return checkReplicas(lister.PetSets(rs.Namespace), labels.SelectorFromSet(rs.OffshootLabels()), expectedItems)
 }
+
+func (rs *RedisSentinel) GetDeletionPolicy() string {
+	return string(rs.Spec.DeletionPolicy)
+}

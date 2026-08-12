@@ -18,6 +18,8 @@ limitations under the License.
 package v1alpha1
 
 import (
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+
 	core "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -51,7 +53,35 @@ type DocumentDBOpsRequest struct {
 }
 
 type DocumentDBTLSSpec struct {
-	TLSSpec `json:",inline,omitempty"`
+	// DBTLS reconfigures the database-plane certificates: the Postgres server certificate and
+	// the streaming-replication client certificate.
+	// +optional
+	DBTLS *TLSSpec `json:"dbTLS,omitempty"`
+
+	// GatewayTLS reconfigures the MongoDB-wire gateway certificate. Rotating or re-issuing it
+	// is independent of the database plane, so a public-facing gateway certificate can be
+	// rotated without touching replication.
+	// +optional
+	GatewayTLS *TLSSpec `json:"gatewayTLS,omitempty"`
+
+	// Remove removes ALL TLS configuration. TLS is all-or-nothing for DocumentDB, so it cannot
+	// be removed from one plane only; the per-plane `remove` fields are rejected.
+	// +optional
+	Remove bool `json:"remove,omitempty"`
+
+	// SSLMode for the DocumentDB Postgres server. [disable;allow;prefer;require;verify-ca;verify-full]
+	// +optional
+	SSLMode dbapi.DocumentDBSSLMode `json:"sslMode,omitempty"`
+
+	// ClientAuthMode for sidecar or sharding. (default will be scram. [scram;cert])
+	// +optional
+	ClientAuthMode dbapi.DocDBClientAuthMode `json:"clientAuthMode,omitempty"`
+
+	// GatewayMutualTLSEnabled controls whether the MongoDB-wire gateway listener requires
+	// clients to present a valid certificate (mutual TLS), independent of the general TLS config.
+	// Leave unset to keep the DocumentDB object's current value unchanged.
+	// +optional
+	GatewayMutualTLSEnabled *bool `json:"gatewayMutualTLSEnabled,omitempty"`
 }
 
 // DocumentDBOpsRequestSpec is the spec for DocumentDBOpsRequest

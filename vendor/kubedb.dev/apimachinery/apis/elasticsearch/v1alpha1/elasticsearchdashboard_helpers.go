@@ -89,8 +89,7 @@ func (ed *ElasticsearchDashboard) DefaultCertificateSecretName(alias Elasticsear
 	return meta_util.NameWithSuffix(ed.Name, fmt.Sprintf("%s-cert", string(alias)))
 }
 
-// Owner returns owner reference to resources
-func (ed *ElasticsearchDashboard) Owner() *meta.OwnerReference {
+func (ed *ElasticsearchDashboard) AsOwner() *meta.OwnerReference {
 	return meta.NewControllerRef(ed, SchemeGroupVersion.WithKind(ResourceKindElasticsearchDashboard))
 }
 

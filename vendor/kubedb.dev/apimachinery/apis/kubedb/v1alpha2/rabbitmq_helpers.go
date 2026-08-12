@@ -114,11 +114,6 @@ func (r *RabbitMQ) ResourceFQN() string {
 	return fmt.Sprintf("%s.%s", r.ResourcePlural(), kubedb.GroupName)
 }
 
-// Owner returns owner reference to resources
-func (r *RabbitMQ) Owner() *meta.OwnerReference {
-	return meta.NewControllerRef(r, SchemeGroupVersion.WithKind(r.ResourceKind()))
-}
-
 func (r *RabbitMQ) OffshootName() string {
 	return r.Name
 }
@@ -475,4 +470,8 @@ func (d *RabbitMQBind) SecretName() string {
 
 func (d *RabbitMQBind) CertSecretName() string {
 	return d.GetCertSecretName(RabbitmqClientCert)
+}
+
+func (r *RabbitMQ) GetDeletionPolicy() string {
+	return string(r.Spec.DeletionPolicy)
 }

@@ -18,8 +18,10 @@ package v1alpha1
 
 import (
 	corev1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kmapi "kmodules.xyz/client-go/api/v1"
+	ofst "kmodules.xyz/offshoot-api/api/v1"
 )
 
 const (
@@ -42,8 +44,8 @@ const (
 // +kubebuilder:resource:scope=Namespaced
 // +kubebuilder:printcolumn:name="Phase",type="string",JSONPath=".status.phase"
 // +kubebuilder:printcolumn:name="Mode",type="string",JSONPath=".status.mode"
-// +kubebuilder:printcolumn:name="Target",type="string",JSONPath=".status.targetRef.name"
-// +kubebuilder:printcolumn:name="Freshness",type="string",JSONPath=".status.freshness"
+// +kubebuilder:printcolumn:name="Target",type="string",JSONPath=".spec.target.name"
+// +kubebuilder:printcolumn:name="Freshness",type="date",JSONPath=".status.lastSuccessfulRefreshTime"
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 type Branch struct {
 	metav1.TypeMeta `json:",inline"`
@@ -61,6 +63,24 @@ type Branch struct {
 	Status BranchStatus `json:"status,omitzero"`
 }
 
+// PostActions is a container run as a Job against the branched Database after it is Ready,
+// typically to massage or anonymize the cloned data. The Job receives the connection
+// environment for the branch (host, port, and credentials from its auth secret).
+type PostActions struct {
+	// Image is the container image to run.
+	Image string `json:"image,omitempty"`
+
+	// JobDefaults specifies default settings for the Job (pull policy, backoff limit, TTL,
+	// active deadline).
+	// +optional
+	JobDefaults *JobDefaults `json:"jobDefaults,omitempty"`
+
+	// JobTemplate specifies runtime configurations for the Job, so the user can customize
+	// scheduling, resources, security context, volumes, etc.
+	// +optional
+	JobTemplate ofst.PodTemplateSpec `json:"jobTemplate,omitempty"`
+}
+
 // BranchSpec defines the desired state of Branch. One Branch CR is one branch, and it doubles as the
 // session object.
 type BranchSpec struct {
@@ -71,15 +91,17 @@ type BranchSpec struct {
 	// StorageClass, and cpu/memory. Everything else is copied from the source Database.
 	Target BranchTarget `json:"target"`
 
-	// ResetRootPassword resets the branch's root password after provisioning, so the source's
-	// password does not unlock the branch.
+	// ResetRootPassword gives the branch its own root credential instead of the source's, so the
+	// source password does not unlock the branch.
 	// +optional
 	ResetRootPassword bool `json:"resetRootPassword,omitempty"`
 
-	// DataMassageImage is an optional user-provided container run as the LAST step to massage or
-	// anonymize the branch data.
+	// PostActions are user-provided containers run as the LAST step of a branch, after the target
+	// Database is Ready. Each action runs as a Job
+	// against the branch — typically to massage or anonymize the cloned data. They run in order,
+	// and the branch only becomes Ready once every action has succeeded.
 	// +optional
-	DataMassageImage string `json:"dataMassageImage,omitempty"`
+	PostActions []PostActions `json:"postActions,omitempty"`
 
 	// Schedule optionally refreshes the branch on a cron cadence. Omit for a one-shot branch.
 	// +optional
@@ -183,21 +205,36 @@ type BranchStatus struct {
 	// +optional
 	Mode BranchMode `json:"mode,omitempty"`
 
-	// TargetRef references the branched Database.
+	// Resources lists the objects this branch owns, for audit and cleanup visibility.
 	// +optional
-	TargetRef *corev1.ObjectReference `json:"targetRef,omitempty"`
+	Resources *BranchOwnedResources `json:"resources,omitempty"`
 
-	// Snapshot references the source snapshot the current branch was cloned from.
-	// +optional
-	Snapshot *BranchSnapshotRef `json:"snapshot,omitempty"`
+	// --- snapshot provenance (current generation) ---
 
-	// LastRefreshAt is the time of the last successful refresh.
+	// Snapshot describes the source snapshot set backing the current branch generation.
 	// +optional
-	LastRefreshAt *metav1.Time `json:"lastRefreshAt,omitempty"`
+	Snapshot *BranchSnapshotStatus `json:"snapshot,omitempty"`
 
-	// Freshness is the human-readable age of the branch data since the last refresh (e.g. "3m", "1h2m").
+	// --- refresh / freshness ---
+
+	// RefreshGeneration is the current refresh generation; it bumps on each scheduled refresh.
 	// +optional
-	Freshness metav1.Duration `json:"freshness,omitempty"`
+	RefreshGeneration int64 `json:"refreshGeneration,omitempty"`
+
+	// LastRefreshTime is the time of the last refresh ATTEMPT, regardless of outcome.
+	// +optional
+	LastRefreshTime *metav1.Time `json:"lastRefreshTime,omitempty"`
+
+	// LastSuccessfulRefreshTime is the time of the last SUCCESSFUL refresh. It is how fresh the
+	// branch data is: consumers compute the data age as now - lastSuccessfulRefreshTime. A failed
+	// tick updates LastRefreshTime but not this field.
+	// +optional
+	LastSuccessfulRefreshTime *metav1.Time `json:"lastSuccessfulRefreshTime,omitempty"`
+
+	// NextRefreshTime is the next scheduled refresh, computed from spec.schedule.cron. Nil for
+	// a one-shot branch.
+	// +optional
+	NextRefreshTime *metav1.Time `json:"nextRefreshTime,omitempty"`
 
 	// History is the bounded refresh history (bounded by spec.historyLimit).
 	// +optional
@@ -210,20 +247,40 @@ type BranchStatus struct {
 	Conditions []kmapi.Condition `json:"conditions,omitempty"`
 }
 
+// BranchOwnedResources references the objects created and owned by a branch.
+type BranchOwnedResources struct {
+	// ClonedPVCs are the target PVCs cloned from the source snapshots, ordered by ordinal.
+	// +optional
+	ClonedPVCs []string `json:"clonedPVCs,omitempty"`
+
+	// AuthSecret is the branch's auth Secret (the credential matching the cloned data).
+	// +optional
+	AuthSecret string `json:"authSecret,omitempty"`
+
+	// ConfigSecret is the branch's config Secret, when the engine uses one.
+	// +optional
+	ConfigSecret string `json:"configSecret,omitempty"`
+
+	// PostActionJob is the Job name of the current generation's first
+	// spec.postActions entry, set only when spec.postActions is used.
+	// +optional
+	PostActionJob string `json:"postActionJob,omitempty"`
+}
+
 // BranchPhase is the lifecycle phase of a Branch.
-// +kubebuilder:validation:Enum=Pending;Snapshotting;Cloning;Provisioning;Massaging;Ready;Refreshing;Deleting;Failed
+// +kubebuilder:validation:Enum=Pending;Snapshotting;Cloning;Provisioning;ActionsRunning;Ready;Refreshing;Deleting;Failed
 type BranchPhase string
 
 const (
-	BranchPhasePending      BranchPhase = "Pending"
-	BranchPhaseSnapshotting BranchPhase = "Snapshotting"
-	BranchPhaseCloning      BranchPhase = "Cloning"
-	BranchPhaseProvisioning BranchPhase = "Provisioning"
-	BranchPhaseMassaging    BranchPhase = "Massaging"
-	BranchPhaseReady        BranchPhase = "Ready"
-	BranchPhaseRefreshing   BranchPhase = "Refreshing"
-	BranchPhaseDeleting     BranchPhase = "Deleting"
-	BranchPhaseFailed       BranchPhase = "Failed"
+	BranchPhasePending        BranchPhase = "Pending"
+	BranchPhaseSnapshotting   BranchPhase = "Snapshotting"
+	BranchPhaseCloning        BranchPhase = "Cloning"
+	BranchPhaseProvisioning   BranchPhase = "Provisioning"
+	BranchPhaseActionsRunning BranchPhase = "ActionsRunning"
+	BranchPhaseReady          BranchPhase = "Ready"
+	BranchPhaseRefreshing     BranchPhase = "Refreshing"
+	BranchPhaseDeleting       BranchPhase = "Deleting"
+	BranchPhaseFailed         BranchPhase = "Failed"
 )
 
 // BranchMode is how the branch operator participates in a branch.
@@ -248,12 +305,53 @@ const (
 	BranchSnapshotTypeVolumeSnapshot      BranchSnapshotType = "VolumeSnapshot"
 )
 
-// BranchSnapshotRef references the source snapshot.
-type BranchSnapshotRef struct {
-	// Type is the snapshot kind (VolumeGroupSnapshot preferred, VolumeSnapshot fallback).
-	Type BranchSnapshotType `json:"type,omitempty"`
-	// Ref is the name of the snapshot object.
-	Ref string `json:"ref,omitempty"`
+// BranchSnapshotStatus describes the source snapshot set backing the current branch generation.
+type BranchSnapshotStatus struct {
+	// Strategy is how the source was snapshotted: VolumeGroupSnapshot (group-consistent) or
+	// VolumeSnapshot (per-PVC fallback, used when the driver has no VolumeGroupSnapshotClass).
+	// +optional
+	Strategy BranchSnapshotType `json:"strategy,omitempty"`
+
+	// Generation is the refresh generation these snapshots belong to.
+	// +optional
+	Generation int64 `json:"generation,omitempty"`
+
+	// GroupRef is the VolumeGroupSnapshot object name, set only when Strategy is
+	// VolumeGroupSnapshot.
+	// +optional
+	GroupRef string `json:"groupRef,omitempty"`
+
+	// Ready is true when every member snapshot is readyToUse.
+	// +optional
+	Ready bool `json:"ready,omitempty"`
+
+	// Members is one entry per source data PVC, ordered by ordinal and aligned to the cloned
+	// target PVCs.
+	// +optional
+	Members []BranchSnapshotMember `json:"members,omitempty"`
+}
+
+// BranchSnapshotMember is one source VolumeSnapshot backing a single data PVC of the branch.
+type BranchSnapshotMember struct {
+	// Name is the VolumeSnapshot object name.
+	Name string `json:"name"`
+
+	// SourcePVC is the source PVC this snapshot was taken from (its ordinal maps to the cloned
+	// target PVC).
+	// +optional
+	SourcePVC string `json:"sourcePVC,omitempty"`
+
+	// ReadyToUse mirrors the VolumeSnapshot's readyToUse status.
+	// +optional
+	ReadyToUse bool `json:"readyToUse,omitempty"`
+
+	// RestoreSize is the snapshot's restore size, when reported by the CSI driver.
+	// +optional
+	RestoreSize *resource.Quantity `json:"restoreSize,omitempty"`
+
+	// CreationTime is when the snapshot was taken, when reported by the CSI driver.
+	// +optional
+	CreationTime *metav1.Time `json:"creationTime,omitempty"`
 }
 
 // BranchRunResult is the outcome of a refresh run.

@@ -24,12 +24,16 @@ import (
 	"kubedb.dev/apimachinery/apis/kubedb"
 	"kubedb.dev/apimachinery/crds"
 
+	promapi "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1"
 	"gomodules.xyz/pointer"
 	corev1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"kmodules.xyz/client-go/apiextensions"
 	coreutil "kmodules.xyz/client-go/core/v1"
 	meta_util "kmodules.xyz/client-go/meta"
 	"kmodules.xyz/client-go/policy/secomp"
+	appcat "kmodules.xyz/custom-resources/apis/appcatalog/v1alpha1"
+	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v2"
 )
 
@@ -52,6 +56,10 @@ func (a *Aerospike) ConfigSecretName() string {
 
 func (a *Aerospike) OffshootName() string {
 	return a.Name
+}
+
+func (a *Aerospike) AsOwner() *metav1.OwnerReference {
+	return metav1.NewControllerRef(a, SchemeGroupVersion.WithKind(ResourceKindAerospike))
 }
 
 func (a *Aerospike) OffshootSelectors(extraSelectors ...map[string]string) map[string]string {
@@ -82,6 +90,63 @@ func (a Aerospike) offshootLabels(selector, overrides map[string]string) map[str
 func (a Aerospike) ServiceLabels(alias ServiceAlias, extraLabels ...map[string]string) map[string]string {
 	svcTemplate := GetServiceTemplate(a.Spec.ServiceTemplates, alias)
 	return a.offshootLabels(meta_util.OverwriteKeys(a.OffshootSelectors(), extraLabels...), svcTemplate.Labels)
+}
+
+type aerospikeApp struct {
+	*Aerospike
+}
+
+func (a aerospikeApp) Name() string {
+	return a.Aerospike.Name
+}
+
+func (a aerospikeApp) Type() appcat.AppType {
+	return appcat.AppType(fmt.Sprintf("%s/%s", kubedb.GroupName, ResourceSingularAerospike))
+}
+
+func (a Aerospike) AppBindingMeta() appcat.AppBindingMeta {
+	return &aerospikeApp{&a}
+}
+
+type aerospikeStatsService struct {
+	*Aerospike
+}
+
+func (a aerospikeStatsService) GetNamespace() string {
+	return a.Aerospike.GetNamespace()
+}
+
+func (a aerospikeStatsService) ServiceName() string {
+	return a.OffshootName() + "-stats"
+}
+
+func (a aerospikeStatsService) ServiceMonitorName() string {
+	return a.ServiceName()
+}
+
+func (a aerospikeStatsService) ServiceMonitorAdditionalLabels() map[string]string {
+	return a.OffshootLabels()
+}
+
+func (a aerospikeStatsService) Path() string {
+	return kubedb.DefaultStatsPath
+}
+
+func (a aerospikeStatsService) Scheme() string {
+	sc := promapi.SchemeHTTP
+	return sc.String()
+}
+
+func (a aerospikeStatsService) TLSConfig() *promapi.TLSConfig {
+	return nil
+}
+
+func (a Aerospike) StatsService() mona.StatsAccessor {
+	return &aerospikeStatsService{&a}
+}
+
+func (a Aerospike) StatsServiceLabels() map[string]string {
+	return a.ServiceLabels(StatsServiceAlias, map[string]string{kubedb.LabelRole: kubedb.RoleStats})
 }
 
 func (a *Aerospike) SetDefaults(arVersion *catalog.AerospikeVersion) {
@@ -177,4 +242,26 @@ func (a *Aerospike) assignDefaultContainerSecurityContext(arVersion *catalog.Aer
 	if sc.SeccompProfile == nil {
 		sc.SeccompProfile = secomp.DefaultSeccompProfile()
 	}
+}
+
+func (a *Aerospike) GetDeletionPolicy() string {
+	return string(a.Spec.DeletionPolicy)
+}
+
+func (a *Aerospike) GetAuthSecretName() string {
+	if a.Spec.DisableAuth {
+		return ""
+	}
+	if a.Spec.AuthSecret != nil && a.Spec.AuthSecret.Name != "" {
+		return a.Spec.AuthSecret.Name
+	}
+	return meta_util.NameWithSuffix(a.OffshootName(), "auth")
+}
+
+func (a *Aerospike) GetPersistentSecrets() []string {
+	var secrets []string
+	if !a.Spec.DisableAuth && !IsVirtualAuthSecretReferred(a.Spec.AuthSecret) && a.Spec.AuthSecret != nil && a.Spec.AuthSecret.Name != "" {
+		secrets = append(secrets, a.GetAuthSecretName())
+	}
+	return secrets
 }

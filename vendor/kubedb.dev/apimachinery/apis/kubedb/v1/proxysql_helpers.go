@@ -389,3 +389,11 @@ func (p *ProxySQL) copyConfigurationFields() {
 	p.Spec.ConfigSecret = nil
 	p.Spec.InitConfiguration = nil
 }
+
+func (p *ProxySQL) GetDeletionPolicy() string {
+	return string(p.Spec.DeletionPolicy)
+}
+
+func (p *ProxySQL) GetPersistentSecrets() []string {
+	return p.Spec.GetPersistentSecrets()
+}

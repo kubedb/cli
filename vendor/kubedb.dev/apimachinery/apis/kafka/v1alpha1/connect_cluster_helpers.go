@@ -75,11 +75,6 @@ func (k *ConnectCluster) ResourceFQN() string {
 	return fmt.Sprintf("%s.%s", k.ResourcePlural(), kafka.GroupName)
 }
 
-// Owner returns owner reference to resources
-func (k *ConnectCluster) Owner() *meta.OwnerReference {
-	return meta.NewControllerRef(k, SchemeGroupVersion.WithKind(k.ResourceKind()))
-}
-
 func (k *ConnectCluster) OffshootName() string {
 	return k.Name
 }

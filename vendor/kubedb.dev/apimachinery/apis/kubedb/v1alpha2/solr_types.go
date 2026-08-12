@@ -99,7 +99,7 @@ type SolrSpec struct {
 	DisableSecurity bool `json:"disableSecurity,omitempty"`
 
 	// +optional
-	Configuration *ConfigurationSpec `json:"configuration,omitempty"`
+	Configuration *SolrConfiguration `json:"configuration,omitempty"`
 
 	// +optional
 	KeystoreSecret *core.LocalObjectReference `json:"keystoreSecret,omitempty"`
@@ -136,6 +136,15 @@ type SolrSpec struct {
 	// Monitor is used monitor database instance
 	// +optional
 	Monitor *mona.AgentSpec `json:"monitor,omitempty"`
+}
+
+// SolrConfiguration holds the custom configuration along with the Solr specific settings.
+type SolrConfiguration struct {
+	ConfigurationSpec `json:",inline,omitempty"`
+
+	// BackupSpec holds the object storage credentials for Solr backup repositories.
+	// +optional
+	BackupSpec *BackupSpec `json:"backup,omitempty"`
 }
 
 type SolrClusterTopology struct {

@@ -5438,6 +5438,80 @@ spec:
                   useWildcard:
                     type: boolean
                 type: object
+              tde:
+                properties:
+                  cipher:
+                    enum:
+                    - aes_128
+                    - aes_256
+                    type: string
+                  defaultEncryptedTables:
+                    type: boolean
+                  encryptWAL:
+                    type: boolean
+                  enforceEncryption:
+                    type: boolean
+                  keyProvider:
+                    properties:
+                      file:
+                        properties:
+                          path:
+                            type: string
+                        required:
+                        - path
+                        type: object
+                      kmip:
+                        properties:
+                          address:
+                            type: string
+                          credentialSecretRef:
+                            properties:
+                              name:
+                                default: ""
+                                type: string
+                            type: object
+                            x-kubernetes-map-type: atomic
+                          port:
+                            format: int32
+                            maximum: 65535
+                            minimum: 1
+                            type: integer
+                        required:
+                        - address
+                        - credentialSecretRef
+                        - port
+                        type: object
+                      vault:
+                        properties:
+                          address:
+                            type: string
+                          caSecretRef:
+                            properties:
+                              name:
+                                default: ""
+                                type: string
+                            type: object
+                            x-kubernetes-map-type: atomic
+                          mountPath:
+                            type: string
+                          namespace:
+                            type: string
+                          tokenSecretRef:
+                            properties:
+                              name:
+                                default: ""
+                                type: string
+                            type: object
+                            x-kubernetes-map-type: atomic
+                        required:
+                        - address
+                        - mountPath
+                        - tokenSecretRef
+                        type: object
+                    type: object
+                required:
+                - keyProvider
+                type: object
               tls:
                 properties:
                   certificates:

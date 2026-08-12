@@ -99,6 +99,9 @@ type ClickHouseVolumeExpansionSpec struct {
 	Mode VolumeExpansionMode `json:"mode"`
 	// volume specification for nodes
 	Node *resource.Quantity `json:"node,omitempty"`
+	// ClickHouseKeeper is the volume expansion spec for the embedded ClickHouse Keeper nodes.
+	// +optional
+	ClickHouseKeeper *resource.Quantity `json:"clickHouseKeeper,omitempty"`
 }
 
 // ClickHouseTLSSpec contains necessary information for configuring TLS
@@ -112,6 +115,9 @@ type ClickHouseTLSSpec struct {
 // ClickHouseVerticalScalingSpec contains the vertical scaling information of a clickhouse cluster
 type ClickHouseVerticalScalingSpec struct {
 	Node *PodResources `json:"node,omitempty"`
+	// ClickHouseKeeper is the vertical scaling spec for the embedded ClickHouse Keeper nodes.
+	// +optional
+	ClickHouseKeeper *PodResources `json:"clickHouseKeeper,omitempty"`
 	// Mode selects how the vertical scaling is actuated. Defaults to Restart.
 	// +optional
 	// +kubebuilder:default=Restart
@@ -125,6 +131,9 @@ type ClickHouseHorizontalScalingSpec struct {
 	// Number of shards to scale up to. Scale-up only; the new shards start empty
 	// (no data is rebalanced from existing shards).
 	Shards *int32 `json:"shards,omitempty"`
+	// ClickHouseKeeper is the number of replicas for the embedded ClickHouse Keeper nodes.
+	// +optional
+	ClickHouseKeeper *int32 `json:"clickHouseKeeper,omitempty"`
 }
 
 // ClickHouseMigrationSpec is the spec for migrating storageClass of a ClickHouse database.

@@ -928,10 +928,15 @@ func (m *MongoDB) getCmdForProbes(mgVersion *v1alpha1.MongoDBVersion, isArbiter 
 	if len(isArbiter) == 0 { // not arbiter
 		authArgs = "--username=$MONGO_INITDB_ROOT_USERNAME --password=$MONGO_INITDB_ROOT_PASSWORD --authenticationDatabase=admin"
 	}
+	// `tail -1` keeps only the evaluated value: mongosh writes startup warnings to
+	// stdout, so on images where $HOME is not writable by the pod's uid (e.g. mongos
+	// on mongodb-community-server, which has no /data/db volume) the substitution
+	// yields "Warning: ...\n1" and the arithmetic -eq aborts with a syntax error,
+	// failing the probe forever.
 	return []string{
 		"bash",
 		"-c",
-		fmt.Sprintf(`set -x; if [[ $(%s admin --host=localhost %v %v --quiet --eval "db.adminCommand('ping').ok" ) -eq "1" ]]; then 
+		fmt.Sprintf(`set -x; if [[ $(%s admin --host=localhost %v %v --quiet --eval "db.adminCommand('ping').ok" | tail -1) -eq "1" ]]; then
           exit 0
         fi
         exit 1`, m.GetEntryCommand(mgVersion), sslArgs, authArgs),
@@ -1029,7 +1034,7 @@ func (m *MongoDBSpec) GetPersistentSecrets() []string {
 	}
 
 	var secrets []string
-	if m.AuthSecret != nil {
+	if !IsVirtualAuthSecretReferred(m.AuthSecret) && m.AuthSecret != nil && m.AuthSecret.Name != "" {
 		secrets = append(secrets, m.AuthSecret.Name)
 	}
 	if m.KeyFileSecret != nil {
@@ -1101,4 +1106,12 @@ func (m *MongoDB) ConfigSecretName(nodeType string) string {
 		nodeType = "-" + nodeType
 	}
 	return m.Name + nodeType + "-config"
+}
+
+func (m *MongoDB) GetDeletionPolicy() string {
+	return string(m.Spec.TerminationPolicy)
+}
+
+func (m *MongoDB) GetPersistentSecrets() []string {
+	return m.Spec.GetPersistentSecrets()
 }

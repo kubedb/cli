@@ -259,3 +259,11 @@ func (m *Memcached) ReplicasAreReady(lister appslister.StatefulSetLister) (bool,
 	expectedItems := 1
 	return checkReplicas(lister.StatefulSets(m.Namespace), labels.SelectorFromSet(m.OffshootLabels()), expectedItems)
 }
+
+func (m *Memcached) GetDeletionPolicy() string {
+	return string(m.Spec.TerminationPolicy)
+}
+
+func (m *Memcached) GetPersistentSecrets() []string {
+	return m.Spec.GetPersistentSecrets()
+}

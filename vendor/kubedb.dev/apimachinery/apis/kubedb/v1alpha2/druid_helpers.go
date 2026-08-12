@@ -54,10 +54,6 @@ func (d *Druid) CustomResourceDefinition() *apiextensions.CustomResourceDefiniti
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralDruid))
 }
 
-func (d *Druid) Owner() *meta.OwnerReference {
-	return meta.NewControllerRef(d, SchemeGroupVersion.WithKind(d.ResourceKind()))
-}
-
 func (d *Druid) ResourceKind() string {
 	return ResourceKindDruid
 }
@@ -843,11 +839,28 @@ type DruidBind struct {
 var _ DBBindInterface = &DruidBind{}
 
 func (d *DruidBind) ServiceNames() (string, string) {
+	if d.Spec.Topology != nil {
+		if d.Spec.Topology.Routers != nil {
+			return d.RoutersServiceName(), d.RoutersServiceName()
+		} else if d.Spec.Topology.Brokers != nil {
+			return d.BrokersServiceName(), d.BrokersServiceName()
+		}
+	}
 	return d.ServiceName(), d.ServiceName()
 }
 
 func (d *DruidBind) Ports() (int, int) {
-	p := int(d.DruidNodeContainerPort(DruidNodeRoleRouters))
+	var p int
+	if d.Spec.Topology != nil {
+		if d.Spec.Topology.Routers != nil {
+			p = int(d.DruidNodeContainerPort(DruidNodeRoleRouters))
+		} else if d.Spec.Topology.Brokers != nil {
+			p = int(d.DruidNodeContainerPort(DruidNodeRoleBrokers))
+		}
+	} else {
+		p = int(d.DruidNodeContainerPort(DruidNodeRoleRouters))
+	}
+
 	return p, p
 }
 
@@ -857,4 +870,12 @@ func (d *DruidBind) SecretName() string {
 
 func (d *DruidBind) CertSecretName() string {
 	return d.GetCertSecretName(DruidClientCert)
+}
+
+func (d *Druid) GetDeletionPolicy() string {
+	return string(d.Spec.DeletionPolicy)
+}
+
+func (d *Druid) AsOwner() *meta.OwnerReference {
+	return meta.NewControllerRef(d, SchemeGroupVersion.WithKind(d.ResourceKind()))
 }
