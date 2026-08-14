@@ -356,9 +356,6 @@ func (r neo4jStatsService) Path() string {
 
 func (r neo4jStatsService) Scheme() string {
 	scheme := "http"
-	if r.Spec.TLS != nil && r.Spec.TLS.HTTP.Mode != TLSModeDisabled {
-		scheme = "https"
-	}
 	return scheme
 }
 

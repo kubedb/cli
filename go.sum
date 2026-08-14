@@ -502,8 +502,8 @@ go.uber.org/multierr v1.11.0/go.mod h1:20+QtiLqy0Nd6FdQB9TLXag12DsQkrbs3htMFfDN8
 go.uber.org/zap v1.10.0/go.mod h1:vwi/ZaCAaUcBkycHslxD9B2zi4UTXhF60s6SWpuDF0Q=
 go.uber.org/zap v1.27.1 h1:08RqriUEv8+ArZRYSTXy1LeBScaMpVSTBhCeaZYfMYc=
 go.uber.org/zap v1.27.1/go.mod h1:GB2qFLM7cTU87MWRP2mPIjqfIDnGu+VIO4V/SdhGo2E=
-go.virtual-secrets.dev/apimachinery v0.1.0 h1:m5u/bc7l9ILSMANdJVpxR2SWf8KFv4llPEogMV2HYlg=
-go.virtual-secrets.dev/apimachinery v0.1.0/go.mod h1:/o8QNIs2MoS1UwVoYY5hcWZJ07FM8iXQes85zgePQ3s=
+go.virtual-secrets.dev/apimachinery v0.2.0 h1:+25tNWXvkIAMZSDuZjuIyPUAdwhMjAeu78BVOYvuHeE=
+go.virtual-secrets.dev/apimachinery v0.2.0/go.mod h1:KSrWgHgwGAp+AhLj8e7vziC+2RB4fU0Y0W+nEx5wZRA=
 go.yaml.in/yaml/v2 v2.4.3 h1:6gvOSjQoTB3vt1l+CU+tSyi/HOjfOjRLJ4YwYZGwRO0=
 go.yaml.in/yaml/v2 v2.4.3/go.mod h1:zSxWcmIDjOzPXpjlTTbAsKokqkDNAVtZO0WOMiT90s8=
 go.yaml.in/yaml/v3 v3.0.4 h1:tfq32ie2Jv2UxXFdLJdh3jXuOzWiL1fo0bu/FbuKpbc=
@@ -795,10 +795,10 @@ kmodules.xyz/resource-metadata v0.46.1 h1:mm4sWZvQMFJJiLdKlPGxD9Cj6f44SCdHB7Csbk
 kmodules.xyz/resource-metadata v0.46.1/go.mod h1:ejz7IVjhqmj6VH8CVfprocJK/IM++OeunrfUp51ZrIw=
 kmodules.xyz/resource-metrics v0.34.0 h1:cqscgTx3PONxHj6PIySK3sTlKKv8iKTGzRd+S6YSwXg=
 kmodules.xyz/resource-metrics v0.34.0/go.mod h1:R34IKtp5+NqcQz7AQJheBJK6Iem0LqrCbm/55Mn+ECQ=
-kubedb.dev/apimachinery v0.66.0-rc.0 h1:JP1ryqzIe/YynZB9HzeYqMDKVEZ7Iec6AZwNx4vzPqI=
-kubedb.dev/apimachinery v0.66.0-rc.0/go.mod h1:tVMz+Fw+pJ26Rd9mK+rzdEt2EAsMM4pHYfY7rFW1/bE=
-kubedb.dev/db-client-go v0.21.0-rc.0 h1:OjOyCXt9fF8xUFWnMsv6tyRvY7sOkksgQjWbv8GrVNQ=
-kubedb.dev/db-client-go v0.21.0-rc.0/go.mod h1:AWqoU3zuoBYlrKZweBLV+XIv4cNxu+nLohx+PGwrfWk=
+kubedb.dev/apimachinery v0.67.0-rc.0 h1:+BerQvPs70WyWUh+FvJSU2r96xKDEMc9jSS4cMLrXcU=
+kubedb.dev/apimachinery v0.67.0-rc.0/go.mod h1:JDH2CEo4d0f7hySMPrYoPrO70S7MeLDB220U9mebHN4=
+kubedb.dev/db-client-go v0.22.0-rc.0 h1:NQmg3n5Rh53jR/LSOGuC30hHeYAHmpPrT9yjoDVDkVk=
+kubedb.dev/db-client-go v0.22.0-rc.0/go.mod h1:LvBT/TgaQj0LszxyyIrZDKDBRvw6ZZjfMN9BZp0B1vg=
 kubeops.dev/csi-driver-cacerts v0.5.1-0.20260418091014-4f539f46235c h1:ZKmBV3fFfCWQ3jDeWBbUi2J4WjJ2ff88n+cTqJ8ZXT8=
 kubeops.dev/csi-driver-cacerts v0.5.1-0.20260418091014-4f539f46235c/go.mod h1:VNbwC3gTWfmdQCVxd8mkVx+n1+0F1lOA5X3usyZN1rk=
 kubeops.dev/operator-shard-manager v0.0.6-0.20260418091213-65daf7da824d h1:/nZYflp2w1x+wQmxDtHR0Sbzl39fcuaJ66oqgVXBBwQ=

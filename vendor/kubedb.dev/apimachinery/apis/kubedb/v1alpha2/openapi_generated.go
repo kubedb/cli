@@ -45027,8 +45027,15 @@ func schema_apimachinery_apis_kubedb_v1alpha2_RabbitmqApp(ref common.ReferenceCa
 							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.RabbitMQ"),
 						},
 					},
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
 				},
-				Required: []string{"RabbitMQ"},
+				Required: []string{"RabbitMQ", "name"},
 			},
 		},
 		Dependencies: []string{

@@ -830,25 +830,26 @@ func schema_apimachinery_apis_config_v1alpha1_Vault(ref common.ReferenceCallback
 			SchemaProps: spec.SchemaProps{
 				Type: []string{"object"},
 				Properties: map[string]spec.Schema{
-					"url": {
+					"ref": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Connection url to the secret manager",
-							Default:     "",
-							Type:        []string{"string"},
-							Format:      "",
+							Description: "Ref refers to the AppBinding (kmodules.xyz/custom-resources) that describes how to connect to the Vault/OpenBao server: connection URL and CA bundle. This is the same AppBinding a KubeVault VaultServer publishes for its consumers.\n\nIf that AppBinding's spec.parameters carries isolateTenants: true, Secret reads/writes are routed into the OpenBao/Vault namespace of the tenant that owns the Secret's Kubernetes namespace (derived from the ace.appscode.com/client-org label and ace.appscode.com/org-id annotation on that Kubernetes namespace), instead of the Vault root namespace. Virtual Secrets never creates or mounts engines in that namespace itself; it only reads/writes into namespaces KubeVault has already provisioned.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kmodules.xyz/client-go/api/v1.ObjectReference"),
 						},
 					},
 					"roleName": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Name of the vault role to use for the operator",
+							Description: "RoleName is the Vault Kubernetes auth role Virtual Secrets logs in as, bound to the virtual-secrets-server service account. This is distinct from the AppBinding's own vaultRole parameter, which authenticates KubeVault's operator, not Virtual Secrets — it must be provisioned separately by a Vault admin.",
 							Type:        []string{"string"},
 							Format:      "",
 						},
 					},
 				},
-				Required: []string{"url"},
+				Required: []string{"ref"},
 			},
 		},
+		Dependencies: []string{
+			"kmodules.xyz/client-go/api/v1.ObjectReference"},
 	}
 }
 

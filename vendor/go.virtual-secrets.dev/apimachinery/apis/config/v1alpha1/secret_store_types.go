@@ -71,10 +71,25 @@ type SecretStoreList struct {
 }
 
 type Vault struct {
-	// Connection url to the secret manager
-	URL string `json:"url"`
+	// Ref refers to the AppBinding (kmodules.xyz/custom-resources) that
+	// describes how to connect to the Vault/OpenBao server: connection URL and CA
+	// bundle. This is the same AppBinding a KubeVault VaultServer publishes for
+	// its consumers.
+	//
+	// If that AppBinding's spec.parameters carries isolateTenants: true, Secret
+	// reads/writes are routed into the OpenBao/Vault namespace of the tenant that
+	// owns the Secret's Kubernetes namespace (derived from the
+	// ace.appscode.com/client-org label and ace.appscode.com/org-id annotation on
+	// that Kubernetes namespace), instead of the Vault root namespace. Virtual
+	// Secrets never creates or mounts engines in that namespace itself; it only
+	// reads/writes into namespaces KubeVault has already provisioned.
+	Ref kmapi.ObjectReference `json:"ref"`
 
-	// Name of the vault role to use for the operator
+	// RoleName is the Vault Kubernetes auth role Virtual Secrets logs in as,
+	// bound to the virtual-secrets-server service account. This is distinct
+	// from the AppBinding's own vaultRole parameter, which authenticates
+	// KubeVault's operator, not Virtual Secrets — it must be provisioned
+	// separately by a Vault admin.
 	// +optional
 	RoleName string `json:"roleName,omitempty"`
 }
