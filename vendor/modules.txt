@@ -1941,7 +1941,7 @@ go.opentelemetry.io/otel/trace
 go.opentelemetry.io/otel/trace/embedded
 go.opentelemetry.io/otel/trace/internal/telemetry
 go.opentelemetry.io/otel/trace/noop
-# go.virtual-secrets.dev/apimachinery v0.1.0
+# go.virtual-secrets.dev/apimachinery v0.2.0
 ## explicit; go 1.25.0
 go.virtual-secrets.dev/apimachinery/apis/config/v1alpha1
 go.virtual-secrets.dev/apimachinery/apis/virtual/v1alpha1
@@ -2698,7 +2698,7 @@ kmodules.xyz/resource-metrics/kubedb.com/v1
 kmodules.xyz/resource-metrics/kubedb.com/v1alpha2
 kmodules.xyz/resource-metrics/kubevault.com/v1alpha2
 kmodules.xyz/resource-metrics/ops.kubedb.com/v1alpha1
-# kubedb.dev/apimachinery v0.66.0-rc.0
+# kubedb.dev/apimachinery v0.67.0-rc.0
 ## explicit; go 1.25.0
 kubedb.dev/apimachinery/apis
 kubedb.dev/apimachinery/apis/archiver/v1alpha1
@@ -2749,7 +2749,7 @@ kubedb.dev/apimachinery/pkg/factory
 kubedb.dev/apimachinery/pkg/secret
 kubedb.dev/apimachinery/pkg/utils
 kubedb.dev/apimachinery/pkg/utils/raft
-# kubedb.dev/db-client-go v0.21.0-rc.0
+# kubedb.dev/db-client-go v0.22.0-rc.0
 ## explicit; go 1.25.5
 kubedb.dev/db-client-go/elasticsearch
 kubedb.dev/db-client-go/redis
