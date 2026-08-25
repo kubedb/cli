@@ -36,6 +36,7 @@ type GitopsV1alpha1Interface interface {
 	DocumentDBsGetter
 	DruidsGetter
 	ElasticsearchesGetter
+	EtcdsGetter
 	HanaDBsGetter
 	HazelcastsGetter
 	IgnitesGetter
@@ -94,6 +95,10 @@ func (c *GitopsV1alpha1Client) Druids(namespace string) DruidInterface {
 
 func (c *GitopsV1alpha1Client) Elasticsearches(namespace string) ElasticsearchInterface {
 	return newElasticsearches(c, namespace)
+}
+
+func (c *GitopsV1alpha1Client) Etcds(namespace string) EtcdInterface {
+	return newEtcds(c, namespace)
 }
 
 func (c *GitopsV1alpha1Client) HanaDBs(namespace string) HanaDBInterface {

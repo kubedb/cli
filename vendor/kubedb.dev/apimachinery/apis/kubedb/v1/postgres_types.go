@@ -184,6 +184,25 @@ type PostgresSpec struct {
 	// PostgresVersion has spec.tde.supported = true (a Percona distribution).
 	// +optional
 	TDE *PostgresTDESpec `json:"tde,omitempty"`
+
+	// License references the Secret holding the license certificate required to
+	// start a "Postgres Enterprise by AppsCode" build. It is only valid, and
+	// required, when the referenced PostgresVersion has spec.license.required =
+	// true (the AppsCode distribution).
+	// +optional
+	License *PostgresLicenseSpec `json:"license,omitempty"`
+}
+
+// PostgresLicenseSpec references the Secret holding the AppsCode Postgres
+// Enterprise license certificate (an X.509 PEM file the custom postgres
+// binary verifies at startup and every 60 seconds thereafter; see
+// doc/LICENSE_ENFORCEMENT.md in the AppsCode Postgres source repo). It is
+// mounted outside PGDATA at an identical path on every pod and pointed to via
+// the PGLICENSE environment variable.
+type PostgresLicenseSpec struct {
+	// SecretRef selects the key of a Secret holding the license certificate.
+	// Key defaults to "license.pem" if left unset.
+	SecretRef core.SecretKeySelector `json:"secretRef"`
 }
 
 // PostgresTDESpec configures Transparent Data Encryption (encryption at rest)

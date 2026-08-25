@@ -69,6 +69,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&DruidVersionList{},
 		&ElasticsearchVersion{},
 		&ElasticsearchVersionList{},
+		&EtcdVersion{},
+		&EtcdVersionList{},
 		&HanaDBVersion{},
 		&HanaDBVersionList{},
 		&HazelcastVersion{},

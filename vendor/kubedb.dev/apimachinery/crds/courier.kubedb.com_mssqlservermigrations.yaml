@@ -2795,6 +2795,8 @@ spec:
                 properties:
                   connectionInfo:
                     properties:
+                      address:
+                        type: string
                       appBinding:
                         properties:
                           name:
@@ -2810,8 +2812,12 @@ spec:
                         type: boolean
                       maxConnections:
                         type: integer
+                      password:
+                        type: string
                       trustServerCertificate:
                         type: boolean
+                      user:
+                        type: string
                     required:
                     - database
                     type: object
@@ -2885,6 +2891,8 @@ spec:
                 properties:
                   connectionInfo:
                     properties:
+                      address:
+                        type: string
                       appBinding:
                         properties:
                           name:
@@ -2900,8 +2908,12 @@ spec:
                         type: boolean
                       maxConnections:
                         type: integer
+                      password:
+                        type: string
                       trustServerCertificate:
                         type: boolean
+                      user:
+                        type: string
                     required:
                     - database
                     type: object

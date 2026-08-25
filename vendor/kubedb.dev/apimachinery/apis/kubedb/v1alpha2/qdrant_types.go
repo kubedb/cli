@@ -95,6 +95,11 @@ type QdrantSpec struct {
 	// +optional
 	AuthSecret *SecretReference `json:"authSecret,omitempty"`
 
+	// JWTRBAC enables JWT-based role-based access control (RBAC).
+	// If unset, it defaults to false.
+	// +optional
+	JWTRBAC bool `json:"jwtRbac,omitempty"`
+
 	// +optional
 	Configuration *ConfigurationSpec `json:"configuration,omitempty"`
 

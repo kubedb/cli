@@ -729,3 +729,61 @@ func (p *Postgres) GetDeletionPolicy() string {
 func (p *Postgres) GetPersistentSecrets() []string {
 	return p.Spec.GetPersistentSecrets()
 }
+
+// hbaConnectionTypes are the connection types PostgreSQL accepts in the first column of a
+// pg_hba.conf record. "local" is deliberately absent: see ValidateHBAConfig.
+var hbaConnectionTypes = map[string]bool{
+	"host":         true,
+	"hostssl":      true,
+	"hostnossl":    true,
+	"hostgssenc":   true,
+	"hostnogssenc": true,
+}
+
+// ValidateHBAConfig validates user supplied pg_hba.conf records before they are spliced into
+// the generated $PGDATA/pg_hba.conf by postgres-init-docker's role scripts.
+//
+// pg_hba.conf is first-match-wins and the user block is spliced above KubeDB's catch-all
+// rules, which is what lets a user tighten access. That same position means a permissive user
+// record can shadow a KubeDB record, so the rules KubeDB depends on are not negotiable:
+//
+//   - "local" records are rejected. KubeDB's own local trust rules sit above the user block and
+//     would win anyway, so accepting these would silently do nothing.
+//   - records for the "replication" pseudo-database are rejected. They sit above KubeDB's
+//     replication rules, so "host replication all 0.0.0.0/0 trust" would hand out unauthenticated
+//     replication - a full copy of the cluster.
+//   - include/include_if_exists/include_dir are rejected. PostgreSQL only honours them from
+//     major 16 and the catalog ships 10-18, so they would be a silent no-op on most versions.
+//
+// The role scripts filter local/replication again as defence in depth, for the case where the
+// webhook is bypassed. Callers outside the webhook package (pkg/ops) use this too, which is why
+// it lives here rather than in pkg/webhooks.
+func ValidateHBAConfig(content string) error {
+	for i, raw := range strings.Split(content, "\n") {
+		lineNo := i + 1
+		line := strings.TrimSpace(raw)
+		if line == "" || strings.HasPrefix(line, "#") {
+			continue
+		}
+		fields := strings.Fields(line)
+		connType := strings.ToLower(fields[0])
+
+		if strings.HasPrefix(connType, "include") {
+			return fmt.Errorf("pg_hba.conf line %d: %q is not allowed; PostgreSQL only supports include directives in pg_hba.conf from major version 16 and KubeDB supports 10-18, so it would be silently ignored", lineNo, fields[0])
+		}
+		if connType == "local" {
+			return fmt.Errorf("pg_hba.conf line %d: %q records are not allowed; KubeDB's own local rules are matched first, so this would never take effect", lineNo, "local")
+		}
+		if !hbaConnectionTypes[connType] {
+			return fmt.Errorf("pg_hba.conf line %d: unknown connection type %q", lineNo, fields[0])
+		}
+		// host<type> database user address method
+		if len(fields) < 5 {
+			return fmt.Errorf("pg_hba.conf line %d: expected at least 5 fields (type database user address method), got %d: %q", lineNo, len(fields), line)
+		}
+		if strings.EqualFold(fields[1], "replication") {
+			return fmt.Errorf("pg_hba.conf line %d: rules for the %q database are reserved for KubeDB; a permissive rule here would expose unauthenticated replication", lineNo, "replication")
+		}
+	}
+	return nil
+}
