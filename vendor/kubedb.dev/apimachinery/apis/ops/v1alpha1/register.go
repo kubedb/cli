@@ -69,6 +69,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&DruidOpsRequestList{},
 		&ElasticsearchOpsRequest{},
 		&ElasticsearchOpsRequestList{},
+		&EtcdOpsRequest{},
+		&EtcdOpsRequestList{},
 		&HazelcastOpsRequest{},
 		&HazelcastOpsRequestList{},
 		&HanaDBOpsRequest{},

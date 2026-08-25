@@ -795,10 +795,10 @@ kmodules.xyz/resource-metadata v0.46.1 h1:mm4sWZvQMFJJiLdKlPGxD9Cj6f44SCdHB7Csbk
 kmodules.xyz/resource-metadata v0.46.1/go.mod h1:ejz7IVjhqmj6VH8CVfprocJK/IM++OeunrfUp51ZrIw=
 kmodules.xyz/resource-metrics v0.34.0 h1:cqscgTx3PONxHj6PIySK3sTlKKv8iKTGzRd+S6YSwXg=
 kmodules.xyz/resource-metrics v0.34.0/go.mod h1:R34IKtp5+NqcQz7AQJheBJK6Iem0LqrCbm/55Mn+ECQ=
-kubedb.dev/apimachinery v0.67.0-rc.0 h1:+BerQvPs70WyWUh+FvJSU2r96xKDEMc9jSS4cMLrXcU=
-kubedb.dev/apimachinery v0.67.0-rc.0/go.mod h1:JDH2CEo4d0f7hySMPrYoPrO70S7MeLDB220U9mebHN4=
-kubedb.dev/db-client-go v0.22.0-rc.0 h1:NQmg3n5Rh53jR/LSOGuC30hHeYAHmpPrT9yjoDVDkVk=
-kubedb.dev/db-client-go v0.22.0-rc.0/go.mod h1:LvBT/TgaQj0LszxyyIrZDKDBRvw6ZZjfMN9BZp0B1vg=
+kubedb.dev/apimachinery v0.67.0-rc.1 h1:pPc4Pg8GVXNdoBKdGKrZupueX1flk4whjVHxYIOR8Vw=
+kubedb.dev/apimachinery v0.67.0-rc.1/go.mod h1:JDH2CEo4d0f7hySMPrYoPrO70S7MeLDB220U9mebHN4=
+kubedb.dev/db-client-go v0.22.0-rc.1 h1:X+0uB/6mrZyuHBFCGh1Tz40ptK2xaqlVSNkcTcBkBHE=
+kubedb.dev/db-client-go v0.22.0-rc.1/go.mod h1:qAlKuo6hUfHkihXK+nBnuj8qjtU2HdXkRJ85DhKIAH8=
 kubeops.dev/csi-driver-cacerts v0.5.1-0.20260418091014-4f539f46235c h1:ZKmBV3fFfCWQ3jDeWBbUi2J4WjJ2ff88n+cTqJ8ZXT8=
 kubeops.dev/csi-driver-cacerts v0.5.1-0.20260418091014-4f539f46235c/go.mod h1:VNbwC3gTWfmdQCVxd8mkVx+n1+0F1lOA5X3usyZN1rk=
 kubeops.dev/operator-shard-manager v0.0.6-0.20260418091213-65daf7da824d h1:/nZYflp2w1x+wQmxDtHR0Sbzl39fcuaJ66oqgVXBBwQ=

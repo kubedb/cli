@@ -73,6 +73,53 @@ spec:
                     additionalProperties:
                       type: string
                     type: object
+                  remoteAliasKeystore:
+                    properties:
+                      keyName:
+                        minLength: 1
+                        type: string
+                      keystoreRef:
+                        properties:
+                          key:
+                            type: string
+                          name:
+                            default: ""
+                            type: string
+                          optional:
+                            type: boolean
+                        required:
+                        - key
+                        type: object
+                        x-kubernetes-map-type: atomic
+                      passwordRef:
+                        properties:
+                          key:
+                            type: string
+                          name:
+                            default: ""
+                            type: string
+                          optional:
+                            type: boolean
+                        required:
+                        - key
+                        type: object
+                        x-kubernetes-map-type: atomic
+                    required:
+                    - keyName
+                    - keystoreRef
+                    - passwordRef
+                    type: object
+                    x-kubernetes-validations:
+                    - message: keystoreRef.name must be non-empty
+                      rule: has(self.keystoreRef.name) && size(self.keystoreRef.name)
+                        > 0
+                    - message: keystoreRef.key must be non-empty
+                      rule: size(self.keystoreRef.key) > 0
+                    - message: passwordRef.name must be non-empty
+                      rule: has(self.passwordRef.name) && size(self.passwordRef.name)
+                        > 0
+                    - message: passwordRef.key must be non-empty
+                      rule: size(self.passwordRef.key) > 0
                   secretName:
                     type: string
                 type: object

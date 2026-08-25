@@ -64,7 +64,7 @@ type Neo4jOpsRequestSpec struct {
 	// Specifies information necessary for configuring authSecret of the database
 	Authentication *AuthSpec `json:"authentication,omitempty"`
 	// Specifies information necessary for custom configuration of Neo4j
-	Configuration *ReconfigurationSpec `json:"configuration,omitempty"`
+	Configuration *Neo4jReconfigurationSpec `json:"configuration,omitempty"`
 	// Specifies information necessary for horizontal scaling
 	HorizontalScaling *Neo4jHorizontalScalingSpec `json:"horizontalScaling,omitempty"`
 	// Specifies information necessary for vertical scaling
@@ -82,6 +82,15 @@ type Neo4jOpsRequestSpec struct {
 	Apply ApplyOption `json:"apply,omitempty"`
 	// +kubebuilder:default=1
 	MaxRetries int32 `json:"maxRetries,omitempty"`
+}
+
+// Neo4jReconfigurationSpec is the Neo4j-specific reconfiguration spec.
+type Neo4jReconfigurationSpec struct {
+	ReconfigurationSpec `json:",inline,omitempty"`
+
+	// RemoteAliasKeystore configures the PKCS12 AES keystore used to encrypt remote database alias credentials.
+	// +optional
+	RemoteAliasKeystore *dbapi.Neo4jRemoteAliasKeystore `json:"remoteAliasKeystore,omitempty"`
 }
 
 // Neo4jVolumeExpansionSpec is the spec for Neo4j volume expansion

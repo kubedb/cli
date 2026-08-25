@@ -153,9 +153,12 @@ type MSSQLServerConnectionInfo struct {
 	Encrypt                bool                   `json:"encrypt,omitempty"`
 	TrustServerCertificate bool                   `json:"trustServerCertificate,omitempty"`
 
-	Address  string `json:"-"`
-	User     string `json:"-"`
-	Password string `json:"-"`
+	// +optional
+	Address string `json:"address,omitempty"`
+	// +optional
+	User string `json:"user,omitempty"`
+	// +optional
+	Password string `json:"password,omitempty"`
 }
 
 type MSSQLServerSnapshotPipeline struct {

@@ -654,6 +654,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1.PostgreLeaderElectionConfig":                         schema_apimachinery_apis_kubedb_v1_PostgreLeaderElectionConfig(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.Postgres":                                            schema_apimachinery_apis_kubedb_v1_Postgres(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.PostgresConfiguration":                               schema_apimachinery_apis_kubedb_v1_PostgresConfiguration(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1.PostgresLicenseSpec":                                 schema_apimachinery_apis_kubedb_v1_PostgresLicenseSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.PostgresList":                                        schema_apimachinery_apis_kubedb_v1_PostgresList(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.PostgresReplication":                                 schema_apimachinery_apis_kubedb_v1_PostgresReplication(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.PostgresSpec":                                        schema_apimachinery_apis_kubedb_v1_PostgresSpec(ref),
@@ -37897,6 +37898,29 @@ func schema_apimachinery_apis_kubedb_v1_PostgresConfiguration(ref common.Referen
 	}
 }
 
+func schema_apimachinery_apis_kubedb_v1_PostgresLicenseSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "PostgresLicenseSpec references the Secret holding the AppsCode Postgres Enterprise license certificate (an X.509 PEM file the custom postgres binary verifies at startup and every 60 seconds thereafter; see doc/LICENSE_ENFORCEMENT.md in the AppsCode Postgres source repo). It is mounted outside PGDATA at an identical path on every pod and pointed to via the PGLICENSE environment variable.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"secretRef": {
+						SchemaProps: spec.SchemaProps{
+							Description: "SecretRef selects the key of a Secret holding the license certificate. Key defaults to \"license.pem\" if left unset.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("k8s.io/api/core/v1.SecretKeySelector"),
+						},
+					},
+				},
+				Required: []string{"secretRef"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.SecretKeySelector"},
+	}
+}
+
 func schema_apimachinery_apis_kubedb_v1_PostgresList(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -38218,12 +38242,18 @@ func schema_apimachinery_apis_kubedb_v1_PostgresSpec(ref common.ReferenceCallbac
 							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1.PostgresTDESpec"),
 						},
 					},
+					"license": {
+						SchemaProps: spec.SchemaProps{
+							Description: "License references the Secret holding the license certificate required to start a \"Postgres Enterprise by AppsCode\" build. It is only valid, and required, when the referenced PostgresVersion has spec.license.required = true (the AppsCode distribution).",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1.PostgresLicenseSpec"),
+						},
+					},
 				},
 				Required: []string{"version"},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.AllowedConsumers", "kubedb.dev/apimachinery/apis/kubedb/v1.ArbiterSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.Archiver", "kubedb.dev/apimachinery/apis/kubedb/v1.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgreLeaderElectionConfig", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgresConfiguration", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgresReplication", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgresSynchronousReplicationSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgresTDESpec", "kubedb.dev/apimachinery/apis/kubedb/v1.ReadReplicaSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.RemoteReplicaSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.AllowedConsumers", "kubedb.dev/apimachinery/apis/kubedb/v1.ArbiterSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.Archiver", "kubedb.dev/apimachinery/apis/kubedb/v1.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgreLeaderElectionConfig", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgresConfiguration", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgresLicenseSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgresReplication", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgresSynchronousReplicationSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgresTDESpec", "kubedb.dev/apimachinery/apis/kubedb/v1.ReadReplicaSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.RemoteReplicaSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"},
 	}
 }
 

@@ -34536,6 +34536,24 @@ func schema_apimachinery_apis_courier_v1alpha1_MSSQLServerConnectionInfo(ref com
 							Format: "",
 						},
 					},
+					"address": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"user": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"password": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
 				},
 				Required: []string{"database"},
 			},

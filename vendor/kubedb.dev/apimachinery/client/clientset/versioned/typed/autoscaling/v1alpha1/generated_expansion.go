@@ -32,6 +32,8 @@ type DruidAutoscalerExpansion interface{}
 
 type ElasticsearchAutoscalerExpansion interface{}
 
+type EtcdAutoscalerExpansion interface{}
+
 type HanaDBAutoscalerExpansion interface{}
 
 type HazelcastAutoscalerExpansion interface{}

@@ -52,6 +52,10 @@ func (Elasticsearch) CustomResourceDefinition() *apiextensions.CustomResourceDef
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1.ResourcePluralElasticsearch))
 }
 
+func (Etcd) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1a2.ResourcePluralEtcd))
+}
+
 func (HanaDB) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(dbv1a2.ResourcePluralHanaDB))
 }

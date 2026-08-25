@@ -54,6 +54,10 @@ func (ClickHouseArchiver) CustomResourceDefinition() *apiextensions.CustomResour
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralClickHouseArchiver))
 }
 
+func (EtcdArchiver) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralEtcdArchiver))
+}
+
 func SetDefaultLogBackupOptions(log *LogBackupOptions) *LogBackupOptions {
 	if log == nil {
 		log = &LogBackupOptions{
