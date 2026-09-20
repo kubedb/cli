@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 	"time"
 
 	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
@@ -31,9 +32,9 @@ import (
 	core "k8s.io/api/core/v1"
 	kerr "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/apimachinery/pkg/util/wait"
+	"k8s.io/klog/v2"
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
 	cm_util "kmodules.xyz/cert-manager-util/certmanager/v1"
 	kutil "kmodules.xyz/client-go"
@@ -59,7 +60,7 @@ const (
 
 func MysqlAPP(f cmdutil.Factory) *cobra.Command {
 	var userName, password, dns, ns string
-	var yes bool
+	var yes, skipUserCreation bool
 	cmd := cobra.Command{
 		Use:     "mysql",
 		Short:   desLong,
@@ -71,12 +72,16 @@ func MysqlAPP(f cmdutil.Factory) *cobra.Command {
 			if len(args) == 0 {
 				log.Fatal("no database name given")
 			}
-			if err := userPrompt(yes); err != nil {
-				log.Fatal(err)
+			// Nothing on the source is altered when user creation is skipped, so
+			// the "password will be altered" confirmation has nothing to confirm.
+			if !skipUserCreation {
+				if err := userPrompt(yes); err != nil {
+					log.Fatal(err)
+				}
 			}
 			var buffer []byte
 
-			buffer, err := generateMySQLConfig(f, userName, password, dns, ns, args[0])
+			buffer, err := generateMySQLConfig(f, userName, password, dns, ns, args[0], skipUserCreation)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -111,13 +116,22 @@ func MysqlAPP(f cmdutil.Factory) *cobra.Command {
 		log.Fatal(err)
 	}
 	cmd.PersistentFlags().BoolVarP(&yes, "yes", "y", false, "permission for alter password  for the remote replica")
+	cmd.PersistentFlags().BoolVar(&skipUserCreation, "skip-user-creation", false,
+		"do not create or alter the replication user on the source; assume it already exists with the given password. "+
+			"Needed when the source has no writable primary to exec into")
 	return &cmd
 }
 
-func generateMySQLConfig(f cmdutil.Factory, userName string, password string, dns string, ns string, dbname string) ([]byte, error) {
+func generateMySQLConfig(f cmdutil.Factory, userName string, password string, dns string, ns string, dbname string, skipUserCreation bool) ([]byte, error) {
 	var buffer []byte
 
-	opts, err := common.NewMySQLOpts(f, dbname, ns)
+	var dbOpts []common.OptionFunc
+	if skipUserCreation {
+		// Rendering manifests only reads the CR; a non-Ready source should not
+		// block a disaster recovery config from being generated.
+		dbOpts = append(dbOpts, common.SkipReadinessCheck())
+	}
+	opts, err := common.NewMySQLOpts(f, dbname, ns, dbOpts...)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get db %s, err:%v", dbname, err)
 	}
@@ -127,7 +141,7 @@ func generateMySQLConfig(f cmdutil.Factory, userName string, password string, dn
 		return nil, fmt.Errorf("failed to get appbinding %v", err)
 	}
 
-	authBuff, authSecretName, err := generateMySQLAuthSecret(userName, password, ns, opts)
+	authBuff, authSecretName, err := generateMySQLAuthSecret(userName, password, ns, skipUserCreation, opts)
 	if err != nil {
 		return nil, fmt.Errorf("failed to generate auth secret ,%v", err)
 	}
@@ -198,15 +212,20 @@ func generateMySQLTlsSecret(userName string, apb *appApi.AppBinding, ns string, 
 	return buffer, tlsSecret.Name, nil
 }
 
-func generateMySQLAuthSecret(userName string, password string, ns string, opts *common.MySQLOpts) ([]byte, string, error) {
-	if userName != opts.Username {
+func generateMySQLAuthSecret(userName string, password string, ns string, skipUserCreation bool, opts *common.MySQLOpts) ([]byte, string, error) {
+	switch {
+	case userName == opts.Username:
+		password = opts.Pass
+	case skipUserCreation:
+		if err := verifyMySQLUser(opts, userName); err != nil {
+			return nil, "", err
+		}
+	default:
 		// generate user if not present
 		err := generateMySQLUser(opts, userName, password)
 		if err != nil {
 			return nil, "", fmt.Errorf("failed to generate user err:%v", err)
 		}
-	} else {
-		password = opts.Pass
 	}
 	// generate auth secret
 	AuthSecret := core.Secret{
@@ -235,17 +254,48 @@ func generateMySQLAuthSecret(userName string, password string, ns string, opts *
 	return buffer, AuthSecret.Name, nil
 }
 
-func generateMySQLUser(opts *common.MySQLOpts, name string, password string) error {
-	label := opts.DB.OffshootLabels()
-	if *opts.DB.Spec.Replicas > 1 {
-		label["kubedb.com/role"] = "primary"
+// verifyMySQLUser checks the replication user without writing anything. Reading
+// mysql.user works on a read replica, so any running member will do. An
+// unreachable database downgrades to a warning: generating the config is still
+// the useful outcome.
+func verifyMySQLUser(opts *common.MySQLOpts, name string) error {
+	pod, err := pickDBPod(opts.Client, opts.DB.Namespace, opts.DB.OffshootLabels(), MySQLContainerName, false)
+	if err != nil {
+		klog.Warningf("skipping verification of user %q: %v", name, err)
+		return nil
 	}
 
-	pods, err := opts.Client.CoreV1().Pods(opts.DB.Namespace).List(context.TODO(), metav1.ListOptions{
-		LabelSelector: labels.Set.String(label),
-	})
-	if err != nil || len(pods.Items) == 0 {
-		return err
+	query := fmt.Sprintf("export MYSQL_PWD='%s' && mysql -uroot -N -B -e \"SELECT Repl_slave_priv FROM mysql.user WHERE user='%s'\"", opts.Pass, name)
+	out, err := exec_util.ExecIntoPod(opts.Config, pod,
+		exec_util.Command("bash", "-c", query),
+		exec_util.Container(MySQLContainerName),
+	)
+	if err != nil {
+		klog.Warningf("skipping verification of user %q: failed to query %s: %v", name, pod.Name, err)
+		return nil
+	}
+
+	switch strings.TrimSpace(out) {
+	case "":
+		return fmt.Errorf("user %q does not exist on %s/%s; create it on the writable primary first:\n  "+
+			"CREATE USER %s IDENTIFIED BY '<password>'; GRANT REPLICATION SLAVE, CLONE_ADMIN, BACKUP_ADMIN ON *.* TO '%s'@'%%';",
+			name, opts.DB.Namespace, opts.DB.Name, name, name)
+	case "N":
+		return fmt.Errorf("user %q exists on %s/%s but lacks REPLICATION SLAVE; run on the writable primary:\n  "+
+			"GRANT REPLICATION SLAVE, CLONE_ADMIN, BACKUP_ADMIN ON *.* TO '%s'@'%%';",
+			name, opts.DB.Namespace, opts.DB.Name, name)
+	}
+
+	fmt.Printf("user %q verified on %s (replication granted); leaving the source catalog untouched\n", name, pod.Name)
+	return nil
+}
+
+func generateMySQLUser(opts *common.MySQLOpts, name string, password string) error {
+	// DDL only: a clustered source must be addressed through its primary.
+	pod, err := pickDBPod(opts.Client, opts.DB.Namespace, opts.DB.OffshootLabels(), MySQLContainerName, *opts.DB.Spec.Replicas > 1)
+	if err != nil {
+		return fmt.Errorf("%v; pass --skip-user-creation to generate the config against a standby "+
+			"whose replication user already exists", err)
 	}
 	query := fmt.Sprintf("export MYSQL_PWD='%s' && mysql -uroot -e \"create user if not exists %s; alter user %s identified by '%s';"+
 		"GRANT REPLICATION SLAVE,  CLONE_ADMIN, BACKUP_ADMIN ON *.* TO '%s'@'%%' WITH GRANT OPTION; \"", opts.Pass,
@@ -257,7 +307,7 @@ func generateMySQLUser(opts *common.MySQLOpts, name string, password string) err
 		container,
 	}
 
-	_, err = exec_util.ExecIntoPod(opts.Config, &pods.Items[0], options...)
+	_, err = exec_util.ExecIntoPod(opts.Config, pod, options...)
 	if err != nil {
 		return err
 	}
