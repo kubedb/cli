@@ -19,10 +19,10 @@ jobs:
     name: Build
     runs-on: ubuntu-24.04
     steps:
-      - name: Set up Go 1.25
+      - name: Set up Go 1.27
         uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5.6.0
         with:
-          go-version: '1.25'
+          go-version: '1.27'
         id: go
 
       - name: Check out code into the Go module directory
