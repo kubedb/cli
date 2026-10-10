@@ -130,7 +130,7 @@ func NewCmdPin(f cmdutil.Factory, kind pinKind) *cobra.Command {
 				if remove {
 					_, _ = fmt.Fprintf(out, "The standby-hold is cleared. NOTE: this DC resumes contending on the NEXT Lease event; if the Lease is idle, a pending handoff may take until the agent's informer resync. Touching the Lease (for example dc-dr handoff --to <dc>) makes it immediate.\n")
 				} else {
-					_, _ = fmt.Fprintf(out, "This data center is now HELD as a standby for scope %s: it never contends for the Lease, never promotes, and refuses destructive cross-DC rewinds of its data.\n", lease)
+					_, _ = fmt.Fprintf(out, "This data center is now HELD as a standby for scope %s: it never contends for the Lease and never promotes. Its data is still repaired normally if it needs a rewind or re-seed to stay a standby, bounded by the cross-DC loss budget.\n", lease)
 					_, _ = fmt.Fprintf(out, "  It is ignored while this DC is the ACTIVE one (demoting the active DC without a quiesce is unsafe): move the primary away with a switchover first.\n")
 					_, _ = fmt.Fprintf(out, "  Remove with:  kubectl dba dc-dr pin-standby --scope %s --remove --yes\n", lease)
 				}
@@ -184,11 +184,17 @@ func pinStandbyTexts() (use, short, long, example string) {
 			coordination namespace of the CURRENT cluster, which must be the data
 			center you are holding down.
 
-			While it exists that DC never contends for the scope's primary-DC Lease,
-			never promotes (it refuses even an explicit handoff naming it), and its
-			coordinator refuses destructive cross-DC rewinds or re-seeds of the data
-			it holds. It fails CLOSED: if the ConfigMap cannot be read the hold is
-			assumed, so a flaky apiserver never silently drops the protection.
+			While it exists that DC never contends for the scope's primary-DC Lease
+			and never promotes: it refuses even an explicit handoff naming it. It
+			fails CLOSED, so if the ConfigMap cannot be read the hold is assumed and
+			a flaky apiserver never silently drops it.
+
+			This pins the ROLE, not the disk. A held DC is still repaired normally:
+			if it needs a rewind or a re-seed in order to BE a standby, that happens,
+			bounded by the same cross-DC loss budget that protects every other data
+			center. It is refused only when this DC holds more WAL than the budget
+			allows, or when that distance cannot be measured. Use it to say "this DC
+			must never become primary", not "never touch this DC's data".
 
 			It is deliberately ignored on the data center that is currently ACTIVE,
 			because demoting the active DC without a quiesce is unsafe; move the
