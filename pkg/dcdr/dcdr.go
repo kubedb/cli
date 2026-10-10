@@ -66,7 +66,6 @@ const (
 	AnnSwitchoverStart = "dr.kubedb.com/switchover-started"
 	AnnQuiesceActive   = "dr.kubedb.com/quiesce-active"
 	AnnAcceptDataLoss  = "dr.kubedb.com/accept-failover-data-loss"
-	AnnFailoverGroup   = "dr.kubedb.com/failover-group"
 	AnnMaxLagBytes     = "dr.kubedb.com/switchover-max-lag-bytes"
 
 	AnnLeaseHandoffTo = "dr.open-cluster-management.io/handoff-to"
@@ -202,49 +201,31 @@ type Scope struct {
 }
 
 // ResolveScopeForDB mirrors the operator's scopeForDB: the PlacementPolicy's
-// failoverPolicy.trigger is the source of truth (Group with a name, else Global);
-// the dr.kubedb.com/failover-group annotation is consulted only when the policy
-// carries no failoverPolicy; otherwise the scope is Global.
+// failoverPolicy.failoverGroupRef is the source of truth (a named FailoverGroup
+// follows its primary-dc-<group> Lease); no reference, or no policy, is Global.
 func ResolveScopeForDB(ctx context.Context, dyn dynamic.Interface, db *unstructured.Unstructured) (*Scope, error) {
 	ppName, _, _ := unstructured.NestedString(db.Object, "spec", "podTemplate", "spec", "podPlacementPolicy", "name")
-	if ppName != "" {
-		pp, err := dyn.Resource(PlacementGVR).Get(ctx, ppName, metav1.GetOptions{})
-		if err == nil {
-			s := &Scope{MemberDCs: memberDCsFromPP(pp)}
-			trigger, found, _ := unstructured.NestedMap(pp.Object, "spec", "clusterSpreadConstraint", "failoverPolicy", "trigger")
-			if found {
-				scope, _ := trigger["scope"].(string)
-				group, _ := trigger["group"].(string)
-				if scope == "Group" && group != "" {
-					s.LeaseName = GroupLeasePrefix + group
-					s.Source = fmt.Sprintf("PlacementPolicy %s failoverPolicy trigger (Group %q)", ppName, group)
-					return s, nil
-				}
-				s.LeaseName = GlobalPrimaryLease
-				s.Source = fmt.Sprintf("PlacementPolicy %s failoverPolicy trigger (Global)", ppName)
-				return s, nil
-			}
-			// Policy exists but registers no failoverPolicy: back-compat annotation.
-			if g := db.GetAnnotations()[AnnFailoverGroup]; g != "" {
-				s.LeaseName = GroupLeasePrefix + g
-				s.Source = fmt.Sprintf("annotation %s (PlacementPolicy %s has no failoverPolicy)", AnnFailoverGroup, ppName)
-				return s, nil
-			}
-			s.LeaseName = GlobalPrimaryLease
-			s.Source = fmt.Sprintf("default Global (PlacementPolicy %s has no failoverPolicy); WARNING: this scope may not be registered, so no Lease may exist and protection may not be armed", ppName)
-			return s, nil
-		}
-		// The policy is referenced but unreadable: fall through to the annotation,
-		// but say so.
-		if g := db.GetAnnotations()[AnnFailoverGroup]; g != "" {
-			return &Scope{LeaseName: GroupLeasePrefix + g, Source: fmt.Sprintf("annotation %s (PlacementPolicy %s unreadable: %v)", AnnFailoverGroup, ppName, err)}, nil
-		}
+	if ppName == "" {
+		return &Scope{LeaseName: GlobalPrimaryLease, Source: "default Global (no PlacementPolicy set)"}, nil
+	}
+	pp, err := dyn.Resource(PlacementGVR).Get(ctx, ppName, metav1.GetOptions{})
+	if err != nil {
 		return &Scope{LeaseName: GlobalPrimaryLease, Source: fmt.Sprintf("default Global (PlacementPolicy %s unreadable: %v)", ppName, err)}, nil
 	}
-	if g := db.GetAnnotations()[AnnFailoverGroup]; g != "" {
-		return &Scope{LeaseName: GroupLeasePrefix + g, Source: "annotation " + AnnFailoverGroup}, nil
+	s := &Scope{MemberDCs: memberDCsFromPP(pp)}
+	if _, found, _ := unstructured.NestedMap(pp.Object, "spec", "clusterSpreadConstraint", "failoverPolicy"); !found {
+		s.LeaseName = GlobalPrimaryLease
+		s.Source = fmt.Sprintf("default Global (PlacementPolicy %s has no failoverPolicy); WARNING: this scope may not be registered, so no Lease may exist and protection may not be armed", ppName)
+		return s, nil
 	}
-	return &Scope{LeaseName: GlobalPrimaryLease, Source: "default Global (no PlacementPolicy set)"}, nil
+	if group, _, _ := unstructured.NestedString(pp.Object, "spec", "clusterSpreadConstraint", "failoverPolicy", "failoverGroupRef", "name"); group != "" {
+		s.LeaseName = GroupLeasePrefix + group
+		s.Source = fmt.Sprintf("PlacementPolicy %s failoverGroupRef %q", ppName, group)
+		return s, nil
+	}
+	s.LeaseName = GlobalPrimaryLease
+	s.Source = fmt.Sprintf("PlacementPolicy %s failoverPolicy (Global)", ppName)
+	return s, nil
 }
 
 func memberDCsFromPP(pp *unstructured.Unstructured) []string {

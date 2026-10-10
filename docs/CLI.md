@@ -74,7 +74,7 @@ hold the primary role), and a target that is already active (prints a no-op noti
 
 ```
 $ kubectl dba dc-dr switchover cli-test -n demo --to dc-a
-Switchover of demo/cli-test to "dc-a" requested (scope primary-dc-clitest, from PlacementPolicy cli-test-pp failoverPolicy trigger (Group "clitest")).
+Switchover of demo/cli-test to "dc-a" requested (scope primary-dc-clitest, from PlacementPolicy cli-test-pp failoverGroupRef "clitest").
 The operator will quiesce, wait for catch-up, and hand off; zero committed rows are lost.
 Monitor:  kubectl dba dc-dr status cli-test -n demo
 Abort:    kubectl dba dc-dr abort cli-test -n demo
@@ -102,7 +102,7 @@ operator's own gates read, so the display cannot drift from the real decision.
 $ kubectl dba dc-dr status pg-dcdr -n demo
 Database:      demo/pg-dcdr (Ready)
 Failover scope: primary-dc
-                (PlacementPolicy dcdr-postgres failoverPolicy trigger (Global))
+                (PlacementPolicy dcdr-postgres failoverPolicy (Global))
 Member DCs:    dc-a, dc-b
 Active DC:     dc-b   DR phase: Steady
 Protected:     true  (data center "dc-a" is streaming 0 bytes behind, within the 16777216 byte budget)
@@ -329,13 +329,13 @@ kubectl dba dc-dr active-dc DB_NAME -n NS -q          # just the DC name, for sc
 ```
 
 Given a database, its scope is resolved exactly as the operator resolves it (the
-PlacementPolicy's `failoverPolicy.trigger`, falling back to the legacy
-`dr.kubedb.com/failover-group` annotation, else Global) and the matching Lease is read.
+PlacementPolicy's `failoverPolicy.failoverGroupRef`, else Global) and the matching
+Lease is read.
 
 ```
 $ kubectl dba dc-dr active-dc pg-dcdr -n demo
 Active DC:  dc-b
-Lease:      dc-failover/primary-dc  (scope from PlacementPolicy dcdr-postgres failoverPolicy trigger (Global))
+Lease:      dc-failover/primary-dc  (scope from PlacementPolicy dcdr-postgres failoverPolicy (Global))
 Renewed:    2s ago (lease duration 45s)
 Transitions:41
 Members:    dc-a,dc-b
@@ -371,7 +371,7 @@ Diagnosing failover for demo/pg-dcdr
 
   [OK  ] database is DC-DR distributed and armed
   [OK  ] failover scope resolves to primary-dc
-         PlacementPolicy dcdr-postgres failoverPolicy trigger (Global)
+         PlacementPolicy dcdr-postgres failoverPolicy (Global)
   [WARN] holder "dc-b" is renewing normally, so the authority will NOT move on its own
          the Lease was renewed 5s ago, inside its 45s duration: that data center's agent is alive
          -> this is by design: no database-level condition (client errors, QPS, lag, a crashed
