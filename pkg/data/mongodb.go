@@ -342,10 +342,6 @@ func (opts *mongoDBOpts) getShellCommand(command string) (*shell.Session, error)
 
 	db := opts.db
 	svcName := fmt.Sprintf("svc/%s", db.Name)
-	kubectlCommand := []any{
-		"exec", "-n", db.Namespace, svcName, "-c", "mongodb", "--",
-	}
-
 	mgCommand := []any{
 		opts.cliCommand,
 	}
@@ -367,6 +363,8 @@ func (opts *mongoDBOpts) getShellCommand(command string) (*shell.Session, error)
 	}
 
 	mgCommand = append(mgCommand, "--eval", command)
+	kubectlCommand := make([]any, 0, 7+len(mgCommand))
+	kubectlCommand = append(kubectlCommand, "exec", "-n", db.Namespace, svcName, "-c", "mongodb", "--")
 	finalCommand := append(kubectlCommand, mgCommand...)
 
 	return sh.Command("kubectl", finalCommand...), nil
