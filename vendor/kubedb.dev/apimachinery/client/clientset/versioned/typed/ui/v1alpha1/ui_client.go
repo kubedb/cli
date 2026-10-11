@@ -19,31 +19,49 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"net/http"
+	http "net/http"
 
-	v1alpha1 "kubedb.dev/apimachinery/apis/ui/v1alpha1"
-	"kubedb.dev/apimachinery/client/clientset/versioned/scheme"
+	uiv1alpha1 "kubedb.dev/apimachinery/apis/ui/v1alpha1"
+	scheme "kubedb.dev/apimachinery/client/clientset/versioned/scheme"
 
 	rest "k8s.io/client-go/rest"
 )
 
 type UiV1alpha1Interface interface {
 	RESTClient() rest.Interface
+	CassandraInsightsGetter
+	CassandraSchemaOverviewsGetter
+	DB2InsightsGetter
+	DB2QueriesesGetter
+	DB2SchemaOverviewsGetter
 	DatabaseConfigurationsGetter
 	DatabaseConnectionsGetter
 	DatabaseSummariesGetter
+	DocumentDBInsightsGetter
+	DocumentDBSchemaOverviewsGetter
+	DruidInsightsGetter
+	DruidSchemaOverviewsGetter
+	DruidTasksesGetter
 	ElasticsearchInsightsGetter
 	ElasticsearchNodesStatsesGetter
 	ElasticsearchSchemaOverviewsGetter
 	MariaDBInsightsGetter
 	MariaDBQueriesesGetter
 	MariaDBSchemaOverviewsGetter
+	MilvusInsightsGetter
+	MilvusSchemaOverviewsGetter
 	MongoDBInsightsGetter
 	MongoDBQueriesesGetter
 	MongoDBSchemaOverviewsGetter
 	MySQLInsightsGetter
 	MySQLQueriesesGetter
 	MySQLSchemaOverviewsGetter
+	Neo4jActivitiesGetter
+	Neo4jInsightsGetter
+	Neo4jSchemaOverviewsGetter
+	PerconaXtraDBInsightsGetter
+	PerconaXtraDBQueriesesGetter
+	PerconaXtraDBSchemaOverviewsGetter
 	PgBouncerInsightsGetter
 	PgBouncerPoolOverviewsGetter
 	PgBouncerServerOverviewsGetter
@@ -58,11 +76,34 @@ type UiV1alpha1Interface interface {
 	RedisInsightsGetter
 	RedisQueriesesGetter
 	RedisSchemaOverviewsGetter
+	SinglestoreInsightsGetter
+	SinglestoreQueriesesGetter
+	SinglestoreSchemaOverviewsGetter
 }
 
 // UiV1alpha1Client is used to interact with features provided by the ui.kubedb.com group.
 type UiV1alpha1Client struct {
 	restClient rest.Interface
+}
+
+func (c *UiV1alpha1Client) CassandraInsights(namespace string) CassandraInsightInterface {
+	return newCassandraInsights(c, namespace)
+}
+
+func (c *UiV1alpha1Client) CassandraSchemaOverviews(namespace string) CassandraSchemaOverviewInterface {
+	return newCassandraSchemaOverviews(c, namespace)
+}
+
+func (c *UiV1alpha1Client) DB2Insights(namespace string) DB2InsightInterface {
+	return newDB2Insights(c, namespace)
+}
+
+func (c *UiV1alpha1Client) DB2Querieses(namespace string) DB2QueriesInterface {
+	return newDB2Querieses(c, namespace)
+}
+
+func (c *UiV1alpha1Client) DB2SchemaOverviews(namespace string) DB2SchemaOverviewInterface {
+	return newDB2SchemaOverviews(c, namespace)
 }
 
 func (c *UiV1alpha1Client) DatabaseConfigurations(namespace string) DatabaseConfigurationInterface {
@@ -75,6 +116,26 @@ func (c *UiV1alpha1Client) DatabaseConnections(namespace string) DatabaseConnect
 
 func (c *UiV1alpha1Client) DatabaseSummaries() DatabaseSummaryInterface {
 	return newDatabaseSummaries(c)
+}
+
+func (c *UiV1alpha1Client) DocumentDBInsights(namespace string) DocumentDBInsightInterface {
+	return newDocumentDBInsights(c, namespace)
+}
+
+func (c *UiV1alpha1Client) DocumentDBSchemaOverviews(namespace string) DocumentDBSchemaOverviewInterface {
+	return newDocumentDBSchemaOverviews(c, namespace)
+}
+
+func (c *UiV1alpha1Client) DruidInsights(namespace string) DruidInsightInterface {
+	return newDruidInsights(c, namespace)
+}
+
+func (c *UiV1alpha1Client) DruidSchemaOverviews(namespace string) DruidSchemaOverviewInterface {
+	return newDruidSchemaOverviews(c, namespace)
+}
+
+func (c *UiV1alpha1Client) DruidTaskses(namespace string) DruidTasksInterface {
+	return newDruidTaskses(c, namespace)
 }
 
 func (c *UiV1alpha1Client) ElasticsearchInsights(namespace string) ElasticsearchInsightInterface {
@@ -101,6 +162,14 @@ func (c *UiV1alpha1Client) MariaDBSchemaOverviews(namespace string) MariaDBSchem
 	return newMariaDBSchemaOverviews(c, namespace)
 }
 
+func (c *UiV1alpha1Client) MilvusInsights(namespace string) MilvusInsightInterface {
+	return newMilvusInsights(c, namespace)
+}
+
+func (c *UiV1alpha1Client) MilvusSchemaOverviews(namespace string) MilvusSchemaOverviewInterface {
+	return newMilvusSchemaOverviews(c, namespace)
+}
+
 func (c *UiV1alpha1Client) MongoDBInsights(namespace string) MongoDBInsightInterface {
 	return newMongoDBInsights(c, namespace)
 }
@@ -123,6 +192,30 @@ func (c *UiV1alpha1Client) MySQLQuerieses(namespace string) MySQLQueriesInterfac
 
 func (c *UiV1alpha1Client) MySQLSchemaOverviews(namespace string) MySQLSchemaOverviewInterface {
 	return newMySQLSchemaOverviews(c, namespace)
+}
+
+func (c *UiV1alpha1Client) Neo4jActivities(namespace string) Neo4jActivityInterface {
+	return newNeo4jActivities(c, namespace)
+}
+
+func (c *UiV1alpha1Client) Neo4jInsights(namespace string) Neo4jInsightInterface {
+	return newNeo4jInsights(c, namespace)
+}
+
+func (c *UiV1alpha1Client) Neo4jSchemaOverviews(namespace string) Neo4jSchemaOverviewInterface {
+	return newNeo4jSchemaOverviews(c, namespace)
+}
+
+func (c *UiV1alpha1Client) PerconaXtraDBInsights(namespace string) PerconaXtraDBInsightInterface {
+	return newPerconaXtraDBInsights(c, namespace)
+}
+
+func (c *UiV1alpha1Client) PerconaXtraDBQuerieses(namespace string) PerconaXtraDBQueriesInterface {
+	return newPerconaXtraDBQuerieses(c, namespace)
+}
+
+func (c *UiV1alpha1Client) PerconaXtraDBSchemaOverviews(namespace string) PerconaXtraDBSchemaOverviewInterface {
+	return newPerconaXtraDBSchemaOverviews(c, namespace)
 }
 
 func (c *UiV1alpha1Client) PgBouncerInsights(namespace string) PgBouncerInsightInterface {
@@ -181,14 +274,24 @@ func (c *UiV1alpha1Client) RedisSchemaOverviews(namespace string) RedisSchemaOve
 	return newRedisSchemaOverviews(c, namespace)
 }
 
+func (c *UiV1alpha1Client) SinglestoreInsights(namespace string) SinglestoreInsightInterface {
+	return newSinglestoreInsights(c, namespace)
+}
+
+func (c *UiV1alpha1Client) SinglestoreQuerieses(namespace string) SinglestoreQueriesInterface {
+	return newSinglestoreQuerieses(c, namespace)
+}
+
+func (c *UiV1alpha1Client) SinglestoreSchemaOverviews(namespace string) SinglestoreSchemaOverviewInterface {
+	return newSinglestoreSchemaOverviews(c, namespace)
+}
+
 // NewForConfig creates a new UiV1alpha1Client for the given config.
 // NewForConfig is equivalent to NewForConfigAndClient(c, httpClient),
 // where httpClient was generated with rest.HTTPClientFor(c).
 func NewForConfig(c *rest.Config) (*UiV1alpha1Client, error) {
 	config := *c
-	if err := setConfigDefaults(&config); err != nil {
-		return nil, err
-	}
+	setConfigDefaults(&config)
 	httpClient, err := rest.HTTPClientFor(&config)
 	if err != nil {
 		return nil, err
@@ -200,9 +303,7 @@ func NewForConfig(c *rest.Config) (*UiV1alpha1Client, error) {
 // Note the http client provided takes precedence over the configured transport values.
 func NewForConfigAndClient(c *rest.Config, h *http.Client) (*UiV1alpha1Client, error) {
 	config := *c
-	if err := setConfigDefaults(&config); err != nil {
-		return nil, err
-	}
+	setConfigDefaults(&config)
 	client, err := rest.RESTClientForConfigAndClient(&config, h)
 	if err != nil {
 		return nil, err
@@ -225,17 +326,15 @@ func New(c rest.Interface) *UiV1alpha1Client {
 	return &UiV1alpha1Client{c}
 }
 
-func setConfigDefaults(config *rest.Config) error {
-	gv := v1alpha1.SchemeGroupVersion
+func setConfigDefaults(config *rest.Config) {
+	gv := uiv1alpha1.SchemeGroupVersion
 	config.GroupVersion = &gv
 	config.APIPath = "/apis"
-	config.NegotiatedSerializer = scheme.Codecs.WithoutConversion()
+	config.NegotiatedSerializer = rest.CodecFactoryForGeneratedClient(scheme.Scheme, scheme.Codecs).WithoutConversion()
 
 	if config.UserAgent == "" {
 		config.UserAgent = rest.DefaultKubernetesUserAgent()
 	}
-
-	return nil
 }
 
 // RESTClient returns a RESTClient that is used to communicate

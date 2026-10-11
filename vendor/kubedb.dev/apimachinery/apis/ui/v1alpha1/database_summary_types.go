@@ -28,15 +28,23 @@ const (
 	ResourceDatabaseSummaries   = "databasesummaries"
 )
 
+// DatabaseSummary is a request/response payload, not a stored Kubernetes
+// object -- it carries no metav1.ObjectMeta, matching how upstream
+// Kubernetes shapes the same kind of type (e.g.
+// k8s.io/api/admission/v1.AdmissionReview). Its generated client is built
+// on kmodules.xyz/client-go/gentype's create-only Client[T runtime.Object]
+// instead of k8s.io/client-go/gentype's Client[T], which requires
+// metav1.Object -- see that package's doc comment. This only works because
+// DatabaseSummary is create-only (+genclient:onlyVerbs=create); it carries
+// no +kubebuilder:object:root=true/+kubebuilder:resource markers since
+// controller-gen needs ObjectMeta to treat a type as a CRD root, and
+// ui-server serves this type via API aggregation, not a CRD.
 // +genclient
 // +genclient:nonNamespaced
 // +genclient:skipVerbs=get,list,update,delete,watch
 // +genclient:onlyVerbs=create
 // +k8s:openapi-gen=true
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
-
-// +kubebuilder:object:root=true
-// +kubebuilder:resource:path=databasesummaries,singular=databasesummary,scope=Cluster
 type DatabaseSummary struct {
 	metav1.TypeMeta `json:",inline"`
 	// +optional

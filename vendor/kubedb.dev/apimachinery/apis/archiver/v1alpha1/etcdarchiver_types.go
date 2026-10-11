@@ -35,7 +35,7 @@ const (
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 // +kubebuilder:object:root=true
-// +kubebuilder:resource:path=etcdarchivers,singular=etcdarchiver,shortName=etcdarchiver,categories={archiver,kubedb,appscode}
+// +kubebuilder:resource:path=etcdarchivers,singular=etcdarchiver,shortName=etarchiver,categories={archiver,kubedb,appscode}
 // +kubebuilder:subresource:status
 type EtcdArchiver struct {
 	metav1.TypeMeta   `json:",inline"`

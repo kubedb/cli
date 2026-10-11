@@ -19,16 +19,15 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"context"
-	"time"
+	context "context"
 
-	v1alpha1 "kubedb.dev/apimachinery/apis/archiver/v1alpha1"
+	archiverv1alpha1 "kubedb.dev/apimachinery/apis/archiver/v1alpha1"
 	scheme "kubedb.dev/apimachinery/client/clientset/versioned/scheme"
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
-	rest "k8s.io/client-go/rest"
+	gentype "k8s.io/client-go/gentype"
 )
 
 // PostgresArchiversGetter has a method to return a PostgresArchiverInterface.
@@ -39,158 +38,34 @@ type PostgresArchiversGetter interface {
 
 // PostgresArchiverInterface has methods to work with PostgresArchiver resources.
 type PostgresArchiverInterface interface {
-	Create(ctx context.Context, postgresArchiver *v1alpha1.PostgresArchiver, opts v1.CreateOptions) (*v1alpha1.PostgresArchiver, error)
-	Update(ctx context.Context, postgresArchiver *v1alpha1.PostgresArchiver, opts v1.UpdateOptions) (*v1alpha1.PostgresArchiver, error)
-	UpdateStatus(ctx context.Context, postgresArchiver *v1alpha1.PostgresArchiver, opts v1.UpdateOptions) (*v1alpha1.PostgresArchiver, error)
+	Create(ctx context.Context, postgresArchiver *archiverv1alpha1.PostgresArchiver, opts v1.CreateOptions) (*archiverv1alpha1.PostgresArchiver, error)
+	Update(ctx context.Context, postgresArchiver *archiverv1alpha1.PostgresArchiver, opts v1.UpdateOptions) (*archiverv1alpha1.PostgresArchiver, error)
+	// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
+	UpdateStatus(ctx context.Context, postgresArchiver *archiverv1alpha1.PostgresArchiver, opts v1.UpdateOptions) (*archiverv1alpha1.PostgresArchiver, error)
 	Delete(ctx context.Context, name string, opts v1.DeleteOptions) error
 	DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error
-	Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha1.PostgresArchiver, error)
-	List(ctx context.Context, opts v1.ListOptions) (*v1alpha1.PostgresArchiverList, error)
+	Get(ctx context.Context, name string, opts v1.GetOptions) (*archiverv1alpha1.PostgresArchiver, error)
+	List(ctx context.Context, opts v1.ListOptions) (*archiverv1alpha1.PostgresArchiverList, error)
 	Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error)
-	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.PostgresArchiver, err error)
+	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *archiverv1alpha1.PostgresArchiver, err error)
 	PostgresArchiverExpansion
 }
 
 // postgresArchivers implements PostgresArchiverInterface
 type postgresArchivers struct {
-	client rest.Interface
-	ns     string
+	*gentype.ClientWithList[*archiverv1alpha1.PostgresArchiver, *archiverv1alpha1.PostgresArchiverList]
 }
 
 // newPostgresArchivers returns a PostgresArchivers
 func newPostgresArchivers(c *ArchiverV1alpha1Client, namespace string) *postgresArchivers {
 	return &postgresArchivers{
-		client: c.RESTClient(),
-		ns:     namespace,
+		gentype.NewClientWithList[*archiverv1alpha1.PostgresArchiver, *archiverv1alpha1.PostgresArchiverList](
+			"postgresarchivers",
+			c.RESTClient(),
+			scheme.ParameterCodec,
+			namespace,
+			func() *archiverv1alpha1.PostgresArchiver { return &archiverv1alpha1.PostgresArchiver{} },
+			func() *archiverv1alpha1.PostgresArchiverList { return &archiverv1alpha1.PostgresArchiverList{} },
+		),
 	}
-}
-
-// Get takes name of the postgresArchiver, and returns the corresponding postgresArchiver object, and an error if there is any.
-func (c *postgresArchivers) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.PostgresArchiver, err error) {
-	result = &v1alpha1.PostgresArchiver{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("postgresarchivers").
-		Name(name).
-		VersionedParams(&options, scheme.ParameterCodec).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// List takes label and field selectors, and returns the list of PostgresArchivers that match those selectors.
-func (c *postgresArchivers) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha1.PostgresArchiverList, err error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	result = &v1alpha1.PostgresArchiverList{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("postgresarchivers").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Watch returns a watch.Interface that watches the requested postgresArchivers.
-func (c *postgresArchivers) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	opts.Watch = true
-	return c.client.Get().
-		Namespace(c.ns).
-		Resource("postgresarchivers").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Watch(ctx)
-}
-
-// Create takes the representation of a postgresArchiver and creates it.  Returns the server's representation of the postgresArchiver, and an error, if there is any.
-func (c *postgresArchivers) Create(ctx context.Context, postgresArchiver *v1alpha1.PostgresArchiver, opts v1.CreateOptions) (result *v1alpha1.PostgresArchiver, err error) {
-	result = &v1alpha1.PostgresArchiver{}
-	err = c.client.Post().
-		Namespace(c.ns).
-		Resource("postgresarchivers").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(postgresArchiver).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Update takes the representation of a postgresArchiver and updates it. Returns the server's representation of the postgresArchiver, and an error, if there is any.
-func (c *postgresArchivers) Update(ctx context.Context, postgresArchiver *v1alpha1.PostgresArchiver, opts v1.UpdateOptions) (result *v1alpha1.PostgresArchiver, err error) {
-	result = &v1alpha1.PostgresArchiver{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("postgresarchivers").
-		Name(postgresArchiver.Name).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(postgresArchiver).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// UpdateStatus was generated because the type contains a Status member.
-// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
-func (c *postgresArchivers) UpdateStatus(ctx context.Context, postgresArchiver *v1alpha1.PostgresArchiver, opts v1.UpdateOptions) (result *v1alpha1.PostgresArchiver, err error) {
-	result = &v1alpha1.PostgresArchiver{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("postgresarchivers").
-		Name(postgresArchiver.Name).
-		SubResource("status").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(postgresArchiver).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Delete takes name of the postgresArchiver and deletes it. Returns an error if one occurs.
-func (c *postgresArchivers) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("postgresarchivers").
-		Name(name).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// DeleteCollection deletes a collection of objects.
-func (c *postgresArchivers) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
-	var timeout time.Duration
-	if listOpts.TimeoutSeconds != nil {
-		timeout = time.Duration(*listOpts.TimeoutSeconds) * time.Second
-	}
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("postgresarchivers").
-		VersionedParams(&listOpts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// Patch applies the patch and returns the patched postgresArchiver.
-func (c *postgresArchivers) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.PostgresArchiver, err error) {
-	result = &v1alpha1.PostgresArchiver{}
-	err = c.client.Patch(pt).
-		Namespace(c.ns).
-		Resource("postgresarchivers").
-		Name(name).
-		SubResource(subresources...).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(data).
-		Do(ctx).
-		Into(result)
-	return
 }

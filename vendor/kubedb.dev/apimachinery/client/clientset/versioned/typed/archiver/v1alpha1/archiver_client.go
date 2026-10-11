@@ -19,10 +19,10 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"net/http"
+	http "net/http"
 
-	v1alpha1 "kubedb.dev/apimachinery/apis/archiver/v1alpha1"
-	"kubedb.dev/apimachinery/client/clientset/versioned/scheme"
+	archiverv1alpha1 "kubedb.dev/apimachinery/apis/archiver/v1alpha1"
+	scheme "kubedb.dev/apimachinery/client/clientset/versioned/scheme"
 
 	rest "k8s.io/client-go/rest"
 )
@@ -30,11 +30,14 @@ import (
 type ArchiverV1alpha1Interface interface {
 	RESTClient() rest.Interface
 	ClickHouseArchiversGetter
+	DocumentDBArchiversGetter
 	EtcdArchiversGetter
 	MSSQLServerArchiversGetter
 	MariaDBArchiversGetter
+	MilvusArchiversGetter
 	MongoDBArchiversGetter
 	MySQLArchiversGetter
+	Neo4jArchiversGetter
 	PostgresArchiversGetter
 }
 
@@ -45,6 +48,10 @@ type ArchiverV1alpha1Client struct {
 
 func (c *ArchiverV1alpha1Client) ClickHouseArchivers(namespace string) ClickHouseArchiverInterface {
 	return newClickHouseArchivers(c, namespace)
+}
+
+func (c *ArchiverV1alpha1Client) DocumentDBArchivers(namespace string) DocumentDBArchiverInterface {
+	return newDocumentDBArchivers(c, namespace)
 }
 
 func (c *ArchiverV1alpha1Client) EtcdArchivers(namespace string) EtcdArchiverInterface {
@@ -59,12 +66,20 @@ func (c *ArchiverV1alpha1Client) MariaDBArchivers(namespace string) MariaDBArchi
 	return newMariaDBArchivers(c, namespace)
 }
 
+func (c *ArchiverV1alpha1Client) MilvusArchivers(namespace string) MilvusArchiverInterface {
+	return newMilvusArchivers(c, namespace)
+}
+
 func (c *ArchiverV1alpha1Client) MongoDBArchivers(namespace string) MongoDBArchiverInterface {
 	return newMongoDBArchivers(c, namespace)
 }
 
 func (c *ArchiverV1alpha1Client) MySQLArchivers(namespace string) MySQLArchiverInterface {
 	return newMySQLArchivers(c, namespace)
+}
+
+func (c *ArchiverV1alpha1Client) Neo4jArchivers(namespace string) Neo4jArchiverInterface {
+	return newNeo4jArchivers(c, namespace)
 }
 
 func (c *ArchiverV1alpha1Client) PostgresArchivers(namespace string) PostgresArchiverInterface {
@@ -76,9 +91,7 @@ func (c *ArchiverV1alpha1Client) PostgresArchivers(namespace string) PostgresArc
 // where httpClient was generated with rest.HTTPClientFor(c).
 func NewForConfig(c *rest.Config) (*ArchiverV1alpha1Client, error) {
 	config := *c
-	if err := setConfigDefaults(&config); err != nil {
-		return nil, err
-	}
+	setConfigDefaults(&config)
 	httpClient, err := rest.HTTPClientFor(&config)
 	if err != nil {
 		return nil, err
@@ -90,9 +103,7 @@ func NewForConfig(c *rest.Config) (*ArchiverV1alpha1Client, error) {
 // Note the http client provided takes precedence over the configured transport values.
 func NewForConfigAndClient(c *rest.Config, h *http.Client) (*ArchiverV1alpha1Client, error) {
 	config := *c
-	if err := setConfigDefaults(&config); err != nil {
-		return nil, err
-	}
+	setConfigDefaults(&config)
 	client, err := rest.RESTClientForConfigAndClient(&config, h)
 	if err != nil {
 		return nil, err
@@ -115,17 +126,15 @@ func New(c rest.Interface) *ArchiverV1alpha1Client {
 	return &ArchiverV1alpha1Client{c}
 }
 
-func setConfigDefaults(config *rest.Config) error {
-	gv := v1alpha1.SchemeGroupVersion
+func setConfigDefaults(config *rest.Config) {
+	gv := archiverv1alpha1.SchemeGroupVersion
 	config.GroupVersion = &gv
 	config.APIPath = "/apis"
-	config.NegotiatedSerializer = scheme.Codecs.WithoutConversion()
+	config.NegotiatedSerializer = rest.CodecFactoryForGeneratedClient(scheme.Scheme, scheme.Codecs).WithoutConversion()
 
 	if config.UserAgent == "" {
 		config.UserAgent = rest.DefaultKubernetesUserAgent()
 	}
-
-	return nil
 }
 
 // RESTClient returns a RESTClient that is used to communicate

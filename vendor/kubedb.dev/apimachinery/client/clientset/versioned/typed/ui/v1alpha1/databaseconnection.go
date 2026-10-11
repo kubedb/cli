@@ -19,16 +19,15 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"context"
-	"time"
+	context "context"
 
-	v1alpha1 "kubedb.dev/apimachinery/apis/ui/v1alpha1"
+	uiv1alpha1 "kubedb.dev/apimachinery/apis/ui/v1alpha1"
 	scheme "kubedb.dev/apimachinery/client/clientset/versioned/scheme"
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
-	rest "k8s.io/client-go/rest"
+	gentype "k8s.io/client-go/gentype"
 )
 
 // DatabaseConnectionsGetter has a method to return a DatabaseConnectionInterface.
@@ -39,158 +38,34 @@ type DatabaseConnectionsGetter interface {
 
 // DatabaseConnectionInterface has methods to work with DatabaseConnection resources.
 type DatabaseConnectionInterface interface {
-	Create(ctx context.Context, databaseConnection *v1alpha1.DatabaseConnection, opts v1.CreateOptions) (*v1alpha1.DatabaseConnection, error)
-	Update(ctx context.Context, databaseConnection *v1alpha1.DatabaseConnection, opts v1.UpdateOptions) (*v1alpha1.DatabaseConnection, error)
-	UpdateStatus(ctx context.Context, databaseConnection *v1alpha1.DatabaseConnection, opts v1.UpdateOptions) (*v1alpha1.DatabaseConnection, error)
+	Create(ctx context.Context, databaseConnection *uiv1alpha1.DatabaseConnection, opts v1.CreateOptions) (*uiv1alpha1.DatabaseConnection, error)
+	Update(ctx context.Context, databaseConnection *uiv1alpha1.DatabaseConnection, opts v1.UpdateOptions) (*uiv1alpha1.DatabaseConnection, error)
+	// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
+	UpdateStatus(ctx context.Context, databaseConnection *uiv1alpha1.DatabaseConnection, opts v1.UpdateOptions) (*uiv1alpha1.DatabaseConnection, error)
 	Delete(ctx context.Context, name string, opts v1.DeleteOptions) error
 	DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error
-	Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha1.DatabaseConnection, error)
-	List(ctx context.Context, opts v1.ListOptions) (*v1alpha1.DatabaseConnectionList, error)
+	Get(ctx context.Context, name string, opts v1.GetOptions) (*uiv1alpha1.DatabaseConnection, error)
+	List(ctx context.Context, opts v1.ListOptions) (*uiv1alpha1.DatabaseConnectionList, error)
 	Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error)
-	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.DatabaseConnection, err error)
+	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *uiv1alpha1.DatabaseConnection, err error)
 	DatabaseConnectionExpansion
 }
 
 // databaseConnections implements DatabaseConnectionInterface
 type databaseConnections struct {
-	client rest.Interface
-	ns     string
+	*gentype.ClientWithList[*uiv1alpha1.DatabaseConnection, *uiv1alpha1.DatabaseConnectionList]
 }
 
 // newDatabaseConnections returns a DatabaseConnections
 func newDatabaseConnections(c *UiV1alpha1Client, namespace string) *databaseConnections {
 	return &databaseConnections{
-		client: c.RESTClient(),
-		ns:     namespace,
+		gentype.NewClientWithList[*uiv1alpha1.DatabaseConnection, *uiv1alpha1.DatabaseConnectionList](
+			"databaseconnections",
+			c.RESTClient(),
+			scheme.ParameterCodec,
+			namespace,
+			func() *uiv1alpha1.DatabaseConnection { return &uiv1alpha1.DatabaseConnection{} },
+			func() *uiv1alpha1.DatabaseConnectionList { return &uiv1alpha1.DatabaseConnectionList{} },
+		),
 	}
-}
-
-// Get takes name of the databaseConnection, and returns the corresponding databaseConnection object, and an error if there is any.
-func (c *databaseConnections) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.DatabaseConnection, err error) {
-	result = &v1alpha1.DatabaseConnection{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("databaseconnections").
-		Name(name).
-		VersionedParams(&options, scheme.ParameterCodec).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// List takes label and field selectors, and returns the list of DatabaseConnections that match those selectors.
-func (c *databaseConnections) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha1.DatabaseConnectionList, err error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	result = &v1alpha1.DatabaseConnectionList{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("databaseconnections").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Watch returns a watch.Interface that watches the requested databaseConnections.
-func (c *databaseConnections) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	opts.Watch = true
-	return c.client.Get().
-		Namespace(c.ns).
-		Resource("databaseconnections").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Watch(ctx)
-}
-
-// Create takes the representation of a databaseConnection and creates it.  Returns the server's representation of the databaseConnection, and an error, if there is any.
-func (c *databaseConnections) Create(ctx context.Context, databaseConnection *v1alpha1.DatabaseConnection, opts v1.CreateOptions) (result *v1alpha1.DatabaseConnection, err error) {
-	result = &v1alpha1.DatabaseConnection{}
-	err = c.client.Post().
-		Namespace(c.ns).
-		Resource("databaseconnections").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(databaseConnection).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Update takes the representation of a databaseConnection and updates it. Returns the server's representation of the databaseConnection, and an error, if there is any.
-func (c *databaseConnections) Update(ctx context.Context, databaseConnection *v1alpha1.DatabaseConnection, opts v1.UpdateOptions) (result *v1alpha1.DatabaseConnection, err error) {
-	result = &v1alpha1.DatabaseConnection{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("databaseconnections").
-		Name(databaseConnection.Name).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(databaseConnection).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// UpdateStatus was generated because the type contains a Status member.
-// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
-func (c *databaseConnections) UpdateStatus(ctx context.Context, databaseConnection *v1alpha1.DatabaseConnection, opts v1.UpdateOptions) (result *v1alpha1.DatabaseConnection, err error) {
-	result = &v1alpha1.DatabaseConnection{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("databaseconnections").
-		Name(databaseConnection.Name).
-		SubResource("status").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(databaseConnection).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Delete takes name of the databaseConnection and deletes it. Returns an error if one occurs.
-func (c *databaseConnections) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("databaseconnections").
-		Name(name).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// DeleteCollection deletes a collection of objects.
-func (c *databaseConnections) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
-	var timeout time.Duration
-	if listOpts.TimeoutSeconds != nil {
-		timeout = time.Duration(*listOpts.TimeoutSeconds) * time.Second
-	}
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("databaseconnections").
-		VersionedParams(&listOpts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// Patch applies the patch and returns the patched databaseConnection.
-func (c *databaseConnections) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.DatabaseConnection, err error) {
-	result = &v1alpha1.DatabaseConnection{}
-	err = c.client.Patch(pt).
-		Namespace(c.ns).
-		Resource("databaseconnections").
-		Name(name).
-		SubResource(subresources...).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(data).
-		Do(ctx).
-		Into(result)
-	return
 }

@@ -1,0 +1,56 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    app.kubernetes.io/name: kubedb
+  name: singlestoreschemaoverviews.ui.kubedb.com
+spec:
+  group: ui.kubedb.com
+  names:
+    kind: SinglestoreSchemaOverview
+    listKind: SinglestoreSchemaOverviewList
+    plural: singlestoreschemaoverviews
+    singular: singlestoreschemaoverview
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        properties:
+          apiVersion:
+            type: string
+          kind:
+            type: string
+          metadata:
+            type: object
+          spec:
+            properties:
+              databases:
+                items:
+                  properties:
+                    databaseName:
+                      type: string
+                    diskUseBytes:
+                      format: int64
+                      type: integer
+                    memoryUseBytes:
+                      format: int64
+                      type: integer
+                    rows:
+                      format: int64
+                      type: integer
+                    storageType:
+                      type: string
+                    tableName:
+                      type: string
+                  required:
+                  - databaseName
+                  - tableName
+                  type: object
+                type: array
+            required:
+            - databases
+            type: object
+        type: object
+    served: true
+    storage: true

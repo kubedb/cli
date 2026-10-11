@@ -19,16 +19,15 @@ limitations under the License.
 package v1alpha2
 
 import (
-	"context"
-	"time"
+	context "context"
 
-	v1alpha2 "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	kubedbv1alpha2 "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 	scheme "kubedb.dev/apimachinery/client/clientset/versioned/scheme"
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
-	rest "k8s.io/client-go/rest"
+	gentype "k8s.io/client-go/gentype"
 )
 
 // MSSQLServersGetter has a method to return a MSSQLServerInterface.
@@ -39,158 +38,34 @@ type MSSQLServersGetter interface {
 
 // MSSQLServerInterface has methods to work with MSSQLServer resources.
 type MSSQLServerInterface interface {
-	Create(ctx context.Context, mSSQLServer *v1alpha2.MSSQLServer, opts v1.CreateOptions) (*v1alpha2.MSSQLServer, error)
-	Update(ctx context.Context, mSSQLServer *v1alpha2.MSSQLServer, opts v1.UpdateOptions) (*v1alpha2.MSSQLServer, error)
-	UpdateStatus(ctx context.Context, mSSQLServer *v1alpha2.MSSQLServer, opts v1.UpdateOptions) (*v1alpha2.MSSQLServer, error)
+	Create(ctx context.Context, mSSQLServer *kubedbv1alpha2.MSSQLServer, opts v1.CreateOptions) (*kubedbv1alpha2.MSSQLServer, error)
+	Update(ctx context.Context, mSSQLServer *kubedbv1alpha2.MSSQLServer, opts v1.UpdateOptions) (*kubedbv1alpha2.MSSQLServer, error)
+	// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
+	UpdateStatus(ctx context.Context, mSSQLServer *kubedbv1alpha2.MSSQLServer, opts v1.UpdateOptions) (*kubedbv1alpha2.MSSQLServer, error)
 	Delete(ctx context.Context, name string, opts v1.DeleteOptions) error
 	DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error
-	Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha2.MSSQLServer, error)
-	List(ctx context.Context, opts v1.ListOptions) (*v1alpha2.MSSQLServerList, error)
+	Get(ctx context.Context, name string, opts v1.GetOptions) (*kubedbv1alpha2.MSSQLServer, error)
+	List(ctx context.Context, opts v1.ListOptions) (*kubedbv1alpha2.MSSQLServerList, error)
 	Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error)
-	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha2.MSSQLServer, err error)
+	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *kubedbv1alpha2.MSSQLServer, err error)
 	MSSQLServerExpansion
 }
 
 // mSSQLServers implements MSSQLServerInterface
 type mSSQLServers struct {
-	client rest.Interface
-	ns     string
+	*gentype.ClientWithList[*kubedbv1alpha2.MSSQLServer, *kubedbv1alpha2.MSSQLServerList]
 }
 
 // newMSSQLServers returns a MSSQLServers
 func newMSSQLServers(c *KubedbV1alpha2Client, namespace string) *mSSQLServers {
 	return &mSSQLServers{
-		client: c.RESTClient(),
-		ns:     namespace,
+		gentype.NewClientWithList[*kubedbv1alpha2.MSSQLServer, *kubedbv1alpha2.MSSQLServerList](
+			"mssqlservers",
+			c.RESTClient(),
+			scheme.ParameterCodec,
+			namespace,
+			func() *kubedbv1alpha2.MSSQLServer { return &kubedbv1alpha2.MSSQLServer{} },
+			func() *kubedbv1alpha2.MSSQLServerList { return &kubedbv1alpha2.MSSQLServerList{} },
+		),
 	}
-}
-
-// Get takes name of the mSSQLServer, and returns the corresponding mSSQLServer object, and an error if there is any.
-func (c *mSSQLServers) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha2.MSSQLServer, err error) {
-	result = &v1alpha2.MSSQLServer{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("mssqlservers").
-		Name(name).
-		VersionedParams(&options, scheme.ParameterCodec).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// List takes label and field selectors, and returns the list of MSSQLServers that match those selectors.
-func (c *mSSQLServers) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha2.MSSQLServerList, err error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	result = &v1alpha2.MSSQLServerList{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("mssqlservers").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Watch returns a watch.Interface that watches the requested mSSQLServers.
-func (c *mSSQLServers) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	opts.Watch = true
-	return c.client.Get().
-		Namespace(c.ns).
-		Resource("mssqlservers").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Watch(ctx)
-}
-
-// Create takes the representation of a mSSQLServer and creates it.  Returns the server's representation of the mSSQLServer, and an error, if there is any.
-func (c *mSSQLServers) Create(ctx context.Context, mSSQLServer *v1alpha2.MSSQLServer, opts v1.CreateOptions) (result *v1alpha2.MSSQLServer, err error) {
-	result = &v1alpha2.MSSQLServer{}
-	err = c.client.Post().
-		Namespace(c.ns).
-		Resource("mssqlservers").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(mSSQLServer).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Update takes the representation of a mSSQLServer and updates it. Returns the server's representation of the mSSQLServer, and an error, if there is any.
-func (c *mSSQLServers) Update(ctx context.Context, mSSQLServer *v1alpha2.MSSQLServer, opts v1.UpdateOptions) (result *v1alpha2.MSSQLServer, err error) {
-	result = &v1alpha2.MSSQLServer{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("mssqlservers").
-		Name(mSSQLServer.Name).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(mSSQLServer).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// UpdateStatus was generated because the type contains a Status member.
-// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
-func (c *mSSQLServers) UpdateStatus(ctx context.Context, mSSQLServer *v1alpha2.MSSQLServer, opts v1.UpdateOptions) (result *v1alpha2.MSSQLServer, err error) {
-	result = &v1alpha2.MSSQLServer{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("mssqlservers").
-		Name(mSSQLServer.Name).
-		SubResource("status").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(mSSQLServer).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Delete takes name of the mSSQLServer and deletes it. Returns an error if one occurs.
-func (c *mSSQLServers) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("mssqlservers").
-		Name(name).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// DeleteCollection deletes a collection of objects.
-func (c *mSSQLServers) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
-	var timeout time.Duration
-	if listOpts.TimeoutSeconds != nil {
-		timeout = time.Duration(*listOpts.TimeoutSeconds) * time.Second
-	}
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("mssqlservers").
-		VersionedParams(&listOpts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// Patch applies the patch and returns the patched mSSQLServer.
-func (c *mSSQLServers) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha2.MSSQLServer, err error) {
-	result = &v1alpha2.MSSQLServer{}
-	err = c.client.Patch(pt).
-		Namespace(c.ns).
-		Resource("mssqlservers").
-		Name(name).
-		SubResource(subresources...).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(data).
-		Do(ctx).
-		Into(result)
-	return
 }

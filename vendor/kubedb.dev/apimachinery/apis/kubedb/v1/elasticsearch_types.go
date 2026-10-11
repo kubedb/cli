@@ -115,6 +115,13 @@ type ElasticsearchSpec struct {
 	// +optional
 	SecureConfigSecret *core.LocalObjectReference `json:"secureConfigSecret,omitempty"`
 
+	// License is an optional field to activate an Elastic subscription license
+	// (gold/platinum/enterprise) on the cluster. Only meaningful when the
+	// referenced ElasticsearchVersion uses the ElasticStack distribution.
+	//	- Ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/update-license.html
+	// +optional
+	License *ElasticsearchLicenseSpec `json:"license,omitempty"`
+
 	// PodTemplate is an optional configuration for pods used to expose database
 	// +optional
 	PodTemplate ofstv2.PodTemplateSpec `json:"podTemplate,omitempty"`
@@ -179,6 +186,24 @@ type ElasticsearchSpec struct {
 	// +optional
 	// +kubebuilder:default={periodSeconds: 10, timeoutSeconds: 10, failureThreshold: 1}
 	HealthChecker kmapi.HealthCheckSpec `json:"healthChecker"`
+}
+
+// ElasticsearchLicenseSpec configures activation of an Elastic subscription license.
+// Exactly one of SecretRef or Trial must be set.
+type ElasticsearchLicenseSpec struct {
+	// SecretRef references a Secret holding the signed license file content
+	// under a single key, "license.json". Downloaded from Elastic (self-managed
+	// subscription) or the Elastic Cloud console. Mutually exclusive with Trial.
+	// +optional
+	SecretRef *core.LocalObjectReference `json:"secretRef,omitempty"`
+
+	// Trial requests Elastic's built-in one-time 30-day trial license
+	// (POST _license/start_trial) instead of a user-supplied license.
+	// Mutually exclusive with SecretRef. A cluster can only ever start one
+	// trial in its lifetime; a repeat request after the trial has been used
+	// once is surfaced via the LicenseSyncFailed condition rather than retried.
+	// +optional
+	Trial bool `json:"trial,omitempty"`
 }
 
 type ElasticsearchClusterTopology struct {

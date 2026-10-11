@@ -19,16 +19,15 @@ limitations under the License.
 package v1
 
 import (
-	"context"
-	"time"
+	context "context"
 
-	v1 "kubedb.dev/apimachinery/apis/kubedb/v1"
+	kubedbv1 "kubedb.dev/apimachinery/apis/kubedb/v1"
 	scheme "kubedb.dev/apimachinery/client/clientset/versioned/scheme"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
-	rest "k8s.io/client-go/rest"
+	gentype "k8s.io/client-go/gentype"
 )
 
 // KafkasGetter has a method to return a KafkaInterface.
@@ -39,158 +38,34 @@ type KafkasGetter interface {
 
 // KafkaInterface has methods to work with Kafka resources.
 type KafkaInterface interface {
-	Create(ctx context.Context, kafka *v1.Kafka, opts metav1.CreateOptions) (*v1.Kafka, error)
-	Update(ctx context.Context, kafka *v1.Kafka, opts metav1.UpdateOptions) (*v1.Kafka, error)
-	UpdateStatus(ctx context.Context, kafka *v1.Kafka, opts metav1.UpdateOptions) (*v1.Kafka, error)
+	Create(ctx context.Context, kafka *kubedbv1.Kafka, opts metav1.CreateOptions) (*kubedbv1.Kafka, error)
+	Update(ctx context.Context, kafka *kubedbv1.Kafka, opts metav1.UpdateOptions) (*kubedbv1.Kafka, error)
+	// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
+	UpdateStatus(ctx context.Context, kafka *kubedbv1.Kafka, opts metav1.UpdateOptions) (*kubedbv1.Kafka, error)
 	Delete(ctx context.Context, name string, opts metav1.DeleteOptions) error
 	DeleteCollection(ctx context.Context, opts metav1.DeleteOptions, listOpts metav1.ListOptions) error
-	Get(ctx context.Context, name string, opts metav1.GetOptions) (*v1.Kafka, error)
-	List(ctx context.Context, opts metav1.ListOptions) (*v1.KafkaList, error)
+	Get(ctx context.Context, name string, opts metav1.GetOptions) (*kubedbv1.Kafka, error)
+	List(ctx context.Context, opts metav1.ListOptions) (*kubedbv1.KafkaList, error)
 	Watch(ctx context.Context, opts metav1.ListOptions) (watch.Interface, error)
-	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts metav1.PatchOptions, subresources ...string) (result *v1.Kafka, err error)
+	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts metav1.PatchOptions, subresources ...string) (result *kubedbv1.Kafka, err error)
 	KafkaExpansion
 }
 
 // kafkas implements KafkaInterface
 type kafkas struct {
-	client rest.Interface
-	ns     string
+	*gentype.ClientWithList[*kubedbv1.Kafka, *kubedbv1.KafkaList]
 }
 
 // newKafkas returns a Kafkas
 func newKafkas(c *KubedbV1Client, namespace string) *kafkas {
 	return &kafkas{
-		client: c.RESTClient(),
-		ns:     namespace,
+		gentype.NewClientWithList[*kubedbv1.Kafka, *kubedbv1.KafkaList](
+			"kafkas",
+			c.RESTClient(),
+			scheme.ParameterCodec,
+			namespace,
+			func() *kubedbv1.Kafka { return &kubedbv1.Kafka{} },
+			func() *kubedbv1.KafkaList { return &kubedbv1.KafkaList{} },
+		),
 	}
-}
-
-// Get takes name of the kafka, and returns the corresponding kafka object, and an error if there is any.
-func (c *kafkas) Get(ctx context.Context, name string, options metav1.GetOptions) (result *v1.Kafka, err error) {
-	result = &v1.Kafka{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("kafkas").
-		Name(name).
-		VersionedParams(&options, scheme.ParameterCodec).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// List takes label and field selectors, and returns the list of Kafkas that match those selectors.
-func (c *kafkas) List(ctx context.Context, opts metav1.ListOptions) (result *v1.KafkaList, err error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	result = &v1.KafkaList{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("kafkas").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Watch returns a watch.Interface that watches the requested kafkas.
-func (c *kafkas) Watch(ctx context.Context, opts metav1.ListOptions) (watch.Interface, error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	opts.Watch = true
-	return c.client.Get().
-		Namespace(c.ns).
-		Resource("kafkas").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Watch(ctx)
-}
-
-// Create takes the representation of a kafka and creates it.  Returns the server's representation of the kafka, and an error, if there is any.
-func (c *kafkas) Create(ctx context.Context, kafka *v1.Kafka, opts metav1.CreateOptions) (result *v1.Kafka, err error) {
-	result = &v1.Kafka{}
-	err = c.client.Post().
-		Namespace(c.ns).
-		Resource("kafkas").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(kafka).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Update takes the representation of a kafka and updates it. Returns the server's representation of the kafka, and an error, if there is any.
-func (c *kafkas) Update(ctx context.Context, kafka *v1.Kafka, opts metav1.UpdateOptions) (result *v1.Kafka, err error) {
-	result = &v1.Kafka{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("kafkas").
-		Name(kafka.Name).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(kafka).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// UpdateStatus was generated because the type contains a Status member.
-// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
-func (c *kafkas) UpdateStatus(ctx context.Context, kafka *v1.Kafka, opts metav1.UpdateOptions) (result *v1.Kafka, err error) {
-	result = &v1.Kafka{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("kafkas").
-		Name(kafka.Name).
-		SubResource("status").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(kafka).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Delete takes name of the kafka and deletes it. Returns an error if one occurs.
-func (c *kafkas) Delete(ctx context.Context, name string, opts metav1.DeleteOptions) error {
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("kafkas").
-		Name(name).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// DeleteCollection deletes a collection of objects.
-func (c *kafkas) DeleteCollection(ctx context.Context, opts metav1.DeleteOptions, listOpts metav1.ListOptions) error {
-	var timeout time.Duration
-	if listOpts.TimeoutSeconds != nil {
-		timeout = time.Duration(*listOpts.TimeoutSeconds) * time.Second
-	}
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("kafkas").
-		VersionedParams(&listOpts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// Patch applies the patch and returns the patched kafka.
-func (c *kafkas) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts metav1.PatchOptions, subresources ...string) (result *v1.Kafka, err error) {
-	result = &v1.Kafka{}
-	err = c.client.Patch(pt).
-		Namespace(c.ns).
-		Resource("kafkas").
-		Name(name).
-		SubResource(subresources...).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(data).
-		Do(ctx).
-		Into(result)
-	return
 }

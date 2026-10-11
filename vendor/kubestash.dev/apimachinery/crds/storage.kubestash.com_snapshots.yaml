@@ -113,6 +113,9 @@ spec:
                       - Medusa
                       - ClickHouseBackup
                       - Neo4jAdmin
+                      - Weaviate
+                      - Milvus
+                      - OracleBackup
                       type: string
                     duration:
                       type: string
@@ -186,6 +189,36 @@ spec:
                         status:
                           type: string
                       type: object
+                    milvusStats:
+                      properties:
+                        bytesCopied:
+                          format: int64
+                          type: integer
+                        fenceTime:
+                          format: date-time
+                          type: string
+                        id:
+                          type: string
+                        metaRevision:
+                          format: int64
+                          type: integer
+                        objectCount:
+                          format: int64
+                          type: integer
+                        quiesce:
+                          type: string
+                        startTime:
+                          format: date-time
+                          type: string
+                        stopTime:
+                          format: date-time
+                          type: string
+                        tso:
+                          format: int64
+                          type: integer
+                        woodpeckerMetaVersion:
+                          type: string
+                      type: object
                     neo4jStats:
                       items:
                         properties:
@@ -213,6 +246,19 @@ spec:
                             type: string
                         type: object
                       type: array
+                    oracleStats:
+                      properties:
+                        dbid:
+                          type: string
+                        incarnation:
+                          type: string
+                        pieceCount:
+                          type: integer
+                        tag:
+                          type: string
+                        untilSCN:
+                          type: string
+                      type: object
                     path:
                       type: string
                     phase:
@@ -271,6 +317,8 @@ spec:
                         properties:
                           backupId:
                             type: integer
+                          backupName:
+                            type: string
                           collection:
                             type: string
                           indexFileCount:
@@ -307,6 +355,17 @@ spec:
                           items:
                             type: string
                           type: array
+                        id:
+                          type: string
+                        startTime:
+                          format: date-time
+                          type: string
+                        stopTime:
+                          format: date-time
+                          type: string
+                      type: object
+                    weaviateStats:
+                      properties:
                         id:
                           type: string
                         startTime:

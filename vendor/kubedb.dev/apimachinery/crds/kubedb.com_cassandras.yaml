@@ -1,7 +1,6 @@
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  creationTimestamp: null
   labels:
     app.kubernetes.io/name: kubedb
   name: cassandras.kubedb.com
@@ -4801,7 +4800,7 @@ spec:
                       - standby
                       - stats
                       - dashboard
-                      - secondary
+                      - readreplica
                       type: string
                     metadata:
                       properties:

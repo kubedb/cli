@@ -1,7 +1,6 @@
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  creationTimestamp: null
   labels:
     app.kubernetes.io/name: kubedb
   name: postgresinsights.ui.kubedb.com
@@ -111,6 +110,52 @@ spec:
                   - type
                   type: object
                 type: array
+              disasterRecovery:
+                properties:
+                  activeDC:
+                    type: string
+                  dataCenters:
+                    items:
+                      properties:
+                        clusterName:
+                          type: string
+                        crossDCStreamer:
+                          type: string
+                        healthy:
+                          type: boolean
+                        lagBytes:
+                          format: int64
+                          type: integer
+                        lagObservedAt:
+                          format: date-time
+                          type: string
+                        leader:
+                          type: string
+                        notReadyPods:
+                          items:
+                            type: string
+                          type: array
+                        role:
+                          type: string
+                        writable:
+                          type: boolean
+                        writableObservedAt:
+                          format: date-time
+                          type: string
+                      required:
+                      - clusterName
+                      type: object
+                    type: array
+                  lastTransitionTime:
+                    format: date-time
+                    type: string
+                  phase:
+                    type: string
+                  protected:
+                    type: boolean
+                  protectionMessage:
+                    type: string
+                type: object
               observedGeneration:
                 format: int64
                 type: integer

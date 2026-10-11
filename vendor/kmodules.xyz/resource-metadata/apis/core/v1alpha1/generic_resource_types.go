@@ -80,6 +80,7 @@ type GenericResourceSpec struct {
 	RoleResourceRequests map[api.PodRole]ResourceList `json:"roleResourceRequests,omitempty"`
 
 	Namespace *NamespaceInfo    `json:"namespace,omitempty"`
+	Tenant    *TenantInfo       `json:"tenant,omitempty"`
 	Pods      []ComputeResource `json:"pods,omitempty"`
 	Storage   []StorageResource `json:"storage,omitempty"`
 
@@ -91,10 +92,29 @@ type NamespaceInfo struct {
 	UID  types.UID `json:"uid,omitempty"`
 	Name string    `json:"name"`
 	// +optional
-	CreationTimestamp   metav1.Time       `json:"creationTimestamp,omitempty"`
-	AceOrgID            string            `json:"aceOrgID,omitempty"`
+	CreationTimestamp metav1.Time `json:"creationTimestamp,omitempty"`
+	// Deprecated: use GenericResourceSpec.Tenant. Removed after one release.
+	AceOrgID string `json:"aceOrgID,omitempty"`
+	// Deprecated: use GenericResourceSpec.Tenant. Removed after one release.
 	AceOrgMetadata      map[string]string `json:"aceOrgMetadata,omitempty"`
 	EnableResourceTrial bool              `json:"enableResourceTrial,omitempty"`
+}
+
+// +kubebuilder:validation:Enum=namespace;cluster
+type TenantSource string
+
+const (
+	TenantSourceNamespace TenantSource = "namespace"
+	TenantSourceCluster   TenantSource = "cluster"
+)
+
+// TenantInfo identifies the org a usage event is billed to, independent of how
+// that org was discovered.
+type TenantInfo struct {
+	OrgID string `json:"orgID,omitempty"`
+	// +optional
+	Metadata map[string]string `json:"metadata,omitempty"`
+	Source   TenantSource      `json:"source,omitempty"`
 }
 
 type ComputeResource struct {

@@ -19,16 +19,15 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"context"
-	"time"
+	context "context"
 
-	v1alpha1 "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
+	catalogv1alpha1 "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
 	scheme "kubedb.dev/apimachinery/client/clientset/versioned/scheme"
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
-	rest "k8s.io/client-go/rest"
+	gentype "k8s.io/client-go/gentype"
 )
 
 // Neo4jVersionsGetter has a method to return a Neo4jVersionInterface.
@@ -39,131 +38,32 @@ type Neo4jVersionsGetter interface {
 
 // Neo4jVersionInterface has methods to work with Neo4jVersion resources.
 type Neo4jVersionInterface interface {
-	Create(ctx context.Context, neo4jVersion *v1alpha1.Neo4jVersion, opts v1.CreateOptions) (*v1alpha1.Neo4jVersion, error)
-	Update(ctx context.Context, neo4jVersion *v1alpha1.Neo4jVersion, opts v1.UpdateOptions) (*v1alpha1.Neo4jVersion, error)
+	Create(ctx context.Context, neo4jVersion *catalogv1alpha1.Neo4jVersion, opts v1.CreateOptions) (*catalogv1alpha1.Neo4jVersion, error)
+	Update(ctx context.Context, neo4jVersion *catalogv1alpha1.Neo4jVersion, opts v1.UpdateOptions) (*catalogv1alpha1.Neo4jVersion, error)
 	Delete(ctx context.Context, name string, opts v1.DeleteOptions) error
 	DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error
-	Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha1.Neo4jVersion, error)
-	List(ctx context.Context, opts v1.ListOptions) (*v1alpha1.Neo4jVersionList, error)
+	Get(ctx context.Context, name string, opts v1.GetOptions) (*catalogv1alpha1.Neo4jVersion, error)
+	List(ctx context.Context, opts v1.ListOptions) (*catalogv1alpha1.Neo4jVersionList, error)
 	Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error)
-	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.Neo4jVersion, err error)
+	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *catalogv1alpha1.Neo4jVersion, err error)
 	Neo4jVersionExpansion
 }
 
 // neo4jVersions implements Neo4jVersionInterface
 type neo4jVersions struct {
-	client rest.Interface
+	*gentype.ClientWithList[*catalogv1alpha1.Neo4jVersion, *catalogv1alpha1.Neo4jVersionList]
 }
 
 // newNeo4jVersions returns a Neo4jVersions
 func newNeo4jVersions(c *CatalogV1alpha1Client) *neo4jVersions {
 	return &neo4jVersions{
-		client: c.RESTClient(),
+		gentype.NewClientWithList[*catalogv1alpha1.Neo4jVersion, *catalogv1alpha1.Neo4jVersionList](
+			"neo4jversions",
+			c.RESTClient(),
+			scheme.ParameterCodec,
+			"",
+			func() *catalogv1alpha1.Neo4jVersion { return &catalogv1alpha1.Neo4jVersion{} },
+			func() *catalogv1alpha1.Neo4jVersionList { return &catalogv1alpha1.Neo4jVersionList{} },
+		),
 	}
-}
-
-// Get takes name of the neo4jVersion, and returns the corresponding neo4jVersion object, and an error if there is any.
-func (c *neo4jVersions) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.Neo4jVersion, err error) {
-	result = &v1alpha1.Neo4jVersion{}
-	err = c.client.Get().
-		Resource("neo4jversions").
-		Name(name).
-		VersionedParams(&options, scheme.ParameterCodec).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// List takes label and field selectors, and returns the list of Neo4jVersions that match those selectors.
-func (c *neo4jVersions) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha1.Neo4jVersionList, err error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	result = &v1alpha1.Neo4jVersionList{}
-	err = c.client.Get().
-		Resource("neo4jversions").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Watch returns a watch.Interface that watches the requested neo4jVersions.
-func (c *neo4jVersions) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	opts.Watch = true
-	return c.client.Get().
-		Resource("neo4jversions").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Watch(ctx)
-}
-
-// Create takes the representation of a neo4jVersion and creates it.  Returns the server's representation of the neo4jVersion, and an error, if there is any.
-func (c *neo4jVersions) Create(ctx context.Context, neo4jVersion *v1alpha1.Neo4jVersion, opts v1.CreateOptions) (result *v1alpha1.Neo4jVersion, err error) {
-	result = &v1alpha1.Neo4jVersion{}
-	err = c.client.Post().
-		Resource("neo4jversions").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(neo4jVersion).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Update takes the representation of a neo4jVersion and updates it. Returns the server's representation of the neo4jVersion, and an error, if there is any.
-func (c *neo4jVersions) Update(ctx context.Context, neo4jVersion *v1alpha1.Neo4jVersion, opts v1.UpdateOptions) (result *v1alpha1.Neo4jVersion, err error) {
-	result = &v1alpha1.Neo4jVersion{}
-	err = c.client.Put().
-		Resource("neo4jversions").
-		Name(neo4jVersion.Name).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(neo4jVersion).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Delete takes name of the neo4jVersion and deletes it. Returns an error if one occurs.
-func (c *neo4jVersions) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
-	return c.client.Delete().
-		Resource("neo4jversions").
-		Name(name).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// DeleteCollection deletes a collection of objects.
-func (c *neo4jVersions) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
-	var timeout time.Duration
-	if listOpts.TimeoutSeconds != nil {
-		timeout = time.Duration(*listOpts.TimeoutSeconds) * time.Second
-	}
-	return c.client.Delete().
-		Resource("neo4jversions").
-		VersionedParams(&listOpts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// Patch applies the patch and returns the patched neo4jVersion.
-func (c *neo4jVersions) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.Neo4jVersion, err error) {
-	result = &v1alpha1.Neo4jVersion{}
-	err = c.client.Patch(pt).
-		Resource("neo4jversions").
-		Name(name).
-		SubResource(subresources...).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(data).
-		Do(ctx).
-		Into(result)
-	return
 }

@@ -219,6 +219,12 @@ type DocumentDBSpec struct {
 	// Init is used to initialize the database from a script or git repo.
 	// +optional
 	Init *InitSpec `json:"init,omitempty"`
+
+	// Archiver controls continuous archiving (WAL backup) for this database. It is normally set
+	// by the operator, which matches a DocumentDBArchiver to this database through that
+	// archiver's spec.databases selector; setting it explicitly pins a specific archiver.
+	// +optional
+	Archiver *Archiver `json:"archiver,omitempty"`
 }
 
 type DocumentDBConfiguration struct {

@@ -227,3 +227,63 @@ type ClickHouseIncrementalBackupOptions struct {
 	// +optional
 	LogRetentionHistoryLimit int32 `json:"logRetentionHistoryLimit,omitempty"`
 }
+
+type Neo4jFullBackupOptions struct {
+	// Driver specifies the mechanism used to perform a full backup.
+	// +kubebuilder:default:=Neo4jAdmin
+	Driver apis.Driver `json:"driver"`
+
+	// Task specifies the task configuration for a full backup.
+	// +optional
+	Task *Task `json:"task,omitempty"`
+
+	// Scheduler specifies the scheduling configuration for full backups.
+	// +optional
+	Scheduler *SchedulerOptions `json:"scheduler,omitempty"`
+
+	// ContainerRuntimeSettings specifies the runtime settings for the full backup containers.
+	// +optional
+	ContainerRuntimeSettings *ofst.ContainerRuntimeSettings `json:"containerRuntimeSettings,omitempty"`
+
+	// JobTemplate specifies the pod template for a full backup job.
+	// +optional
+	JobTemplate *ofst.PodTemplateSpec `json:"jobTemplate,omitempty"`
+
+	// RetryConfig specifies the retry policy for a failed full backup.
+	// +optional
+	RetryConfig *stashcoreapi.RetryConfig `json:"retryConfig,omitempty"`
+
+	// Timeout specifies the maximum duration allowed for a full backup.
+	// +optional
+	Timeout *metav1.Duration `json:"timeout,omitempty"`
+
+	// SessionHistoryLimit specifies the number of full backup session histories to retain.
+	// +optional
+	SessionHistoryLimit int32 `json:"sessionHistoryLimit,omitempty"`
+}
+
+type Neo4jDifferentialBackupOptions struct {
+	// BackupInterval defines how frequently a differential backup is triggered.
+	// +optional
+	BackupInterval *metav1.Duration `json:"backupInterval,omitempty"`
+
+	// Task specifies the task configuration for a differential backup.
+	// +optional
+	Task *Task `json:"task,omitempty"`
+
+	// RuntimeSettings specifies the runtime settings for a differential backup.
+	// +optional
+	RuntimeSettings *ofst.RuntimeSettings `json:"runtimeSettings,omitempty"`
+
+	// SuccessfulLogHistoryLimit defines the number of successful Logs backup status that the differential snapshot will retain
+	// The default value is 5.
+	// +kubebuilder:default=5
+	// +optional
+	SuccessfulLogHistoryLimit int32 `json:"successfulLogHistoryLimit,omitempty"`
+
+	// FailedLogHistoryLimit defines the number of failed Logs backup that the differential snapshot will retain for debugging purposes.
+	// The default value is 5.
+	// +kubebuilder:default=5
+	// +optional
+	FailedLogHistoryLimit int32 `json:"failedLogHistoryLimit,omitempty"`
+}

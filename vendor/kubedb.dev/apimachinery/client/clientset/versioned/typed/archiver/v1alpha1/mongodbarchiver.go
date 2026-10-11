@@ -19,16 +19,15 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"context"
-	"time"
+	context "context"
 
-	v1alpha1 "kubedb.dev/apimachinery/apis/archiver/v1alpha1"
+	archiverv1alpha1 "kubedb.dev/apimachinery/apis/archiver/v1alpha1"
 	scheme "kubedb.dev/apimachinery/client/clientset/versioned/scheme"
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
-	rest "k8s.io/client-go/rest"
+	gentype "k8s.io/client-go/gentype"
 )
 
 // MongoDBArchiversGetter has a method to return a MongoDBArchiverInterface.
@@ -39,158 +38,34 @@ type MongoDBArchiversGetter interface {
 
 // MongoDBArchiverInterface has methods to work with MongoDBArchiver resources.
 type MongoDBArchiverInterface interface {
-	Create(ctx context.Context, mongoDBArchiver *v1alpha1.MongoDBArchiver, opts v1.CreateOptions) (*v1alpha1.MongoDBArchiver, error)
-	Update(ctx context.Context, mongoDBArchiver *v1alpha1.MongoDBArchiver, opts v1.UpdateOptions) (*v1alpha1.MongoDBArchiver, error)
-	UpdateStatus(ctx context.Context, mongoDBArchiver *v1alpha1.MongoDBArchiver, opts v1.UpdateOptions) (*v1alpha1.MongoDBArchiver, error)
+	Create(ctx context.Context, mongoDBArchiver *archiverv1alpha1.MongoDBArchiver, opts v1.CreateOptions) (*archiverv1alpha1.MongoDBArchiver, error)
+	Update(ctx context.Context, mongoDBArchiver *archiverv1alpha1.MongoDBArchiver, opts v1.UpdateOptions) (*archiverv1alpha1.MongoDBArchiver, error)
+	// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
+	UpdateStatus(ctx context.Context, mongoDBArchiver *archiverv1alpha1.MongoDBArchiver, opts v1.UpdateOptions) (*archiverv1alpha1.MongoDBArchiver, error)
 	Delete(ctx context.Context, name string, opts v1.DeleteOptions) error
 	DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error
-	Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha1.MongoDBArchiver, error)
-	List(ctx context.Context, opts v1.ListOptions) (*v1alpha1.MongoDBArchiverList, error)
+	Get(ctx context.Context, name string, opts v1.GetOptions) (*archiverv1alpha1.MongoDBArchiver, error)
+	List(ctx context.Context, opts v1.ListOptions) (*archiverv1alpha1.MongoDBArchiverList, error)
 	Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error)
-	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.MongoDBArchiver, err error)
+	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *archiverv1alpha1.MongoDBArchiver, err error)
 	MongoDBArchiverExpansion
 }
 
 // mongoDBArchivers implements MongoDBArchiverInterface
 type mongoDBArchivers struct {
-	client rest.Interface
-	ns     string
+	*gentype.ClientWithList[*archiverv1alpha1.MongoDBArchiver, *archiverv1alpha1.MongoDBArchiverList]
 }
 
 // newMongoDBArchivers returns a MongoDBArchivers
 func newMongoDBArchivers(c *ArchiverV1alpha1Client, namespace string) *mongoDBArchivers {
 	return &mongoDBArchivers{
-		client: c.RESTClient(),
-		ns:     namespace,
+		gentype.NewClientWithList[*archiverv1alpha1.MongoDBArchiver, *archiverv1alpha1.MongoDBArchiverList](
+			"mongodbarchivers",
+			c.RESTClient(),
+			scheme.ParameterCodec,
+			namespace,
+			func() *archiverv1alpha1.MongoDBArchiver { return &archiverv1alpha1.MongoDBArchiver{} },
+			func() *archiverv1alpha1.MongoDBArchiverList { return &archiverv1alpha1.MongoDBArchiverList{} },
+		),
 	}
-}
-
-// Get takes name of the mongoDBArchiver, and returns the corresponding mongoDBArchiver object, and an error if there is any.
-func (c *mongoDBArchivers) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.MongoDBArchiver, err error) {
-	result = &v1alpha1.MongoDBArchiver{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("mongodbarchivers").
-		Name(name).
-		VersionedParams(&options, scheme.ParameterCodec).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// List takes label and field selectors, and returns the list of MongoDBArchivers that match those selectors.
-func (c *mongoDBArchivers) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha1.MongoDBArchiverList, err error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	result = &v1alpha1.MongoDBArchiverList{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("mongodbarchivers").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Watch returns a watch.Interface that watches the requested mongoDBArchivers.
-func (c *mongoDBArchivers) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	opts.Watch = true
-	return c.client.Get().
-		Namespace(c.ns).
-		Resource("mongodbarchivers").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Watch(ctx)
-}
-
-// Create takes the representation of a mongoDBArchiver and creates it.  Returns the server's representation of the mongoDBArchiver, and an error, if there is any.
-func (c *mongoDBArchivers) Create(ctx context.Context, mongoDBArchiver *v1alpha1.MongoDBArchiver, opts v1.CreateOptions) (result *v1alpha1.MongoDBArchiver, err error) {
-	result = &v1alpha1.MongoDBArchiver{}
-	err = c.client.Post().
-		Namespace(c.ns).
-		Resource("mongodbarchivers").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(mongoDBArchiver).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Update takes the representation of a mongoDBArchiver and updates it. Returns the server's representation of the mongoDBArchiver, and an error, if there is any.
-func (c *mongoDBArchivers) Update(ctx context.Context, mongoDBArchiver *v1alpha1.MongoDBArchiver, opts v1.UpdateOptions) (result *v1alpha1.MongoDBArchiver, err error) {
-	result = &v1alpha1.MongoDBArchiver{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("mongodbarchivers").
-		Name(mongoDBArchiver.Name).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(mongoDBArchiver).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// UpdateStatus was generated because the type contains a Status member.
-// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
-func (c *mongoDBArchivers) UpdateStatus(ctx context.Context, mongoDBArchiver *v1alpha1.MongoDBArchiver, opts v1.UpdateOptions) (result *v1alpha1.MongoDBArchiver, err error) {
-	result = &v1alpha1.MongoDBArchiver{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("mongodbarchivers").
-		Name(mongoDBArchiver.Name).
-		SubResource("status").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(mongoDBArchiver).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Delete takes name of the mongoDBArchiver and deletes it. Returns an error if one occurs.
-func (c *mongoDBArchivers) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("mongodbarchivers").
-		Name(name).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// DeleteCollection deletes a collection of objects.
-func (c *mongoDBArchivers) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
-	var timeout time.Duration
-	if listOpts.TimeoutSeconds != nil {
-		timeout = time.Duration(*listOpts.TimeoutSeconds) * time.Second
-	}
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("mongodbarchivers").
-		VersionedParams(&listOpts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// Patch applies the patch and returns the patched mongoDBArchiver.
-func (c *mongoDBArchivers) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.MongoDBArchiver, err error) {
-	result = &v1alpha1.MongoDBArchiver{}
-	err = c.client.Patch(pt).
-		Namespace(c.ns).
-		Resource("mongodbarchivers").
-		Name(name).
-		SubResource(subresources...).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(data).
-		Do(ctx).
-		Into(result)
-	return
 }

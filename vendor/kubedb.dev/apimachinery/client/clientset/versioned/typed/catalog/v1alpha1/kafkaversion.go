@@ -19,16 +19,15 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"context"
-	"time"
+	context "context"
 
-	v1alpha1 "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
+	catalogv1alpha1 "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
 	scheme "kubedb.dev/apimachinery/client/clientset/versioned/scheme"
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
-	rest "k8s.io/client-go/rest"
+	gentype "k8s.io/client-go/gentype"
 )
 
 // KafkaVersionsGetter has a method to return a KafkaVersionInterface.
@@ -39,131 +38,32 @@ type KafkaVersionsGetter interface {
 
 // KafkaVersionInterface has methods to work with KafkaVersion resources.
 type KafkaVersionInterface interface {
-	Create(ctx context.Context, kafkaVersion *v1alpha1.KafkaVersion, opts v1.CreateOptions) (*v1alpha1.KafkaVersion, error)
-	Update(ctx context.Context, kafkaVersion *v1alpha1.KafkaVersion, opts v1.UpdateOptions) (*v1alpha1.KafkaVersion, error)
+	Create(ctx context.Context, kafkaVersion *catalogv1alpha1.KafkaVersion, opts v1.CreateOptions) (*catalogv1alpha1.KafkaVersion, error)
+	Update(ctx context.Context, kafkaVersion *catalogv1alpha1.KafkaVersion, opts v1.UpdateOptions) (*catalogv1alpha1.KafkaVersion, error)
 	Delete(ctx context.Context, name string, opts v1.DeleteOptions) error
 	DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error
-	Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha1.KafkaVersion, error)
-	List(ctx context.Context, opts v1.ListOptions) (*v1alpha1.KafkaVersionList, error)
+	Get(ctx context.Context, name string, opts v1.GetOptions) (*catalogv1alpha1.KafkaVersion, error)
+	List(ctx context.Context, opts v1.ListOptions) (*catalogv1alpha1.KafkaVersionList, error)
 	Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error)
-	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.KafkaVersion, err error)
+	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *catalogv1alpha1.KafkaVersion, err error)
 	KafkaVersionExpansion
 }
 
 // kafkaVersions implements KafkaVersionInterface
 type kafkaVersions struct {
-	client rest.Interface
+	*gentype.ClientWithList[*catalogv1alpha1.KafkaVersion, *catalogv1alpha1.KafkaVersionList]
 }
 
 // newKafkaVersions returns a KafkaVersions
 func newKafkaVersions(c *CatalogV1alpha1Client) *kafkaVersions {
 	return &kafkaVersions{
-		client: c.RESTClient(),
+		gentype.NewClientWithList[*catalogv1alpha1.KafkaVersion, *catalogv1alpha1.KafkaVersionList](
+			"kafkaversions",
+			c.RESTClient(),
+			scheme.ParameterCodec,
+			"",
+			func() *catalogv1alpha1.KafkaVersion { return &catalogv1alpha1.KafkaVersion{} },
+			func() *catalogv1alpha1.KafkaVersionList { return &catalogv1alpha1.KafkaVersionList{} },
+		),
 	}
-}
-
-// Get takes name of the kafkaVersion, and returns the corresponding kafkaVersion object, and an error if there is any.
-func (c *kafkaVersions) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.KafkaVersion, err error) {
-	result = &v1alpha1.KafkaVersion{}
-	err = c.client.Get().
-		Resource("kafkaversions").
-		Name(name).
-		VersionedParams(&options, scheme.ParameterCodec).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// List takes label and field selectors, and returns the list of KafkaVersions that match those selectors.
-func (c *kafkaVersions) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha1.KafkaVersionList, err error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	result = &v1alpha1.KafkaVersionList{}
-	err = c.client.Get().
-		Resource("kafkaversions").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Watch returns a watch.Interface that watches the requested kafkaVersions.
-func (c *kafkaVersions) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	opts.Watch = true
-	return c.client.Get().
-		Resource("kafkaversions").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Watch(ctx)
-}
-
-// Create takes the representation of a kafkaVersion and creates it.  Returns the server's representation of the kafkaVersion, and an error, if there is any.
-func (c *kafkaVersions) Create(ctx context.Context, kafkaVersion *v1alpha1.KafkaVersion, opts v1.CreateOptions) (result *v1alpha1.KafkaVersion, err error) {
-	result = &v1alpha1.KafkaVersion{}
-	err = c.client.Post().
-		Resource("kafkaversions").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(kafkaVersion).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Update takes the representation of a kafkaVersion and updates it. Returns the server's representation of the kafkaVersion, and an error, if there is any.
-func (c *kafkaVersions) Update(ctx context.Context, kafkaVersion *v1alpha1.KafkaVersion, opts v1.UpdateOptions) (result *v1alpha1.KafkaVersion, err error) {
-	result = &v1alpha1.KafkaVersion{}
-	err = c.client.Put().
-		Resource("kafkaversions").
-		Name(kafkaVersion.Name).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(kafkaVersion).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Delete takes name of the kafkaVersion and deletes it. Returns an error if one occurs.
-func (c *kafkaVersions) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
-	return c.client.Delete().
-		Resource("kafkaversions").
-		Name(name).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// DeleteCollection deletes a collection of objects.
-func (c *kafkaVersions) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
-	var timeout time.Duration
-	if listOpts.TimeoutSeconds != nil {
-		timeout = time.Duration(*listOpts.TimeoutSeconds) * time.Second
-	}
-	return c.client.Delete().
-		Resource("kafkaversions").
-		VersionedParams(&listOpts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// Patch applies the patch and returns the patched kafkaVersion.
-func (c *kafkaVersions) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.KafkaVersion, err error) {
-	result = &v1alpha1.KafkaVersion{}
-	err = c.client.Patch(pt).
-		Resource("kafkaversions").
-		Name(name).
-		SubResource(subresources...).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(data).
-		Do(ctx).
-		Into(result)
-	return
 }

@@ -387,7 +387,7 @@ func (r *Neo4j) CertificateName(alias Neo4jCertificateType) string {
 	return meta_util.NameWithSuffix(r.Name, fmt.Sprintf("%s-cert", string(alias)))
 }
 
-func (r Neo4j) GetStorageClassName() string {
+func (r *Neo4j) GetStorageClassName() string {
 	return *r.Spec.Storage.StorageClassName
 }
 
@@ -397,4 +397,54 @@ func (r *Neo4j) GetDeletionPolicy() string {
 
 func (r *Neo4j) AsOwner() *meta.OwnerReference {
 	return meta.NewControllerRef(r, SchemeGroupVersion.WithKind(r.ResourceKind()))
+}
+
+func (c *Neo4j) SidekickLabels(skName string) map[string]string {
+	return meta_util.OverwriteKeys(nil, kubedb.CommonSidekickLabels(), map[string]string{
+		meta_util.InstanceLabelKey: skName,
+		kubedb.SidekickOwnerName:   c.Name,
+		kubedb.SidekickOwnerKind:   c.ResourceFQN(),
+	})
+}
+
+type Neo4jBind struct {
+	*Neo4j
+}
+
+var _ DBBindInterface = &Neo4jBind{}
+
+// ServiceNames returns the primary service twice: Neo4j exposes the Bolt
+// endpoint and the Neo4j Browser UI on the same Service.
+func (r *Neo4jBind) ServiceNames() (string, string) {
+	dbSvc := r.ServiceName()
+	uiSvc := dbSvc
+	if r.IsProtocolDisabled(Neo4jProtocolHTTP) && r.IsProtocolDisabled(Neo4jProtocolHTTPS) {
+		uiSvc = ""
+	}
+	return dbSvc, uiSvc
+}
+
+// Ports returns the Bolt port for database traffic and the Neo4j Browser port
+// for the UI. The browser is served over HTTPS when TLS is enabled for HTTP.
+func (r *Neo4jBind) Ports() (int, int) {
+	if _, uiSvc := r.ServiceNames(); uiSvc == "" {
+		return kubedb.Neo4jBoltPort, 0
+	}
+	if r.IsHTTPTLSEnabled() {
+		return kubedb.Neo4jBoltPort, kubedb.Neo4jHTTPSPort
+	}
+	return kubedb.Neo4jBoltPort, kubedb.Neo4jHTTPPort
+}
+
+// IsHTTPTLSEnabled reports whether Neo4j serves its HTTP endpoint over TLS.
+func (r *Neo4jBind) IsHTTPTLSEnabled() bool {
+	return r.Spec.TLS != nil && r.Spec.TLS.HTTP != nil && r.Spec.TLS.HTTP.Mode != TLSModeDisabled
+}
+
+func (r *Neo4jBind) SecretName() string {
+	return r.GetAuthSecretName()
+}
+
+func (r *Neo4jBind) CertSecretName() string {
+	return r.GetCertSecretName(Neo4jCertificateTypeClient)
 }

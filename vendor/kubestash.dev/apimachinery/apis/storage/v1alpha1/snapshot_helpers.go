@@ -181,6 +181,12 @@ func (s *Snapshot) GetSize() string {
 func GenerateSnapshotName(repoName, backupSession string) string {
 	backupSessionRegex := regexp.MustCompile("(.*)-([0-9]+)$")
 	subMatches := backupSessionRegex.FindStringSubmatch(backupSession)
+	// A BackupSession name does not always end in a numeric suffix (e.g. one
+	// created via generateName). Guard against a nil match instead of panicking
+	// on the index, and fall back to the full backupSession name as the suffix.
+	if len(subMatches) < 3 {
+		return meta.ValidNameWithPrefixNSuffix(repoName, backupSession, "")
+	}
 	return meta.ValidNameWithPrefixNSuffix(repoName, subMatches[1], subMatches[2])
 }
 

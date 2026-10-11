@@ -323,6 +323,58 @@ type PostgresReplication struct {
 	// in the range lagged lsn between the new primary and the old primary
 	// +optional
 	ForceFailoverAcceptingDataLossAfter *metav1.Duration `json:"forceFailoverAcceptingDataLossAfter,omitempty"`
+
+	// BestEffortCrossDCLagBytesForFailover bounds how much un-replicated write ahead log an
+	// UNPLANNED cross data center failover may destroy. A surviving data center that is further
+	// behind the lost primary than this refuses to promote itself, and the database stays down
+	// until a human accepts the loss.
+	//
+	// It is BEST EFFORT, and the name says so because the distinction decides whether it can be
+	// relied upon:
+	//
+	//   - When a data center is genuinely LOST, the figure is near exact. The primary stopped
+	//     writing at the same instant the survivor stopped hearing from it, so the last write
+	//     position the survivor received IS the primary's final position. The error is bounded by
+	//     one replication message, which is sub-second while a primary is actually writing.
+	//
+	//   - During a NETWORK PARTITION where the primary keeps running, it is understated, and
+	//     without bound. The survivor's view of the primary froze when the link broke while the
+	//     primary kept writing, so the two positions sit still together and the computed lag reads
+	//     near zero however far apart they really are. In that state the failover Lease does not
+	//     move and no promotion happens, so the gap only matters if the primary's data center then
+	//     also loses its control plane connection. That compound case is out of scope: this field
+	//     will not catch it.
+	//
+	// It is therefore a budget, not a guarantee. Do not represent it to auditors as a bound on
+	// data loss; a bound requires synchronous replication, which this is not.
+	//
+	// This is NOT spec.leaderElection.maximumLagBeforeFailover, which governs the INTRA-DC raft
+	// election. This one governs cross data center disaster recovery, where the data at risk is
+	// whatever never crossed the link.
+	//
+	// Enforcement is fail closed and lives in the data plane, because that is the only place that
+	// can actually stop a promotion: the surviving data center's coordinator compares the last
+	// primary write position it received against its own flushed position and refuses to promote
+	// when the difference is over budget. Refusing leaves the database down, which is the correct
+	// trade only because a human can override it by annotating the Postgres object with
+	// dr.kubedb.com/accept-failover-data-loss=true, an explicit decision to accept the loss.
+	//
+	// When unset nothing is enforced and failover behaves exactly as before, so existing
+	// deployments are unaffected. Setting it to 0 demands a fully caught up survivor.
+	// +optional
+	// +kubebuilder:validation:Minimum=0
+	BestEffortCrossDCLagBytesForFailover *int64 `json:"bestEffortCrossDCLagBytesForFailover,omitempty"`
+
+	// Maintainer note, do not "simplify" the field above. It is int64 rather than uint64
+	// because OpenAPI v3, and therefore CRD validation, has no unsigned integer type, so a
+	// uint64 cannot be expressed in the published schema. Minimum=0 is what rules out
+	// negatives. It is a pointer rather than a plain int64 so that nil keeps meaning
+	// "unset", which is what distinguishes "no budget enforced" from a budget of 0.
+	//
+	// Adding a field here that v1alpha2 does not have also means the conversions in
+	// apis/kubedb/v1alpha2/conversion.go can no longer cast PostgresReplication between the
+	// two versions with unsafe.Pointer; doing so reads past the end of the smaller
+	// allocation. See TestPostgresReplicationConversionIsFieldByField.
 }
 
 type ArbiterSpec struct {
@@ -459,6 +511,144 @@ type PostgresStatus struct {
 	Conditions []kmapi.Condition `json:"conditions,omitempty"`
 	// +optional
 	AuthSecret *Age `json:"authSecret,omitempty"`
+	// DisasterRecovery reports the cross data center (DC-DR) state for a distributed Postgres.
+	// +optional
+	DisasterRecovery *PostgresDisasterRecoveryStatus `json:"disasterRecovery,omitempty"`
+}
+
+// PostgresDRPhase is the cross data center DR phase of a distributed Postgres.
+type PostgresDRPhase string
+
+const (
+	PostgresDRPhaseSteady      PostgresDRPhase = "Steady"
+	PostgresDRPhaseFailingOver PostgresDRPhase = "FailingOver"
+	PostgresDRPhaseFailingBack PostgresDRPhase = "FailingBack"
+	PostgresDRPhaseDegraded    PostgresDRPhase = "Degraded"
+)
+
+// PostgresDisasterRecoveryStatus reports the per data center DC-DR view of a
+// distributed Postgres. The cross-DC decision is owned by the dr-controlplane
+// primary-DC Lease; this status reflects it on the single Database object.
+type PostgresDisasterRecoveryStatus struct {
+	// ActiveDC is the data center that currently holds the primary DC Lease and runs the writable primary.
+	// +optional
+	ActiveDC string `json:"activeDC,omitempty"`
+
+	// Phase is the DC-DR phase.
+	// +optional
+	Phase PostgresDRPhase `json:"phase,omitempty"`
+
+	// DataCenters is the per data center view, one entry per Member DC.
+	// +optional
+	DataCenters []PostgresDCStatus `json:"dataCenters,omitempty"`
+
+	// LastTransitionTime is when ActiveDC last changed.
+	// +optional
+	LastTransitionTime *metav1.Time `json:"lastTransitionTime,omitempty"`
+
+	// Protected reports whether the database currently has cross data center DR protection: at
+	// least one Member data center other than the active one is confirmed to be streaming within
+	// the lag budget, as of a fresh observation.
+	//
+	// This is deliberately separate from Phase and from the per-DC Healthy flags. After every
+	// promotion there is a window in which the new primary is up and serving while the demoted
+	// data center has not finished re-cascading, so the database is running with no surviving
+	// copy of its writes anywhere else. A second fault landing in that window is roughly twice
+	// as expensive as the first. Protected is the field that answers "is it safe to do this
+	// again yet" without having to infer it from lag and health.
+	//
+	// nil means unknown, which is NOT the same as false: the hub could not establish the
+	// protection state this cycle. Treat unknown as unprotected when deciding whether to
+	// proceed with a planned operation.
+	// +optional
+	Protected *bool `json:"protected,omitempty"`
+
+	// ProtectionMessage explains the current value of Protected in operator-facing terms, for
+	// example which data center is not streaming yet, or why protection could not be established.
+	// +optional
+	ProtectionMessage string `json:"protectionMessage,omitempty"`
+}
+
+// PostgresDCStatus is one data center's local view inside a distributed Postgres.
+type PostgresDCStatus struct {
+	// ClusterName is the data center, named by its OCM managed cluster (the same
+	// clusterName used in the PlacementPolicy distributionRule).
+	ClusterName string `json:"clusterName"`
+
+	// Role is Member, Arbiter, or Witness.
+	// +optional
+	Role string `json:"role,omitempty"`
+
+	// Leader is this DC's local raft leader pod.
+	// +optional
+	Leader string `json:"leader,omitempty"`
+
+	// Writable is true when this DC's leader is the cluster's writable primary.
+	//
+	// It is seeded from the placement (the active DC is expected to be writable) and is only
+	// overridden by an actual probe of the leader. That default is deliberate for the planned
+	// switchover gate, which waits for Writable to go false before handing off and must not be
+	// released by a failed probe. It also means a true here can be nothing more than the
+	// expectation: read WritableObservedAt before treating it as evidence.
+	// +optional
+	Writable bool `json:"writable,omitempty"`
+
+	// WritableObservedAt is when Writable was last established by actually probing this DC's
+	// leader, as opposed to assumed from the placement.
+	//
+	// Writable on its own fails open: it starts true for the active DC and is only ever lowered
+	// by a SUCCESSFUL probe, so every failure to reach the leader leaves a true behind that is
+	// indistinguishable from a healthy one. Anything that reads Writable as positive EVIDENCE -
+	// that the database is serving writes, or that an accepted failover has landed and no longer
+	// needs re-driving - must pair it with a fresh stamp here, or it will stand down in exactly
+	// the outage it exists to handle.
+	//
+	// nil means this pass never determined the DC's writability. It is set on a successful probe
+	// whichever way the answer came out, so a recent stamp with Writable false is a real
+	// observation of a read-only leader, not a missing one.
+	// +optional
+	WritableObservedAt *metav1.Time `json:"writableObservedAt,omitempty"`
+
+	// CrossDCStreamer is the pod in this data center that streams directly from the ACTIVE data
+	// center's primary, and from which this DC's own replicas cascade. It is the head of this
+	// DC's copy of the data, so it is the node holding the most write ahead log here, and the
+	// only correct promotion target if this DC has to take over.
+	//
+	// It is recorded because it can only be observed while this DC is still a standby: it is read
+	// from the active primary's pg_stat_replication, which stops being available the moment that
+	// primary is lost, which is precisely when the promotion target has to be chosen. Once
+	// recorded it is carried forward until a fresh observation replaces it.
+	// +optional
+	CrossDCStreamer string `json:"crossDCStreamer,omitempty"`
+
+	// NotReadyPods names the pods in this data center that are not currently participating:
+	// not streaming from the data center's leader, not attached cross data center, or not
+	// running at all. It exists so a non Ready phase can say WHICH pod is holding the
+	// database back instead of only that something is, which otherwise has to be rediscovered
+	// by hand across several clusters at the exact moment that is most expensive.
+	// +optional
+	NotReadyPods []string `json:"notReadyPods,omitempty"`
+
+	// LagBytes is this DC's cross-DC replication lag behind the active DC, in bytes.
+	// +optional
+	LagBytes *int64 `json:"lagBytes,omitempty"`
+
+	// LagObservedAt is when LagBytes was last successfully measured.
+	//
+	// LagBytes alone cannot be acted on, because a stale value and a current value look
+	// identical, and the difference matters most during exactly the events where the
+	// measurement stops being refreshed. A nil LagBytes with a recent LagObservedAt means "we
+	// looked and this DC was not streaming"; a nil LagObservedAt means "we could not look".
+	// +optional
+	LagObservedAt *metav1.Time `json:"lagObservedAt,omitempty"`
+
+	// Healthy reflects whether this DC's health Lease is fresh.
+	//
+	// Note that this is a liveness signal about the DC's agent, not a statement that the DC
+	// holds a usable copy of the data. A Member standby can be Healthy and still not be
+	// streaming. Use Protected on the parent status for the second question.
+	// +optional
+	Healthy bool `json:"healthy,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

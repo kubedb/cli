@@ -84,8 +84,8 @@ func (m *MSSQLServer) ServiceName() string {
 	return m.OffshootName()
 }
 
-func (m *MSSQLServer) SecondaryServiceName() string {
-	return meta_util.NameWithPrefix(m.ServiceName(), string(SecondaryServiceAlias))
+func (m *MSSQLServer) StandbyServiceName() string {
+	return meta_util.NameWithPrefix(m.ServiceName(), string(StandbyServiceAlias))
 }
 
 func (m *MSSQLServer) GoverningServiceName() string {

@@ -1,7 +1,6 @@
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  creationTimestamp: null
   labels:
     app.kubernetes.io/name: kubedb
   name: clickhouses.gitops.kubedb.com
@@ -11462,7 +11461,7 @@ spec:
                       - standby
                       - stats
                       - dashboard
-                      - secondary
+                      - readreplica
                       type: string
                     metadata:
                       properties:
@@ -11799,6 +11798,10 @@ spec:
                           type: array
                       type: object
                     type: array
+                type: object
+              observedDataPVCUIDs:
+                additionalProperties:
+                  type: string
                 type: object
               observedGeneration:
                 format: int64

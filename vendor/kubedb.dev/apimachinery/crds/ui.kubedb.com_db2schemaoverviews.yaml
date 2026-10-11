@@ -1,0 +1,59 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    app.kubernetes.io/name: kubedb
+  name: db2schemaoverviews.ui.kubedb.com
+spec:
+  group: ui.kubedb.com
+  names:
+    kind: DB2SchemaOverview
+    listKind: DB2SchemaOverviewList
+    plural: db2schemaoverviews
+    singular: db2schemaoverview
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        properties:
+          apiVersion:
+            type: string
+          kind:
+            type: string
+          metadata:
+            type: object
+          spec:
+            properties:
+              tables:
+                items:
+                  properties:
+                    columnCount:
+                      format: int32
+                      type: integer
+                    dataSizeBytes:
+                      format: int64
+                      type: integer
+                    indexSizeBytes:
+                      format: int64
+                      type: integer
+                    rowCount:
+                      format: int64
+                      type: integer
+                    schemaName:
+                      type: string
+                    tableName:
+                      type: string
+                    type:
+                      type: string
+                  required:
+                  - schemaName
+                  - tableName
+                  type: object
+                type: array
+            required:
+            - tables
+            type: object
+        type: object
+    served: true
+    storage: true

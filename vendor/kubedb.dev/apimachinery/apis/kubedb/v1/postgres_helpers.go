@@ -375,6 +375,30 @@ func (p *Postgres) SetDefaults(postgresVersion *catalog.PostgresVersion) {
 		p.Spec.AuthSecret.Kind = kubedb.ResourceKindSecret
 	}
 
+	if p.Spec.LeaderElection == nil && p.isDCDRDistributed() {
+		// A raft election timeout of Period * ElectionTick = 3s (the plain HA default below)
+		// is tuned for pods sharing a data center switch. Under DC-DR the same raft runs
+		// inside one DC but on a cluster whose API server and coordination control plane are
+		// shared with the cross data center machinery, and a control plane brownout that
+		// stalls the coordinator's reconcile goroutine for a few seconds is enough to lose
+		// leadership. Measured live: a hub etcd slowdown produced leadership churn
+		// (1 -> 2 -> 1 -> 3) DURING a cross-DC heal, which serialized three separate
+		// cross-DC rewinds and turned one fork into three, costing 841s of availability
+		// while every safety invariant held.
+		//
+		// 1s * 15 = 15s of election timeout rides out that class of brownout without
+		// changing what raft guarantees. The cost is a slower INTRA-DC failover detection
+		// (up to ~15s rather than ~3s) which is the right trade here: a DC-DR deployment
+		// already tolerates tens of seconds for the cross-DC path (30s marker TTL alone),
+		// and a spurious election is far more expensive than a slightly later real one
+		// because it can fork a timeline.
+		p.Spec.LeaderElection = &PostgreLeaderElectionConfig{
+			Period:                   metav1.Duration{Duration: 1 * time.Second},
+			ElectionTick:             15,
+			HeartbeatTick:            1,
+			MaximumLagBeforeFailover: 64 * 1024 * 1024,
+		}
+	}
 	if p.Spec.LeaderElection == nil {
 		p.Spec.LeaderElection = &PostgreLeaderElectionConfig{
 			// The upper limit of election timeout is 50000ms (50s), which should only be used when deploying a
@@ -786,4 +810,50 @@ func ValidateHBAConfig(content string) error {
 		}
 	}
 	return nil
+}
+
+// isDCDRDistributed reports whether this Postgres is a cross data center disaster recovery
+// deployment, which is a distributed database explicitly opted in with the DC-DR annotation.
+// It mirrors the operator's own detection (isDCDRDistributed in pkg/controller) so defaults
+// applied here and behaviour applied there can never disagree about what a DC-DR database is.
+func (p Postgres) isDCDRDistributed() bool {
+	return p.Spec.Distributed && p.Annotations[DCDREnabledAnnotation] == "true"
+}
+
+// DCDREnabledAnnotation opts a distributed Postgres into cross data center disaster
+// recovery. It is the same key the operator reads (pkg/controller and pkg/ops both
+// define it locally as dcdrEnabledAnnotation); the constant lives here so defaulting
+// and behaviour cannot drift apart.
+const DCDREnabledAnnotation = "dr.kubedb.com/enabled"
+
+// WritableObservationTTL is how long a PostgresDCStatus.WritableObservedAt stamp stays
+// usable as evidence. The hub re-observes every DC on its resync (2 minutes), so this
+// tolerates two consecutive missed passes before a writable claim expires; past that the
+// database is treated as having no confirmed writable primary, which is the fail-closed
+// answer.
+const WritableObservationTTL = 5 * time.Minute
+
+// WritablePrimaryConfirmed reports whether this data center is POSITIVELY OBSERVED to hold a
+// writable primary right now.
+//
+// It exists because PostgresDCStatus.Writable fails open: it is seeded true for the active DC
+// from the placement and is only ever lowered by a probe that SUCCEEDED, so a dial failure, a
+// query failure, or a hub that stopped observing altogether all persist a true that looks
+// exactly like a healthy one. Every consumer that reads Writable as evidence - rather than as
+// the "keep waiting" default the planned switchover gate wants - has to require that the
+// observation actually happened, and recently. Two already got this wrong in ways that only
+// show up during an outage: the standing accept-data-loss re-drive stood down against a stale
+// true and left the coordinator holding, and the health check reported a wholly unreachable
+// DC-DR database as Critical/AcceptingConnection=True instead of NotReady.
+//
+// Leader is required too: a writable claim with no named leader pod names nothing that could
+// be serving.
+func (d *PostgresDCStatus) WritablePrimaryConfirmed(now time.Time) bool {
+	if d == nil || !d.Writable || d.Leader == "" {
+		return false
+	}
+	if d.WritableObservedAt == nil {
+		return false // never probed: the true is the placement default, not an observation
+	}
+	return now.Sub(d.WritableObservedAt.Time) <= WritableObservationTTL
 }

@@ -19,16 +19,15 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"context"
-	"time"
+	context "context"
 
-	v1alpha1 "kubedb.dev/apimachinery/apis/ui/v1alpha1"
+	uiv1alpha1 "kubedb.dev/apimachinery/apis/ui/v1alpha1"
 	scheme "kubedb.dev/apimachinery/client/clientset/versioned/scheme"
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
-	rest "k8s.io/client-go/rest"
+	gentype "k8s.io/client-go/gentype"
 )
 
 // ElasticsearchNodesStatsesGetter has a method to return a ElasticsearchNodesStatsInterface.
@@ -39,158 +38,34 @@ type ElasticsearchNodesStatsesGetter interface {
 
 // ElasticsearchNodesStatsInterface has methods to work with ElasticsearchNodesStats resources.
 type ElasticsearchNodesStatsInterface interface {
-	Create(ctx context.Context, elasticsearchNodesStats *v1alpha1.ElasticsearchNodesStats, opts v1.CreateOptions) (*v1alpha1.ElasticsearchNodesStats, error)
-	Update(ctx context.Context, elasticsearchNodesStats *v1alpha1.ElasticsearchNodesStats, opts v1.UpdateOptions) (*v1alpha1.ElasticsearchNodesStats, error)
-	UpdateStatus(ctx context.Context, elasticsearchNodesStats *v1alpha1.ElasticsearchNodesStats, opts v1.UpdateOptions) (*v1alpha1.ElasticsearchNodesStats, error)
+	Create(ctx context.Context, elasticsearchNodesStats *uiv1alpha1.ElasticsearchNodesStats, opts v1.CreateOptions) (*uiv1alpha1.ElasticsearchNodesStats, error)
+	Update(ctx context.Context, elasticsearchNodesStats *uiv1alpha1.ElasticsearchNodesStats, opts v1.UpdateOptions) (*uiv1alpha1.ElasticsearchNodesStats, error)
+	// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
+	UpdateStatus(ctx context.Context, elasticsearchNodesStats *uiv1alpha1.ElasticsearchNodesStats, opts v1.UpdateOptions) (*uiv1alpha1.ElasticsearchNodesStats, error)
 	Delete(ctx context.Context, name string, opts v1.DeleteOptions) error
 	DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error
-	Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha1.ElasticsearchNodesStats, error)
-	List(ctx context.Context, opts v1.ListOptions) (*v1alpha1.ElasticsearchNodesStatsList, error)
+	Get(ctx context.Context, name string, opts v1.GetOptions) (*uiv1alpha1.ElasticsearchNodesStats, error)
+	List(ctx context.Context, opts v1.ListOptions) (*uiv1alpha1.ElasticsearchNodesStatsList, error)
 	Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error)
-	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.ElasticsearchNodesStats, err error)
+	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *uiv1alpha1.ElasticsearchNodesStats, err error)
 	ElasticsearchNodesStatsExpansion
 }
 
 // elasticsearchNodesStatses implements ElasticsearchNodesStatsInterface
 type elasticsearchNodesStatses struct {
-	client rest.Interface
-	ns     string
+	*gentype.ClientWithList[*uiv1alpha1.ElasticsearchNodesStats, *uiv1alpha1.ElasticsearchNodesStatsList]
 }
 
 // newElasticsearchNodesStatses returns a ElasticsearchNodesStatses
 func newElasticsearchNodesStatses(c *UiV1alpha1Client, namespace string) *elasticsearchNodesStatses {
 	return &elasticsearchNodesStatses{
-		client: c.RESTClient(),
-		ns:     namespace,
+		gentype.NewClientWithList[*uiv1alpha1.ElasticsearchNodesStats, *uiv1alpha1.ElasticsearchNodesStatsList](
+			"elasticsearchnodesstatses",
+			c.RESTClient(),
+			scheme.ParameterCodec,
+			namespace,
+			func() *uiv1alpha1.ElasticsearchNodesStats { return &uiv1alpha1.ElasticsearchNodesStats{} },
+			func() *uiv1alpha1.ElasticsearchNodesStatsList { return &uiv1alpha1.ElasticsearchNodesStatsList{} },
+		),
 	}
-}
-
-// Get takes name of the elasticsearchNodesStats, and returns the corresponding elasticsearchNodesStats object, and an error if there is any.
-func (c *elasticsearchNodesStatses) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.ElasticsearchNodesStats, err error) {
-	result = &v1alpha1.ElasticsearchNodesStats{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("elasticsearchnodesstatses").
-		Name(name).
-		VersionedParams(&options, scheme.ParameterCodec).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// List takes label and field selectors, and returns the list of ElasticsearchNodesStatses that match those selectors.
-func (c *elasticsearchNodesStatses) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha1.ElasticsearchNodesStatsList, err error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	result = &v1alpha1.ElasticsearchNodesStatsList{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("elasticsearchnodesstatses").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Watch returns a watch.Interface that watches the requested elasticsearchNodesStatses.
-func (c *elasticsearchNodesStatses) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	opts.Watch = true
-	return c.client.Get().
-		Namespace(c.ns).
-		Resource("elasticsearchnodesstatses").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Watch(ctx)
-}
-
-// Create takes the representation of a elasticsearchNodesStats and creates it.  Returns the server's representation of the elasticsearchNodesStats, and an error, if there is any.
-func (c *elasticsearchNodesStatses) Create(ctx context.Context, elasticsearchNodesStats *v1alpha1.ElasticsearchNodesStats, opts v1.CreateOptions) (result *v1alpha1.ElasticsearchNodesStats, err error) {
-	result = &v1alpha1.ElasticsearchNodesStats{}
-	err = c.client.Post().
-		Namespace(c.ns).
-		Resource("elasticsearchnodesstatses").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(elasticsearchNodesStats).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Update takes the representation of a elasticsearchNodesStats and updates it. Returns the server's representation of the elasticsearchNodesStats, and an error, if there is any.
-func (c *elasticsearchNodesStatses) Update(ctx context.Context, elasticsearchNodesStats *v1alpha1.ElasticsearchNodesStats, opts v1.UpdateOptions) (result *v1alpha1.ElasticsearchNodesStats, err error) {
-	result = &v1alpha1.ElasticsearchNodesStats{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("elasticsearchnodesstatses").
-		Name(elasticsearchNodesStats.Name).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(elasticsearchNodesStats).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// UpdateStatus was generated because the type contains a Status member.
-// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
-func (c *elasticsearchNodesStatses) UpdateStatus(ctx context.Context, elasticsearchNodesStats *v1alpha1.ElasticsearchNodesStats, opts v1.UpdateOptions) (result *v1alpha1.ElasticsearchNodesStats, err error) {
-	result = &v1alpha1.ElasticsearchNodesStats{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("elasticsearchnodesstatses").
-		Name(elasticsearchNodesStats.Name).
-		SubResource("status").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(elasticsearchNodesStats).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Delete takes name of the elasticsearchNodesStats and deletes it. Returns an error if one occurs.
-func (c *elasticsearchNodesStatses) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("elasticsearchnodesstatses").
-		Name(name).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// DeleteCollection deletes a collection of objects.
-func (c *elasticsearchNodesStatses) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
-	var timeout time.Duration
-	if listOpts.TimeoutSeconds != nil {
-		timeout = time.Duration(*listOpts.TimeoutSeconds) * time.Second
-	}
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("elasticsearchnodesstatses").
-		VersionedParams(&listOpts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// Patch applies the patch and returns the patched elasticsearchNodesStats.
-func (c *elasticsearchNodesStatses) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.ElasticsearchNodesStats, err error) {
-	result = &v1alpha1.ElasticsearchNodesStats{}
-	err = c.client.Patch(pt).
-		Namespace(c.ns).
-		Resource("elasticsearchnodesstatses").
-		Name(name).
-		SubResource(subresources...).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(data).
-		Do(ctx).
-		Into(result)
-	return
 }

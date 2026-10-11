@@ -19,16 +19,15 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"context"
-	"time"
+	context "context"
 
-	v1alpha1 "kubedb.dev/apimachinery/apis/courier/v1alpha1"
+	courierv1alpha1 "kubedb.dev/apimachinery/apis/courier/v1alpha1"
 	scheme "kubedb.dev/apimachinery/client/clientset/versioned/scheme"
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
-	rest "k8s.io/client-go/rest"
+	gentype "k8s.io/client-go/gentype"
 )
 
 // MySQLMigrationsGetter has a method to return a MySQLMigrationInterface.
@@ -39,158 +38,34 @@ type MySQLMigrationsGetter interface {
 
 // MySQLMigrationInterface has methods to work with MySQLMigration resources.
 type MySQLMigrationInterface interface {
-	Create(ctx context.Context, mySQLMigration *v1alpha1.MySQLMigration, opts v1.CreateOptions) (*v1alpha1.MySQLMigration, error)
-	Update(ctx context.Context, mySQLMigration *v1alpha1.MySQLMigration, opts v1.UpdateOptions) (*v1alpha1.MySQLMigration, error)
-	UpdateStatus(ctx context.Context, mySQLMigration *v1alpha1.MySQLMigration, opts v1.UpdateOptions) (*v1alpha1.MySQLMigration, error)
+	Create(ctx context.Context, mySQLMigration *courierv1alpha1.MySQLMigration, opts v1.CreateOptions) (*courierv1alpha1.MySQLMigration, error)
+	Update(ctx context.Context, mySQLMigration *courierv1alpha1.MySQLMigration, opts v1.UpdateOptions) (*courierv1alpha1.MySQLMigration, error)
+	// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
+	UpdateStatus(ctx context.Context, mySQLMigration *courierv1alpha1.MySQLMigration, opts v1.UpdateOptions) (*courierv1alpha1.MySQLMigration, error)
 	Delete(ctx context.Context, name string, opts v1.DeleteOptions) error
 	DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error
-	Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha1.MySQLMigration, error)
-	List(ctx context.Context, opts v1.ListOptions) (*v1alpha1.MySQLMigrationList, error)
+	Get(ctx context.Context, name string, opts v1.GetOptions) (*courierv1alpha1.MySQLMigration, error)
+	List(ctx context.Context, opts v1.ListOptions) (*courierv1alpha1.MySQLMigrationList, error)
 	Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error)
-	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.MySQLMigration, err error)
+	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *courierv1alpha1.MySQLMigration, err error)
 	MySQLMigrationExpansion
 }
 
 // mySQLMigrations implements MySQLMigrationInterface
 type mySQLMigrations struct {
-	client rest.Interface
-	ns     string
+	*gentype.ClientWithList[*courierv1alpha1.MySQLMigration, *courierv1alpha1.MySQLMigrationList]
 }
 
 // newMySQLMigrations returns a MySQLMigrations
 func newMySQLMigrations(c *CourierV1alpha1Client, namespace string) *mySQLMigrations {
 	return &mySQLMigrations{
-		client: c.RESTClient(),
-		ns:     namespace,
+		gentype.NewClientWithList[*courierv1alpha1.MySQLMigration, *courierv1alpha1.MySQLMigrationList](
+			"mysqlmigrations",
+			c.RESTClient(),
+			scheme.ParameterCodec,
+			namespace,
+			func() *courierv1alpha1.MySQLMigration { return &courierv1alpha1.MySQLMigration{} },
+			func() *courierv1alpha1.MySQLMigrationList { return &courierv1alpha1.MySQLMigrationList{} },
+		),
 	}
-}
-
-// Get takes name of the mySQLMigration, and returns the corresponding mySQLMigration object, and an error if there is any.
-func (c *mySQLMigrations) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.MySQLMigration, err error) {
-	result = &v1alpha1.MySQLMigration{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("mysqlmigrations").
-		Name(name).
-		VersionedParams(&options, scheme.ParameterCodec).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// List takes label and field selectors, and returns the list of MySQLMigrations that match those selectors.
-func (c *mySQLMigrations) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha1.MySQLMigrationList, err error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	result = &v1alpha1.MySQLMigrationList{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("mysqlmigrations").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Watch returns a watch.Interface that watches the requested mySQLMigrations.
-func (c *mySQLMigrations) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	opts.Watch = true
-	return c.client.Get().
-		Namespace(c.ns).
-		Resource("mysqlmigrations").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Watch(ctx)
-}
-
-// Create takes the representation of a mySQLMigration and creates it.  Returns the server's representation of the mySQLMigration, and an error, if there is any.
-func (c *mySQLMigrations) Create(ctx context.Context, mySQLMigration *v1alpha1.MySQLMigration, opts v1.CreateOptions) (result *v1alpha1.MySQLMigration, err error) {
-	result = &v1alpha1.MySQLMigration{}
-	err = c.client.Post().
-		Namespace(c.ns).
-		Resource("mysqlmigrations").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(mySQLMigration).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Update takes the representation of a mySQLMigration and updates it. Returns the server's representation of the mySQLMigration, and an error, if there is any.
-func (c *mySQLMigrations) Update(ctx context.Context, mySQLMigration *v1alpha1.MySQLMigration, opts v1.UpdateOptions) (result *v1alpha1.MySQLMigration, err error) {
-	result = &v1alpha1.MySQLMigration{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("mysqlmigrations").
-		Name(mySQLMigration.Name).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(mySQLMigration).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// UpdateStatus was generated because the type contains a Status member.
-// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
-func (c *mySQLMigrations) UpdateStatus(ctx context.Context, mySQLMigration *v1alpha1.MySQLMigration, opts v1.UpdateOptions) (result *v1alpha1.MySQLMigration, err error) {
-	result = &v1alpha1.MySQLMigration{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("mysqlmigrations").
-		Name(mySQLMigration.Name).
-		SubResource("status").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(mySQLMigration).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Delete takes name of the mySQLMigration and deletes it. Returns an error if one occurs.
-func (c *mySQLMigrations) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("mysqlmigrations").
-		Name(name).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// DeleteCollection deletes a collection of objects.
-func (c *mySQLMigrations) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
-	var timeout time.Duration
-	if listOpts.TimeoutSeconds != nil {
-		timeout = time.Duration(*listOpts.TimeoutSeconds) * time.Second
-	}
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("mysqlmigrations").
-		VersionedParams(&listOpts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// Patch applies the patch and returns the patched mySQLMigration.
-func (c *mySQLMigrations) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.MySQLMigration, err error) {
-	result = &v1alpha1.MySQLMigration{}
-	err = c.client.Patch(pt).
-		Namespace(c.ns).
-		Resource("mysqlmigrations").
-		Name(name).
-		SubResource(subresources...).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(data).
-		Do(ctx).
-		Into(result)
-	return
 }

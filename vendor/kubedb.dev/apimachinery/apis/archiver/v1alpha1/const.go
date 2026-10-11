@@ -16,6 +16,32 @@ limitations under the License.
 
 package v1alpha1
 
+// Backup and restore names, flags, and defaults shared with the Neo4j operator.
+const (
+	Neo4jDataSubPath               = "data"
+	SnapshotIDAlphabet             = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"
+	DataBackupRestorer             = "data-backup-restorer"
+	DifferentialSnapshotSuffix     = "differential-snapshot"
+	DifferentialBackupCommand      = "differential-backup"
+	NamespaceFlag                  = "namespace"
+	DifferentialSnapshotFlag       = "diff-snapshot-name"
+	DifferentialBackupConfigFlag   = "diff-backupconfig-name"
+	SuccessfulLogHistoryLimitFlag  = "successful-log-history-limit"
+	FailedLogHistoryLimitFlag      = "failed-log-history-limit"
+	DifferentialBackupIntervalFlag = "differential-backup-interval"
+	RestoreUntilFlag               = "restore-until"
+	SeedServerNameParam            = "seedServerName"
+	Neo4jAdminArgsParam            = "neo4jAdminArgs"
+	RestoreTimeLayout              = "2006-01-02 15:04:05"
+	DefaultLogHistoryLimit         = 5
+
+	BackupDirNeo4jMetadata     = "metadata"
+	BackupDirNeo4jData         = "data"
+	BackupDirNeo4jDifferential = "differential"
+
+	Neo4jDriver = "Neo4jAdmin"
+)
+
 const (
 	RepositorySuffixFull     = "full"
 	RepositorySuffixManifest = "manifest"

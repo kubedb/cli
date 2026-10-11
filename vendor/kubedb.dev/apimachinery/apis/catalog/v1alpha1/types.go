@@ -49,7 +49,7 @@ type AddonSpec struct {
 	Tasks AddonTasks `json:"tasks,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=mongodb-addon;postgres-addon;mysql-addon;mariadb-addon;mssqlserver-addon;clickhouse-addon
+// +kubebuilder:validation:Enum=mongodb-addon;postgres-addon;mysql-addon;mariadb-addon;mssqlserver-addon;clickhouse-addon;neo4j-addon;documentdb-addon;milvus-addon
 type AddonType string
 
 type AddonTasks struct {

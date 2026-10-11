@@ -452,10 +452,6 @@ func (opts *redisOpts) getShellCommand(podIP string, redisCommand []any) *shell.
 		redisBaseCommand = append(redisBaseCommand, "-h", podIP)
 	}
 	svcName := fmt.Sprintf("svc/%s", db.Name)
-	kubectlCommand := []any{
-		"exec", "-n", db.Namespace, svcName, "-c", "redis",
-	}
-
 	if db.Spec.TLS != nil {
 		redisBaseCommand = append(
 			redisBaseCommand,
@@ -466,6 +462,8 @@ func (opts *redisOpts) getShellCommand(podIP string, redisCommand []any) *shell.
 		)
 	}
 
+	kubectlCommand := make([]any, 0, 6+len(redisBaseCommand)+len(redisCommand))
+	kubectlCommand = append(kubectlCommand, "exec", "-n", db.Namespace, svcName, "-c", "redis")
 	finalCommand := append(kubectlCommand, redisBaseCommand...)
 	if redisCommand != nil {
 		finalCommand = append(finalCommand, redisCommand...)

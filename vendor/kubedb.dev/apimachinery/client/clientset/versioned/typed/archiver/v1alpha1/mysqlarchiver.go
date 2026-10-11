@@ -19,16 +19,15 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"context"
-	"time"
+	context "context"
 
-	v1alpha1 "kubedb.dev/apimachinery/apis/archiver/v1alpha1"
+	archiverv1alpha1 "kubedb.dev/apimachinery/apis/archiver/v1alpha1"
 	scheme "kubedb.dev/apimachinery/client/clientset/versioned/scheme"
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
-	rest "k8s.io/client-go/rest"
+	gentype "k8s.io/client-go/gentype"
 )
 
 // MySQLArchiversGetter has a method to return a MySQLArchiverInterface.
@@ -39,158 +38,34 @@ type MySQLArchiversGetter interface {
 
 // MySQLArchiverInterface has methods to work with MySQLArchiver resources.
 type MySQLArchiverInterface interface {
-	Create(ctx context.Context, mySQLArchiver *v1alpha1.MySQLArchiver, opts v1.CreateOptions) (*v1alpha1.MySQLArchiver, error)
-	Update(ctx context.Context, mySQLArchiver *v1alpha1.MySQLArchiver, opts v1.UpdateOptions) (*v1alpha1.MySQLArchiver, error)
-	UpdateStatus(ctx context.Context, mySQLArchiver *v1alpha1.MySQLArchiver, opts v1.UpdateOptions) (*v1alpha1.MySQLArchiver, error)
+	Create(ctx context.Context, mySQLArchiver *archiverv1alpha1.MySQLArchiver, opts v1.CreateOptions) (*archiverv1alpha1.MySQLArchiver, error)
+	Update(ctx context.Context, mySQLArchiver *archiverv1alpha1.MySQLArchiver, opts v1.UpdateOptions) (*archiverv1alpha1.MySQLArchiver, error)
+	// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
+	UpdateStatus(ctx context.Context, mySQLArchiver *archiverv1alpha1.MySQLArchiver, opts v1.UpdateOptions) (*archiverv1alpha1.MySQLArchiver, error)
 	Delete(ctx context.Context, name string, opts v1.DeleteOptions) error
 	DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error
-	Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha1.MySQLArchiver, error)
-	List(ctx context.Context, opts v1.ListOptions) (*v1alpha1.MySQLArchiverList, error)
+	Get(ctx context.Context, name string, opts v1.GetOptions) (*archiverv1alpha1.MySQLArchiver, error)
+	List(ctx context.Context, opts v1.ListOptions) (*archiverv1alpha1.MySQLArchiverList, error)
 	Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error)
-	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.MySQLArchiver, err error)
+	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *archiverv1alpha1.MySQLArchiver, err error)
 	MySQLArchiverExpansion
 }
 
 // mySQLArchivers implements MySQLArchiverInterface
 type mySQLArchivers struct {
-	client rest.Interface
-	ns     string
+	*gentype.ClientWithList[*archiverv1alpha1.MySQLArchiver, *archiverv1alpha1.MySQLArchiverList]
 }
 
 // newMySQLArchivers returns a MySQLArchivers
 func newMySQLArchivers(c *ArchiverV1alpha1Client, namespace string) *mySQLArchivers {
 	return &mySQLArchivers{
-		client: c.RESTClient(),
-		ns:     namespace,
+		gentype.NewClientWithList[*archiverv1alpha1.MySQLArchiver, *archiverv1alpha1.MySQLArchiverList](
+			"mysqlarchivers",
+			c.RESTClient(),
+			scheme.ParameterCodec,
+			namespace,
+			func() *archiverv1alpha1.MySQLArchiver { return &archiverv1alpha1.MySQLArchiver{} },
+			func() *archiverv1alpha1.MySQLArchiverList { return &archiverv1alpha1.MySQLArchiverList{} },
+		),
 	}
-}
-
-// Get takes name of the mySQLArchiver, and returns the corresponding mySQLArchiver object, and an error if there is any.
-func (c *mySQLArchivers) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.MySQLArchiver, err error) {
-	result = &v1alpha1.MySQLArchiver{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("mysqlarchivers").
-		Name(name).
-		VersionedParams(&options, scheme.ParameterCodec).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// List takes label and field selectors, and returns the list of MySQLArchivers that match those selectors.
-func (c *mySQLArchivers) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha1.MySQLArchiverList, err error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	result = &v1alpha1.MySQLArchiverList{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("mysqlarchivers").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Watch returns a watch.Interface that watches the requested mySQLArchivers.
-func (c *mySQLArchivers) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	opts.Watch = true
-	return c.client.Get().
-		Namespace(c.ns).
-		Resource("mysqlarchivers").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Watch(ctx)
-}
-
-// Create takes the representation of a mySQLArchiver and creates it.  Returns the server's representation of the mySQLArchiver, and an error, if there is any.
-func (c *mySQLArchivers) Create(ctx context.Context, mySQLArchiver *v1alpha1.MySQLArchiver, opts v1.CreateOptions) (result *v1alpha1.MySQLArchiver, err error) {
-	result = &v1alpha1.MySQLArchiver{}
-	err = c.client.Post().
-		Namespace(c.ns).
-		Resource("mysqlarchivers").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(mySQLArchiver).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Update takes the representation of a mySQLArchiver and updates it. Returns the server's representation of the mySQLArchiver, and an error, if there is any.
-func (c *mySQLArchivers) Update(ctx context.Context, mySQLArchiver *v1alpha1.MySQLArchiver, opts v1.UpdateOptions) (result *v1alpha1.MySQLArchiver, err error) {
-	result = &v1alpha1.MySQLArchiver{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("mysqlarchivers").
-		Name(mySQLArchiver.Name).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(mySQLArchiver).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// UpdateStatus was generated because the type contains a Status member.
-// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
-func (c *mySQLArchivers) UpdateStatus(ctx context.Context, mySQLArchiver *v1alpha1.MySQLArchiver, opts v1.UpdateOptions) (result *v1alpha1.MySQLArchiver, err error) {
-	result = &v1alpha1.MySQLArchiver{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("mysqlarchivers").
-		Name(mySQLArchiver.Name).
-		SubResource("status").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(mySQLArchiver).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Delete takes name of the mySQLArchiver and deletes it. Returns an error if one occurs.
-func (c *mySQLArchivers) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("mysqlarchivers").
-		Name(name).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// DeleteCollection deletes a collection of objects.
-func (c *mySQLArchivers) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
-	var timeout time.Duration
-	if listOpts.TimeoutSeconds != nil {
-		timeout = time.Duration(*listOpts.TimeoutSeconds) * time.Second
-	}
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("mysqlarchivers").
-		VersionedParams(&listOpts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// Patch applies the patch and returns the patched mySQLArchiver.
-func (c *mySQLArchivers) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.MySQLArchiver, err error) {
-	result = &v1alpha1.MySQLArchiver{}
-	err = c.client.Patch(pt).
-		Namespace(c.ns).
-		Resource("mysqlarchivers").
-		Name(name).
-		SubResource(subresources...).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(data).
-		Do(ctx).
-		Into(result)
-	return
 }

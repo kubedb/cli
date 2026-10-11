@@ -27,7 +27,7 @@ import (
 )
 
 const (
-	ResourceCodeEtcdOpsRequest     = "etcdops"
+	ResourceCodeEtcdOpsRequest     = "etops"
 	ResourceKindEtcdOpsRequest     = "EtcdOpsRequest"
 	ResourceSingularEtcdOpsRequest = "etcdopsrequest"
 	ResourcePluralEtcdOpsRequest   = "etcdopsrequests"
@@ -40,7 +40,7 @@ const (
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 // +kubebuilder:object:root=true
-// +kubebuilder:resource:path=etcdopsrequests,singular=etcdopsrequest,shortName=etcdops,categories={ops,kubedb,appscode}
+// +kubebuilder:resource:path=etcdopsrequests,singular=etcdopsrequest,shortName=etops,categories={ops,kubedb,appscode}
 // +kubebuilder:subresource:status
 // +kubebuilder:printcolumn:name="Type",type="string",JSONPath=".spec.type"
 // +kubebuilder:printcolumn:name="Status",type="string",JSONPath=".status.phase"

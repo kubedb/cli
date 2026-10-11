@@ -19,13 +19,13 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"context"
+	context "context"
 
-	v1alpha1 "kubedb.dev/apimachinery/apis/ui/v1alpha1"
+	uiv1alpha1 "kubedb.dev/apimachinery/apis/ui/v1alpha1"
 	scheme "kubedb.dev/apimachinery/client/clientset/versioned/scheme"
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	rest "k8s.io/client-go/rest"
+	gentype "kmodules.xyz/client-go/gentype"
 )
 
 // DatabaseSummariesGetter has a method to return a DatabaseSummaryInterface.
@@ -36,30 +36,24 @@ type DatabaseSummariesGetter interface {
 
 // DatabaseSummaryInterface has methods to work with DatabaseSummary resources.
 type DatabaseSummaryInterface interface {
-	Create(ctx context.Context, databaseSummary *v1alpha1.DatabaseSummary, opts v1.CreateOptions) (*v1alpha1.DatabaseSummary, error)
+	Create(ctx context.Context, databaseSummary *uiv1alpha1.DatabaseSummary, opts v1.CreateOptions) (*uiv1alpha1.DatabaseSummary, error)
 	DatabaseSummaryExpansion
 }
 
 // databaseSummaries implements DatabaseSummaryInterface
 type databaseSummaries struct {
-	client rest.Interface
+	*gentype.Client[*uiv1alpha1.DatabaseSummary]
 }
 
 // newDatabaseSummaries returns a DatabaseSummaries
 func newDatabaseSummaries(c *UiV1alpha1Client) *databaseSummaries {
 	return &databaseSummaries{
-		client: c.RESTClient(),
+		gentype.NewClient[*uiv1alpha1.DatabaseSummary](
+			"databasesummaries",
+			c.RESTClient(),
+			scheme.ParameterCodec,
+			"",
+			func() *uiv1alpha1.DatabaseSummary { return &uiv1alpha1.DatabaseSummary{} },
+		),
 	}
-}
-
-// Create takes the representation of a databaseSummary and creates it.  Returns the server's representation of the databaseSummary, and an error, if there is any.
-func (c *databaseSummaries) Create(ctx context.Context, databaseSummary *v1alpha1.DatabaseSummary, opts v1.CreateOptions) (result *v1alpha1.DatabaseSummary, err error) {
-	result = &v1alpha1.DatabaseSummary{}
-	err = c.client.Post().
-		Resource("databasesummaries").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(databaseSummary).
-		Do(ctx).
-		Into(result)
-	return
 }

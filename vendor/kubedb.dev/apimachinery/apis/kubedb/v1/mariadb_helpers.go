@@ -347,6 +347,7 @@ func (m *MariaDB) SetDefaults(mdVersion *v1alpha1.MariaDBVersion) {
 		if m.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup == nil {
 			m.Spec.Monitor.Prometheus.Exporter.SecurityContext.RunAsGroup = mdVersion.Spec.SecurityContext.RunAsUser
 		}
+		apis.SetDefaultResourceLimits(&m.Spec.Monitor.Prometheus.Exporter.Resources, kubedb.DefaultExporterResource)
 	}
 	if m.IsCluster() && m.IsMariaDBReplication() {
 		m.SetDefaultsMaxscale(mdVersion, m.Spec.Topology.MaxScale)

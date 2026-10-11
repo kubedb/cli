@@ -208,6 +208,19 @@ func Convert_v1_MariaDBSpec_To_v1alpha2_MariaDBSpec(in *v1.MariaDBSpec, out *Mar
 	return nil
 }
 
+// Convert_v1_PostgresReplication_To_v1alpha2_PostgresReplication is lossy and therefore
+// cannot be generated: BestEffortCrossDCLagBytesForFailover exists only in v1, and
+// v1alpha2 has no field to carry it, so it is dropped on the way down.
+func Convert_v1_PostgresReplication_To_v1alpha2_PostgresReplication(in *v1.PostgresReplication, out *PostgresReplication, s conversion.Scope) error {
+	return autoConvert_v1_PostgresReplication_To_v1alpha2_PostgresReplication(in, out, s)
+}
+
+// Convert_v1_PostgresStatus_To_v1alpha2_PostgresStatus is lossy for the same reason:
+// DisasterRecovery is reported only in v1.
+func Convert_v1_PostgresStatus_To_v1alpha2_PostgresStatus(in *v1.PostgresStatus, out *PostgresStatus, s conversion.Scope) error {
+	return autoConvert_v1_PostgresStatus_To_v1alpha2_PostgresStatus(in, out, s)
+}
+
 func Convert_v1alpha2_PostgresSpec_To_v1_PostgresSpec(in *PostgresSpec, out *v1.PostgresSpec, s conversion.Scope) error {
 	if err := Convert_v1alpha2_AutoOpsSpec_To_v1_AutoOpsSpec(&in.AutoOps, &out.AutoOps, s); err != nil {
 		return err
@@ -250,7 +263,18 @@ func Convert_v1alpha2_PostgresSpec_To_v1_PostgresSpec(in *PostgresSpec, out *v1.
 	out.HealthChecker = in.HealthChecker
 	out.Archiver = (*v1.Archiver)(unsafe.Pointer(in.Archiver))
 	out.Arbiter = (*v1.ArbiterSpec)(unsafe.Pointer(in.Arbiter))
-	out.Replication = (*v1.PostgresReplication)(unsafe.Pointer(in.Replication))
+	// The two PostgresReplication types no longer have identical layouts: v1 carries
+	// BestEffortCrossDCLagBytesForFailover and v1alpha2 does not. Reinterpreting the
+	// v1alpha2 allocation as the v1 type would read that trailing field out of bounds,
+	// so this must be a field by field conversion.
+	if in.Replication != nil {
+		out.Replication = new(v1.PostgresReplication)
+		if err := Convert_v1alpha2_PostgresReplication_To_v1_PostgresReplication(in.Replication, out.Replication, s); err != nil {
+			return err
+		}
+	} else {
+		out.Replication = nil
+	}
 	return nil
 }
 
@@ -288,7 +312,17 @@ func Convert_v1_PostgresSpec_To_v1alpha2_PostgresSpec(in *v1.PostgresSpec, out *
 	out.HealthChecker = in.HealthChecker
 	out.Archiver = (*Archiver)(unsafe.Pointer(in.Archiver))
 	out.Arbiter = (*ArbiterSpec)(unsafe.Pointer(in.Arbiter))
-	out.Replication = (*PostgresReplication)(unsafe.Pointer(in.Replication))
+	// Field by field for the same reason as the v1alpha2 -> v1 direction above; the
+	// v1-only BestEffortCrossDCLagBytesForFailover is dropped, since v1alpha2 cannot
+	// express it.
+	if in.Replication != nil {
+		out.Replication = new(PostgresReplication)
+		if err := Convert_v1_PostgresReplication_To_v1alpha2_PostgresReplication(in.Replication, out.Replication, s); err != nil {
+			return err
+		}
+	} else {
+		out.Replication = nil
+	}
 	return nil
 }
 

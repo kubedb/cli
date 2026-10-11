@@ -58,6 +58,10 @@ func (EtcdArchiver) CustomResourceDefinition() *apiextensions.CustomResourceDefi
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralEtcdArchiver))
 }
 
+func (MilvusArchiver) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralMilvusArchiver))
+}
+
 func SetDefaultLogBackupOptions(log *LogBackupOptions) *LogBackupOptions {
 	if log == nil {
 		log = &LogBackupOptions{

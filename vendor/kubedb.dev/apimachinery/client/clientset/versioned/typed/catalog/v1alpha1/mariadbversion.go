@@ -19,16 +19,15 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"context"
-	"time"
+	context "context"
 
-	v1alpha1 "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
+	catalogv1alpha1 "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
 	scheme "kubedb.dev/apimachinery/client/clientset/versioned/scheme"
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
-	rest "k8s.io/client-go/rest"
+	gentype "k8s.io/client-go/gentype"
 )
 
 // MariaDBVersionsGetter has a method to return a MariaDBVersionInterface.
@@ -39,131 +38,32 @@ type MariaDBVersionsGetter interface {
 
 // MariaDBVersionInterface has methods to work with MariaDBVersion resources.
 type MariaDBVersionInterface interface {
-	Create(ctx context.Context, mariaDBVersion *v1alpha1.MariaDBVersion, opts v1.CreateOptions) (*v1alpha1.MariaDBVersion, error)
-	Update(ctx context.Context, mariaDBVersion *v1alpha1.MariaDBVersion, opts v1.UpdateOptions) (*v1alpha1.MariaDBVersion, error)
+	Create(ctx context.Context, mariaDBVersion *catalogv1alpha1.MariaDBVersion, opts v1.CreateOptions) (*catalogv1alpha1.MariaDBVersion, error)
+	Update(ctx context.Context, mariaDBVersion *catalogv1alpha1.MariaDBVersion, opts v1.UpdateOptions) (*catalogv1alpha1.MariaDBVersion, error)
 	Delete(ctx context.Context, name string, opts v1.DeleteOptions) error
 	DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error
-	Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha1.MariaDBVersion, error)
-	List(ctx context.Context, opts v1.ListOptions) (*v1alpha1.MariaDBVersionList, error)
+	Get(ctx context.Context, name string, opts v1.GetOptions) (*catalogv1alpha1.MariaDBVersion, error)
+	List(ctx context.Context, opts v1.ListOptions) (*catalogv1alpha1.MariaDBVersionList, error)
 	Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error)
-	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.MariaDBVersion, err error)
+	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *catalogv1alpha1.MariaDBVersion, err error)
 	MariaDBVersionExpansion
 }
 
 // mariaDBVersions implements MariaDBVersionInterface
 type mariaDBVersions struct {
-	client rest.Interface
+	*gentype.ClientWithList[*catalogv1alpha1.MariaDBVersion, *catalogv1alpha1.MariaDBVersionList]
 }
 
 // newMariaDBVersions returns a MariaDBVersions
 func newMariaDBVersions(c *CatalogV1alpha1Client) *mariaDBVersions {
 	return &mariaDBVersions{
-		client: c.RESTClient(),
+		gentype.NewClientWithList[*catalogv1alpha1.MariaDBVersion, *catalogv1alpha1.MariaDBVersionList](
+			"mariadbversions",
+			c.RESTClient(),
+			scheme.ParameterCodec,
+			"",
+			func() *catalogv1alpha1.MariaDBVersion { return &catalogv1alpha1.MariaDBVersion{} },
+			func() *catalogv1alpha1.MariaDBVersionList { return &catalogv1alpha1.MariaDBVersionList{} },
+		),
 	}
-}
-
-// Get takes name of the mariaDBVersion, and returns the corresponding mariaDBVersion object, and an error if there is any.
-func (c *mariaDBVersions) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.MariaDBVersion, err error) {
-	result = &v1alpha1.MariaDBVersion{}
-	err = c.client.Get().
-		Resource("mariadbversions").
-		Name(name).
-		VersionedParams(&options, scheme.ParameterCodec).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// List takes label and field selectors, and returns the list of MariaDBVersions that match those selectors.
-func (c *mariaDBVersions) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha1.MariaDBVersionList, err error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	result = &v1alpha1.MariaDBVersionList{}
-	err = c.client.Get().
-		Resource("mariadbversions").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Watch returns a watch.Interface that watches the requested mariaDBVersions.
-func (c *mariaDBVersions) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	opts.Watch = true
-	return c.client.Get().
-		Resource("mariadbversions").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Watch(ctx)
-}
-
-// Create takes the representation of a mariaDBVersion and creates it.  Returns the server's representation of the mariaDBVersion, and an error, if there is any.
-func (c *mariaDBVersions) Create(ctx context.Context, mariaDBVersion *v1alpha1.MariaDBVersion, opts v1.CreateOptions) (result *v1alpha1.MariaDBVersion, err error) {
-	result = &v1alpha1.MariaDBVersion{}
-	err = c.client.Post().
-		Resource("mariadbversions").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(mariaDBVersion).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Update takes the representation of a mariaDBVersion and updates it. Returns the server's representation of the mariaDBVersion, and an error, if there is any.
-func (c *mariaDBVersions) Update(ctx context.Context, mariaDBVersion *v1alpha1.MariaDBVersion, opts v1.UpdateOptions) (result *v1alpha1.MariaDBVersion, err error) {
-	result = &v1alpha1.MariaDBVersion{}
-	err = c.client.Put().
-		Resource("mariadbversions").
-		Name(mariaDBVersion.Name).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(mariaDBVersion).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Delete takes name of the mariaDBVersion and deletes it. Returns an error if one occurs.
-func (c *mariaDBVersions) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
-	return c.client.Delete().
-		Resource("mariadbversions").
-		Name(name).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// DeleteCollection deletes a collection of objects.
-func (c *mariaDBVersions) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
-	var timeout time.Duration
-	if listOpts.TimeoutSeconds != nil {
-		timeout = time.Duration(*listOpts.TimeoutSeconds) * time.Second
-	}
-	return c.client.Delete().
-		Resource("mariadbversions").
-		VersionedParams(&listOpts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// Patch applies the patch and returns the patched mariaDBVersion.
-func (c *mariaDBVersions) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.MariaDBVersion, err error) {
-	result = &v1alpha1.MariaDBVersion{}
-	err = c.client.Patch(pt).
-		Resource("mariadbversions").
-		Name(name).
-		SubResource(subresources...).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(data).
-		Do(ctx).
-		Into(result)
-	return
 }

@@ -1,7 +1,6 @@
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  creationTimestamp: null
   labels:
     app.kubernetes.io/name: kubedb
   name: aerospikes.gitops.kubedb.com
@@ -4770,7 +4769,7 @@ spec:
                       - standby
                       - stats
                       - dashboard
-                      - secondary
+                      - readreplica
                       type: string
                     metadata:
                       properties:

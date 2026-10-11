@@ -70,6 +70,9 @@ type Neo4jVersionSpec struct {
 	UpdateConstraints UpdateConstraints `json:"updateConstraints,omitempty"`
 	// +optional
 	GitSyncer GitSyncer `json:"gitSyncer,omitempty"`
+	// Archiver defines the walg & stash-addon related specifications
+	// +optional
+	Archiver ArchiverSpec `json:"archiver,omitempty"`
 }
 
 // Neo4jVersionDatabase is the Neo4j Database image

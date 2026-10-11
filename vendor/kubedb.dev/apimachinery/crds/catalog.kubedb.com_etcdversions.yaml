@@ -1,7 +1,6 @@
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  creationTimestamp: null
   labels:
     app.kubernetes.io/name: kubedb
   name: etcdversions.catalog.kubedb.com
@@ -16,7 +15,7 @@ spec:
     listKind: EtcdVersionList
     plural: etcdversions
     shortNames:
-    - etcdversion
+    - etversion
     singular: etcdversion
   scope: Cluster
   versions:
@@ -57,6 +56,9 @@ spec:
                         - mariadb-addon
                         - mssqlserver-addon
                         - clickhouse-addon
+                        - neo4j-addon
+                        - documentdb-addon
+                        - milvus-addon
                         type: string
                       tasks:
                         properties:

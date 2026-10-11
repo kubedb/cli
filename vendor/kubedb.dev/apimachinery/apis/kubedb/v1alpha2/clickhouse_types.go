@@ -19,6 +19,7 @@ package v1alpha2
 import (
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/types"
 	kmapi "kmodules.xyz/client-go/api/v1"
 	mona "kmodules.xyz/monitoring-agent-api/api/v1"
 	ofst "kmodules.xyz/offshoot-api/api/v2"
@@ -207,6 +208,10 @@ type ClickHouseStatus struct {
 	// Conditions applied to the database, such as approval or denial.
 	// +optional
 	Conditions []kmapi.Condition `json:"conditions,omitempty"`
+	// ObservedDataPVCUIDs records the last verified Kubernetes UID of each
+	// ClickHouse data PVC, keyed by PVC name.
+	// +optional
+	ObservedDataPVCUIDs map[string]types.UID `json:"observedDataPVCUIDs,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
