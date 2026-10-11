@@ -19,15 +19,14 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"context"
-	"time"
+	context "context"
 
-	v1alpha1 "kubedb.dev/apimachinery/apis/ui/v1alpha1"
+	uiv1alpha1 "kubedb.dev/apimachinery/apis/ui/v1alpha1"
 	scheme "kubedb.dev/apimachinery/client/clientset/versioned/scheme"
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
-	rest "k8s.io/client-go/rest"
+	gentype "k8s.io/client-go/gentype"
 )
 
 // DatabaseConfigurationsGetter has a method to return a DatabaseConfigurationInterface.
@@ -38,98 +37,29 @@ type DatabaseConfigurationsGetter interface {
 
 // DatabaseConfigurationInterface has methods to work with DatabaseConfiguration resources.
 type DatabaseConfigurationInterface interface {
-	Create(ctx context.Context, databaseConfiguration *v1alpha1.DatabaseConfiguration, opts v1.CreateOptions) (*v1alpha1.DatabaseConfiguration, error)
+	Create(ctx context.Context, databaseConfiguration *uiv1alpha1.DatabaseConfiguration, opts v1.CreateOptions) (*uiv1alpha1.DatabaseConfiguration, error)
 	DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error
-	Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha1.DatabaseConfiguration, error)
-	List(ctx context.Context, opts v1.ListOptions) (*v1alpha1.DatabaseConfigurationList, error)
-	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.DatabaseConfiguration, err error)
+	Get(ctx context.Context, name string, opts v1.GetOptions) (*uiv1alpha1.DatabaseConfiguration, error)
+	List(ctx context.Context, opts v1.ListOptions) (*uiv1alpha1.DatabaseConfigurationList, error)
+	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *uiv1alpha1.DatabaseConfiguration, err error)
 	DatabaseConfigurationExpansion
 }
 
 // databaseConfigurations implements DatabaseConfigurationInterface
 type databaseConfigurations struct {
-	client rest.Interface
-	ns     string
+	*gentype.ClientWithList[*uiv1alpha1.DatabaseConfiguration, *uiv1alpha1.DatabaseConfigurationList]
 }
 
 // newDatabaseConfigurations returns a DatabaseConfigurations
 func newDatabaseConfigurations(c *UiV1alpha1Client, namespace string) *databaseConfigurations {
 	return &databaseConfigurations{
-		client: c.RESTClient(),
-		ns:     namespace,
+		gentype.NewClientWithList[*uiv1alpha1.DatabaseConfiguration, *uiv1alpha1.DatabaseConfigurationList](
+			"databaseconfigurations",
+			c.RESTClient(),
+			scheme.ParameterCodec,
+			namespace,
+			func() *uiv1alpha1.DatabaseConfiguration { return &uiv1alpha1.DatabaseConfiguration{} },
+			func() *uiv1alpha1.DatabaseConfigurationList { return &uiv1alpha1.DatabaseConfigurationList{} },
+		),
 	}
-}
-
-// Get takes name of the databaseConfiguration, and returns the corresponding databaseConfiguration object, and an error if there is any.
-func (c *databaseConfigurations) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.DatabaseConfiguration, err error) {
-	result = &v1alpha1.DatabaseConfiguration{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("databaseconfigurations").
-		Name(name).
-		VersionedParams(&options, scheme.ParameterCodec).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// List takes label and field selectors, and returns the list of DatabaseConfigurations that match those selectors.
-func (c *databaseConfigurations) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha1.DatabaseConfigurationList, err error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	result = &v1alpha1.DatabaseConfigurationList{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("databaseconfigurations").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Create takes the representation of a databaseConfiguration and creates it.  Returns the server's representation of the databaseConfiguration, and an error, if there is any.
-func (c *databaseConfigurations) Create(ctx context.Context, databaseConfiguration *v1alpha1.DatabaseConfiguration, opts v1.CreateOptions) (result *v1alpha1.DatabaseConfiguration, err error) {
-	result = &v1alpha1.DatabaseConfiguration{}
-	err = c.client.Post().
-		Namespace(c.ns).
-		Resource("databaseconfigurations").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(databaseConfiguration).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// DeleteCollection deletes a collection of objects.
-func (c *databaseConfigurations) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
-	var timeout time.Duration
-	if listOpts.TimeoutSeconds != nil {
-		timeout = time.Duration(*listOpts.TimeoutSeconds) * time.Second
-	}
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("databaseconfigurations").
-		VersionedParams(&listOpts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// Patch applies the patch and returns the patched databaseConfiguration.
-func (c *databaseConfigurations) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.DatabaseConfiguration, err error) {
-	result = &v1alpha1.DatabaseConfiguration{}
-	err = c.client.Patch(pt).
-		Namespace(c.ns).
-		Resource("databaseconfigurations").
-		Name(name).
-		SubResource(subresources...).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(data).
-		Do(ctx).
-		Into(result)
-	return
 }

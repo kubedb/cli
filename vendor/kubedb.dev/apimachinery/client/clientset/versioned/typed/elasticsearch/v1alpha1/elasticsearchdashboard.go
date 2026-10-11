@@ -19,16 +19,15 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"context"
-	"time"
+	context "context"
 
-	v1alpha1 "kubedb.dev/apimachinery/apis/elasticsearch/v1alpha1"
+	elasticsearchv1alpha1 "kubedb.dev/apimachinery/apis/elasticsearch/v1alpha1"
 	scheme "kubedb.dev/apimachinery/client/clientset/versioned/scheme"
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
-	rest "k8s.io/client-go/rest"
+	gentype "k8s.io/client-go/gentype"
 )
 
 // ElasticsearchDashboardsGetter has a method to return a ElasticsearchDashboardInterface.
@@ -39,158 +38,38 @@ type ElasticsearchDashboardsGetter interface {
 
 // ElasticsearchDashboardInterface has methods to work with ElasticsearchDashboard resources.
 type ElasticsearchDashboardInterface interface {
-	Create(ctx context.Context, elasticsearchDashboard *v1alpha1.ElasticsearchDashboard, opts v1.CreateOptions) (*v1alpha1.ElasticsearchDashboard, error)
-	Update(ctx context.Context, elasticsearchDashboard *v1alpha1.ElasticsearchDashboard, opts v1.UpdateOptions) (*v1alpha1.ElasticsearchDashboard, error)
-	UpdateStatus(ctx context.Context, elasticsearchDashboard *v1alpha1.ElasticsearchDashboard, opts v1.UpdateOptions) (*v1alpha1.ElasticsearchDashboard, error)
+	Create(ctx context.Context, elasticsearchDashboard *elasticsearchv1alpha1.ElasticsearchDashboard, opts v1.CreateOptions) (*elasticsearchv1alpha1.ElasticsearchDashboard, error)
+	Update(ctx context.Context, elasticsearchDashboard *elasticsearchv1alpha1.ElasticsearchDashboard, opts v1.UpdateOptions) (*elasticsearchv1alpha1.ElasticsearchDashboard, error)
+	// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
+	UpdateStatus(ctx context.Context, elasticsearchDashboard *elasticsearchv1alpha1.ElasticsearchDashboard, opts v1.UpdateOptions) (*elasticsearchv1alpha1.ElasticsearchDashboard, error)
 	Delete(ctx context.Context, name string, opts v1.DeleteOptions) error
 	DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error
-	Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha1.ElasticsearchDashboard, error)
-	List(ctx context.Context, opts v1.ListOptions) (*v1alpha1.ElasticsearchDashboardList, error)
+	Get(ctx context.Context, name string, opts v1.GetOptions) (*elasticsearchv1alpha1.ElasticsearchDashboard, error)
+	List(ctx context.Context, opts v1.ListOptions) (*elasticsearchv1alpha1.ElasticsearchDashboardList, error)
 	Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error)
-	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.ElasticsearchDashboard, err error)
+	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *elasticsearchv1alpha1.ElasticsearchDashboard, err error)
 	ElasticsearchDashboardExpansion
 }
 
 // elasticsearchDashboards implements ElasticsearchDashboardInterface
 type elasticsearchDashboards struct {
-	client rest.Interface
-	ns     string
+	*gentype.ClientWithList[*elasticsearchv1alpha1.ElasticsearchDashboard, *elasticsearchv1alpha1.ElasticsearchDashboardList]
 }
 
 // newElasticsearchDashboards returns a ElasticsearchDashboards
 func newElasticsearchDashboards(c *ElasticsearchV1alpha1Client, namespace string) *elasticsearchDashboards {
 	return &elasticsearchDashboards{
-		client: c.RESTClient(),
-		ns:     namespace,
+		gentype.NewClientWithList[*elasticsearchv1alpha1.ElasticsearchDashboard, *elasticsearchv1alpha1.ElasticsearchDashboardList](
+			"elasticsearchdashboards",
+			c.RESTClient(),
+			scheme.ParameterCodec,
+			namespace,
+			func() *elasticsearchv1alpha1.ElasticsearchDashboard {
+				return &elasticsearchv1alpha1.ElasticsearchDashboard{}
+			},
+			func() *elasticsearchv1alpha1.ElasticsearchDashboardList {
+				return &elasticsearchv1alpha1.ElasticsearchDashboardList{}
+			},
+		),
 	}
-}
-
-// Get takes name of the elasticsearchDashboard, and returns the corresponding elasticsearchDashboard object, and an error if there is any.
-func (c *elasticsearchDashboards) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.ElasticsearchDashboard, err error) {
-	result = &v1alpha1.ElasticsearchDashboard{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("elasticsearchdashboards").
-		Name(name).
-		VersionedParams(&options, scheme.ParameterCodec).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// List takes label and field selectors, and returns the list of ElasticsearchDashboards that match those selectors.
-func (c *elasticsearchDashboards) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha1.ElasticsearchDashboardList, err error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	result = &v1alpha1.ElasticsearchDashboardList{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("elasticsearchdashboards").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Watch returns a watch.Interface that watches the requested elasticsearchDashboards.
-func (c *elasticsearchDashboards) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	opts.Watch = true
-	return c.client.Get().
-		Namespace(c.ns).
-		Resource("elasticsearchdashboards").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Watch(ctx)
-}
-
-// Create takes the representation of a elasticsearchDashboard and creates it.  Returns the server's representation of the elasticsearchDashboard, and an error, if there is any.
-func (c *elasticsearchDashboards) Create(ctx context.Context, elasticsearchDashboard *v1alpha1.ElasticsearchDashboard, opts v1.CreateOptions) (result *v1alpha1.ElasticsearchDashboard, err error) {
-	result = &v1alpha1.ElasticsearchDashboard{}
-	err = c.client.Post().
-		Namespace(c.ns).
-		Resource("elasticsearchdashboards").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(elasticsearchDashboard).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Update takes the representation of a elasticsearchDashboard and updates it. Returns the server's representation of the elasticsearchDashboard, and an error, if there is any.
-func (c *elasticsearchDashboards) Update(ctx context.Context, elasticsearchDashboard *v1alpha1.ElasticsearchDashboard, opts v1.UpdateOptions) (result *v1alpha1.ElasticsearchDashboard, err error) {
-	result = &v1alpha1.ElasticsearchDashboard{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("elasticsearchdashboards").
-		Name(elasticsearchDashboard.Name).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(elasticsearchDashboard).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// UpdateStatus was generated because the type contains a Status member.
-// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
-func (c *elasticsearchDashboards) UpdateStatus(ctx context.Context, elasticsearchDashboard *v1alpha1.ElasticsearchDashboard, opts v1.UpdateOptions) (result *v1alpha1.ElasticsearchDashboard, err error) {
-	result = &v1alpha1.ElasticsearchDashboard{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("elasticsearchdashboards").
-		Name(elasticsearchDashboard.Name).
-		SubResource("status").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(elasticsearchDashboard).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Delete takes name of the elasticsearchDashboard and deletes it. Returns an error if one occurs.
-func (c *elasticsearchDashboards) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("elasticsearchdashboards").
-		Name(name).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// DeleteCollection deletes a collection of objects.
-func (c *elasticsearchDashboards) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
-	var timeout time.Duration
-	if listOpts.TimeoutSeconds != nil {
-		timeout = time.Duration(*listOpts.TimeoutSeconds) * time.Second
-	}
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("elasticsearchdashboards").
-		VersionedParams(&listOpts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// Patch applies the patch and returns the patched elasticsearchDashboard.
-func (c *elasticsearchDashboards) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.ElasticsearchDashboard, err error) {
-	result = &v1alpha1.ElasticsearchDashboard{}
-	err = c.client.Patch(pt).
-		Namespace(c.ns).
-		Resource("elasticsearchdashboards").
-		Name(name).
-		SubResource(subresources...).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(data).
-		Do(ctx).
-		Into(result)
-	return
 }

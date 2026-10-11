@@ -54,15 +54,38 @@ func (p OracleVersion) ResourcePlural() string {
 }
 
 func (p OracleVersion) ValidateSpecs() error {
-	if p.Spec.Version == "" ||
-		p.Spec.DB.Image == "" ||
-		p.Spec.Exporter.Image == "" {
-		fields := []string{
-			"spec.version",
-			"spec.db.image",
-			"spec.exporter.image",
-		}
-		return fmt.Errorf("atleast one of the following specs is not set for postgresVersion %q: %s", p.Name, strings.Join(fields, ", "))
+	var missing []string
+	if p.Spec.Version == "" {
+		missing = append(missing, "spec.version")
+	}
+	if p.Spec.DB.Image == "" {
+		missing = append(missing, "spec.db.image")
+	}
+	if p.Spec.Exporter.Image == "" {
+		missing = append(missing, "spec.exporter.image")
+	}
+	if p.Spec.InitContainer.Image == "" {
+		missing = append(missing, "spec.initContainer.image")
+	}
+	if p.Spec.Coordinator.Image == "" {
+		missing = append(missing, "spec.coordinator.image")
+	}
+	if len(missing) > 0 {
+		return fmt.Errorf("required fields not set for OracleVersion %q: %s", p.Name, strings.Join(missing, ", "))
+	}
+	return nil
+}
+
+func (p OracleVersion) ValidateDataGuardSpecs() error {
+	var missing []string
+	if p.Spec.DataGuard.Observer.Image == "" {
+		missing = append(missing, "spec.dataGuard.observer.image")
+	}
+	if p.Spec.DataGuard.InitContainer.Image == "" {
+		missing = append(missing, "spec.dataGuard.initContainer.image")
+	}
+	if len(missing) > 0 {
+		return fmt.Errorf("OracleVersion %q cannot serve mode=DataGuard, missing: %s", p.Name, strings.Join(missing, ", "))
 	}
 	return nil
 }

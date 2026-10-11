@@ -115,7 +115,8 @@ func untilHasKey(
 		},
 	}
 
-	_, err = watchtools.UntilWithSync(ctx,
+	_, err = watchtools.UntilWithSync(
+		ctx,
 		lw,
 		&unstructured.Unstructured{},
 		nil,

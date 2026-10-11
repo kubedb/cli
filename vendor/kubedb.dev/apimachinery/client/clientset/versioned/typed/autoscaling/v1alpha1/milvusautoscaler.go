@@ -19,16 +19,15 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"context"
-	"time"
+	context "context"
 
-	v1alpha1 "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1"
+	autoscalingv1alpha1 "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1"
 	scheme "kubedb.dev/apimachinery/client/clientset/versioned/scheme"
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
-	rest "k8s.io/client-go/rest"
+	gentype "k8s.io/client-go/gentype"
 )
 
 // MilvusAutoscalersGetter has a method to return a MilvusAutoscalerInterface.
@@ -39,158 +38,34 @@ type MilvusAutoscalersGetter interface {
 
 // MilvusAutoscalerInterface has methods to work with MilvusAutoscaler resources.
 type MilvusAutoscalerInterface interface {
-	Create(ctx context.Context, milvusAutoscaler *v1alpha1.MilvusAutoscaler, opts v1.CreateOptions) (*v1alpha1.MilvusAutoscaler, error)
-	Update(ctx context.Context, milvusAutoscaler *v1alpha1.MilvusAutoscaler, opts v1.UpdateOptions) (*v1alpha1.MilvusAutoscaler, error)
-	UpdateStatus(ctx context.Context, milvusAutoscaler *v1alpha1.MilvusAutoscaler, opts v1.UpdateOptions) (*v1alpha1.MilvusAutoscaler, error)
+	Create(ctx context.Context, milvusAutoscaler *autoscalingv1alpha1.MilvusAutoscaler, opts v1.CreateOptions) (*autoscalingv1alpha1.MilvusAutoscaler, error)
+	Update(ctx context.Context, milvusAutoscaler *autoscalingv1alpha1.MilvusAutoscaler, opts v1.UpdateOptions) (*autoscalingv1alpha1.MilvusAutoscaler, error)
+	// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
+	UpdateStatus(ctx context.Context, milvusAutoscaler *autoscalingv1alpha1.MilvusAutoscaler, opts v1.UpdateOptions) (*autoscalingv1alpha1.MilvusAutoscaler, error)
 	Delete(ctx context.Context, name string, opts v1.DeleteOptions) error
 	DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error
-	Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha1.MilvusAutoscaler, error)
-	List(ctx context.Context, opts v1.ListOptions) (*v1alpha1.MilvusAutoscalerList, error)
+	Get(ctx context.Context, name string, opts v1.GetOptions) (*autoscalingv1alpha1.MilvusAutoscaler, error)
+	List(ctx context.Context, opts v1.ListOptions) (*autoscalingv1alpha1.MilvusAutoscalerList, error)
 	Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error)
-	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.MilvusAutoscaler, err error)
+	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *autoscalingv1alpha1.MilvusAutoscaler, err error)
 	MilvusAutoscalerExpansion
 }
 
 // milvusAutoscalers implements MilvusAutoscalerInterface
 type milvusAutoscalers struct {
-	client rest.Interface
-	ns     string
+	*gentype.ClientWithList[*autoscalingv1alpha1.MilvusAutoscaler, *autoscalingv1alpha1.MilvusAutoscalerList]
 }
 
 // newMilvusAutoscalers returns a MilvusAutoscalers
 func newMilvusAutoscalers(c *AutoscalingV1alpha1Client, namespace string) *milvusAutoscalers {
 	return &milvusAutoscalers{
-		client: c.RESTClient(),
-		ns:     namespace,
+		gentype.NewClientWithList[*autoscalingv1alpha1.MilvusAutoscaler, *autoscalingv1alpha1.MilvusAutoscalerList](
+			"milvusautoscalers",
+			c.RESTClient(),
+			scheme.ParameterCodec,
+			namespace,
+			func() *autoscalingv1alpha1.MilvusAutoscaler { return &autoscalingv1alpha1.MilvusAutoscaler{} },
+			func() *autoscalingv1alpha1.MilvusAutoscalerList { return &autoscalingv1alpha1.MilvusAutoscalerList{} },
+		),
 	}
-}
-
-// Get takes name of the milvusAutoscaler, and returns the corresponding milvusAutoscaler object, and an error if there is any.
-func (c *milvusAutoscalers) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.MilvusAutoscaler, err error) {
-	result = &v1alpha1.MilvusAutoscaler{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("milvusautoscalers").
-		Name(name).
-		VersionedParams(&options, scheme.ParameterCodec).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// List takes label and field selectors, and returns the list of MilvusAutoscalers that match those selectors.
-func (c *milvusAutoscalers) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha1.MilvusAutoscalerList, err error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	result = &v1alpha1.MilvusAutoscalerList{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("milvusautoscalers").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Watch returns a watch.Interface that watches the requested milvusAutoscalers.
-func (c *milvusAutoscalers) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	opts.Watch = true
-	return c.client.Get().
-		Namespace(c.ns).
-		Resource("milvusautoscalers").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Watch(ctx)
-}
-
-// Create takes the representation of a milvusAutoscaler and creates it.  Returns the server's representation of the milvusAutoscaler, and an error, if there is any.
-func (c *milvusAutoscalers) Create(ctx context.Context, milvusAutoscaler *v1alpha1.MilvusAutoscaler, opts v1.CreateOptions) (result *v1alpha1.MilvusAutoscaler, err error) {
-	result = &v1alpha1.MilvusAutoscaler{}
-	err = c.client.Post().
-		Namespace(c.ns).
-		Resource("milvusautoscalers").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(milvusAutoscaler).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Update takes the representation of a milvusAutoscaler and updates it. Returns the server's representation of the milvusAutoscaler, and an error, if there is any.
-func (c *milvusAutoscalers) Update(ctx context.Context, milvusAutoscaler *v1alpha1.MilvusAutoscaler, opts v1.UpdateOptions) (result *v1alpha1.MilvusAutoscaler, err error) {
-	result = &v1alpha1.MilvusAutoscaler{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("milvusautoscalers").
-		Name(milvusAutoscaler.Name).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(milvusAutoscaler).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// UpdateStatus was generated because the type contains a Status member.
-// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
-func (c *milvusAutoscalers) UpdateStatus(ctx context.Context, milvusAutoscaler *v1alpha1.MilvusAutoscaler, opts v1.UpdateOptions) (result *v1alpha1.MilvusAutoscaler, err error) {
-	result = &v1alpha1.MilvusAutoscaler{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("milvusautoscalers").
-		Name(milvusAutoscaler.Name).
-		SubResource("status").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(milvusAutoscaler).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Delete takes name of the milvusAutoscaler and deletes it. Returns an error if one occurs.
-func (c *milvusAutoscalers) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("milvusautoscalers").
-		Name(name).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// DeleteCollection deletes a collection of objects.
-func (c *milvusAutoscalers) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
-	var timeout time.Duration
-	if listOpts.TimeoutSeconds != nil {
-		timeout = time.Duration(*listOpts.TimeoutSeconds) * time.Second
-	}
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("milvusautoscalers").
-		VersionedParams(&listOpts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// Patch applies the patch and returns the patched milvusAutoscaler.
-func (c *milvusAutoscalers) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.MilvusAutoscaler, err error) {
-	result = &v1alpha1.MilvusAutoscaler{}
-	err = c.client.Patch(pt).
-		Namespace(c.ns).
-		Resource("milvusautoscalers").
-		Name(name).
-		SubResource(subresources...).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(data).
-		Do(ctx).
-		Into(result)
-	return
 }

@@ -19,16 +19,15 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"context"
-	"time"
+	context "context"
 
-	v1alpha1 "kubedb.dev/apimachinery/apis/schema/v1alpha1"
+	schemav1alpha1 "kubedb.dev/apimachinery/apis/schema/v1alpha1"
 	scheme "kubedb.dev/apimachinery/client/clientset/versioned/scheme"
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
-	rest "k8s.io/client-go/rest"
+	gentype "k8s.io/client-go/gentype"
 )
 
 // PostgresDatabasesGetter has a method to return a PostgresDatabaseInterface.
@@ -39,158 +38,34 @@ type PostgresDatabasesGetter interface {
 
 // PostgresDatabaseInterface has methods to work with PostgresDatabase resources.
 type PostgresDatabaseInterface interface {
-	Create(ctx context.Context, postgresDatabase *v1alpha1.PostgresDatabase, opts v1.CreateOptions) (*v1alpha1.PostgresDatabase, error)
-	Update(ctx context.Context, postgresDatabase *v1alpha1.PostgresDatabase, opts v1.UpdateOptions) (*v1alpha1.PostgresDatabase, error)
-	UpdateStatus(ctx context.Context, postgresDatabase *v1alpha1.PostgresDatabase, opts v1.UpdateOptions) (*v1alpha1.PostgresDatabase, error)
+	Create(ctx context.Context, postgresDatabase *schemav1alpha1.PostgresDatabase, opts v1.CreateOptions) (*schemav1alpha1.PostgresDatabase, error)
+	Update(ctx context.Context, postgresDatabase *schemav1alpha1.PostgresDatabase, opts v1.UpdateOptions) (*schemav1alpha1.PostgresDatabase, error)
+	// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
+	UpdateStatus(ctx context.Context, postgresDatabase *schemav1alpha1.PostgresDatabase, opts v1.UpdateOptions) (*schemav1alpha1.PostgresDatabase, error)
 	Delete(ctx context.Context, name string, opts v1.DeleteOptions) error
 	DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error
-	Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha1.PostgresDatabase, error)
-	List(ctx context.Context, opts v1.ListOptions) (*v1alpha1.PostgresDatabaseList, error)
+	Get(ctx context.Context, name string, opts v1.GetOptions) (*schemav1alpha1.PostgresDatabase, error)
+	List(ctx context.Context, opts v1.ListOptions) (*schemav1alpha1.PostgresDatabaseList, error)
 	Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error)
-	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.PostgresDatabase, err error)
+	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *schemav1alpha1.PostgresDatabase, err error)
 	PostgresDatabaseExpansion
 }
 
 // postgresDatabases implements PostgresDatabaseInterface
 type postgresDatabases struct {
-	client rest.Interface
-	ns     string
+	*gentype.ClientWithList[*schemav1alpha1.PostgresDatabase, *schemav1alpha1.PostgresDatabaseList]
 }
 
 // newPostgresDatabases returns a PostgresDatabases
 func newPostgresDatabases(c *SchemaV1alpha1Client, namespace string) *postgresDatabases {
 	return &postgresDatabases{
-		client: c.RESTClient(),
-		ns:     namespace,
+		gentype.NewClientWithList[*schemav1alpha1.PostgresDatabase, *schemav1alpha1.PostgresDatabaseList](
+			"postgresdatabases",
+			c.RESTClient(),
+			scheme.ParameterCodec,
+			namespace,
+			func() *schemav1alpha1.PostgresDatabase { return &schemav1alpha1.PostgresDatabase{} },
+			func() *schemav1alpha1.PostgresDatabaseList { return &schemav1alpha1.PostgresDatabaseList{} },
+		),
 	}
-}
-
-// Get takes name of the postgresDatabase, and returns the corresponding postgresDatabase object, and an error if there is any.
-func (c *postgresDatabases) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.PostgresDatabase, err error) {
-	result = &v1alpha1.PostgresDatabase{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("postgresdatabases").
-		Name(name).
-		VersionedParams(&options, scheme.ParameterCodec).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// List takes label and field selectors, and returns the list of PostgresDatabases that match those selectors.
-func (c *postgresDatabases) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha1.PostgresDatabaseList, err error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	result = &v1alpha1.PostgresDatabaseList{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("postgresdatabases").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Watch returns a watch.Interface that watches the requested postgresDatabases.
-func (c *postgresDatabases) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	opts.Watch = true
-	return c.client.Get().
-		Namespace(c.ns).
-		Resource("postgresdatabases").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Watch(ctx)
-}
-
-// Create takes the representation of a postgresDatabase and creates it.  Returns the server's representation of the postgresDatabase, and an error, if there is any.
-func (c *postgresDatabases) Create(ctx context.Context, postgresDatabase *v1alpha1.PostgresDatabase, opts v1.CreateOptions) (result *v1alpha1.PostgresDatabase, err error) {
-	result = &v1alpha1.PostgresDatabase{}
-	err = c.client.Post().
-		Namespace(c.ns).
-		Resource("postgresdatabases").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(postgresDatabase).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Update takes the representation of a postgresDatabase and updates it. Returns the server's representation of the postgresDatabase, and an error, if there is any.
-func (c *postgresDatabases) Update(ctx context.Context, postgresDatabase *v1alpha1.PostgresDatabase, opts v1.UpdateOptions) (result *v1alpha1.PostgresDatabase, err error) {
-	result = &v1alpha1.PostgresDatabase{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("postgresdatabases").
-		Name(postgresDatabase.Name).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(postgresDatabase).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// UpdateStatus was generated because the type contains a Status member.
-// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
-func (c *postgresDatabases) UpdateStatus(ctx context.Context, postgresDatabase *v1alpha1.PostgresDatabase, opts v1.UpdateOptions) (result *v1alpha1.PostgresDatabase, err error) {
-	result = &v1alpha1.PostgresDatabase{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("postgresdatabases").
-		Name(postgresDatabase.Name).
-		SubResource("status").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(postgresDatabase).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Delete takes name of the postgresDatabase and deletes it. Returns an error if one occurs.
-func (c *postgresDatabases) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("postgresdatabases").
-		Name(name).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// DeleteCollection deletes a collection of objects.
-func (c *postgresDatabases) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
-	var timeout time.Duration
-	if listOpts.TimeoutSeconds != nil {
-		timeout = time.Duration(*listOpts.TimeoutSeconds) * time.Second
-	}
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("postgresdatabases").
-		VersionedParams(&listOpts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// Patch applies the patch and returns the patched postgresDatabase.
-func (c *postgresDatabases) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.PostgresDatabase, err error) {
-	result = &v1alpha1.PostgresDatabase{}
-	err = c.client.Patch(pt).
-		Namespace(c.ns).
-		Resource("postgresdatabases").
-		Name(name).
-		SubResource(subresources...).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(data).
-		Do(ctx).
-		Into(result)
-	return
 }

@@ -3,7 +3,6 @@
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  creationTimestamp: null
   name: genericresources.core.k8s.appscode.com
 spec:
   group: core.k8s.appscode.com
@@ -125,10 +124,14 @@ spec:
               namespace:
                 properties:
                   aceOrgID:
+                    description: 'Deprecated: use GenericResourceSpec.Tenant. Removed
+                      after one release.'
                     type: string
                   aceOrgMetadata:
                     additionalProperties:
                       type: string
+                    description: 'Deprecated: use GenericResourceSpec.Tenant. Removed
+                      after one release.'
                     type: object
                   creationTimestamp:
                     format: date-time
@@ -390,6 +393,23 @@ spec:
                   - name
                   type: object
                 type: array
+              tenant:
+                description: |-
+                  TenantInfo identifies the org a usage event is billed to, independent of how
+                  that org was discovered.
+                properties:
+                  metadata:
+                    additionalProperties:
+                      type: string
+                    type: object
+                  orgID:
+                    type: string
+                  source:
+                    enum:
+                    - namespace
+                    - cluster
+                    type: string
+                type: object
               totalResource:
                 properties:
                   limits:

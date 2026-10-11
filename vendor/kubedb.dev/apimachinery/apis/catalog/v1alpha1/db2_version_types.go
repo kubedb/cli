@@ -62,6 +62,10 @@ type DB2VersionSpec struct {
 	// Coordinator Image
 	Coordinator DB2Coordinator `json:"coordinator"`
 
+	// init container image
+	// +optional
+	InitContainer DB2VersionInitContainer `json:"initContainer,omitempty"`
+
 	// Deprecated versions usable but regarded as obsolete and best avoided, typically due to having been superseded.
 	// +optional
 	Deprecated bool `json:"deprecated,omitempty"`
@@ -96,4 +100,11 @@ type DB2VersionList struct {
 	metav1.ListMeta `json:"metadata,omitempty"`
 	// Items is a list of DB2Version CRD objects
 	Items []DB2Version `json:"items,omitempty"`
+}
+
+// DB2VersionInitContainer is the DB2 init container image. It is pinned per
+// DB2Version so a release needing a different command sequence ships a different
+// init image, with no version branching in operator code.
+type DB2VersionInitContainer struct {
+	Image string `json:"image"`
 }

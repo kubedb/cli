@@ -1,0 +1,77 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    app.kubernetes.io/name: kubedb
+  name: perconaxtradbqueries.ui.kubedb.com
+spec:
+  group: ui.kubedb.com
+  names:
+    kind: PerconaXtraDBQueries
+    listKind: PerconaXtraDBQueriesList
+    plural: perconaxtradbqueries
+    singular: perconaxtradbqueries
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        properties:
+          apiVersion:
+            type: string
+          kind:
+            type: string
+          metadata:
+            type: object
+          spec:
+            properties:
+              queries:
+                items:
+                  properties:
+                    averageExecutionTimeMilliSeconds:
+                      format: double
+                      type: number
+                    count:
+                      format: int64
+                      type: integer
+                    digest:
+                      type: string
+                    digestText:
+                      type: string
+                    firstSeen:
+                      format: date-time
+                      type: string
+                    lastSeen:
+                      format: date-time
+                      type: string
+                    maximumExecutionTimeMilliSeconds:
+                      format: double
+                      type: number
+                    minimumExecutionTimeMilliSeconds:
+                      format: double
+                      type: number
+                    rowsAffected:
+                      format: int64
+                      type: integer
+                    rowsExamined:
+                      format: int64
+                      type: integer
+                    rowsSent:
+                      format: int64
+                      type: integer
+                    schemaName:
+                      type: string
+                    totalExecutionTimeMilliSeconds:
+                      format: double
+                      type: number
+                    totalLockTimeMilliSeconds:
+                      format: double
+                      type: number
+                  type: object
+                type: array
+            required:
+            - queries
+            type: object
+        type: object
+    served: true
+    storage: true

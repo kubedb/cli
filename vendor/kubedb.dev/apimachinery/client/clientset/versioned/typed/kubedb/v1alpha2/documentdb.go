@@ -19,16 +19,15 @@ limitations under the License.
 package v1alpha2
 
 import (
-	"context"
-	"time"
+	context "context"
 
-	v1alpha2 "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	kubedbv1alpha2 "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 	scheme "kubedb.dev/apimachinery/client/clientset/versioned/scheme"
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
-	rest "k8s.io/client-go/rest"
+	gentype "k8s.io/client-go/gentype"
 )
 
 // DocumentDBsGetter has a method to return a DocumentDBInterface.
@@ -39,158 +38,34 @@ type DocumentDBsGetter interface {
 
 // DocumentDBInterface has methods to work with DocumentDB resources.
 type DocumentDBInterface interface {
-	Create(ctx context.Context, documentDB *v1alpha2.DocumentDB, opts v1.CreateOptions) (*v1alpha2.DocumentDB, error)
-	Update(ctx context.Context, documentDB *v1alpha2.DocumentDB, opts v1.UpdateOptions) (*v1alpha2.DocumentDB, error)
-	UpdateStatus(ctx context.Context, documentDB *v1alpha2.DocumentDB, opts v1.UpdateOptions) (*v1alpha2.DocumentDB, error)
+	Create(ctx context.Context, documentDB *kubedbv1alpha2.DocumentDB, opts v1.CreateOptions) (*kubedbv1alpha2.DocumentDB, error)
+	Update(ctx context.Context, documentDB *kubedbv1alpha2.DocumentDB, opts v1.UpdateOptions) (*kubedbv1alpha2.DocumentDB, error)
+	// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
+	UpdateStatus(ctx context.Context, documentDB *kubedbv1alpha2.DocumentDB, opts v1.UpdateOptions) (*kubedbv1alpha2.DocumentDB, error)
 	Delete(ctx context.Context, name string, opts v1.DeleteOptions) error
 	DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error
-	Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha2.DocumentDB, error)
-	List(ctx context.Context, opts v1.ListOptions) (*v1alpha2.DocumentDBList, error)
+	Get(ctx context.Context, name string, opts v1.GetOptions) (*kubedbv1alpha2.DocumentDB, error)
+	List(ctx context.Context, opts v1.ListOptions) (*kubedbv1alpha2.DocumentDBList, error)
 	Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error)
-	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha2.DocumentDB, err error)
+	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *kubedbv1alpha2.DocumentDB, err error)
 	DocumentDBExpansion
 }
 
 // documentDBs implements DocumentDBInterface
 type documentDBs struct {
-	client rest.Interface
-	ns     string
+	*gentype.ClientWithList[*kubedbv1alpha2.DocumentDB, *kubedbv1alpha2.DocumentDBList]
 }
 
 // newDocumentDBs returns a DocumentDBs
 func newDocumentDBs(c *KubedbV1alpha2Client, namespace string) *documentDBs {
 	return &documentDBs{
-		client: c.RESTClient(),
-		ns:     namespace,
+		gentype.NewClientWithList[*kubedbv1alpha2.DocumentDB, *kubedbv1alpha2.DocumentDBList](
+			"documentdbs",
+			c.RESTClient(),
+			scheme.ParameterCodec,
+			namespace,
+			func() *kubedbv1alpha2.DocumentDB { return &kubedbv1alpha2.DocumentDB{} },
+			func() *kubedbv1alpha2.DocumentDBList { return &kubedbv1alpha2.DocumentDBList{} },
+		),
 	}
-}
-
-// Get takes name of the documentDB, and returns the corresponding documentDB object, and an error if there is any.
-func (c *documentDBs) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha2.DocumentDB, err error) {
-	result = &v1alpha2.DocumentDB{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("documentdbs").
-		Name(name).
-		VersionedParams(&options, scheme.ParameterCodec).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// List takes label and field selectors, and returns the list of DocumentDBs that match those selectors.
-func (c *documentDBs) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha2.DocumentDBList, err error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	result = &v1alpha2.DocumentDBList{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("documentdbs").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Watch returns a watch.Interface that watches the requested documentDBs.
-func (c *documentDBs) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	opts.Watch = true
-	return c.client.Get().
-		Namespace(c.ns).
-		Resource("documentdbs").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Watch(ctx)
-}
-
-// Create takes the representation of a documentDB and creates it.  Returns the server's representation of the documentDB, and an error, if there is any.
-func (c *documentDBs) Create(ctx context.Context, documentDB *v1alpha2.DocumentDB, opts v1.CreateOptions) (result *v1alpha2.DocumentDB, err error) {
-	result = &v1alpha2.DocumentDB{}
-	err = c.client.Post().
-		Namespace(c.ns).
-		Resource("documentdbs").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(documentDB).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Update takes the representation of a documentDB and updates it. Returns the server's representation of the documentDB, and an error, if there is any.
-func (c *documentDBs) Update(ctx context.Context, documentDB *v1alpha2.DocumentDB, opts v1.UpdateOptions) (result *v1alpha2.DocumentDB, err error) {
-	result = &v1alpha2.DocumentDB{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("documentdbs").
-		Name(documentDB.Name).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(documentDB).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// UpdateStatus was generated because the type contains a Status member.
-// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
-func (c *documentDBs) UpdateStatus(ctx context.Context, documentDB *v1alpha2.DocumentDB, opts v1.UpdateOptions) (result *v1alpha2.DocumentDB, err error) {
-	result = &v1alpha2.DocumentDB{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("documentdbs").
-		Name(documentDB.Name).
-		SubResource("status").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(documentDB).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Delete takes name of the documentDB and deletes it. Returns an error if one occurs.
-func (c *documentDBs) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("documentdbs").
-		Name(name).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// DeleteCollection deletes a collection of objects.
-func (c *documentDBs) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
-	var timeout time.Duration
-	if listOpts.TimeoutSeconds != nil {
-		timeout = time.Duration(*listOpts.TimeoutSeconds) * time.Second
-	}
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("documentdbs").
-		VersionedParams(&listOpts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// Patch applies the patch and returns the patched documentDB.
-func (c *documentDBs) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha2.DocumentDB, err error) {
-	result = &v1alpha2.DocumentDB{}
-	err = c.client.Patch(pt).
-		Namespace(c.ns).
-		Resource("documentdbs").
-		Name(name).
-		SubResource(subresources...).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(data).
-		Do(ctx).
-		Into(result)
-	return
 }

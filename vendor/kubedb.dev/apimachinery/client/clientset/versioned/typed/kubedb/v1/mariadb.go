@@ -19,16 +19,15 @@ limitations under the License.
 package v1
 
 import (
-	"context"
-	"time"
+	context "context"
 
-	v1 "kubedb.dev/apimachinery/apis/kubedb/v1"
+	kubedbv1 "kubedb.dev/apimachinery/apis/kubedb/v1"
 	scheme "kubedb.dev/apimachinery/client/clientset/versioned/scheme"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
-	rest "k8s.io/client-go/rest"
+	gentype "k8s.io/client-go/gentype"
 )
 
 // MariaDBsGetter has a method to return a MariaDBInterface.
@@ -39,158 +38,34 @@ type MariaDBsGetter interface {
 
 // MariaDBInterface has methods to work with MariaDB resources.
 type MariaDBInterface interface {
-	Create(ctx context.Context, mariaDB *v1.MariaDB, opts metav1.CreateOptions) (*v1.MariaDB, error)
-	Update(ctx context.Context, mariaDB *v1.MariaDB, opts metav1.UpdateOptions) (*v1.MariaDB, error)
-	UpdateStatus(ctx context.Context, mariaDB *v1.MariaDB, opts metav1.UpdateOptions) (*v1.MariaDB, error)
+	Create(ctx context.Context, mariaDB *kubedbv1.MariaDB, opts metav1.CreateOptions) (*kubedbv1.MariaDB, error)
+	Update(ctx context.Context, mariaDB *kubedbv1.MariaDB, opts metav1.UpdateOptions) (*kubedbv1.MariaDB, error)
+	// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
+	UpdateStatus(ctx context.Context, mariaDB *kubedbv1.MariaDB, opts metav1.UpdateOptions) (*kubedbv1.MariaDB, error)
 	Delete(ctx context.Context, name string, opts metav1.DeleteOptions) error
 	DeleteCollection(ctx context.Context, opts metav1.DeleteOptions, listOpts metav1.ListOptions) error
-	Get(ctx context.Context, name string, opts metav1.GetOptions) (*v1.MariaDB, error)
-	List(ctx context.Context, opts metav1.ListOptions) (*v1.MariaDBList, error)
+	Get(ctx context.Context, name string, opts metav1.GetOptions) (*kubedbv1.MariaDB, error)
+	List(ctx context.Context, opts metav1.ListOptions) (*kubedbv1.MariaDBList, error)
 	Watch(ctx context.Context, opts metav1.ListOptions) (watch.Interface, error)
-	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts metav1.PatchOptions, subresources ...string) (result *v1.MariaDB, err error)
+	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts metav1.PatchOptions, subresources ...string) (result *kubedbv1.MariaDB, err error)
 	MariaDBExpansion
 }
 
 // mariaDBs implements MariaDBInterface
 type mariaDBs struct {
-	client rest.Interface
-	ns     string
+	*gentype.ClientWithList[*kubedbv1.MariaDB, *kubedbv1.MariaDBList]
 }
 
 // newMariaDBs returns a MariaDBs
 func newMariaDBs(c *KubedbV1Client, namespace string) *mariaDBs {
 	return &mariaDBs{
-		client: c.RESTClient(),
-		ns:     namespace,
+		gentype.NewClientWithList[*kubedbv1.MariaDB, *kubedbv1.MariaDBList](
+			"mariadbs",
+			c.RESTClient(),
+			scheme.ParameterCodec,
+			namespace,
+			func() *kubedbv1.MariaDB { return &kubedbv1.MariaDB{} },
+			func() *kubedbv1.MariaDBList { return &kubedbv1.MariaDBList{} },
+		),
 	}
-}
-
-// Get takes name of the mariaDB, and returns the corresponding mariaDB object, and an error if there is any.
-func (c *mariaDBs) Get(ctx context.Context, name string, options metav1.GetOptions) (result *v1.MariaDB, err error) {
-	result = &v1.MariaDB{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("mariadbs").
-		Name(name).
-		VersionedParams(&options, scheme.ParameterCodec).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// List takes label and field selectors, and returns the list of MariaDBs that match those selectors.
-func (c *mariaDBs) List(ctx context.Context, opts metav1.ListOptions) (result *v1.MariaDBList, err error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	result = &v1.MariaDBList{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("mariadbs").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Watch returns a watch.Interface that watches the requested mariaDBs.
-func (c *mariaDBs) Watch(ctx context.Context, opts metav1.ListOptions) (watch.Interface, error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	opts.Watch = true
-	return c.client.Get().
-		Namespace(c.ns).
-		Resource("mariadbs").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Watch(ctx)
-}
-
-// Create takes the representation of a mariaDB and creates it.  Returns the server's representation of the mariaDB, and an error, if there is any.
-func (c *mariaDBs) Create(ctx context.Context, mariaDB *v1.MariaDB, opts metav1.CreateOptions) (result *v1.MariaDB, err error) {
-	result = &v1.MariaDB{}
-	err = c.client.Post().
-		Namespace(c.ns).
-		Resource("mariadbs").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(mariaDB).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Update takes the representation of a mariaDB and updates it. Returns the server's representation of the mariaDB, and an error, if there is any.
-func (c *mariaDBs) Update(ctx context.Context, mariaDB *v1.MariaDB, opts metav1.UpdateOptions) (result *v1.MariaDB, err error) {
-	result = &v1.MariaDB{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("mariadbs").
-		Name(mariaDB.Name).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(mariaDB).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// UpdateStatus was generated because the type contains a Status member.
-// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
-func (c *mariaDBs) UpdateStatus(ctx context.Context, mariaDB *v1.MariaDB, opts metav1.UpdateOptions) (result *v1.MariaDB, err error) {
-	result = &v1.MariaDB{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("mariadbs").
-		Name(mariaDB.Name).
-		SubResource("status").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(mariaDB).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Delete takes name of the mariaDB and deletes it. Returns an error if one occurs.
-func (c *mariaDBs) Delete(ctx context.Context, name string, opts metav1.DeleteOptions) error {
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("mariadbs").
-		Name(name).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// DeleteCollection deletes a collection of objects.
-func (c *mariaDBs) DeleteCollection(ctx context.Context, opts metav1.DeleteOptions, listOpts metav1.ListOptions) error {
-	var timeout time.Duration
-	if listOpts.TimeoutSeconds != nil {
-		timeout = time.Duration(*listOpts.TimeoutSeconds) * time.Second
-	}
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("mariadbs").
-		VersionedParams(&listOpts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// Patch applies the patch and returns the patched mariaDB.
-func (c *mariaDBs) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts metav1.PatchOptions, subresources ...string) (result *v1.MariaDB, err error) {
-	result = &v1.MariaDB{}
-	err = c.client.Patch(pt).
-		Namespace(c.ns).
-		Resource("mariadbs").
-		Name(name).
-		SubResource(subresources...).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(data).
-		Do(ctx).
-		Into(result)
-	return
 }

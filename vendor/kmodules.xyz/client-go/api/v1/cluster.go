@@ -85,6 +85,26 @@ type ClusterMetadata struct {
 	HubClusterID         string          `json:"hubClusterID,omitempty" protobuf:"bytes,10,opt,name=hubClusterID"`
 	CloudServiceAuthMode string          `json:"cloudServiceAuthMode,omitempty" protobuf:"bytes,11,opt,name=cloudServiceAuthMode"`
 	Mode                 ClusterMode     `json:"mode,omitempty" protobuf:"bytes,12,opt,name=mode,casttype=ClusterMode"`
+	License              *LicenseInfo    `json:"license,omitempty" protobuf:"bytes,13,opt,name=license"`
+}
+
+// +kubebuilder:validation:Enum=appscode;selfhosted
+type LicenseDistributor string
+
+const (
+	LicenseDistributorAppsCode   LicenseDistributor = "appscode"
+	LicenseDistributorSelfHosted LicenseDistributor = "selfhosted"
+)
+
+type LicenseInfo struct {
+	Distributor LicenseDistributor `json:"distributor,omitempty" protobuf:"bytes,1,opt,name=distributor,casttype=LicenseDistributor"`
+	// Endpoint is the platform-api to acquire licenses from, when Distributor is selfhosted.
+	Endpoint string `json:"endpoint,omitempty" protobuf:"bytes,2,opt,name=endpoint"`
+	OrgID    string `json:"orgID,omitempty" protobuf:"bytes,3,opt,name=orgID"`
+}
+
+func (l *LicenseInfo) IsEmpty() bool {
+	return l == nil || (l.Distributor == "" && l.Endpoint == "" && l.OrgID == "")
 }
 
 func (md ClusterMetadata) Manager() string {

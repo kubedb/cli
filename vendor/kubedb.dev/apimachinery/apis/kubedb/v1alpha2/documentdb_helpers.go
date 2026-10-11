@@ -308,6 +308,30 @@ func (d *DocumentDB) AppBindingMeta() appcat.AppBindingMeta {
 	return &documentDBApp{d}
 }
 
+// AdminAppBindingName is the <db>-admin AppBinding for the backend Postgres endpoint, as opposed
+// to the MongoDB-wire gateway published under the DocumentDB's own name.
+func (d *DocumentDB) AdminAppBindingName() string {
+	return metautil.NameWithSuffix(d.OffshootName(), kubedb.DocumentDBAdminAppBindingSuffix)
+}
+
+// documentDBAdminApp types <db>-admin as kubedb.com/postgres, matching its postgresql scheme and
+// port: the endpoint speaks the Postgres wire protocol, whatever the gateway in front of it does.
+type documentDBAdminApp struct {
+	*DocumentDB
+}
+
+func (r documentDBAdminApp) Name() string {
+	return r.AdminAppBindingName()
+}
+
+func (r documentDBAdminApp) Type() appcat.AppType {
+	return appcat.AppType(fmt.Sprintf("%s/%s", kubedb.GroupName, ResourceSingularPostgres))
+}
+
+func (d *DocumentDB) AdminAppBindingMeta() appcat.AppBindingMeta {
+	return &documentDBAdminApp{d}
+}
+
 type documentDBStatsService struct {
 	*DocumentDB
 }

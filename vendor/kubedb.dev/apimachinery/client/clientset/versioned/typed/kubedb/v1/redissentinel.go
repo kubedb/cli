@@ -19,16 +19,15 @@ limitations under the License.
 package v1
 
 import (
-	"context"
-	"time"
+	context "context"
 
-	v1 "kubedb.dev/apimachinery/apis/kubedb/v1"
+	kubedbv1 "kubedb.dev/apimachinery/apis/kubedb/v1"
 	scheme "kubedb.dev/apimachinery/client/clientset/versioned/scheme"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
-	rest "k8s.io/client-go/rest"
+	gentype "k8s.io/client-go/gentype"
 )
 
 // RedisSentinelsGetter has a method to return a RedisSentinelInterface.
@@ -39,158 +38,34 @@ type RedisSentinelsGetter interface {
 
 // RedisSentinelInterface has methods to work with RedisSentinel resources.
 type RedisSentinelInterface interface {
-	Create(ctx context.Context, redisSentinel *v1.RedisSentinel, opts metav1.CreateOptions) (*v1.RedisSentinel, error)
-	Update(ctx context.Context, redisSentinel *v1.RedisSentinel, opts metav1.UpdateOptions) (*v1.RedisSentinel, error)
-	UpdateStatus(ctx context.Context, redisSentinel *v1.RedisSentinel, opts metav1.UpdateOptions) (*v1.RedisSentinel, error)
+	Create(ctx context.Context, redisSentinel *kubedbv1.RedisSentinel, opts metav1.CreateOptions) (*kubedbv1.RedisSentinel, error)
+	Update(ctx context.Context, redisSentinel *kubedbv1.RedisSentinel, opts metav1.UpdateOptions) (*kubedbv1.RedisSentinel, error)
+	// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
+	UpdateStatus(ctx context.Context, redisSentinel *kubedbv1.RedisSentinel, opts metav1.UpdateOptions) (*kubedbv1.RedisSentinel, error)
 	Delete(ctx context.Context, name string, opts metav1.DeleteOptions) error
 	DeleteCollection(ctx context.Context, opts metav1.DeleteOptions, listOpts metav1.ListOptions) error
-	Get(ctx context.Context, name string, opts metav1.GetOptions) (*v1.RedisSentinel, error)
-	List(ctx context.Context, opts metav1.ListOptions) (*v1.RedisSentinelList, error)
+	Get(ctx context.Context, name string, opts metav1.GetOptions) (*kubedbv1.RedisSentinel, error)
+	List(ctx context.Context, opts metav1.ListOptions) (*kubedbv1.RedisSentinelList, error)
 	Watch(ctx context.Context, opts metav1.ListOptions) (watch.Interface, error)
-	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts metav1.PatchOptions, subresources ...string) (result *v1.RedisSentinel, err error)
+	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts metav1.PatchOptions, subresources ...string) (result *kubedbv1.RedisSentinel, err error)
 	RedisSentinelExpansion
 }
 
 // redisSentinels implements RedisSentinelInterface
 type redisSentinels struct {
-	client rest.Interface
-	ns     string
+	*gentype.ClientWithList[*kubedbv1.RedisSentinel, *kubedbv1.RedisSentinelList]
 }
 
 // newRedisSentinels returns a RedisSentinels
 func newRedisSentinels(c *KubedbV1Client, namespace string) *redisSentinels {
 	return &redisSentinels{
-		client: c.RESTClient(),
-		ns:     namespace,
+		gentype.NewClientWithList[*kubedbv1.RedisSentinel, *kubedbv1.RedisSentinelList](
+			"redissentinels",
+			c.RESTClient(),
+			scheme.ParameterCodec,
+			namespace,
+			func() *kubedbv1.RedisSentinel { return &kubedbv1.RedisSentinel{} },
+			func() *kubedbv1.RedisSentinelList { return &kubedbv1.RedisSentinelList{} },
+		),
 	}
-}
-
-// Get takes name of the redisSentinel, and returns the corresponding redisSentinel object, and an error if there is any.
-func (c *redisSentinels) Get(ctx context.Context, name string, options metav1.GetOptions) (result *v1.RedisSentinel, err error) {
-	result = &v1.RedisSentinel{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("redissentinels").
-		Name(name).
-		VersionedParams(&options, scheme.ParameterCodec).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// List takes label and field selectors, and returns the list of RedisSentinels that match those selectors.
-func (c *redisSentinels) List(ctx context.Context, opts metav1.ListOptions) (result *v1.RedisSentinelList, err error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	result = &v1.RedisSentinelList{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("redissentinels").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Watch returns a watch.Interface that watches the requested redisSentinels.
-func (c *redisSentinels) Watch(ctx context.Context, opts metav1.ListOptions) (watch.Interface, error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	opts.Watch = true
-	return c.client.Get().
-		Namespace(c.ns).
-		Resource("redissentinels").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Watch(ctx)
-}
-
-// Create takes the representation of a redisSentinel and creates it.  Returns the server's representation of the redisSentinel, and an error, if there is any.
-func (c *redisSentinels) Create(ctx context.Context, redisSentinel *v1.RedisSentinel, opts metav1.CreateOptions) (result *v1.RedisSentinel, err error) {
-	result = &v1.RedisSentinel{}
-	err = c.client.Post().
-		Namespace(c.ns).
-		Resource("redissentinels").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(redisSentinel).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Update takes the representation of a redisSentinel and updates it. Returns the server's representation of the redisSentinel, and an error, if there is any.
-func (c *redisSentinels) Update(ctx context.Context, redisSentinel *v1.RedisSentinel, opts metav1.UpdateOptions) (result *v1.RedisSentinel, err error) {
-	result = &v1.RedisSentinel{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("redissentinels").
-		Name(redisSentinel.Name).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(redisSentinel).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// UpdateStatus was generated because the type contains a Status member.
-// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
-func (c *redisSentinels) UpdateStatus(ctx context.Context, redisSentinel *v1.RedisSentinel, opts metav1.UpdateOptions) (result *v1.RedisSentinel, err error) {
-	result = &v1.RedisSentinel{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("redissentinels").
-		Name(redisSentinel.Name).
-		SubResource("status").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(redisSentinel).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Delete takes name of the redisSentinel and deletes it. Returns an error if one occurs.
-func (c *redisSentinels) Delete(ctx context.Context, name string, opts metav1.DeleteOptions) error {
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("redissentinels").
-		Name(name).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// DeleteCollection deletes a collection of objects.
-func (c *redisSentinels) DeleteCollection(ctx context.Context, opts metav1.DeleteOptions, listOpts metav1.ListOptions) error {
-	var timeout time.Duration
-	if listOpts.TimeoutSeconds != nil {
-		timeout = time.Duration(*listOpts.TimeoutSeconds) * time.Second
-	}
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("redissentinels").
-		VersionedParams(&listOpts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// Patch applies the patch and returns the patched redisSentinel.
-func (c *redisSentinels) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts metav1.PatchOptions, subresources ...string) (result *v1.RedisSentinel, err error) {
-	result = &v1.RedisSentinel{}
-	err = c.client.Patch(pt).
-		Namespace(c.ns).
-		Resource("redissentinels").
-		Name(name).
-		SubResource(subresources...).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(data).
-		Do(ctx).
-		Into(result)
-	return
 }

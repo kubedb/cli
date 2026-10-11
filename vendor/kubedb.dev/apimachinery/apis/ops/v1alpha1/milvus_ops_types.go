@@ -116,6 +116,27 @@ type MilvusHorizontalScalingTopologySpec struct {
 	StreamingNode *int32 `json:"streamingnode,omitempty"`
 	// Number of DataNode nodes
 	DataNode *int32 `json:"dataNode,omitempty"`
+
+	// Groups optionally horizontally scales one or more MilvusNodeGroup
+	// sub-pools (pl2/milvus-fixes/sriov-gpu-design.md § 13.5) instead of a
+	// whole role above. A role whose spec.topology.distributed.<role>.groups
+	// is set is only addressable through this field -- the flat per-role
+	// fields above target that role's own (ungrouped) PetSet, which doesn't
+	// exist once Groups is in use.
+	// +optional
+	Groups []MilvusScalingGroupTarget `json:"groups,omitempty"`
+}
+
+// MilvusScalingGroupTarget identifies one MilvusNodeGroup (by role + group
+// name) and its desired replica count, for horizontal-scaling a group
+// individually.
+type MilvusScalingGroupTarget struct {
+	// NodeType is the Distributed role the target group belongs to.
+	NodeType api.MilvusNodeRoleType `json:"nodeType"`
+	// Group is the MilvusNodeGroup name (spec.topology.distributed.<nodeType>.groups[].name).
+	Group string `json:"group"`
+	// Replicas is the desired replica count for this group's PetSet.
+	Replicas int32 `json:"replicas"`
 }
 
 // MilvusVerticalScalingSpec contains the vertical scaling information of a Milvus cluster
@@ -132,6 +153,27 @@ type MilvusVerticalScalingSpec struct {
 	// +optional
 	// +kubebuilder:default=Restart
 	Mode VerticalScalingMode `json:"mode,omitempty"`
+
+	// Groups optionally vertically scales one or more MilvusNodeGroup
+	// sub-pools (pl2/milvus-fixes/sriov-gpu-design.md § 13.5) instead of a
+	// whole role above. A role whose spec.topology.distributed.<role>.groups
+	// is set is only addressable through this field -- the flat per-role
+	// fields above target that role's own (ungrouped) PetSet, which doesn't
+	// exist once Groups is in use.
+	// +optional
+	Groups []MilvusVerticalScalingGroupTarget `json:"groups,omitempty"`
+}
+
+// MilvusVerticalScalingGroupTarget identifies one MilvusNodeGroup (by role +
+// group name) and its desired resources, for vertical-scaling a group
+// individually.
+type MilvusVerticalScalingGroupTarget struct {
+	// NodeType is the Distributed role the target group belongs to.
+	NodeType api.MilvusNodeRoleType `json:"nodeType"`
+	// Group is the MilvusNodeGroup name (spec.topology.distributed.<nodeType>.groups[].name).
+	Group string `json:"group"`
+	// Resources is the desired resource/scheduling spec for this group.
+	Resources PodResources `json:"resources"`
 }
 
 // MilvusVolumeExpansionSpec is the spec for Milvus volume expansion

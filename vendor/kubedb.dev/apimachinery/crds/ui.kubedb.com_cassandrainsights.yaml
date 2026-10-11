@@ -1,0 +1,147 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    app.kubernetes.io/name: kubedb
+  name: cassandrainsights.ui.kubedb.com
+spec:
+  group: ui.kubedb.com
+  names:
+    kind: CassandraInsight
+    listKind: CassandraInsightList
+    plural: cassandrainsights
+    singular: cassandrainsight
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        properties:
+          apiVersion:
+            type: string
+          kind:
+            type: string
+          metadata:
+            type: object
+          spec:
+            properties:
+              clusterName:
+                type: string
+              cqlVersion:
+                type: string
+              nativeProtocolVersion:
+                type: string
+              nodes:
+                items:
+                  properties:
+                    address:
+                      type: string
+                    dataCenter:
+                      type: string
+                    hostID:
+                      type: string
+                    rack:
+                      type: string
+                    releaseVersion:
+                      type: string
+                    schemaVersion:
+                      type: string
+                  required:
+                  - address
+                  type: object
+                type: array
+              partitioner:
+                type: string
+              racks:
+                items:
+                  properties:
+                    desired:
+                      format: int32
+                      type: integer
+                    name:
+                      type: string
+                    ready:
+                      format: int32
+                      type: integer
+                  required:
+                  - name
+                  - ready
+                  type: object
+                type: array
+              schemaAgreement:
+                type: boolean
+              status:
+                enum:
+                - Provisioning
+                - DataRestoring
+                - Ready
+                - Critical
+                - NotReady
+                - Halted
+                - Unknown
+                type: string
+              totalKeyspaces:
+                format: int32
+                type: integer
+              totalNodes:
+                format: int32
+                type: integer
+              totalTables:
+                format: int32
+                type: integer
+              type:
+                enum:
+                - Standalone
+                - Topology
+                type: string
+              version:
+                type: string
+            required:
+            - status
+            - type
+            - version
+            type: object
+          status:
+            properties:
+              conditions:
+                items:
+                  properties:
+                    lastTransitionTime:
+                      format: date-time
+                      type: string
+                    message:
+                      type: string
+                    observedGeneration:
+                      format: int64
+                      type: integer
+                    reason:
+                      type: string
+                    severity:
+                      type: string
+                    status:
+                      type: string
+                    type:
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - status
+                  - type
+                  type: object
+                type: array
+              observedGeneration:
+                format: int64
+                type: integer
+              phase:
+                enum:
+                - Provisioning
+                - DataRestoring
+                - Ready
+                - Critical
+                - NotReady
+                - Halted
+                - Unknown
+                type: string
+            type: object
+        type: object
+    served: true
+    storage: true

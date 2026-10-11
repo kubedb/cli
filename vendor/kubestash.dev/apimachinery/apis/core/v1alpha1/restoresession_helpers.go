@@ -285,6 +285,10 @@ func (rs *RestoreSession) getTargetRef(appRef kmapi.TypedObjectReference) *kmapi
 		if opt.Singlestore != nil {
 			overrideTargetRef(opt.Singlestore.DBName, opt.Singlestore.RestoreNamespace)
 		}
+	case olddbapi.ResourceKindNeo4j:
+		if opt.Neo4j != nil {
+			overrideTargetRef(opt.Neo4j.DBName, opt.Neo4j.RestoreNamespace)
+		}
 	}
 
 	return targetRef

@@ -19,16 +19,15 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"context"
-	"time"
+	context "context"
 
-	v1alpha1 "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1"
+	autoscalingv1alpha1 "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1"
 	scheme "kubedb.dev/apimachinery/client/clientset/versioned/scheme"
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
-	rest "k8s.io/client-go/rest"
+	gentype "k8s.io/client-go/gentype"
 )
 
 // ElasticsearchAutoscalersGetter has a method to return a ElasticsearchAutoscalerInterface.
@@ -39,158 +38,38 @@ type ElasticsearchAutoscalersGetter interface {
 
 // ElasticsearchAutoscalerInterface has methods to work with ElasticsearchAutoscaler resources.
 type ElasticsearchAutoscalerInterface interface {
-	Create(ctx context.Context, elasticsearchAutoscaler *v1alpha1.ElasticsearchAutoscaler, opts v1.CreateOptions) (*v1alpha1.ElasticsearchAutoscaler, error)
-	Update(ctx context.Context, elasticsearchAutoscaler *v1alpha1.ElasticsearchAutoscaler, opts v1.UpdateOptions) (*v1alpha1.ElasticsearchAutoscaler, error)
-	UpdateStatus(ctx context.Context, elasticsearchAutoscaler *v1alpha1.ElasticsearchAutoscaler, opts v1.UpdateOptions) (*v1alpha1.ElasticsearchAutoscaler, error)
+	Create(ctx context.Context, elasticsearchAutoscaler *autoscalingv1alpha1.ElasticsearchAutoscaler, opts v1.CreateOptions) (*autoscalingv1alpha1.ElasticsearchAutoscaler, error)
+	Update(ctx context.Context, elasticsearchAutoscaler *autoscalingv1alpha1.ElasticsearchAutoscaler, opts v1.UpdateOptions) (*autoscalingv1alpha1.ElasticsearchAutoscaler, error)
+	// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
+	UpdateStatus(ctx context.Context, elasticsearchAutoscaler *autoscalingv1alpha1.ElasticsearchAutoscaler, opts v1.UpdateOptions) (*autoscalingv1alpha1.ElasticsearchAutoscaler, error)
 	Delete(ctx context.Context, name string, opts v1.DeleteOptions) error
 	DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error
-	Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha1.ElasticsearchAutoscaler, error)
-	List(ctx context.Context, opts v1.ListOptions) (*v1alpha1.ElasticsearchAutoscalerList, error)
+	Get(ctx context.Context, name string, opts v1.GetOptions) (*autoscalingv1alpha1.ElasticsearchAutoscaler, error)
+	List(ctx context.Context, opts v1.ListOptions) (*autoscalingv1alpha1.ElasticsearchAutoscalerList, error)
 	Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error)
-	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.ElasticsearchAutoscaler, err error)
+	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *autoscalingv1alpha1.ElasticsearchAutoscaler, err error)
 	ElasticsearchAutoscalerExpansion
 }
 
 // elasticsearchAutoscalers implements ElasticsearchAutoscalerInterface
 type elasticsearchAutoscalers struct {
-	client rest.Interface
-	ns     string
+	*gentype.ClientWithList[*autoscalingv1alpha1.ElasticsearchAutoscaler, *autoscalingv1alpha1.ElasticsearchAutoscalerList]
 }
 
 // newElasticsearchAutoscalers returns a ElasticsearchAutoscalers
 func newElasticsearchAutoscalers(c *AutoscalingV1alpha1Client, namespace string) *elasticsearchAutoscalers {
 	return &elasticsearchAutoscalers{
-		client: c.RESTClient(),
-		ns:     namespace,
+		gentype.NewClientWithList[*autoscalingv1alpha1.ElasticsearchAutoscaler, *autoscalingv1alpha1.ElasticsearchAutoscalerList](
+			"elasticsearchautoscalers",
+			c.RESTClient(),
+			scheme.ParameterCodec,
+			namespace,
+			func() *autoscalingv1alpha1.ElasticsearchAutoscaler {
+				return &autoscalingv1alpha1.ElasticsearchAutoscaler{}
+			},
+			func() *autoscalingv1alpha1.ElasticsearchAutoscalerList {
+				return &autoscalingv1alpha1.ElasticsearchAutoscalerList{}
+			},
+		),
 	}
-}
-
-// Get takes name of the elasticsearchAutoscaler, and returns the corresponding elasticsearchAutoscaler object, and an error if there is any.
-func (c *elasticsearchAutoscalers) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.ElasticsearchAutoscaler, err error) {
-	result = &v1alpha1.ElasticsearchAutoscaler{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("elasticsearchautoscalers").
-		Name(name).
-		VersionedParams(&options, scheme.ParameterCodec).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// List takes label and field selectors, and returns the list of ElasticsearchAutoscalers that match those selectors.
-func (c *elasticsearchAutoscalers) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha1.ElasticsearchAutoscalerList, err error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	result = &v1alpha1.ElasticsearchAutoscalerList{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("elasticsearchautoscalers").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Watch returns a watch.Interface that watches the requested elasticsearchAutoscalers.
-func (c *elasticsearchAutoscalers) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	opts.Watch = true
-	return c.client.Get().
-		Namespace(c.ns).
-		Resource("elasticsearchautoscalers").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Watch(ctx)
-}
-
-// Create takes the representation of a elasticsearchAutoscaler and creates it.  Returns the server's representation of the elasticsearchAutoscaler, and an error, if there is any.
-func (c *elasticsearchAutoscalers) Create(ctx context.Context, elasticsearchAutoscaler *v1alpha1.ElasticsearchAutoscaler, opts v1.CreateOptions) (result *v1alpha1.ElasticsearchAutoscaler, err error) {
-	result = &v1alpha1.ElasticsearchAutoscaler{}
-	err = c.client.Post().
-		Namespace(c.ns).
-		Resource("elasticsearchautoscalers").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(elasticsearchAutoscaler).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Update takes the representation of a elasticsearchAutoscaler and updates it. Returns the server's representation of the elasticsearchAutoscaler, and an error, if there is any.
-func (c *elasticsearchAutoscalers) Update(ctx context.Context, elasticsearchAutoscaler *v1alpha1.ElasticsearchAutoscaler, opts v1.UpdateOptions) (result *v1alpha1.ElasticsearchAutoscaler, err error) {
-	result = &v1alpha1.ElasticsearchAutoscaler{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("elasticsearchautoscalers").
-		Name(elasticsearchAutoscaler.Name).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(elasticsearchAutoscaler).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// UpdateStatus was generated because the type contains a Status member.
-// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
-func (c *elasticsearchAutoscalers) UpdateStatus(ctx context.Context, elasticsearchAutoscaler *v1alpha1.ElasticsearchAutoscaler, opts v1.UpdateOptions) (result *v1alpha1.ElasticsearchAutoscaler, err error) {
-	result = &v1alpha1.ElasticsearchAutoscaler{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("elasticsearchautoscalers").
-		Name(elasticsearchAutoscaler.Name).
-		SubResource("status").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(elasticsearchAutoscaler).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Delete takes name of the elasticsearchAutoscaler and deletes it. Returns an error if one occurs.
-func (c *elasticsearchAutoscalers) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("elasticsearchautoscalers").
-		Name(name).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// DeleteCollection deletes a collection of objects.
-func (c *elasticsearchAutoscalers) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
-	var timeout time.Duration
-	if listOpts.TimeoutSeconds != nil {
-		timeout = time.Duration(*listOpts.TimeoutSeconds) * time.Second
-	}
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("elasticsearchautoscalers").
-		VersionedParams(&listOpts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// Patch applies the patch and returns the patched elasticsearchAutoscaler.
-func (c *elasticsearchAutoscalers) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.ElasticsearchAutoscaler, err error) {
-	result = &v1alpha1.ElasticsearchAutoscaler{}
-	err = c.client.Patch(pt).
-		Namespace(c.ns).
-		Resource("elasticsearchautoscalers").
-		Name(name).
-		SubResource(subresources...).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(data).
-		Do(ctx).
-		Into(result)
-	return
 }

@@ -9799,6 +9799,47 @@ spec:
                         type: object
                         x-kubernetes-map-type: atomic
                     type: object
+                  milvus:
+                    properties:
+                      authSecret:
+                        default: true
+                        type: boolean
+                      authSecretName:
+                        type: string
+                      configSecret:
+                        default: true
+                        type: boolean
+                      configSecretName:
+                        type: string
+                      db:
+                        default: true
+                        type: boolean
+                      dbName:
+                        type: string
+                      metaStorageAuthSecret:
+                        default: false
+                        type: boolean
+                      objectStorageSecret:
+                        default: false
+                        type: boolean
+                      objectStorageSecretName:
+                        type: string
+                      restoreNamespace:
+                        type: string
+                      tlsIssuerRef:
+                        properties:
+                          apiGroup:
+                            type: string
+                          kind:
+                            type: string
+                          name:
+                            type: string
+                        required:
+                        - kind
+                        - name
+                        type: object
+                        x-kubernetes-map-type: atomic
+                    type: object
                   mongoDB:
                     properties:
                       archiver:
@@ -9891,6 +9932,54 @@ spec:
                         x-kubernetes-map-type: atomic
                     type: object
                   mySQL:
+                    properties:
+                      archiver:
+                        default: false
+                        type: boolean
+                      archiverRef:
+                        properties:
+                          name:
+                            type: string
+                          namespace:
+                            type: string
+                        required:
+                        - name
+                        type: object
+                      authSecret:
+                        default: true
+                        type: boolean
+                      authSecretName:
+                        type: string
+                      configSecret:
+                        default: true
+                        type: boolean
+                      configSecretName:
+                        type: string
+                      db:
+                        default: true
+                        type: boolean
+                      dbName:
+                        type: string
+                      initScript:
+                        default: true
+                        type: boolean
+                      restoreNamespace:
+                        type: string
+                      tlsIssuerRef:
+                        properties:
+                          apiGroup:
+                            type: string
+                          kind:
+                            type: string
+                          name:
+                            type: string
+                        required:
+                        - kind
+                        - name
+                        type: object
+                        x-kubernetes-map-type: atomic
+                    type: object
+                  neo4j:
                     properties:
                       archiver:
                         default: false

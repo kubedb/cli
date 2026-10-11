@@ -25,7 +25,7 @@ import (
 )
 
 const (
-	ResourceCodeEtcd     = "etcd"
+	ResourceCodeEtcd     = "et"
 	ResourceKindEtcd     = "Etcd"
 	ResourceSingularEtcd = "etcd"
 	ResourcePluralEtcd   = "etcds"
@@ -62,7 +62,7 @@ const (
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 // +kubebuilder:storageversion
-// +kubebuilder:resource:path=etcds,singular=etcd,shortName=etcd,categories={datastore,kubedb,appscode,all}
+// +kubebuilder:resource:path=etcds,singular=etcd,shortName=et,categories={datastore,kubedb,appscode,all}
 // +kubebuilder:printcolumn:name="Version",type="string",JSONPath=".spec.version"
 // +kubebuilder:printcolumn:name="Status",type="string",JSONPath=".status.phase"
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"

@@ -1,0 +1,173 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    app.kubernetes.io/name: kubedb
+  name: neo4jinsights.ui.kubedb.com
+spec:
+  group: ui.kubedb.com
+  names:
+    kind: Neo4jInsight
+    listKind: Neo4jInsightList
+    plural: neo4jinsights
+    singular: neo4jinsight
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        properties:
+          apiVersion:
+            type: string
+          kind:
+            type: string
+          metadata:
+            type: object
+          spec:
+            properties:
+              clusterHealth:
+                properties:
+                  availableServers:
+                    format: int32
+                    type: integer
+                  offlineDatabases:
+                    format: int32
+                    type: integer
+                  onlineDatabases:
+                    format: int32
+                    type: integer
+                  totalDatabases:
+                    format: int32
+                    type: integer
+                  totalServers:
+                    format: int32
+                    type: integer
+                  unavailableServers:
+                    format: int32
+                    type: integer
+                type: object
+              databases:
+                items:
+                  properties:
+                    access:
+                      type: string
+                    constituents:
+                      items:
+                        type: string
+                      type: array
+                    currentPrimariesCount:
+                      format: int32
+                      type: integer
+                    currentSecondariesCount:
+                      format: int32
+                      type: integer
+                    currentStatus:
+                      type: string
+                    default:
+                      type: boolean
+                    name:
+                      type: string
+                    nodeCount:
+                      format: int64
+                      type: integer
+                    relationshipCount:
+                      format: int64
+                      type: integer
+                    requestedPrimariesCount:
+                      format: int32
+                      type: integer
+                    requestedSecondariesCount:
+                      format: int32
+                      type: integer
+                    requestedStatus:
+                      type: string
+                    statusMessage:
+                      type: string
+                    type:
+                      type: string
+                    writerAddress:
+                      type: string
+                  required:
+                  - name
+                  type: object
+                type: array
+              edition:
+                type: string
+              mode:
+                type: string
+              servers:
+                items:
+                  properties:
+                    address:
+                      type: string
+                    health:
+                      type: string
+                    hosting:
+                      items:
+                        type: string
+                      type: array
+                    modeConstraint:
+                      type: string
+                    name:
+                      type: string
+                    state:
+                      type: string
+                    version:
+                      type: string
+                  required:
+                  - health
+                  - name
+                  - state
+                  type: object
+                type: array
+              version:
+                type: string
+            required:
+            - clusterHealth
+            - mode
+            - version
+            type: object
+          status:
+            properties:
+              conditions:
+                items:
+                  properties:
+                    lastTransitionTime:
+                      format: date-time
+                      type: string
+                    message:
+                      type: string
+                    observedGeneration:
+                      format: int64
+                      type: integer
+                    reason:
+                      type: string
+                    severity:
+                      type: string
+                    status:
+                      type: string
+                    type:
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - status
+                  - type
+                  type: object
+                type: array
+              observedGeneration:
+                format: int64
+                type: integer
+              phase:
+                enum:
+                - Provisioning
+                - DataRestoring
+                - Ready
+                - Critical
+                - NotReady
+                - Halted
+                - Unknown
+                type: string
+            type: object
+        type: object
+    served: true
+    storage: true

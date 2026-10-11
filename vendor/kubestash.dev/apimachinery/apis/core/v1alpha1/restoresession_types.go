@@ -120,6 +120,14 @@ type ManifestRestoreOptions struct {
 	// RedisSentinel specifies the options for selecting particular RedisSentinel components to restore in manifest restore
 	// +optional
 	RedisSentinel *RedisSentinelManifestOptions `json:"redisSentinel,omitempty"`
+
+	// Neo4j specifies the options for selecting particular Neo4j components to restore in manifest restore
+	// +optional
+	Neo4j *KubeDBManifestOptions `json:"neo4j,omitempty"`
+
+	// Milvus specifies the options for restoring a Milvus manifest
+	// +optional
+	Milvus *MilvusManifestOptions `json:"milvus,omitempty"`
 }
 
 type RedisSentinelManifestOptions struct {
@@ -234,6 +242,60 @@ type DruidManifestOptions struct {
 	// +kubebuilder:default=true
 	// +optional
 	DeepStorageSecret *bool `json:"deepStorageSecret,omitempty"`
+}
+
+// MilvusManifestOptions selects which manifests of a Milvus are restored.
+type MilvusManifestOptions struct {
+	// RestoreNamespace specifies the Namespace where the restored files will be applied
+	// +optional
+	RestoreNamespace string `json:"restoreNamespace,omitempty"`
+
+	// DB specifies whether to restore the Milvus manifest or not
+	// +kubebuilder:default=true
+	// +optional
+	DB *bool `json:"db,omitempty"`
+
+	// DBName specifies the new name of the Milvus yaml after restore
+	// +optional
+	DBName string `json:"dbName,omitempty"`
+
+	// AuthSecret specifies whether to restore the AuthSecret manifest or not
+	// +kubebuilder:default=true
+	// +optional
+	AuthSecret *bool `json:"authSecret,omitempty"`
+
+	// AuthSecretName specifies new name of the AuthSecret yaml after restore
+	// +optional
+	AuthSecretName string `json:"authSecretName,omitempty"`
+
+	// ConfigSecret specifies whether to restore the ConfigSecret manifest or not
+	// +kubebuilder:default=true
+	// +optional
+	ConfigSecret *bool `json:"configSecret,omitempty"`
+
+	// ConfigSecretName specifies new name of the ConfigSecret yaml after restore
+	// +optional
+	ConfigSecretName string `json:"configSecretName,omitempty"`
+
+	// ObjectStorageSecret specifies whether to restore the object storage secret
+	// manifest. It is opt-in: it normally points at the SOURCE bucket, while a
+	// restore targets a different one.
+	// +kubebuilder:default=false
+	// +optional
+	ObjectStorageSecret *bool `json:"objectStorageSecret,omitempty"`
+
+	// ObjectStorageSecretName specifies new name of the object storage secret yaml after restore
+	// +optional
+	ObjectStorageSecretName string `json:"objectStorageSecretName,omitempty"`
+
+	// MetaStorageAuthSecret specifies whether to restore the meta etcd auth secret manifest or not
+	// +kubebuilder:default=false
+	// +optional
+	MetaStorageAuthSecret *bool `json:"metaStorageAuthSecret,omitempty"`
+
+	// TLSIssuerRef specifies a new issuer reference for the restored TLS-enabled Milvus
+	// +optional
+	TLSIssuerRef *core.TypedLocalObjectReference `json:"tlsIssuerRef,omitempty"`
 }
 
 type KubeDBManifestOptions struct {

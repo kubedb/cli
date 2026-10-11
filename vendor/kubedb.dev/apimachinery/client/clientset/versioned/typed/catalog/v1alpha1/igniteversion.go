@@ -19,16 +19,15 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"context"
-	"time"
+	context "context"
 
-	v1alpha1 "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
+	catalogv1alpha1 "kubedb.dev/apimachinery/apis/catalog/v1alpha1"
 	scheme "kubedb.dev/apimachinery/client/clientset/versioned/scheme"
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
-	rest "k8s.io/client-go/rest"
+	gentype "k8s.io/client-go/gentype"
 )
 
 // IgniteVersionsGetter has a method to return a IgniteVersionInterface.
@@ -39,131 +38,32 @@ type IgniteVersionsGetter interface {
 
 // IgniteVersionInterface has methods to work with IgniteVersion resources.
 type IgniteVersionInterface interface {
-	Create(ctx context.Context, igniteVersion *v1alpha1.IgniteVersion, opts v1.CreateOptions) (*v1alpha1.IgniteVersion, error)
-	Update(ctx context.Context, igniteVersion *v1alpha1.IgniteVersion, opts v1.UpdateOptions) (*v1alpha1.IgniteVersion, error)
+	Create(ctx context.Context, igniteVersion *catalogv1alpha1.IgniteVersion, opts v1.CreateOptions) (*catalogv1alpha1.IgniteVersion, error)
+	Update(ctx context.Context, igniteVersion *catalogv1alpha1.IgniteVersion, opts v1.UpdateOptions) (*catalogv1alpha1.IgniteVersion, error)
 	Delete(ctx context.Context, name string, opts v1.DeleteOptions) error
 	DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error
-	Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha1.IgniteVersion, error)
-	List(ctx context.Context, opts v1.ListOptions) (*v1alpha1.IgniteVersionList, error)
+	Get(ctx context.Context, name string, opts v1.GetOptions) (*catalogv1alpha1.IgniteVersion, error)
+	List(ctx context.Context, opts v1.ListOptions) (*catalogv1alpha1.IgniteVersionList, error)
 	Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error)
-	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.IgniteVersion, err error)
+	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *catalogv1alpha1.IgniteVersion, err error)
 	IgniteVersionExpansion
 }
 
 // igniteVersions implements IgniteVersionInterface
 type igniteVersions struct {
-	client rest.Interface
+	*gentype.ClientWithList[*catalogv1alpha1.IgniteVersion, *catalogv1alpha1.IgniteVersionList]
 }
 
 // newIgniteVersions returns a IgniteVersions
 func newIgniteVersions(c *CatalogV1alpha1Client) *igniteVersions {
 	return &igniteVersions{
-		client: c.RESTClient(),
+		gentype.NewClientWithList[*catalogv1alpha1.IgniteVersion, *catalogv1alpha1.IgniteVersionList](
+			"igniteversions",
+			c.RESTClient(),
+			scheme.ParameterCodec,
+			"",
+			func() *catalogv1alpha1.IgniteVersion { return &catalogv1alpha1.IgniteVersion{} },
+			func() *catalogv1alpha1.IgniteVersionList { return &catalogv1alpha1.IgniteVersionList{} },
+		),
 	}
-}
-
-// Get takes name of the igniteVersion, and returns the corresponding igniteVersion object, and an error if there is any.
-func (c *igniteVersions) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.IgniteVersion, err error) {
-	result = &v1alpha1.IgniteVersion{}
-	err = c.client.Get().
-		Resource("igniteversions").
-		Name(name).
-		VersionedParams(&options, scheme.ParameterCodec).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// List takes label and field selectors, and returns the list of IgniteVersions that match those selectors.
-func (c *igniteVersions) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha1.IgniteVersionList, err error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	result = &v1alpha1.IgniteVersionList{}
-	err = c.client.Get().
-		Resource("igniteversions").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Watch returns a watch.Interface that watches the requested igniteVersions.
-func (c *igniteVersions) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	opts.Watch = true
-	return c.client.Get().
-		Resource("igniteversions").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Watch(ctx)
-}
-
-// Create takes the representation of a igniteVersion and creates it.  Returns the server's representation of the igniteVersion, and an error, if there is any.
-func (c *igniteVersions) Create(ctx context.Context, igniteVersion *v1alpha1.IgniteVersion, opts v1.CreateOptions) (result *v1alpha1.IgniteVersion, err error) {
-	result = &v1alpha1.IgniteVersion{}
-	err = c.client.Post().
-		Resource("igniteversions").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(igniteVersion).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Update takes the representation of a igniteVersion and updates it. Returns the server's representation of the igniteVersion, and an error, if there is any.
-func (c *igniteVersions) Update(ctx context.Context, igniteVersion *v1alpha1.IgniteVersion, opts v1.UpdateOptions) (result *v1alpha1.IgniteVersion, err error) {
-	result = &v1alpha1.IgniteVersion{}
-	err = c.client.Put().
-		Resource("igniteversions").
-		Name(igniteVersion.Name).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(igniteVersion).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Delete takes name of the igniteVersion and deletes it. Returns an error if one occurs.
-func (c *igniteVersions) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
-	return c.client.Delete().
-		Resource("igniteversions").
-		Name(name).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// DeleteCollection deletes a collection of objects.
-func (c *igniteVersions) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
-	var timeout time.Duration
-	if listOpts.TimeoutSeconds != nil {
-		timeout = time.Duration(*listOpts.TimeoutSeconds) * time.Second
-	}
-	return c.client.Delete().
-		Resource("igniteversions").
-		VersionedParams(&listOpts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// Patch applies the patch and returns the patched igniteVersion.
-func (c *igniteVersions) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.IgniteVersion, err error) {
-	result = &v1alpha1.IgniteVersion{}
-	err = c.client.Patch(pt).
-		Resource("igniteversions").
-		Name(name).
-		SubResource(subresources...).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(data).
-		Do(ctx).
-		Into(result)
-	return
 }

@@ -19,16 +19,15 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"context"
-	"time"
+	context "context"
 
-	v1alpha1 "kubedb.dev/apimachinery/apis/kafka/v1alpha1"
+	kafkav1alpha1 "kubedb.dev/apimachinery/apis/kafka/v1alpha1"
 	scheme "kubedb.dev/apimachinery/client/clientset/versioned/scheme"
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
-	rest "k8s.io/client-go/rest"
+	gentype "k8s.io/client-go/gentype"
 )
 
 // ConnectClustersGetter has a method to return a ConnectClusterInterface.
@@ -39,158 +38,34 @@ type ConnectClustersGetter interface {
 
 // ConnectClusterInterface has methods to work with ConnectCluster resources.
 type ConnectClusterInterface interface {
-	Create(ctx context.Context, connectCluster *v1alpha1.ConnectCluster, opts v1.CreateOptions) (*v1alpha1.ConnectCluster, error)
-	Update(ctx context.Context, connectCluster *v1alpha1.ConnectCluster, opts v1.UpdateOptions) (*v1alpha1.ConnectCluster, error)
-	UpdateStatus(ctx context.Context, connectCluster *v1alpha1.ConnectCluster, opts v1.UpdateOptions) (*v1alpha1.ConnectCluster, error)
+	Create(ctx context.Context, connectCluster *kafkav1alpha1.ConnectCluster, opts v1.CreateOptions) (*kafkav1alpha1.ConnectCluster, error)
+	Update(ctx context.Context, connectCluster *kafkav1alpha1.ConnectCluster, opts v1.UpdateOptions) (*kafkav1alpha1.ConnectCluster, error)
+	// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
+	UpdateStatus(ctx context.Context, connectCluster *kafkav1alpha1.ConnectCluster, opts v1.UpdateOptions) (*kafkav1alpha1.ConnectCluster, error)
 	Delete(ctx context.Context, name string, opts v1.DeleteOptions) error
 	DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error
-	Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha1.ConnectCluster, error)
-	List(ctx context.Context, opts v1.ListOptions) (*v1alpha1.ConnectClusterList, error)
+	Get(ctx context.Context, name string, opts v1.GetOptions) (*kafkav1alpha1.ConnectCluster, error)
+	List(ctx context.Context, opts v1.ListOptions) (*kafkav1alpha1.ConnectClusterList, error)
 	Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error)
-	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.ConnectCluster, err error)
+	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *kafkav1alpha1.ConnectCluster, err error)
 	ConnectClusterExpansion
 }
 
 // connectClusters implements ConnectClusterInterface
 type connectClusters struct {
-	client rest.Interface
-	ns     string
+	*gentype.ClientWithList[*kafkav1alpha1.ConnectCluster, *kafkav1alpha1.ConnectClusterList]
 }
 
 // newConnectClusters returns a ConnectClusters
 func newConnectClusters(c *KafkaV1alpha1Client, namespace string) *connectClusters {
 	return &connectClusters{
-		client: c.RESTClient(),
-		ns:     namespace,
+		gentype.NewClientWithList[*kafkav1alpha1.ConnectCluster, *kafkav1alpha1.ConnectClusterList](
+			"connectclusters",
+			c.RESTClient(),
+			scheme.ParameterCodec,
+			namespace,
+			func() *kafkav1alpha1.ConnectCluster { return &kafkav1alpha1.ConnectCluster{} },
+			func() *kafkav1alpha1.ConnectClusterList { return &kafkav1alpha1.ConnectClusterList{} },
+		),
 	}
-}
-
-// Get takes name of the connectCluster, and returns the corresponding connectCluster object, and an error if there is any.
-func (c *connectClusters) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.ConnectCluster, err error) {
-	result = &v1alpha1.ConnectCluster{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("connectclusters").
-		Name(name).
-		VersionedParams(&options, scheme.ParameterCodec).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// List takes label and field selectors, and returns the list of ConnectClusters that match those selectors.
-func (c *connectClusters) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha1.ConnectClusterList, err error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	result = &v1alpha1.ConnectClusterList{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("connectclusters").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Watch returns a watch.Interface that watches the requested connectClusters.
-func (c *connectClusters) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	opts.Watch = true
-	return c.client.Get().
-		Namespace(c.ns).
-		Resource("connectclusters").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Watch(ctx)
-}
-
-// Create takes the representation of a connectCluster and creates it.  Returns the server's representation of the connectCluster, and an error, if there is any.
-func (c *connectClusters) Create(ctx context.Context, connectCluster *v1alpha1.ConnectCluster, opts v1.CreateOptions) (result *v1alpha1.ConnectCluster, err error) {
-	result = &v1alpha1.ConnectCluster{}
-	err = c.client.Post().
-		Namespace(c.ns).
-		Resource("connectclusters").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(connectCluster).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Update takes the representation of a connectCluster and updates it. Returns the server's representation of the connectCluster, and an error, if there is any.
-func (c *connectClusters) Update(ctx context.Context, connectCluster *v1alpha1.ConnectCluster, opts v1.UpdateOptions) (result *v1alpha1.ConnectCluster, err error) {
-	result = &v1alpha1.ConnectCluster{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("connectclusters").
-		Name(connectCluster.Name).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(connectCluster).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// UpdateStatus was generated because the type contains a Status member.
-// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
-func (c *connectClusters) UpdateStatus(ctx context.Context, connectCluster *v1alpha1.ConnectCluster, opts v1.UpdateOptions) (result *v1alpha1.ConnectCluster, err error) {
-	result = &v1alpha1.ConnectCluster{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("connectclusters").
-		Name(connectCluster.Name).
-		SubResource("status").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(connectCluster).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Delete takes name of the connectCluster and deletes it. Returns an error if one occurs.
-func (c *connectClusters) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("connectclusters").
-		Name(name).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// DeleteCollection deletes a collection of objects.
-func (c *connectClusters) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
-	var timeout time.Duration
-	if listOpts.TimeoutSeconds != nil {
-		timeout = time.Duration(*listOpts.TimeoutSeconds) * time.Second
-	}
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("connectclusters").
-		VersionedParams(&listOpts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// Patch applies the patch and returns the patched connectCluster.
-func (c *connectClusters) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.ConnectCluster, err error) {
-	result = &v1alpha1.ConnectCluster{}
-	err = c.client.Patch(pt).
-		Namespace(c.ns).
-		Resource("connectclusters").
-		Name(name).
-		SubResource(subresources...).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(data).
-		Do(ctx).
-		Into(result)
-	return
 }

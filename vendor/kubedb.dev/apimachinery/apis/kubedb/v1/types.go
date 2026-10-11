@@ -112,14 +112,15 @@ const (
 	DeletionPolicyDoNotTerminate DeletionPolicy = "DoNotTerminate"
 )
 
-// +kubebuilder:validation:Enum=primary;standby;stats
+// +kubebuilder:validation:Enum=primary;standby;stats;dashboard;readreplica
 type ServiceAlias string
 
 const (
 	PrimaryServiceAlias     ServiceAlias = "primary"
 	StandbyServiceAlias     ServiceAlias = "standby"
 	StatsServiceAlias       ServiceAlias = "stats"
-	ReadReplicaServiceAlias ServiceAlias = "rr"
+	DashboardServiceAlias   ServiceAlias = "dashboard"
+	ReadReplicaServiceAlias ServiceAlias = "readreplica"
 )
 
 // +kubebuilder:validation:Enum=fscopy;clone;sync;none

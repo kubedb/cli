@@ -114,6 +114,10 @@ type ProxySQLConfiguration struct {
 	// +optional
 	// +kubebuilder:pruning:PreserveUnknownFields
 	AdminVariables *runtime.RawExtension `json:"adminVariables,omitempty"`
+
+	// +optional
+	// +kubebuilder:pruning:PreserveUnknownFields
+	MySQLAWSAuroraHostgroups *runtime.RawExtension `json:"mysqlAWSAuroraHostgroups,omitempty"`
 }
 
 type ProxySQLSpec struct {

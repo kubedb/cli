@@ -20,14 +20,20 @@ package v1alpha1
 
 type ClickHouseArchiverExpansion interface{}
 
+type DocumentDBArchiverExpansion interface{}
+
 type EtcdArchiverExpansion interface{}
 
 type MSSQLServerArchiverExpansion interface{}
 
 type MariaDBArchiverExpansion interface{}
 
+type MilvusArchiverExpansion interface{}
+
 type MongoDBArchiverExpansion interface{}
 
 type MySQLArchiverExpansion interface{}
+
+type Neo4jArchiverExpansion interface{}
 
 type PostgresArchiverExpansion interface{}

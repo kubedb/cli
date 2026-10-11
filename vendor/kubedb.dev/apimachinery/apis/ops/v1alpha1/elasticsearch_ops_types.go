@@ -73,6 +73,8 @@ type ElasticsearchOpsRequestSpec struct {
 	Restart *RestartSpec `json:"restart,omitempty"`
 	// Specifies information necessary for migrating storageClass or data
 	Migration *ElasticsearchMigrationSpec `json:"migration,omitempty"`
+	// Specifies information necessary for activating/rotating an Elastic subscription license
+	License *ElasticsearchLicenseOpsSpec `json:"license,omitempty"`
 	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
 	Timeout *metav1.Duration `json:"timeout,omitempty"`
 	// ApplyOption is to control the execution of OpsRequest depending on the database state.
@@ -82,8 +84,8 @@ type ElasticsearchOpsRequestSpec struct {
 	MaxRetries int32 `json:"maxRetries,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS;RotateAuth;StorageMigration
-// ENUM(UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Restart, Reconfigure, ReconfigureTLS, RotateAuth, StorageMigration)
+// +kubebuilder:validation:Enum=UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS;RotateAuth;StorageMigration;RotateLicense
+// ENUM(UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Restart, Reconfigure, ReconfigureTLS, RotateAuth, StorageMigration, RotateLicense)
 type ElasticsearchOpsRequestType string
 
 // ElasticsearchReplicaReadinessCriteria is the criteria for checking readiness of an Elasticsearch database
@@ -244,6 +246,23 @@ type ElasticsearchMigrationSpec struct {
 	// Coordinating is the migration spec for coordinating nodes in topology mode.
 	// +optional
 	Coordinating *StorageMigrationSpec `json:"coordinating,omitempty"`
+}
+
+// ElasticsearchLicenseOpsSpec drives an explicit license (re)activation. It has
+// the same SecretRef/Trial shape as kubedb.dev/apimachinery/apis/kubedb/v1.ElasticsearchLicenseSpec;
+// applying it also patches spec.license on the Elasticsearch CR so the CR stays
+// the source of truth for future reconciles.
+type ElasticsearchLicenseOpsSpec struct {
+	// SecretRef references a Secret holding the signed license file content
+	// under a single key, "license.json". Mutually exclusive with Trial.
+	// +optional
+	SecretRef *core.LocalObjectReference `json:"secretRef,omitempty"`
+
+	// Trial requests Elastic's built-in one-time 30-day trial license
+	// (POST _license/start_trial) instead of a user-supplied license.
+	// Mutually exclusive with SecretRef.
+	// +optional
+	Trial bool `json:"trial,omitempty"`
 }
 
 type ElasticsearchCustomConfiguration struct {

@@ -79,6 +79,18 @@ type DocumentDBVersionSpec struct {
 	//+ optional
 	PostgresVersion string `json:"postgresVersion,omitempty"`
 
+	// Postgres version of the backup plugin image to use, published as spec.version on the
+	// <db>-admin AppBinding - e.g. "17.2", not the major "17" in PostgresVersion.
+	// +optional
+	PostgresPluginVersion string `json:"postgresPluginVersion,omitempty"`
+
+	// Archiver defines the wal-g image and the KubeStash addon tasks used for continuous
+	// archiving (PITR). The wal-g image runs as a sidekick beside the primary and pushes WAL
+	// segments; the addon task names identify the full/manifest backup and restore tasks in
+	// the DocumentDB addon.
+	// +optional
+	Archiver ArchiverSpec `json:"archiver,omitempty"`
+
 	// +optional
 	UI []ChartInfo `json:"ui,omitempty"`
 

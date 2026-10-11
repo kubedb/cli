@@ -1,7 +1,6 @@
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  creationTimestamp: null
   labels:
     app.kubernetes.io/name: kubedb
   name: milvusopsrequests.ops.kubedb.com
@@ -103,6 +102,22 @@ spec:
                       dataNode:
                         format: int32
                         type: integer
+                      groups:
+                        items:
+                          properties:
+                            group:
+                              type: string
+                            nodeType:
+                              type: string
+                            replicas:
+                              format: int32
+                              type: integer
+                          required:
+                          - group
+                          - nodeType
+                          - replicas
+                          type: object
+                        type: array
                       mixcoord:
                         format: int32
                         type: integer
@@ -324,6 +339,67 @@ spec:
                         - value
                         type: object
                     type: object
+                  groups:
+                    items:
+                      properties:
+                        group:
+                          type: string
+                        nodeType:
+                          type: string
+                        resources:
+                          properties:
+                            nodeSelectionPolicy:
+                              type: string
+                            resources:
+                              properties:
+                                claims:
+                                  items:
+                                    properties:
+                                      name:
+                                        type: string
+                                      request:
+                                        type: string
+                                    required:
+                                    - name
+                                    type: object
+                                  type: array
+                                  x-kubernetes-list-map-keys:
+                                  - name
+                                  x-kubernetes-list-type: map
+                                limits:
+                                  additionalProperties:
+                                    anyOf:
+                                    - type: integer
+                                    - type: string
+                                    pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                    x-kubernetes-int-or-string: true
+                                  type: object
+                                requests:
+                                  additionalProperties:
+                                    anyOf:
+                                    - type: integer
+                                    - type: string
+                                    pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                    x-kubernetes-int-or-string: true
+                                  type: object
+                              type: object
+                            topology:
+                              properties:
+                                key:
+                                  type: string
+                                value:
+                                  type: string
+                              required:
+                              - key
+                              - value
+                              type: object
+                          type: object
+                      required:
+                      - group
+                      - nodeType
+                      - resources
+                      type: object
+                    type: array
                   mixcoord:
                     properties:
                       nodeSelectionPolicy:

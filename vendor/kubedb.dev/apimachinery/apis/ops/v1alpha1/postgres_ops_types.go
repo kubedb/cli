@@ -187,6 +187,23 @@ type PostgresHorizontalScalingSpec struct {
 
 	// +optional
 	ReadReplicas []ReadReplicaHzScalingSpec `json:"readReplicas,omitempty"`
+
+	// DataCenters scales individual data centers of a distributed DC-DR Postgres.
+	// Each entry sets that data center's local node count; data centers not listed
+	// are left unchanged. Use this instead of Replicas for a DC-DR cluster, where
+	// each data center has its own intra-DC raft and is scaled independently.
+	// +optional
+	DataCenters []PostgresHorizontalScalingDC `json:"dataCenters,omitempty"`
+}
+
+// PostgresHorizontalScalingDC is a per data center node-count target for scaling a
+// distributed DC-DR Postgres.
+type PostgresHorizontalScalingDC struct {
+	// ClusterName is the data center, named by its OCM managed cluster, matching a
+	// Member or Witness distributionRule in the Postgres PlacementPolicy.
+	ClusterName string `json:"clusterName"`
+	// Replicas is the desired local node count for this data center.
+	Replicas int32 `json:"replicas"`
 }
 
 type ReadReplicaHzScalingSpec struct {

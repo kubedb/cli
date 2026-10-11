@@ -102,8 +102,8 @@ func (h *HanaDB) ServiceName() string {
 	return h.OffshootName()
 }
 
-func (h *HanaDB) SecondaryServiceName() string {
-	return metautil.NameWithPrefix(h.ServiceName(), string(SecondaryServiceAlias))
+func (h *HanaDB) StandbyServiceName() string {
+	return metautil.NameWithPrefix(h.ServiceName(), string(StandbyServiceAlias))
 }
 
 func (h *HanaDB) GoverningServiceName() string {
@@ -392,9 +392,9 @@ func (h *HanaDB) ServerCertificateDNSNames() []string {
 		fmt.Sprintf("%s.%s", h.ServiceName(), h.Namespace),
 		fmt.Sprintf("%s.%s.svc", h.ServiceName(), h.Namespace),
 		fmt.Sprintf("%s.%s.svc.%s", h.ServiceName(), h.Namespace, apiutils.FindDomain()),
-		fmt.Sprintf("%s.%s", h.SecondaryServiceName(), h.Namespace),
-		fmt.Sprintf("%s.%s.svc", h.SecondaryServiceName(), h.Namespace),
-		fmt.Sprintf("%s.%s.svc.%s", h.SecondaryServiceName(), h.Namespace, apiutils.FindDomain()),
+		fmt.Sprintf("%s.%s", h.StandbyServiceName(), h.Namespace),
+		fmt.Sprintf("%s.%s.svc", h.StandbyServiceName(), h.Namespace),
+		fmt.Sprintf("%s.%s.svc.%s", h.StandbyServiceName(), h.Namespace, apiutils.FindDomain()),
 		fmt.Sprintf("%s.%s", h.GoverningServiceName(), h.Namespace),
 		fmt.Sprintf("%s.%s.svc", h.GoverningServiceName(), h.Namespace),
 		fmt.Sprintf("%s.%s.svc.%s", h.GoverningServiceName(), h.Namespace, apiutils.FindDomain()),

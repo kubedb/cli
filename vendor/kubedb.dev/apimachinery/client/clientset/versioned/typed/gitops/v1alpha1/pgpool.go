@@ -19,16 +19,15 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"context"
-	"time"
+	context "context"
 
-	v1alpha1 "kubedb.dev/apimachinery/apis/gitops/v1alpha1"
+	gitopsv1alpha1 "kubedb.dev/apimachinery/apis/gitops/v1alpha1"
 	scheme "kubedb.dev/apimachinery/client/clientset/versioned/scheme"
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
-	rest "k8s.io/client-go/rest"
+	gentype "k8s.io/client-go/gentype"
 )
 
 // PgpoolsGetter has a method to return a PgpoolInterface.
@@ -39,158 +38,34 @@ type PgpoolsGetter interface {
 
 // PgpoolInterface has methods to work with Pgpool resources.
 type PgpoolInterface interface {
-	Create(ctx context.Context, pgpool *v1alpha1.Pgpool, opts v1.CreateOptions) (*v1alpha1.Pgpool, error)
-	Update(ctx context.Context, pgpool *v1alpha1.Pgpool, opts v1.UpdateOptions) (*v1alpha1.Pgpool, error)
-	UpdateStatus(ctx context.Context, pgpool *v1alpha1.Pgpool, opts v1.UpdateOptions) (*v1alpha1.Pgpool, error)
+	Create(ctx context.Context, pgpool *gitopsv1alpha1.Pgpool, opts v1.CreateOptions) (*gitopsv1alpha1.Pgpool, error)
+	Update(ctx context.Context, pgpool *gitopsv1alpha1.Pgpool, opts v1.UpdateOptions) (*gitopsv1alpha1.Pgpool, error)
+	// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
+	UpdateStatus(ctx context.Context, pgpool *gitopsv1alpha1.Pgpool, opts v1.UpdateOptions) (*gitopsv1alpha1.Pgpool, error)
 	Delete(ctx context.Context, name string, opts v1.DeleteOptions) error
 	DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error
-	Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha1.Pgpool, error)
-	List(ctx context.Context, opts v1.ListOptions) (*v1alpha1.PgpoolList, error)
+	Get(ctx context.Context, name string, opts v1.GetOptions) (*gitopsv1alpha1.Pgpool, error)
+	List(ctx context.Context, opts v1.ListOptions) (*gitopsv1alpha1.PgpoolList, error)
 	Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error)
-	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.Pgpool, err error)
+	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *gitopsv1alpha1.Pgpool, err error)
 	PgpoolExpansion
 }
 
 // pgpools implements PgpoolInterface
 type pgpools struct {
-	client rest.Interface
-	ns     string
+	*gentype.ClientWithList[*gitopsv1alpha1.Pgpool, *gitopsv1alpha1.PgpoolList]
 }
 
 // newPgpools returns a Pgpools
 func newPgpools(c *GitopsV1alpha1Client, namespace string) *pgpools {
 	return &pgpools{
-		client: c.RESTClient(),
-		ns:     namespace,
+		gentype.NewClientWithList[*gitopsv1alpha1.Pgpool, *gitopsv1alpha1.PgpoolList](
+			"pgpools",
+			c.RESTClient(),
+			scheme.ParameterCodec,
+			namespace,
+			func() *gitopsv1alpha1.Pgpool { return &gitopsv1alpha1.Pgpool{} },
+			func() *gitopsv1alpha1.PgpoolList { return &gitopsv1alpha1.PgpoolList{} },
+		),
 	}
-}
-
-// Get takes name of the pgpool, and returns the corresponding pgpool object, and an error if there is any.
-func (c *pgpools) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.Pgpool, err error) {
-	result = &v1alpha1.Pgpool{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("pgpools").
-		Name(name).
-		VersionedParams(&options, scheme.ParameterCodec).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// List takes label and field selectors, and returns the list of Pgpools that match those selectors.
-func (c *pgpools) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha1.PgpoolList, err error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	result = &v1alpha1.PgpoolList{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("pgpools").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Watch returns a watch.Interface that watches the requested pgpools.
-func (c *pgpools) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	opts.Watch = true
-	return c.client.Get().
-		Namespace(c.ns).
-		Resource("pgpools").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Watch(ctx)
-}
-
-// Create takes the representation of a pgpool and creates it.  Returns the server's representation of the pgpool, and an error, if there is any.
-func (c *pgpools) Create(ctx context.Context, pgpool *v1alpha1.Pgpool, opts v1.CreateOptions) (result *v1alpha1.Pgpool, err error) {
-	result = &v1alpha1.Pgpool{}
-	err = c.client.Post().
-		Namespace(c.ns).
-		Resource("pgpools").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(pgpool).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Update takes the representation of a pgpool and updates it. Returns the server's representation of the pgpool, and an error, if there is any.
-func (c *pgpools) Update(ctx context.Context, pgpool *v1alpha1.Pgpool, opts v1.UpdateOptions) (result *v1alpha1.Pgpool, err error) {
-	result = &v1alpha1.Pgpool{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("pgpools").
-		Name(pgpool.Name).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(pgpool).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// UpdateStatus was generated because the type contains a Status member.
-// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
-func (c *pgpools) UpdateStatus(ctx context.Context, pgpool *v1alpha1.Pgpool, opts v1.UpdateOptions) (result *v1alpha1.Pgpool, err error) {
-	result = &v1alpha1.Pgpool{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("pgpools").
-		Name(pgpool.Name).
-		SubResource("status").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(pgpool).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Delete takes name of the pgpool and deletes it. Returns an error if one occurs.
-func (c *pgpools) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("pgpools").
-		Name(name).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// DeleteCollection deletes a collection of objects.
-func (c *pgpools) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
-	var timeout time.Duration
-	if listOpts.TimeoutSeconds != nil {
-		timeout = time.Duration(*listOpts.TimeoutSeconds) * time.Second
-	}
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("pgpools").
-		VersionedParams(&listOpts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// Patch applies the patch and returns the patched pgpool.
-func (c *pgpools) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.Pgpool, err error) {
-	result = &v1alpha1.Pgpool{}
-	err = c.client.Patch(pt).
-		Namespace(c.ns).
-		Resource("pgpools").
-		Name(name).
-		SubResource(subresources...).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(data).
-		Do(ctx).
-		Into(result)
-	return
 }

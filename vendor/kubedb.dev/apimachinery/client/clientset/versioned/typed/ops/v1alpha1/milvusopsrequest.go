@@ -19,16 +19,15 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"context"
-	"time"
+	context "context"
 
-	v1alpha1 "kubedb.dev/apimachinery/apis/ops/v1alpha1"
+	opsv1alpha1 "kubedb.dev/apimachinery/apis/ops/v1alpha1"
 	scheme "kubedb.dev/apimachinery/client/clientset/versioned/scheme"
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
-	rest "k8s.io/client-go/rest"
+	gentype "k8s.io/client-go/gentype"
 )
 
 // MilvusOpsRequestsGetter has a method to return a MilvusOpsRequestInterface.
@@ -39,158 +38,34 @@ type MilvusOpsRequestsGetter interface {
 
 // MilvusOpsRequestInterface has methods to work with MilvusOpsRequest resources.
 type MilvusOpsRequestInterface interface {
-	Create(ctx context.Context, milvusOpsRequest *v1alpha1.MilvusOpsRequest, opts v1.CreateOptions) (*v1alpha1.MilvusOpsRequest, error)
-	Update(ctx context.Context, milvusOpsRequest *v1alpha1.MilvusOpsRequest, opts v1.UpdateOptions) (*v1alpha1.MilvusOpsRequest, error)
-	UpdateStatus(ctx context.Context, milvusOpsRequest *v1alpha1.MilvusOpsRequest, opts v1.UpdateOptions) (*v1alpha1.MilvusOpsRequest, error)
+	Create(ctx context.Context, milvusOpsRequest *opsv1alpha1.MilvusOpsRequest, opts v1.CreateOptions) (*opsv1alpha1.MilvusOpsRequest, error)
+	Update(ctx context.Context, milvusOpsRequest *opsv1alpha1.MilvusOpsRequest, opts v1.UpdateOptions) (*opsv1alpha1.MilvusOpsRequest, error)
+	// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
+	UpdateStatus(ctx context.Context, milvusOpsRequest *opsv1alpha1.MilvusOpsRequest, opts v1.UpdateOptions) (*opsv1alpha1.MilvusOpsRequest, error)
 	Delete(ctx context.Context, name string, opts v1.DeleteOptions) error
 	DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error
-	Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha1.MilvusOpsRequest, error)
-	List(ctx context.Context, opts v1.ListOptions) (*v1alpha1.MilvusOpsRequestList, error)
+	Get(ctx context.Context, name string, opts v1.GetOptions) (*opsv1alpha1.MilvusOpsRequest, error)
+	List(ctx context.Context, opts v1.ListOptions) (*opsv1alpha1.MilvusOpsRequestList, error)
 	Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error)
-	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.MilvusOpsRequest, err error)
+	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *opsv1alpha1.MilvusOpsRequest, err error)
 	MilvusOpsRequestExpansion
 }
 
 // milvusOpsRequests implements MilvusOpsRequestInterface
 type milvusOpsRequests struct {
-	client rest.Interface
-	ns     string
+	*gentype.ClientWithList[*opsv1alpha1.MilvusOpsRequest, *opsv1alpha1.MilvusOpsRequestList]
 }
 
 // newMilvusOpsRequests returns a MilvusOpsRequests
 func newMilvusOpsRequests(c *OpsV1alpha1Client, namespace string) *milvusOpsRequests {
 	return &milvusOpsRequests{
-		client: c.RESTClient(),
-		ns:     namespace,
+		gentype.NewClientWithList[*opsv1alpha1.MilvusOpsRequest, *opsv1alpha1.MilvusOpsRequestList](
+			"milvusopsrequests",
+			c.RESTClient(),
+			scheme.ParameterCodec,
+			namespace,
+			func() *opsv1alpha1.MilvusOpsRequest { return &opsv1alpha1.MilvusOpsRequest{} },
+			func() *opsv1alpha1.MilvusOpsRequestList { return &opsv1alpha1.MilvusOpsRequestList{} },
+		),
 	}
-}
-
-// Get takes name of the milvusOpsRequest, and returns the corresponding milvusOpsRequest object, and an error if there is any.
-func (c *milvusOpsRequests) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.MilvusOpsRequest, err error) {
-	result = &v1alpha1.MilvusOpsRequest{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("milvusopsrequests").
-		Name(name).
-		VersionedParams(&options, scheme.ParameterCodec).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// List takes label and field selectors, and returns the list of MilvusOpsRequests that match those selectors.
-func (c *milvusOpsRequests) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha1.MilvusOpsRequestList, err error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	result = &v1alpha1.MilvusOpsRequestList{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("milvusopsrequests").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Watch returns a watch.Interface that watches the requested milvusOpsRequests.
-func (c *milvusOpsRequests) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	opts.Watch = true
-	return c.client.Get().
-		Namespace(c.ns).
-		Resource("milvusopsrequests").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Watch(ctx)
-}
-
-// Create takes the representation of a milvusOpsRequest and creates it.  Returns the server's representation of the milvusOpsRequest, and an error, if there is any.
-func (c *milvusOpsRequests) Create(ctx context.Context, milvusOpsRequest *v1alpha1.MilvusOpsRequest, opts v1.CreateOptions) (result *v1alpha1.MilvusOpsRequest, err error) {
-	result = &v1alpha1.MilvusOpsRequest{}
-	err = c.client.Post().
-		Namespace(c.ns).
-		Resource("milvusopsrequests").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(milvusOpsRequest).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Update takes the representation of a milvusOpsRequest and updates it. Returns the server's representation of the milvusOpsRequest, and an error, if there is any.
-func (c *milvusOpsRequests) Update(ctx context.Context, milvusOpsRequest *v1alpha1.MilvusOpsRequest, opts v1.UpdateOptions) (result *v1alpha1.MilvusOpsRequest, err error) {
-	result = &v1alpha1.MilvusOpsRequest{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("milvusopsrequests").
-		Name(milvusOpsRequest.Name).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(milvusOpsRequest).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// UpdateStatus was generated because the type contains a Status member.
-// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
-func (c *milvusOpsRequests) UpdateStatus(ctx context.Context, milvusOpsRequest *v1alpha1.MilvusOpsRequest, opts v1.UpdateOptions) (result *v1alpha1.MilvusOpsRequest, err error) {
-	result = &v1alpha1.MilvusOpsRequest{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("milvusopsrequests").
-		Name(milvusOpsRequest.Name).
-		SubResource("status").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(milvusOpsRequest).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Delete takes name of the milvusOpsRequest and deletes it. Returns an error if one occurs.
-func (c *milvusOpsRequests) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("milvusopsrequests").
-		Name(name).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// DeleteCollection deletes a collection of objects.
-func (c *milvusOpsRequests) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
-	var timeout time.Duration
-	if listOpts.TimeoutSeconds != nil {
-		timeout = time.Duration(*listOpts.TimeoutSeconds) * time.Second
-	}
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("milvusopsrequests").
-		VersionedParams(&listOpts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// Patch applies the patch and returns the patched milvusOpsRequest.
-func (c *milvusOpsRequests) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.MilvusOpsRequest, err error) {
-	result = &v1alpha1.MilvusOpsRequest{}
-	err = c.client.Patch(pt).
-		Namespace(c.ns).
-		Resource("milvusopsrequests").
-		Name(name).
-		SubResource(subresources...).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(data).
-		Do(ctx).
-		Into(result)
-	return
 }

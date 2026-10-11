@@ -19,16 +19,15 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"context"
-	"time"
+	context "context"
 
-	v1alpha1 "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1"
+	autoscalingv1alpha1 "kubedb.dev/apimachinery/apis/autoscaling/v1alpha1"
 	scheme "kubedb.dev/apimachinery/client/clientset/versioned/scheme"
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
-	rest "k8s.io/client-go/rest"
+	gentype "k8s.io/client-go/gentype"
 )
 
 // QdrantAutoscalersGetter has a method to return a QdrantAutoscalerInterface.
@@ -39,158 +38,34 @@ type QdrantAutoscalersGetter interface {
 
 // QdrantAutoscalerInterface has methods to work with QdrantAutoscaler resources.
 type QdrantAutoscalerInterface interface {
-	Create(ctx context.Context, qdrantAutoscaler *v1alpha1.QdrantAutoscaler, opts v1.CreateOptions) (*v1alpha1.QdrantAutoscaler, error)
-	Update(ctx context.Context, qdrantAutoscaler *v1alpha1.QdrantAutoscaler, opts v1.UpdateOptions) (*v1alpha1.QdrantAutoscaler, error)
-	UpdateStatus(ctx context.Context, qdrantAutoscaler *v1alpha1.QdrantAutoscaler, opts v1.UpdateOptions) (*v1alpha1.QdrantAutoscaler, error)
+	Create(ctx context.Context, qdrantAutoscaler *autoscalingv1alpha1.QdrantAutoscaler, opts v1.CreateOptions) (*autoscalingv1alpha1.QdrantAutoscaler, error)
+	Update(ctx context.Context, qdrantAutoscaler *autoscalingv1alpha1.QdrantAutoscaler, opts v1.UpdateOptions) (*autoscalingv1alpha1.QdrantAutoscaler, error)
+	// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
+	UpdateStatus(ctx context.Context, qdrantAutoscaler *autoscalingv1alpha1.QdrantAutoscaler, opts v1.UpdateOptions) (*autoscalingv1alpha1.QdrantAutoscaler, error)
 	Delete(ctx context.Context, name string, opts v1.DeleteOptions) error
 	DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error
-	Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha1.QdrantAutoscaler, error)
-	List(ctx context.Context, opts v1.ListOptions) (*v1alpha1.QdrantAutoscalerList, error)
+	Get(ctx context.Context, name string, opts v1.GetOptions) (*autoscalingv1alpha1.QdrantAutoscaler, error)
+	List(ctx context.Context, opts v1.ListOptions) (*autoscalingv1alpha1.QdrantAutoscalerList, error)
 	Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error)
-	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.QdrantAutoscaler, err error)
+	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *autoscalingv1alpha1.QdrantAutoscaler, err error)
 	QdrantAutoscalerExpansion
 }
 
 // qdrantAutoscalers implements QdrantAutoscalerInterface
 type qdrantAutoscalers struct {
-	client rest.Interface
-	ns     string
+	*gentype.ClientWithList[*autoscalingv1alpha1.QdrantAutoscaler, *autoscalingv1alpha1.QdrantAutoscalerList]
 }
 
 // newQdrantAutoscalers returns a QdrantAutoscalers
 func newQdrantAutoscalers(c *AutoscalingV1alpha1Client, namespace string) *qdrantAutoscalers {
 	return &qdrantAutoscalers{
-		client: c.RESTClient(),
-		ns:     namespace,
+		gentype.NewClientWithList[*autoscalingv1alpha1.QdrantAutoscaler, *autoscalingv1alpha1.QdrantAutoscalerList](
+			"qdrantautoscalers",
+			c.RESTClient(),
+			scheme.ParameterCodec,
+			namespace,
+			func() *autoscalingv1alpha1.QdrantAutoscaler { return &autoscalingv1alpha1.QdrantAutoscaler{} },
+			func() *autoscalingv1alpha1.QdrantAutoscalerList { return &autoscalingv1alpha1.QdrantAutoscalerList{} },
+		),
 	}
-}
-
-// Get takes name of the qdrantAutoscaler, and returns the corresponding qdrantAutoscaler object, and an error if there is any.
-func (c *qdrantAutoscalers) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.QdrantAutoscaler, err error) {
-	result = &v1alpha1.QdrantAutoscaler{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("qdrantautoscalers").
-		Name(name).
-		VersionedParams(&options, scheme.ParameterCodec).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// List takes label and field selectors, and returns the list of QdrantAutoscalers that match those selectors.
-func (c *qdrantAutoscalers) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha1.QdrantAutoscalerList, err error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	result = &v1alpha1.QdrantAutoscalerList{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("qdrantautoscalers").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Watch returns a watch.Interface that watches the requested qdrantAutoscalers.
-func (c *qdrantAutoscalers) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	opts.Watch = true
-	return c.client.Get().
-		Namespace(c.ns).
-		Resource("qdrantautoscalers").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Watch(ctx)
-}
-
-// Create takes the representation of a qdrantAutoscaler and creates it.  Returns the server's representation of the qdrantAutoscaler, and an error, if there is any.
-func (c *qdrantAutoscalers) Create(ctx context.Context, qdrantAutoscaler *v1alpha1.QdrantAutoscaler, opts v1.CreateOptions) (result *v1alpha1.QdrantAutoscaler, err error) {
-	result = &v1alpha1.QdrantAutoscaler{}
-	err = c.client.Post().
-		Namespace(c.ns).
-		Resource("qdrantautoscalers").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(qdrantAutoscaler).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Update takes the representation of a qdrantAutoscaler and updates it. Returns the server's representation of the qdrantAutoscaler, and an error, if there is any.
-func (c *qdrantAutoscalers) Update(ctx context.Context, qdrantAutoscaler *v1alpha1.QdrantAutoscaler, opts v1.UpdateOptions) (result *v1alpha1.QdrantAutoscaler, err error) {
-	result = &v1alpha1.QdrantAutoscaler{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("qdrantautoscalers").
-		Name(qdrantAutoscaler.Name).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(qdrantAutoscaler).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// UpdateStatus was generated because the type contains a Status member.
-// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
-func (c *qdrantAutoscalers) UpdateStatus(ctx context.Context, qdrantAutoscaler *v1alpha1.QdrantAutoscaler, opts v1.UpdateOptions) (result *v1alpha1.QdrantAutoscaler, err error) {
-	result = &v1alpha1.QdrantAutoscaler{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("qdrantautoscalers").
-		Name(qdrantAutoscaler.Name).
-		SubResource("status").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(qdrantAutoscaler).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Delete takes name of the qdrantAutoscaler and deletes it. Returns an error if one occurs.
-func (c *qdrantAutoscalers) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("qdrantautoscalers").
-		Name(name).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// DeleteCollection deletes a collection of objects.
-func (c *qdrantAutoscalers) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
-	var timeout time.Duration
-	if listOpts.TimeoutSeconds != nil {
-		timeout = time.Duration(*listOpts.TimeoutSeconds) * time.Second
-	}
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("qdrantautoscalers").
-		VersionedParams(&listOpts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// Patch applies the patch and returns the patched qdrantAutoscaler.
-func (c *qdrantAutoscalers) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.QdrantAutoscaler, err error) {
-	result = &v1alpha1.QdrantAutoscaler{}
-	err = c.client.Patch(pt).
-		Namespace(c.ns).
-		Resource("qdrantautoscalers").
-		Name(name).
-		SubResource(subresources...).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(data).
-		Do(ctx).
-		Into(result)
-	return
 }

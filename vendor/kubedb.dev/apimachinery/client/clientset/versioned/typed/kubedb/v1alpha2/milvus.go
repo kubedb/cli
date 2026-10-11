@@ -19,16 +19,15 @@ limitations under the License.
 package v1alpha2
 
 import (
-	"context"
-	"time"
+	context "context"
 
-	v1alpha2 "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
+	kubedbv1alpha2 "kubedb.dev/apimachinery/apis/kubedb/v1alpha2"
 	scheme "kubedb.dev/apimachinery/client/clientset/versioned/scheme"
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
-	rest "k8s.io/client-go/rest"
+	gentype "k8s.io/client-go/gentype"
 )
 
 // MilvusesGetter has a method to return a MilvusInterface.
@@ -39,158 +38,34 @@ type MilvusesGetter interface {
 
 // MilvusInterface has methods to work with Milvus resources.
 type MilvusInterface interface {
-	Create(ctx context.Context, milvus *v1alpha2.Milvus, opts v1.CreateOptions) (*v1alpha2.Milvus, error)
-	Update(ctx context.Context, milvus *v1alpha2.Milvus, opts v1.UpdateOptions) (*v1alpha2.Milvus, error)
-	UpdateStatus(ctx context.Context, milvus *v1alpha2.Milvus, opts v1.UpdateOptions) (*v1alpha2.Milvus, error)
+	Create(ctx context.Context, milvus *kubedbv1alpha2.Milvus, opts v1.CreateOptions) (*kubedbv1alpha2.Milvus, error)
+	Update(ctx context.Context, milvus *kubedbv1alpha2.Milvus, opts v1.UpdateOptions) (*kubedbv1alpha2.Milvus, error)
+	// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
+	UpdateStatus(ctx context.Context, milvus *kubedbv1alpha2.Milvus, opts v1.UpdateOptions) (*kubedbv1alpha2.Milvus, error)
 	Delete(ctx context.Context, name string, opts v1.DeleteOptions) error
 	DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error
-	Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha2.Milvus, error)
-	List(ctx context.Context, opts v1.ListOptions) (*v1alpha2.MilvusList, error)
+	Get(ctx context.Context, name string, opts v1.GetOptions) (*kubedbv1alpha2.Milvus, error)
+	List(ctx context.Context, opts v1.ListOptions) (*kubedbv1alpha2.MilvusList, error)
 	Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error)
-	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha2.Milvus, err error)
+	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *kubedbv1alpha2.Milvus, err error)
 	MilvusExpansion
 }
 
 // milvuses implements MilvusInterface
 type milvuses struct {
-	client rest.Interface
-	ns     string
+	*gentype.ClientWithList[*kubedbv1alpha2.Milvus, *kubedbv1alpha2.MilvusList]
 }
 
 // newMilvuses returns a Milvuses
 func newMilvuses(c *KubedbV1alpha2Client, namespace string) *milvuses {
 	return &milvuses{
-		client: c.RESTClient(),
-		ns:     namespace,
+		gentype.NewClientWithList[*kubedbv1alpha2.Milvus, *kubedbv1alpha2.MilvusList](
+			"milvuses",
+			c.RESTClient(),
+			scheme.ParameterCodec,
+			namespace,
+			func() *kubedbv1alpha2.Milvus { return &kubedbv1alpha2.Milvus{} },
+			func() *kubedbv1alpha2.MilvusList { return &kubedbv1alpha2.MilvusList{} },
+		),
 	}
-}
-
-// Get takes name of the milvus, and returns the corresponding milvus object, and an error if there is any.
-func (c *milvuses) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha2.Milvus, err error) {
-	result = &v1alpha2.Milvus{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("milvuses").
-		Name(name).
-		VersionedParams(&options, scheme.ParameterCodec).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// List takes label and field selectors, and returns the list of Milvuses that match those selectors.
-func (c *milvuses) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha2.MilvusList, err error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	result = &v1alpha2.MilvusList{}
-	err = c.client.Get().
-		Namespace(c.ns).
-		Resource("milvuses").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Watch returns a watch.Interface that watches the requested milvuses.
-func (c *milvuses) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	opts.Watch = true
-	return c.client.Get().
-		Namespace(c.ns).
-		Resource("milvuses").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Watch(ctx)
-}
-
-// Create takes the representation of a milvus and creates it.  Returns the server's representation of the milvus, and an error, if there is any.
-func (c *milvuses) Create(ctx context.Context, milvus *v1alpha2.Milvus, opts v1.CreateOptions) (result *v1alpha2.Milvus, err error) {
-	result = &v1alpha2.Milvus{}
-	err = c.client.Post().
-		Namespace(c.ns).
-		Resource("milvuses").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(milvus).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Update takes the representation of a milvus and updates it. Returns the server's representation of the milvus, and an error, if there is any.
-func (c *milvuses) Update(ctx context.Context, milvus *v1alpha2.Milvus, opts v1.UpdateOptions) (result *v1alpha2.Milvus, err error) {
-	result = &v1alpha2.Milvus{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("milvuses").
-		Name(milvus.Name).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(milvus).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// UpdateStatus was generated because the type contains a Status member.
-// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
-func (c *milvuses) UpdateStatus(ctx context.Context, milvus *v1alpha2.Milvus, opts v1.UpdateOptions) (result *v1alpha2.Milvus, err error) {
-	result = &v1alpha2.Milvus{}
-	err = c.client.Put().
-		Namespace(c.ns).
-		Resource("milvuses").
-		Name(milvus.Name).
-		SubResource("status").
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(milvus).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// Delete takes name of the milvus and deletes it. Returns an error if one occurs.
-func (c *milvuses) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("milvuses").
-		Name(name).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// DeleteCollection deletes a collection of objects.
-func (c *milvuses) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
-	var timeout time.Duration
-	if listOpts.TimeoutSeconds != nil {
-		timeout = time.Duration(*listOpts.TimeoutSeconds) * time.Second
-	}
-	return c.client.Delete().
-		Namespace(c.ns).
-		Resource("milvuses").
-		VersionedParams(&listOpts, scheme.ParameterCodec).
-		Timeout(timeout).
-		Body(&opts).
-		Do(ctx).
-		Error()
-}
-
-// Patch applies the patch and returns the patched milvus.
-func (c *milvuses) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha2.Milvus, err error) {
-	result = &v1alpha2.Milvus{}
-	err = c.client.Patch(pt).
-		Namespace(c.ns).
-		Resource("milvuses").
-		Name(name).
-		SubResource(subresources...).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(data).
-		Do(ctx).
-		Into(result)
-	return
 }
