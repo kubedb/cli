@@ -38,7 +38,6 @@ import (
 	core "k8s.io/api/core/v1"
 	kerr "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/klog/v2"
@@ -58,7 +57,7 @@ func PostgreSQlAPP(f cmdutil.Factory) *cobra.Command {
 	var caCertPath, caKeyPath string
 	var clientSANs []string
 	var port int32
-	var yes bool
+	var yes, skipUserCreation bool
 
 	cmd := cobra.Command{
 		Use:     "postgres",
@@ -70,8 +69,12 @@ func PostgreSQlAPP(f cmdutil.Factory) *cobra.Command {
 			if len(args) == 0 {
 				log.Fatal("no database name given")
 			}
-			if err := userPrompt(yes); err != nil {
-				log.Fatal(err)
+			// Nothing on the source is altered when user creation is skipped, so
+			// the "password will be altered" confirmation has nothing to confirm.
+			if !skipUserCreation {
+				if err := userPrompt(yes); err != nil {
+					log.Fatal(err)
+				}
 			}
 			// Issuing a certificate needs the CA's PRIVATE key; ca.crt alone cannot
 			// sign anything, so the pair travels together.
@@ -90,7 +93,7 @@ func PostgreSQlAPP(f cmdutil.Factory) *cobra.Command {
 			}
 
 			var buffer []byte
-			buffer, err := generateConfig(f, userName, password, dns, ns, authSecretName, replicaName, port, args[0], tlsIssueOptions{
+			buffer, err := generateConfig(f, userName, password, dns, ns, authSecretName, replicaName, port, args[0], skipUserCreation, tlsIssueOptions{
 				CACertPath: caCertPath,
 				CAKeyPath:  caKeyPath,
 				DNSSANs:    clientSANs,
@@ -137,6 +140,10 @@ func PostgreSQlAPP(f cmdutil.Factory) *cobra.Command {
 	cmd.PersistentFlags().StringVar(&caCertPath, "ca-cert", "", "path to a CA certificate PEM; when set (together with --ca-key) the client certificate is issued locally from this CA instead of through cert-manager")
 	cmd.PersistentFlags().StringVar(&caKeyPath, "ca-key", "", "path to the CA private key PEM matching --ca-cert; required to sign the client certificate")
 	cmd.PersistentFlags().StringSliceVar(&clientSANs, "client-sans", nil, "comma separated DNS names to set as SANs on the generated client certificate")
+	cmd.PersistentFlags().BoolVar(&skipUserCreation, "skip-user-creation", false,
+		"do not create or alter the replication user on the source; assume it already exists with the given password. "+
+			"Needed when the source has no writable primary to exec into - a standby, or a remote replica acting as the source of a chained replica, "+
+			"where the replication role already arrived through WAL replication")
 	return &cmd
 }
 
@@ -149,9 +156,16 @@ type tlsIssueOptions struct {
 	DNSSANs    []string
 }
 
-func generateConfig(f cmdutil.Factory, userName string, password string, dns string, ns string, authSecretName string, replicaName string, port int32, dbname string, tlsOpt tlsIssueOptions) ([]byte, error) {
+func generateConfig(f cmdutil.Factory, userName string, password string, dns string, ns string, authSecretName string, replicaName string, port int32, dbname string, skipUserCreation bool, tlsOpt tlsIssueOptions) ([]byte, error) {
 	var buffer []byte
-	opts, err := common.NewPostgresOpts(f, dbname, ns)
+	var dbOpts []common.OptionFunc
+	if skipUserCreation {
+		// Rendering manifests only reads the CR. A source stuck in a non-Ready
+		// phase - mid-failover, or standby-only - is precisely when a disaster
+		// recovery config is wanted, so do not refuse to run.
+		dbOpts = append(dbOpts, common.SkipReadinessCheck())
+	}
+	opts, err := common.NewPostgresOpts(f, dbname, ns, dbOpts...)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get db %s, err:%v", dbname, err)
 	}
@@ -162,7 +176,7 @@ func generateConfig(f cmdutil.Factory, userName string, password string, dns str
 		return nil, fmt.Errorf("failed to get appbinding %v", err)
 	}
 
-	authBuff, authSecretName, err := generateAuthSecret(userName, password, ns, authSecretName, opts)
+	authBuff, authSecretName, err := generateAuthSecret(userName, password, ns, authSecretName, skipUserCreation, opts)
 	if err != nil {
 		return nil, fmt.Errorf("failed to generate auth secret ,%v", err)
 	}
@@ -356,15 +370,20 @@ func generateTlsSecret(userName string, apb *appApi.AppBinding, ns string, extra
 	return buffer, tlsSecret.Name, nil
 }
 
-func generateAuthSecret(userName string, password string, ns string, secretName string, opts *common.PostgresOpts) ([]byte, string, error) {
-	if userName != opts.Username {
+func generateAuthSecret(userName string, password string, ns string, secretName string, skipUserCreation bool, opts *common.PostgresOpts) ([]byte, string, error) {
+	switch {
+	case userName == opts.Username:
+		password = opts.Pass
+	case skipUserCreation:
+		if err := verifyUser(opts, userName); err != nil {
+			return nil, "", err
+		}
+	default:
 		// generate user if not present
 		err := generateUser(opts, userName, password)
 		if err != nil {
 			return nil, "", fmt.Errorf("failed to generate user err:%v", err)
 		}
-	} else {
-		password = opts.Pass
 	}
 	if secretName == "" {
 		secretName = fmt.Sprintf("%s-remote-replica-auth", opts.DB.Name)
@@ -396,14 +415,48 @@ func generateAuthSecret(userName string, password string, ns string, secretName 
 	return buffer, AuthSecret.Name, nil
 }
 
+// verifyUser checks the replication role without writing anything. Reading
+// pg_roles works on a hot standby, so this runs against any member of the
+// cluster. When no pod can be reached the check is skipped with a warning
+// rather than failing: generating the config is still the useful outcome, and
+// the point of --skip-user-creation is to work where the database does not
+// answer.
+func verifyUser(opts *common.PostgresOpts, name string) error {
+	pod, err := pickDBPod(opts.Client, opts.DB.Namespace, opts.DB.OffshootLabels(), PostgresContainerName, false)
+	if err != nil {
+		klog.Warningf("skipping verification of role %q: %v", name, err)
+		return nil
+	}
+
+	out, err := exec_util.ExecIntoPod(opts.Config, pod,
+		exec_util.Command("psql", "-qtAXc", fmt.Sprintf("SELECT rolreplication FROM pg_roles WHERE rolname='%s'", name)),
+		exec_util.Container(PostgresContainerName),
+	)
+	if err != nil {
+		klog.Warningf("skipping verification of role %q: failed to query %s: %v", name, pod.Name, err)
+		return nil
+	}
+
+	switch strings.TrimSpace(out) {
+	case "":
+		return fmt.Errorf("role %q does not exist on %s/%s; create it on the writable primary first:\n  "+
+			"CREATE USER %s WITH REPLICATION PASSWORD '<password>'; GRANT EXECUTE ON FUNCTION pg_read_binary_file(text) TO %s;",
+			name, opts.DB.Namespace, opts.DB.Name, name, name)
+	case "f", "false":
+		return fmt.Errorf("role %q exists on %s/%s but does not have the REPLICATION attribute; run on the writable primary:\n  "+
+			"ALTER ROLE %s WITH REPLICATION;", name, opts.DB.Namespace, opts.DB.Name, name)
+	}
+
+	fmt.Printf("role %q verified on %s (replication enabled); leaving the source catalog untouched\n", name, pod.Name)
+	return nil
+}
+
 func generateUser(opts *common.PostgresOpts, name string, password string) error {
-	label := opts.DB.OffshootLabels()
-	label["kubedb.com/role"] = "primary"
-	pods, err := opts.Client.CoreV1().Pods(opts.DB.Namespace).List(context.TODO(), metav1.ListOptions{
-		LabelSelector: labels.Set.String(label),
-	})
-	if err != nil || len(pods.Items) == 0 {
-		return err
+	// DDL only: the writable primary is mandatory here.
+	pod, err := pickDBPod(opts.Client, opts.DB.Namespace, opts.DB.OffshootLabels(), PostgresContainerName, true)
+	if err != nil {
+		return fmt.Errorf("%v; pass --skip-user-creation to generate the config against a standby "+
+			"whose replication role already exists", err)
 	}
 
 	query := fmt.Sprintf("SELECT rolname FROM pg_roles WHERE rolname='%s'", name)
@@ -415,7 +468,7 @@ func generateUser(opts *common.PostgresOpts, name string, password string) error
 		container,
 	}
 
-	out, err := exec_util.ExecIntoPod(opts.Config, &pods.Items[0], options...)
+	out, err := exec_util.ExecIntoPod(opts.Config, pod, options...)
 	if err != nil {
 		return err
 	}
@@ -432,7 +485,7 @@ func generateUser(opts *common.PostgresOpts, name string, password string) error
 		container,
 	}
 
-	out, err = exec_util.ExecIntoPod(opts.Config, &pods.Items[0], options...)
+	out, err = exec_util.ExecIntoPod(opts.Config, pod, options...)
 	if err != nil {
 		return err
 	}

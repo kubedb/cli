@@ -49,7 +49,9 @@ type PostgresOpts struct {
 	ErrWriter *bytes.Buffer
 }
 
-func NewPostgresOpts(f cmdutil.Factory, dbName, namespace string) (*PostgresOpts, error) {
+func NewPostgresOpts(f cmdutil.Factory, dbName, namespace string, options ...OptionFunc) (*PostgresOpts, error) {
+	cfg := buildOptionConfig(options)
+
 	config, err := f.ToRESTConfig()
 	if err != nil {
 		return nil, err
@@ -77,7 +79,7 @@ func NewPostgresOpts(f cmdutil.Factory, dbName, namespace string) (*PostgresOpts
 		return nil, err
 	}
 
-	if db.Status.Phase != dbapi.DatabasePhaseReady {
+	if !cfg.skipReadinessCheck && db.Status.Phase != dbapi.DatabasePhaseReady {
 		return nil, fmt.Errorf("postgres %s/%s is not ready", namespace, dbName)
 	}
 
