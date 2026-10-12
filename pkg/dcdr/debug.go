@@ -129,7 +129,7 @@ func newCmdDebugFailover(f cmdutil.Factory) *cobra.Command {
 				findings = append(findings, finding{ok: true, title: "database is DC-DR distributed and armed"})
 			}
 			if strings.Contains(scope.Source, "WARNING") {
-				findings = append(findings, finding{title: "failover scope is registered", detail: scope.Source, remedy: "register the scope in the PlacementPolicy (clusterSpreadConstraint.failoverPolicy.trigger); an unregistered scope has no Lease and no protection", blocker: true})
+				findings = append(findings, finding{title: "failover scope is registered", detail: scope.Source, remedy: "register the scope in the PlacementPolicy (clusterSpreadConstraint.failoverPolicy, with failoverGroupRef for a group); an unregistered scope has no Lease and no protection", blocker: true})
 			} else {
 				findings = append(findings, finding{ok: true, title: fmt.Sprintf("failover scope resolves to %s", scope.LeaseName), detail: scope.Source})
 			}

@@ -40,7 +40,7 @@ func NewCmdActiveDC(f cmdutil.Factory) *cobra.Command {
 			authority for which data center is active.
 
 			Given a database name, its failover scope is resolved first (the
-			PlacementPolicy's failoverPolicy trigger, exactly as the operator
+			PlacementPolicy's failoverPolicy failoverGroupRef, exactly as the operator
 			resolves it) and the matching Lease is read. Given --lease, that Lease is
 			read directly, which also works for a scope whose database is gone.
 
