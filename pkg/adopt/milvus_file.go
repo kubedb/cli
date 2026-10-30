@@ -21,7 +21,6 @@ import (
 	"time"
 
 	"github.com/spf13/cobra"
-	"github.com/spf13/pflag"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"sigs.k8s.io/yaml"
 )
@@ -183,9 +182,10 @@ func (af *adoptionFile) flagValues() []flagValue {
 	return out
 }
 
-// applyFlags sets every flag of fs that the file gives and the command line
+// applyFlags sets every flag of cmd that the file gives and the command line
 // did not. Options a command does not have are skipped.
-func (af *adoptionFile) applyFlags(fs *pflag.FlagSet) error {
+func (af *adoptionFile) applyFlags(cmd *cobra.Command) error {
+	fs := cmd.Flags()
 	for _, fv := range af.flagValues() {
 		fl := fs.Lookup(fv.flag)
 		if fl == nil || fl.Changed {
@@ -221,7 +221,7 @@ func (o *fileOptions) resolve(cmd *cobra.Command, args []string) (string, error)
 		if err != nil {
 			return "", err
 		}
-		if err := af.applyFlags(cmd.Flags()); err != nil {
+		if err := af.applyFlags(cmd); err != nil {
 			return "", err
 		}
 		o.file = af
