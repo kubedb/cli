@@ -43,10 +43,15 @@ type cluster struct {
 	poll time.Duration
 }
 
-func newCluster(f cmdutil.Factory, out io.Writer) (*cluster, error) {
-	ns, _, err := f.ToRawKubeConfigLoader().Namespace()
+// newCluster connects to the cluster. fileNamespace, from an adoption file, is
+// used when -n is not given.
+func newCluster(f cmdutil.Factory, out io.Writer, fileNamespace string) (*cluster, error) {
+	ns, explicit, err := f.ToRawKubeConfigLoader().Namespace()
 	if err != nil {
 		return nil, err
+	}
+	if !explicit && fileNamespace != "" {
+		ns = fileNamespace
 	}
 	cfg, err := f.ToRESTConfig()
 	if err != nil {

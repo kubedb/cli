@@ -14,10 +14,14 @@ limitations under the License.
 package adopt
 
 import (
+	"os"
+	"path/filepath"
 	"reflect"
 	"strings"
 	"testing"
+	"time"
 
+	"github.com/spf13/cobra"
 	core "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
@@ -503,5 +507,157 @@ func TestRestPort(t *testing.T) {
 	}
 	if restPort(map[string]any{"proxy": map[string]any{"http": map[string]any{"port": float64(8080)}}}) != 8080 {
 		t.Fatal("a set http port")
+	}
+}
+
+const adoptionYAML = `
+apiVersion: cli.kubedb.com/v1alpha1
+kind: MilvusAdoption
+release: pura-milvus
+namespace: milvus-prod
+source:
+  workloads:
+  - {role: proxy, kind: Deployment, name: mv-proxy}
+  - {role: querynode, group: l40s, kind: Deployment, name: mv-querynode-l40s}
+auth:
+  authSecret: file-secret
+restrictedSCC: true
+handover:
+  method: stop-start
+  querynodeDelay: 10m
+rollback:
+  cleanup: true
+`
+
+func writeTemp(t *testing.T, content string) string {
+	t.Helper()
+	p := filepath.Join(t.TempDir(), "adopt.yaml")
+	if err := os.WriteFile(p, []byte(content), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	return p
+}
+
+func TestLoadAdoptionFile(t *testing.T) {
+	af, err := loadAdoptionFile(writeTemp(t, adoptionYAML))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if af.Release != "pura-milvus" || af.Namespace != "milvus-prod" || af.Handover.QueryNodeDelay.Duration != 10*time.Minute {
+		t.Fatalf("got %+v", af)
+	}
+	for name, content := range map[string]string{
+		"unknown key":      adoptionYAML + "querynodeDelay: 5m\n",
+		"wrong kind":       strings.Replace(adoptionYAML, "kind: MilvusAdoption", "kind: Milvus", 1),
+		"no release":       strings.Replace(adoptionYAML, "release: pura-milvus", "", 1),
+		"bad method":       strings.Replace(adoptionYAML, "method: stop-start", "method: fast", 1),
+		"bad role":         strings.Replace(adoptionYAML, "role: proxy", "role: rootcoord", 1),
+		"bad kind":         strings.Replace(adoptionYAML, "{role: proxy, kind: Deployment", "{role: proxy, kind: Pod", 1),
+		"bad duration":     strings.Replace(adoptionYAML, "querynodeDelay: 10m", "querynodeDelay: ten", 1),
+		"workload no name": strings.Replace(adoptionYAML, ", name: mv-proxy}", ", name: \"\"}", 1),
+	} {
+		if _, err := loadAdoptionFile(writeTemp(t, content)); err == nil {
+			t.Errorf("%s: want an error", name)
+		}
+	}
+}
+
+func newRunCommandForTest(o *runOptions, fo *fileOptions) *cobra.Command {
+	cmd := &cobra.Command{Use: "run", RunE: func(*cobra.Command, []string) error { return nil }}
+	addPlanFlags(cmd, &o.planOptions)
+	addTimingFlags(cmd, &o.timing)
+	addFileFlag(cmd, fo)
+	cmd.Flags().StringVar(&o.Method, "method", methodOverlap, "")
+	cmd.Flags().DurationVar(&o.ReadyTimeout, "ready-timeout", 15*time.Minute, "")
+	return cmd
+}
+
+func TestAdoptionFileFillsUnsetFlagsOnly(t *testing.T) {
+	var o runOptions
+	var fo fileOptions
+	cmd := newRunCommandForTest(&o, &fo)
+	path := writeTemp(t, adoptionYAML)
+	if err := cmd.ParseFlags([]string{"-f", path, "--auth-secret", "cli-secret", "--settle", "5s"}); err != nil {
+		t.Fatal(err)
+	}
+	release, err := fo.resolve(cmd, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if release != "pura-milvus" || fo.namespace() != "milvus-prod" {
+		t.Fatalf("release %q namespace %q", release, fo.namespace())
+	}
+	if o.AuthSecret != "cli-secret" {
+		t.Fatalf("a flag on the command line must win over the file, got %q", o.AuthSecret)
+	}
+	if o.Method != methodStopStart || o.QueryNodeDelay != 10*time.Minute || !o.RestrictedSCC {
+		t.Fatalf("file values not applied: %+v", o)
+	}
+	if o.Settle != 5*time.Second || o.Timeout != 15*time.Minute {
+		t.Fatalf("flag and default must stay: settle %s timeout %s", o.Settle, o.Timeout)
+	}
+	want := []string{"proxy=Deployment/mv-proxy", "querynode/l40s=Deployment/mv-querynode-l40s"}
+	if !reflect.DeepEqual(o.Workloads, want) {
+		t.Fatalf("workloads %v", o.Workloads)
+	}
+}
+
+func TestResolveRelease(t *testing.T) {
+	var o runOptions
+	var fo fileOptions
+	cmd := newRunCommandForTest(&o, &fo)
+	if _, err := fo.resolve(cmd, nil); err == nil {
+		t.Fatal("no RELEASE and no file must fail")
+	}
+	if r, err := fo.resolve(cmd, []string{"rel"}); err != nil || r != "rel" {
+		t.Fatalf("got %q %v", r, err)
+	}
+	if err := cmd.ParseFlags([]string{"-f", writeTemp(t, adoptionYAML)}); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := fo.resolve(cmd, []string{"other"}); err == nil {
+		t.Fatal("a RELEASE that differs from the file must fail")
+	}
+}
+
+func TestAdoptionFileForRoundTrip(t *testing.T) {
+	refs := allRoles()
+	refs[3] = ref("rel-milvus-querynode-l40s", "querynode", 4)
+	refs = append(refs, ref("rel-milvus-querynode-h200", "querynode", 2))
+	units, tmpls, _, _ := assignUnits(refs, sourceOptions{Release: "rel", RoleLabel: "component"})
+	in := renderInput{
+		Namespace: "ns", Name: "rel-milvus", Version: "2.6.15-gpu", Release: "rel",
+		Source: &Source{Units: units, Templates: tmpls, Config: chartConfig(t)}, RootUser: "root", RootPassword: "x",
+	}
+	st := newState(in)
+	objs, err := render(in, st)
+	if err != nil {
+		t.Fatal(err)
+	}
+	o := planOptions{sourceOptions: sourceOptions{Release: "rel"}, AuthSecret: "milvus-root", RestrictedSCC: true}
+	raw, err := adoptionFileFor(&adoptPlan{State: st, Objects: objs}, o, "ns")
+	if err != nil {
+		t.Fatal(err)
+	}
+	af, err := loadAdoptionFile(writeTemp(t, string(raw)))
+	if err != nil {
+		t.Fatalf("the file plan writes must load again: %v\n%s", err, raw)
+	}
+	if af.Release != "rel" || af.Namespace != "ns" || af.Name != "rel-milvus" || af.Version != "2.6.15-gpu" ||
+		af.Auth.AuthSecret != "milvus-root" || af.RestrictedSCC == nil || !*af.RestrictedSCC || len(af.Source.Workloads) != 6 {
+		t.Fatalf("got %+v", af)
+	}
+	var o2 runOptions
+	var fo fileOptions
+	cmd := newRunCommandForTest(&o2, &fo)
+	if err := cmd.ParseFlags([]string{"-f", writeTemp(t, string(raw))}); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := fo.resolve(cmd, nil); err != nil {
+		t.Fatal(err)
+	}
+	gotUnits, _, fs, err := assignUnits(refs, o2.sourceOptions)
+	if err != nil || fs.hasErrors() || !reflect.DeepEqual(gotUnits, units) {
+		t.Fatalf("the written workloads must select the same units: %v %v\n%v\n%v", err, fs, gotUnits, units)
 	}
 }

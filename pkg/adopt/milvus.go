@@ -85,18 +85,12 @@ func addTimingFlags(cmd *cobra.Command, t *timing) {
 	cmd.Flags().DurationVar(&t.QueryNodeDelay, "querynode-delay", time.Minute, "Overlap: time a new QueryNode serves before an old one stops (raise it for large collections)")
 }
 
-func releaseArg(args []string) (string, error) {
-	if len(args) != 1 {
-		return "", errors.New("give the RELEASE (the Helm release, or the instance label value of the workloads)")
-	}
-	return args[0], nil
-}
-
 func newCmdMilvusPlan(f cmdutil.Factory) *cobra.Command {
 	var o planOptions
+	var fo fileOptions
 	var outDir string
 	cmd := &cobra.Command{
-		Use:   "plan RELEASE",
+		Use:   "plan [RELEASE]",
 		Short: i18n.T("Check a running Milvus and show what adopting it creates"),
 		Long: templates.LongDesc(`
 			Read-only. Finds the workloads, effective configuration, image and client
@@ -105,19 +99,22 @@ func newCmdMilvusPlan(f cmdutil.Factory) *cobra.Command {
 			MilvusVersion, the current root password), and shows the Secrets, the
 			state ConfigMap and the staged Milvus that "run" would create.
 
-			With --output-dir the objects are written there, unredacted. Edit them if
-			needed and apply them; "run" then uses what exists.`),
+			With --output-dir the objects are written there, unredacted, together with
+			adopt.yaml: every option of this adoption as plan found it. Review it and
+			pass it to run, status and rollback with -f instead of repeating the flags.
+			Edit the objects if needed and apply them; "run" then uses what exists.`),
 		Example: templates.Examples(`
 			kubectl dba adopt milvus plan my-release -n milvus
-			kubectl dba adopt milvus plan my-release -n milvus --output-dir ./adopt`),
+			kubectl dba adopt milvus plan my-release -n milvus --output-dir ./adopt
+			kubectl dba adopt milvus plan -f ./adopt/adopt.yaml`),
 		DisableAutoGenTag: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			var err error
-			if o.Release, err = releaseArg(args); err != nil {
+			if o.Release, err = fo.resolve(cmd, args); err != nil {
 				return err
 			}
 			ctx := context.Background()
-			c, err := newCluster(f, cmd.OutOrStdout())
+			c, err := newCluster(f, cmd.OutOrStdout(), fo.namespace())
 			if err != nil {
 				return err
 			}
@@ -139,6 +136,11 @@ func newCmdMilvusPlan(f cmdutil.Factory) *cobra.Command {
 				if err := os.MkdirAll(outDir, 0o700); err != nil {
 					return err
 				}
+				af, err := adoptionFileFor(p, o, c.ns)
+				if err != nil {
+					return err
+				}
+				docs[adoptionFileName] = string(af)
 				for _, name := range sortedKeys(docs) {
 					if err := os.WriteFile(filepath.Join(outDir, name), []byte(docs[name]), 0o600); err != nil {
 						return err
@@ -151,11 +153,16 @@ func newCmdMilvusPlan(f cmdutil.Factory) *cobra.Command {
 				}
 			}
 			printHandoverPlan(out, p.State, methodOverlap)
-			_, _ = fmt.Fprintf(out, "\nNext: kubectl dba adopt milvus run %s -n %s --yes\n", o.Release, c.ns)
+			if outDir != "" {
+				_, _ = fmt.Fprintf(out, "\nNext: kubectl dba adopt milvus run -f %s --yes\n", filepath.Join(outDir, adoptionFileName))
+			} else {
+				_, _ = fmt.Fprintf(out, "\nNext: kubectl dba adopt milvus run %s -n %s --yes\n", o.Release, c.ns)
+			}
 			return nil
 		},
 	}
 	addPlanFlags(cmd, &o)
+	addFileFlag(cmd, &fo)
 	cmd.Flags().StringVar(&outDir, "output-dir", "", "Write the objects to this directory (Secrets unredacted, mode 0600)")
 	return cmd
 }
@@ -189,8 +196,9 @@ type runOptions struct {
 
 func newCmdMilvusRun(f cmdutil.Factory) *cobra.Command {
 	var o runOptions
+	var fo fileOptions
 	cmd := &cobra.Command{
-		Use:   "run RELEASE",
+		Use:   "run [RELEASE]",
 		Short: i18n.T("Adopt a running Milvus: create the Milvus object and hand the roles over"),
 		Long: templates.LongDesc(`
 			Runs the checks of "plan", creates the Secrets, the state ConfigMap
@@ -215,17 +223,18 @@ func newCmdMilvusRun(f cmdutil.Factory) *cobra.Command {
 			the client Service that KubeDB now uses.`),
 		Example: templates.Examples(`
 			kubectl dba adopt milvus run my-release -n milvus --yes
-			kubectl dba adopt milvus run my-release -n milvus --method stop-start --yes`),
+			kubectl dba adopt milvus run my-release -n milvus --method stop-start --yes
+			kubectl dba adopt milvus run -f ./adopt/adopt.yaml --yes`),
 		DisableAutoGenTag: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			var err error
-			if o.Release, err = releaseArg(args); err != nil {
+			if o.Release, err = fo.resolve(cmd, args); err != nil {
 				return err
 			}
 			if o.Method != methodOverlap && o.Method != methodStopStart {
 				return fmt.Errorf("--method must be %s or %s", methodOverlap, methodStopStart)
 			}
-			c, err := newCluster(f, cmd.OutOrStdout())
+			c, err := newCluster(f, cmd.OutOrStdout(), fo.namespace())
 			if err != nil {
 				return err
 			}
@@ -234,6 +243,7 @@ func newCmdMilvusRun(f cmdutil.Factory) *cobra.Command {
 	}
 	addPlanFlags(cmd, &o.planOptions)
 	addTimingFlags(cmd, &o.timing)
+	addFileFlag(cmd, &fo)
 	cmd.Flags().StringVar(&o.Method, "method", methodOverlap, "Handover method: overlap or stop-start")
 	cmd.Flags().BoolVar(&o.Yes, "yes", false, "Proceed; without it, run only shows what it would do")
 	cmd.Flags().BoolVar(&o.SkipConfigCheck, "skip-config-check", false, "Do not stop when the rendered config differs from the running one")
@@ -334,18 +344,19 @@ Next:
 }
 
 func newCmdMilvusStatus(f cmdutil.Factory) *cobra.Command {
+	var fo fileOptions
 	cmd := &cobra.Command{
-		Use:               "status RELEASE",
+		Use:               "status [RELEASE]",
 		Short:             i18n.T("Show where each role of an adoption runs"),
 		Example:           templates.Examples(`kubectl dba adopt milvus status my-release -n milvus`),
 		DisableAutoGenTag: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			release, err := releaseArg(args)
+			release, err := fo.resolve(cmd, args)
 			if err != nil {
 				return err
 			}
 			ctx := context.Background()
-			c, err := newCluster(f, cmd.OutOrStdout())
+			c, err := newCluster(f, cmd.OutOrStdout(), fo.namespace())
 			if err != nil {
 				return err
 			}
@@ -359,6 +370,7 @@ func newCmdMilvusStatus(f cmdutil.Factory) *cobra.Command {
 			return c.printStatus(ctx, st)
 		},
 	}
+	addFileFlag(cmd, &fo)
 	return cmd
 }
 
@@ -409,8 +421,9 @@ type rollbackOptions struct {
 
 func newCmdMilvusRollback(f cmdutil.Factory) *cobra.Command {
 	var o rollbackOptions
+	var fo fileOptions
 	cmd := &cobra.Command{
-		Use:   "rollback RELEASE",
+		Use:   "rollback [RELEASE]",
 		Short: i18n.T("Give an adopted (or partly adopted) Milvus back to the chart's workloads"),
 		Long: templates.LongDesc(`
 			Deletes the Milvus object with kubedb.com/milvus-orphan-on-delete, so its
@@ -427,14 +440,15 @@ func newCmdMilvusRollback(f cmdutil.Factory) *cobra.Command {
 			chart's replicas are then taken from the PetSets, and the client Service
 			gets the chart proxies' selector.`),
 		Example: templates.Examples(`
-			kubectl dba adopt milvus rollback my-release -n milvus --yes --cleanup`),
+			kubectl dba adopt milvus rollback my-release -n milvus --yes --cleanup
+			kubectl dba adopt milvus rollback -f ./adopt/adopt.yaml --yes`),
 		DisableAutoGenTag: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			var err error
-			if o.Release, err = releaseArg(args); err != nil {
+			if o.Release, err = fo.resolve(cmd, args); err != nil {
 				return err
 			}
-			c, err := newCluster(f, cmd.OutOrStdout())
+			c, err := newCluster(f, cmd.OutOrStdout(), fo.namespace())
 			if err != nil {
 				return err
 			}
@@ -443,6 +457,7 @@ func newCmdMilvusRollback(f cmdutil.Factory) *cobra.Command {
 	}
 	addSourceFlags(cmd, &o.sourceOptions)
 	addTimingFlags(cmd, &o.timing)
+	addFileFlag(cmd, &fo)
 	cmd.Flags().StringVar(&o.Name, "name", "", "Name of the Milvus, for an adoption done by hand (no state ConfigMap)")
 	cmd.Flags().BoolVar(&o.Yes, "yes", false, "Proceed; without it, rollback only shows what it would do")
 	cmd.Flags().BoolVar(&o.Cleanup, "cleanup", false, "Delete what KubeDB left behind once the chart serves again (PVCs are kept)")
