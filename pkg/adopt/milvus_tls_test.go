@@ -242,4 +242,41 @@ func TestTLSSpec(t *testing.T) {
 	if _, ok := got["issuerRef"]; ok {
 		t.Fatalf("nothing to issue, no issuerRef: %v", got)
 	}
+
+	got = tlsSpec(&adoptionTLS{
+		ExternalMode: "TLS", IssuerKind: "Issuer", IssuerName: "ca",
+		ExtraDNSNames: []string{"milvus.example.com"}, ExtraIPs: []string{"10.0.0.1"},
+	}, "")
+	if _, ok := got["existingSecrets"]; ok {
+		t.Fatalf("KubeDB issues everything, no existing Secret: %v", got)
+	}
+	server := got["certificates"].([]any)[0].(map[string]any)
+	if server["alias"] != "server" || server["dnsNames"].([]any)[0] != "milvus.example.com" || server["ipAddresses"].([]any)[0] != "10.0.0.1" {
+		t.Fatalf("extra names: %v", got)
+	}
+}
+
+func TestIssuerFromAnnotations(t *testing.T) {
+	if k, n := issuerFromAnnotations(map[string]string{annIssuerName: "ca"}); k != "Issuer" || n != "ca" {
+		t.Fatalf("got %s %s", k, n)
+	}
+	if k, n := issuerFromAnnotations(map[string]string{annIssuerName: "ca", annIssuerKind: "ClusterIssuer"}); k != "ClusterIssuer" || n != "ca" {
+		t.Fatalf("got %s %s", k, n)
+	}
+	if _, n := issuerFromAnnotations(map[string]string{"other": "x"}); n != "" {
+		t.Fatalf("no issuer expected, got %s", n)
+	}
+}
+
+func TestCarryNames(t *testing.T) {
+	ca := newTestCA(t)
+	hosts := clientHosts("mv", "demo")
+	m := ca.issue(t, 365*24*time.Hour, append(hosts, "localhost", "milvus.example.com")...)
+	out := &adoptionTLS{Server: m}
+	if err := out.carryNames("mv", "demo"); err != nil {
+		t.Fatal(err)
+	}
+	if len(out.ExtraDNSNames) != 1 || out.ExtraDNSNames[0] != "milvus.example.com" {
+		t.Fatalf("only names the operator does not add are carried: %v", out.ExtraDNSNames)
+	}
 }

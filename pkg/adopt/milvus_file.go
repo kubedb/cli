@@ -72,6 +72,7 @@ type adoptionAuth struct {
 
 type adoptionTLSFile struct {
 	Issuer       string `json:"issuer,omitempty"`
+	CASecret     string `json:"caSecret,omitempty"`
 	ClientSecret string `json:"clientSecret,omitempty"`
 }
 
@@ -178,6 +179,7 @@ func (af *adoptionFile) flagValues() []flagValue {
 	str("etcd-auth-secret", af.Auth.EtcdAuthSecret)
 	boolean("skip-credential-check", af.Auth.SkipCredentialCheck)
 	str("tls-issuer", af.TLS.Issuer)
+	str("tls-ca-secret", af.TLS.CASecret)
 	str("tls-client-secret", af.TLS.ClientSecret)
 	boolean("restricted-scc", af.RestrictedSCC)
 	str("method", af.Handover.Method)
@@ -270,7 +272,7 @@ func adoptionFileFor(p *adoptPlan, o planOptions, ns string) ([]byte, error) {
 			RootPasswordFile: o.RootPasswordFile,
 			EtcdAuthSecret:   o.EtcdAuthSecret,
 		},
-		TLS: adoptionTLSFile{Issuer: o.TLSIssuer, ClientSecret: o.TLSClientSecret},
+		TLS: adoptionTLSFile{Issuer: o.TLSIssuer, CASecret: o.TLSCASecret, ClientSecret: o.TLSClientSecret},
 		Handover: adoptionHandover{
 			Method:         methodOverlap,
 			QueryNodeDelay: &metav1.Duration{Duration: time.Minute},

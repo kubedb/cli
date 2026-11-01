@@ -295,6 +295,17 @@ func (c *cluster) createObjects(ctx context.Context, p *adoptPlan) error {
 			c.logf("created Secret %s", s.Name)
 		}
 	}
+	if p.Objects.Issuer != nil {
+		_, err := c.dyn.Resource(certIssuerGVR).Namespace(c.ns).Create(ctx, p.Objects.Issuer, metav1.CreateOptions{})
+		switch {
+		case kerr.IsAlreadyExists(err):
+			c.logf("Issuer %s exists; using it", p.Objects.Issuer.GetName())
+		case err != nil:
+			return fmt.Errorf("failed to create Issuer %s: %w", p.Objects.Issuer.GetName(), err)
+		default:
+			c.logf("created Issuer %s", p.Objects.Issuer.GetName())
+		}
+	}
 	_, err := c.kube.CoreV1().ConfigMaps(c.ns).Create(ctx, p.Objects.State, metav1.CreateOptions{})
 	switch {
 	case kerr.IsAlreadyExists(err):
@@ -466,6 +477,14 @@ func (c *cluster) cleanupKubeDBObjects(ctx context.Context, st *State) error {
 			return err
 		}
 		c.logf("deleted Secret %s (created by the adoption)", name)
+	}
+	// The Issuer an adoption created; a CA Secret and any other issuer stay.
+	issuers := c.dyn.Resource(certIssuerGVR).Namespace(c.ns)
+	if is, err := issuers.Get(ctx, caIssuerName(st.Name), metav1.GetOptions{}); err == nil && is.GetLabels()[LabelRelease] != "" {
+		if err := issuers.Delete(ctx, is.GetName(), metav1.DeleteOptions{}); err != nil && !kerr.IsNotFound(err) {
+			return err
+		}
+		c.logf("deleted Issuer %s (created by the adoption)", is.GetName())
 	}
 	for _, rec := range st.RemovedServices {
 		svc := &core.Service{

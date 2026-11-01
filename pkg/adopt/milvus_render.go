@@ -50,6 +50,7 @@ func authSecretName(name string) string          { return name + "-auth" }
 func objectStorageSecretName(name string) string { return name + "-object-storage" }
 func serverTLSSecretName(name string) string     { return name + "-tls-server" }
 func etcdTLSSecretName(name string) string       { return name + "-etcd-tls" }
+func caIssuerName(name string) string            { return name + "-ca" }
 func configSecretName(name string) string        { return name + "-adopt-config" }
 
 // petSetName is the KubeDB PetSet that replaces a Unit.
@@ -73,6 +74,7 @@ func kubedbSelector(name string, u Unit) map[string]string {
 // adoptObjects are the objects an adoption creates, in creation order.
 type adoptObjects struct {
 	Secrets []*core.Secret
+	Issuer  *unstructured.Unstructured
 	State   *core.ConfigMap
 	Milvus  *unstructured.Unstructured
 }
@@ -193,8 +195,24 @@ func render(in renderInput, st *State) (*adoptObjects, error) {
 	if in.RestrictedSCC {
 		spec["restrictedSCC"] = true
 	}
-	if in.TLS != nil {
-		spec["tls"] = tlsSpec(in.TLS, secretFor(in.TLS.Server, serverTLSSecretName(in.Name)))
+	if t := in.TLS; t != nil {
+		serverSecret := ""
+		if !t.managed() {
+			serverSecret = secretFor(t.Server, serverTLSSecretName(in.Name))
+		}
+		spec["tls"] = tlsSpec(t, serverSecret)
+		if t.CASecret != "" {
+			objs.Issuer = &unstructured.Unstructured{Object: map[string]any{
+				"apiVersion": certManagerGroup + "/v1",
+				"kind":       "Issuer",
+				"metadata": map[string]any{
+					"name":      t.IssuerName,
+					"namespace": in.Namespace,
+					"labels":    map[string]any{LabelRelease: in.Release},
+				},
+				"spec": map[string]any{"ca": map[string]any{"secretName": t.CASecret}},
+			}}
+		}
 	}
 	objs.Milvus = &unstructured.Unstructured{Object: map[string]any{
 		"apiVersion": "kubedb.com/v1alpha2",

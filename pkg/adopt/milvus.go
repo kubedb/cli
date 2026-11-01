@@ -74,7 +74,8 @@ func addPlanFlags(cmd *cobra.Command, o *planOptions) {
 	cmd.Flags().StringVar(&o.AuthSecret, "auth-secret", "", "Existing basic-auth Secret with the current root user and password")
 	cmd.Flags().StringVar(&o.RootPasswordFile, "root-password-file", "", "File holding the current root password (default: common.security.defaultRootPassword of the running config)")
 	cmd.Flags().StringVar(&o.EtcdAuthSecret, "etcd-auth-secret", "", "Basic-auth Secret for an etcd that uses authentication")
-	cmd.Flags().StringVar(&o.TLSIssuer, "tls-issuer", "", "cert-manager issuer for a certificate the cluster does not have, as name, Issuer/name or ClusterIssuer/name")
+	cmd.Flags().StringVar(&o.TLSIssuer, "tls-issuer", "", "cert-manager issuer on the CA clients trust, as name, Issuer/name or ClusterIssuer/name; KubeDB then issues and renews the certificates (found by itself if the running certificate came from cert-manager)")
+	cmd.Flags().StringVar(&o.TLSCASecret, "tls-ca-secret", "", "Secret (tls.crt, tls.key) with the CA clients trust; an Issuer is created from it and KubeDB issues and renews the certificates")
 	cmd.Flags().StringVar(&o.TLSClientSecret, "tls-client-secret", "", "Existing Secret (tls.crt, tls.key, ca.crt) with the client certificate KubeDB presents when client mTLS is on")
 	cmd.Flags().StringVar(&o.ConfigFile, "config-file", "", "The effective milvus.yaml, when it is not mounted from a ConfigMap or Secret")
 	cmd.Flags().BoolVar(&o.RestrictedSCC, "restricted-scc", false, "Set spec.restrictedSCC (OpenShift)")
@@ -312,6 +313,9 @@ func runAdoption(ctx context.Context, c *cluster, o runOptions) error {
 				return fmt.Errorf("no pod was moved; fix Secret %s or %s and run again, or pass --skip-config-check", configSecretName(st.Name), objectStorageSecretName(st.Name))
 			}
 			c.logf("rendered config matches the running one (storage, etcd root path, WAL, security, ports)")
+		}
+		if err := c.checkIssuedCertificates(ctx, st.Name, p.TLS, o.ReadyTimeout); err != nil {
+			return err
 		}
 	} else if _, err := c.dyn.Resource(MilvusGVR).Namespace(c.ns).Get(ctx, st.Name, metav1.GetOptions{}); kerr.IsNotFound(err) {
 		return fmt.Errorf("the Milvus %s is gone while %s; run \"rollback\" to give the cluster back", st.Name, st.Phase)

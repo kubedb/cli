@@ -38,6 +38,8 @@ const (
 	tlsCAKey   = "ca.crt"
 
 	certManagerGroup = "cert-manager.io"
+	annIssuerName    = "cert-manager.io/issuer-name"
+	annIssuerKind    = "cert-manager.io/issuer-kind"
 	milvusWorkDir    = "/milvus"
 	certExpiryWarn   = 30 * 24 * time.Hour
 )
@@ -53,21 +55,34 @@ var (
 type tlsMaterial struct {
 	Cert, Key, CA []byte
 	Secret        string
+	// Source is the Secret the certificate file comes from.
+	Source string
 }
 
 func (m *tlsMaterial) secretData() map[string]string {
 	return map[string]string{tlsCertKey: string(m.Cert), tlsKeyKey: string(m.Key), tlsCAKey: string(m.CA)}
 }
 
-// adoptionTLS is the TLS the adopted Milvus keeps.
+// adoptionTLS is the TLS of the adopted Milvus. With an issuer, KubeDB issues and
+// renews every certificate from the CA clients already trust. Without one it
+// uses the running server certificate as it is.
 type adoptionTLS struct {
 	ExternalMode string // Disabled, TLS or mTLS
 	Internal     bool
-	Server       *tlsMaterial // nil when both client and internal TLS are off
+	Server       *tlsMaterial // the running certificate
 	ClientSecret string
 	IssuerKind   string
 	IssuerName   string
+	// CASecret is set when the Issuer does not exist yet: run creates it from this Secret.
+	CASecret string
+	// ExtraDNSNames and ExtraIPs are the names of the running certificate that the
+	// operator does not add by itself.
+	ExtraDNSNames []string
+	ExtraIPs      []string
 }
+
+// managed reports whether KubeDB issues the certificates.
+func (t *adoptionTLS) managed() bool { return t.IssuerName != "" }
 
 // parseIssuerRef parses Kind/name; a bare name is an Issuer.
 func parseIssuerRef(s string) (kind, name string, err error) {
@@ -239,6 +254,9 @@ func (c *cluster) readTLS(ctx context.Context, t core.PodTemplateSpec, cfg map[s
 		}
 	}
 	name := srcs[0].Name
+	if srcs[0].Kind == "Secret" {
+		m.Source = name
+	}
 	if srcs == [3]fileSource{{"Secret", name, tlsCertKey}, {"Secret", name, tlsKeyKey}, {"Secret", name, tlsCAKey}} {
 		m.Secret = name
 	}
@@ -374,101 +392,241 @@ func (c *cluster) planTLS(ctx context.Context, o planOptions, src *Source, in *r
 			fs.errorf("internal TLS: %v", err)
 			return nil
 		}
-		out.Server = inner
+		if out.Server == nil {
+			out.Server = inner
+		}
 	}
-	if external != nil && inner != nil {
-		if !bytes.Equal(external.Cert, inner.Cert) {
-			fs.errorf("client and internal TLS use different certificates; KubeDB mounts one for both")
+
+	if err := c.resolveIssuer(ctx, o, in.Name, out, fs); err != nil {
+		return err
+	}
+	now := time.Now()
+	if out.managed() {
+		// The new certificate gets the Service names from the operator, so only
+		// the names clients may use on top of those are carried over.
+		checkCertificate("server certificate", out.Server, nil, true, now, fs)
+		if external != nil && inner != nil && !bytes.Equal(external.Cert, inner.Cert) {
+			if err := verifyAgainstCA(inner.Cert, external.CA, now); err != nil {
+				fs.errorf("client and internal TLS use different CAs: %v", err)
+				return nil
+			}
+		}
+		if err := out.carryNames(in.Name, c.ns); err != nil {
+			fs.errorf("server certificate: %v", err)
 			return nil
 		}
-		out.Server = external
+		fs.infof("TLS: client %s, internal %v; KubeDB issues and renews the certificates from %s %s, the CA clients already trust", mode, internal, out.IssuerKind, out.IssuerName)
+		if len(out.ExtraDNSNames)+len(out.ExtraIPs) > 0 {
+			fs.infof("the new server certificate also covers %s", strings.Join(append(append([]string{}, out.ExtraDNSNames...), out.ExtraIPs...), ", "))
+		}
+	} else {
+		if external != nil && inner != nil && !bytes.Equal(external.Cert, inner.Cert) {
+			fs.errorf("client and internal TLS use different certificates and KubeDB mounts one for both; give --tls-issuer or --tls-ca-secret so KubeDB issues one")
+			return nil
+		}
+		checkCertificate("server certificate", out.Server, clientHosts(in.Name, c.ns), true, now, fs)
+		fs.infof("TLS: client %s, internal %v; %s", mode, internal, materialNote(out.Server))
 	}
-	checkCertificate("server certificate", out.Server, clientHosts(in.Name, c.ns), true, time.Now(), fs)
-	fs.infof("TLS: client %s, internal %v; %s", mode, internal, materialNote(out.Server))
 
 	if mode == "mTLS" {
 		if err := c.planClientCert(ctx, o, out, fs); err != nil {
 			return err
 		}
-	} else if o.TLSIssuer != "" || o.TLSClientSecret != "" {
-		fs.infof("no client certificate is needed without mTLS; --tls-issuer and --tls-client-secret are not used")
 	}
 	in.TLS = out
 	c.setRESTTLS(out, in.Name)
 	return nil
 }
 
-// planClientCert finds the certificate KubeDB presents when Milvus asks clients
-// for one: the user's, or else one from the issuer.
-func (c *cluster) planClientCert(ctx context.Context, o planOptions, out *adoptionTLS, fs *findings) error {
+// issuerFromAnnotations reads the issuer cert-manager records on a Secret.
+func issuerFromAnnotations(ann map[string]string) (kind, name string) {
+	name = ann[annIssuerName]
+	if name == "" {
+		return "", ""
+	}
+	if kind = ann[annIssuerKind]; kind == "" {
+		kind = "Issuer"
+	}
+	return kind, name
+}
+
+// resolveIssuer finds what lets KubeDB manage the certificates: an issuer the
+// user names, the CA Secret the user gives, or the issuer that already signs the
+// running certificate. Finding none leaves the running certificate in use.
+func (c *cluster) resolveIssuer(ctx context.Context, o planOptions, name string, out *adoptionTLS, fs *findings) error {
 	switch {
-	case o.TLSClientSecret != "":
-		s, err := c.kube.CoreV1().Secrets(c.ns).Get(ctx, o.TLSClientSecret, metav1.GetOptions{})
+	case o.TLSCASecret != "":
+		s, err := c.kube.CoreV1().Secrets(c.ns).Get(ctx, o.TLSCASecret, metav1.GetOptions{})
 		if err != nil {
-			fs.errorf("--tls-client-secret: %v", err)
+			fs.errorf("--tls-ca-secret: %v", err)
 			return nil
 		}
-		for _, k := range []string{tlsCertKey, tlsKeyKey, tlsCAKey} {
+		for _, k := range []string{tlsCertKey, tlsKeyKey} {
 			if _, ok := s.Data[k]; !ok {
-				fs.errorf("--tls-client-secret: Secret %s has no key %s", s.Name, k)
+				fs.errorf("--tls-ca-secret: Secret %s has no key %s", s.Name, k)
 				return nil
 			}
 		}
-		checkCertificate("client certificate", &tlsMaterial{Cert: s.Data[tlsCertKey], Key: s.Data[tlsKeyKey], CA: out.Server.CA}, nil, true, time.Now(), fs)
-		if err := verifyAgainstCA(out.Server.Cert, s.Data[tlsCAKey], time.Now()); err != nil {
-			fs.errorf("--tls-client-secret: its ca.crt does not verify the server certificate: %v", err)
+		if err := verifyAgainstCA(out.Server.Cert, s.Data[tlsCertKey], time.Now()); err != nil {
+			fs.errorf("--tls-ca-secret: Secret %s is not the CA that signed the running certificate, so clients would reject what it issues: %v", s.Name, err)
+			return nil
 		}
-		out.ClientSecret = s.Name
-		fs.infof("client certificate: Secret %s is used as it is", s.Name)
+		out.IssuerKind, out.IssuerName, out.CASecret = "Issuer", caIssuerName(name), s.Name
 	case o.TLSIssuer != "":
-		kind, name, err := parseIssuerRef(o.TLSIssuer)
+		kind, issuer, err := parseIssuerRef(o.TLSIssuer)
 		if err != nil {
 			fs.errorf("--tls-issuer: %v", err)
 			return nil
 		}
-		out.IssuerKind, out.IssuerName = kind, name
-		return c.checkIssuer(ctx, kind, name, out.Server.CA, fs)
-	default:
-		fs.errorf("client mTLS is on, so KubeDB needs a client certificate that Milvus trusts; give it with --tls-client-secret, or give --tls-issuer to have one issued")
+		if c.checkIssuer(ctx, kind, issuer, out.Server.Cert, fs) {
+			out.IssuerKind, out.IssuerName = kind, issuer
+		}
+	case out.Server.Source != "":
+		s, err := c.kube.CoreV1().Secrets(c.ns).Get(ctx, out.Server.Source, metav1.GetOptions{})
+		if err != nil {
+			return err
+		}
+		kind, issuer := issuerFromAnnotations(s.Annotations)
+		if issuer == "" {
+			return nil
+		}
+		if c.checkIssuer(ctx, kind, issuer, out.Server.Cert, fs) {
+			out.IssuerKind, out.IssuerName = kind, issuer
+			fs.infof("%s %s signs the running certificate", kind, issuer)
+		}
 	}
 	return nil
 }
 
-// checkIssuer stops an issuer whose certificates Milvus would reject: in mTLS,
-// Milvus trusts only the CA it runs with.
-func (c *cluster) checkIssuer(ctx context.Context, kind, name string, serverCA []byte, fs *findings) error {
-	if kind == "ClusterIssuer" {
-		if _, err := c.dyn.Resource(certClusterIssuerGVR).Get(ctx, name, metav1.GetOptions{}); err != nil {
-			fs.errorf("--tls-issuer: %v", err)
+// carryNames keeps the names of the running certificate that the operator does
+// not add, such as an ingress host.
+func (t *adoptionTLS) carryNames(name, ns string) error {
+	leaf, _, err := parseLeaf(t.Server.Cert)
+	if err != nil {
+		return err
+	}
+	known := append(clientHosts(name, ns), "localhost")
+	for _, d := range leaf.DNSNames {
+		if !contains(known, d) {
+			t.ExtraDNSNames = append(t.ExtraDNSNames, d)
+		}
+	}
+	for _, ip := range leaf.IPAddresses {
+		if !ip.IsLoopback() {
+			t.ExtraIPs = append(t.ExtraIPs, ip.String())
+		}
+	}
+	return nil
+}
+
+// planClientCert finds the certificate KubeDB presents when Milvus asks clients
+// for one: the user's, or else one from the issuer.
+func (c *cluster) planClientCert(ctx context.Context, o planOptions, out *adoptionTLS, fs *findings) error {
+	if o.TLSClientSecret == "" {
+		if !out.managed() {
+			fs.errorf("client mTLS is on, so KubeDB needs a client certificate that Milvus trusts; give --tls-client-secret, or give --tls-issuer or --tls-ca-secret so KubeDB issues one")
+		}
+		return nil
+	}
+	s, err := c.kube.CoreV1().Secrets(c.ns).Get(ctx, o.TLSClientSecret, metav1.GetOptions{})
+	if err != nil {
+		fs.errorf("--tls-client-secret: %v", err)
+		return nil
+	}
+	for _, k := range []string{tlsCertKey, tlsKeyKey, tlsCAKey} {
+		if _, ok := s.Data[k]; !ok {
+			fs.errorf("--tls-client-secret: Secret %s has no key %s", s.Name, k)
 			return nil
 		}
-		fs.warnf("cannot confirm that ClusterIssuer %s signs with the CA Milvus trusts; client certificates from another CA are rejected", name)
-		return nil
+	}
+	checkCertificate("client certificate", &tlsMaterial{Cert: s.Data[tlsCertKey], Key: s.Data[tlsKeyKey], CA: out.Server.CA}, nil, true, time.Now(), fs)
+	if err := verifyAgainstCA(out.Server.Cert, s.Data[tlsCAKey], time.Now()); err != nil {
+		fs.errorf("--tls-client-secret: its ca.crt does not verify the server certificate: %v", err)
+	}
+	out.ClientSecret = s.Name
+	fs.infof("client certificate: Secret %s is used as it is", s.Name)
+	return nil
+}
+
+// checkIssuer reports whether KubeDB can use the issuer. Clients trust only the
+// CA that signed the running certificate, so an issuer on another CA is refused.
+// What plan cannot read here is checked by run, on the issued certificate.
+func (c *cluster) checkIssuer(ctx context.Context, kind, name string, serverCert []byte, fs *findings) bool {
+	if kind == "ClusterIssuer" {
+		if _, err := c.dyn.Resource(certClusterIssuerGVR).Get(ctx, name, metav1.GetOptions{}); err != nil {
+			fs.errorf("issuer: %v", err)
+			return false
+		}
+		fs.warnf("cannot read the CA of ClusterIssuer %s here; run checks the certificate it issues before any pod moves", name)
+		return true
 	}
 	obj, err := c.dyn.Resource(certIssuerGVR).Namespace(c.ns).Get(ctx, name, metav1.GetOptions{})
 	if kerr.IsNotFound(err) {
-		fs.errorf("--tls-issuer: Issuer %s does not exist", name)
-		return nil
+		fs.errorf("Issuer %s does not exist", name)
+		return false
 	}
 	if err != nil {
-		fs.errorf("--tls-issuer: %v", err)
-		return nil
+		fs.errorf("issuer: %v", err)
+		return false
 	}
 	spec, _ := obj.Object["spec"].(map[string]any)
 	ca, _ := spec["ca"].(map[string]any)
 	secret, _ := ca["secretName"].(string)
 	if secret == "" {
-		fs.warnf("cannot confirm that Issuer %s signs with the CA Milvus trusts; client certificates from another CA are rejected", name)
-		return nil
+		fs.warnf("Issuer %s is not a CA issuer; run checks the certificate it issues before any pod moves", name)
+		return true
 	}
 	s, err := c.kube.CoreV1().Secrets(c.ns).Get(ctx, secret, metav1.GetOptions{})
 	if err != nil {
-		fs.errorf("--tls-issuer: %v", err)
+		fs.errorf("issuer: %v", err)
+		return false
+	}
+	if err := verifyAgainstCA(serverCert, s.Data[tlsCertKey], time.Now()); err != nil {
+		fs.errorf("Issuer %s signs with a different CA than the one clients trust, so they would reject what it issues", name)
+		return false
+	}
+	return true
+}
+
+// checkIssuedCertificates stops an adoption whose new certificates clients would
+// reject. It runs after the Milvus is created and before any pod moves.
+func (c *cluster) checkIssuedCertificates(ctx context.Context, name string, t *adoptionTLS, timeout time.Duration) error {
+	if t == nil || !t.managed() {
 		return nil
 	}
-	if !bytes.Equal(bytes.TrimSpace(s.Data[tlsCertKey]), bytes.TrimSpace(serverCA)) {
-		fs.errorf("Issuer %s signs with a different CA than the one Milvus trusts, so Milvus would reject its client certificates", name)
+	names := []string{name + "-server-cert"}
+	if t.ClientSecret == "" {
+		names = append(names, name+"-client-cert")
 	}
+	deadline := time.Now().Add(timeout)
+	for _, n := range names {
+		var s *core.Secret
+		for {
+			var err error
+			s, err = c.kube.CoreV1().Secrets(c.ns).Get(ctx, n, metav1.GetOptions{})
+			if err == nil && len(s.Data[tlsCertKey]) > 0 {
+				break
+			}
+			if err != nil && !kerr.IsNotFound(err) {
+				return err
+			}
+			if time.Now().After(deadline) {
+				return fmt.Errorf("no pod was moved; certificate Secret %s was not issued in %s, check the Certificate and %s %s", n, timeout, t.IssuerKind, t.IssuerName)
+			}
+			select {
+			case <-ctx.Done():
+				return ctx.Err()
+			case <-time.After(c.poll):
+			}
+		}
+		if len(s.Data[tlsCAKey]) == 0 {
+			return fmt.Errorf("no pod was moved; %s %s does not fill ca.crt in Secret %s, and KubeDB needs it to reach Milvus", t.IssuerKind, t.IssuerName, n)
+		}
+		if err := verifyAgainstCA(s.Data[tlsCertKey], t.Server.CA, time.Now()); err != nil {
+			return fmt.Errorf("no pod was moved; the certificate in Secret %s does not verify against the CA clients trust: %w", n, err)
+		}
+	}
+	c.logf("the issued certificates verify against the CA clients trust")
 	return nil
 }
 
@@ -482,23 +640,39 @@ func (c *cluster) setRESTTLS(t *adoptionTLS, name string) {
 	c.restTLS = &tls.Config{RootCAs: roots, ServerName: name, MinVersion: tls.VersionTLS12}
 }
 
-// tlsSpec is spec.tls of the adopted Milvus.
+// tlsSpec is spec.tls of the adopted Milvus. serverSecret is empty when KubeDB
+// issues the server certificate.
 func tlsSpec(t *adoptionTLS, serverSecret string) map[string]any {
 	internal := "Disabled"
 	if t.Internal {
 		internal = "TLS"
 	}
-	existing := map[string]any{"server": map[string]any{"name": serverSecret}}
+	existing := map[string]any{}
+	if serverSecret != "" {
+		existing["server"] = map[string]any{"name": serverSecret}
+	}
 	if t.ClientSecret != "" {
 		existing["client"] = map[string]any{"name": t.ClientSecret}
 	}
 	spec := map[string]any{
-		"external":        map[string]any{"mode": t.ExternalMode},
-		"internal":        map[string]any{"mode": internal},
-		"existingSecrets": existing,
+		"external": map[string]any{"mode": t.ExternalMode},
+		"internal": map[string]any{"mode": internal},
 	}
-	if t.IssuerName != "" {
+	if len(existing) > 0 {
+		spec["existingSecrets"] = existing
+	}
+	if t.managed() {
 		spec["issuerRef"] = map[string]any{"apiGroup": certManagerGroup, "kind": t.IssuerKind, "name": t.IssuerName}
+		if len(t.ExtraDNSNames)+len(t.ExtraIPs) > 0 {
+			server := map[string]any{"alias": "server"}
+			if len(t.ExtraDNSNames) > 0 {
+				server["dnsNames"] = toAnySlice(t.ExtraDNSNames)
+			}
+			if len(t.ExtraIPs) > 0 {
+				server["ipAddresses"] = toAnySlice(t.ExtraIPs)
+			}
+			spec["certificates"] = []any{server}
+		}
 	}
 	return spec
 }

@@ -35,6 +35,7 @@ type planOptions struct {
 	RootPasswordFile    string
 	EtcdAuthSecret      string
 	TLSIssuer           string
+	TLSCASecret         string
 	TLSClientSecret     string
 	ConfigFile          string
 	RestrictedSCC       bool
@@ -51,6 +52,7 @@ type adoptPlan struct {
 	Source   *Source
 	State    *State
 	Objects  *adoptObjects
+	TLS      *adoptionTLS
 	// GoverningServices are the chart's Services on names KubeDB needs headless;
 	// run deletes them before it creates the Milvus.
 	GoverningServices []core.Service
@@ -206,6 +208,7 @@ func buildPlan(ctx context.Context, c *cluster, o planOptions) (*adoptPlan, erro
 	if fs.hasErrors() {
 		return p, nil
 	}
+	p.TLS = in.TLS
 	p.State = newState(in)
 	if p.Objects, err = render(in, p.State); err != nil {
 		return nil, err
@@ -338,6 +341,13 @@ func (p *adoptPlan) yamlDocs(redact bool) (map[string]string, error) {
 		secrets = append(secrets, string(b))
 	}
 	out["00-secrets.yaml"] = strings.Join(secrets, "---\n")
+	if p.Objects.Issuer != nil {
+		b, err := yaml.Marshal(p.Objects.Issuer.Object)
+		if err != nil {
+			return nil, err
+		}
+		out["00-issuer.yaml"] = string(b)
+	}
 	b, err := yaml.Marshal(p.Objects.State)
 	if err != nil {
 		return nil, err
