@@ -448,9 +448,10 @@ func (c *cluster) cleanupKubeDBObjects(ctx context.Context, st *State) error {
 		}
 		c.logf("deleted Secret %s (rendered config)", s.Name)
 	}
-	// Copies of certificates. The label keeps a Secret of the user's with the same
-	// name, which run reuses, out of this.
-	for _, name := range []string{serverTLSSecretName(st.Name), etcdTLSSecretName(st.Name)} {
+	// The carried config and copies of certificates: a later adoption must read
+	// them afresh, because run keeps a Secret that exists. The label keeps a Secret
+	// of the user's with the same name out of this.
+	for _, name := range []string{configSecretName(st.Name), serverTLSSecretName(st.Name), etcdTLSSecretName(st.Name)} {
 		s, err := c.kube.CoreV1().Secrets(c.ns).Get(ctx, name, metav1.GetOptions{})
 		if kerr.IsNotFound(err) {
 			continue
@@ -464,7 +465,7 @@ func (c *cluster) cleanupKubeDBObjects(ctx context.Context, st *State) error {
 		if err := c.kube.CoreV1().Secrets(c.ns).Delete(ctx, name, metav1.DeleteOptions{}); err != nil && !kerr.IsNotFound(err) {
 			return err
 		}
-		c.logf("deleted Secret %s (copy of a certificate)", name)
+		c.logf("deleted Secret %s (created by the adoption)", name)
 	}
 	for _, rec := range st.RemovedServices {
 		svc := &core.Service{
