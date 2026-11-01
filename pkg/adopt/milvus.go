@@ -74,6 +74,8 @@ func addPlanFlags(cmd *cobra.Command, o *planOptions) {
 	cmd.Flags().StringVar(&o.AuthSecret, "auth-secret", "", "Existing basic-auth Secret with the current root user and password")
 	cmd.Flags().StringVar(&o.RootPasswordFile, "root-password-file", "", "File holding the current root password (default: common.security.defaultRootPassword of the running config)")
 	cmd.Flags().StringVar(&o.EtcdAuthSecret, "etcd-auth-secret", "", "Basic-auth Secret for an etcd that uses authentication")
+	cmd.Flags().StringVar(&o.TLSIssuer, "tls-issuer", "", "cert-manager issuer for a certificate the cluster does not have, as name, Issuer/name or ClusterIssuer/name")
+	cmd.Flags().StringVar(&o.TLSClientSecret, "tls-client-secret", "", "Existing Secret (tls.crt, tls.key, ca.crt) with the client certificate KubeDB presents when client mTLS is on")
 	cmd.Flags().StringVar(&o.ConfigFile, "config-file", "", "The effective milvus.yaml, when it is not mounted from a ConfigMap or Secret")
 	cmd.Flags().BoolVar(&o.RestrictedSCC, "restricted-scc", false, "Set spec.restrictedSCC (OpenShift)")
 	cmd.Flags().BoolVar(&o.SkipCredentialCheck, "skip-credential-check", false, "Do not log in to the running cluster to check the root credentials")

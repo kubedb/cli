@@ -185,6 +185,16 @@ func objectStorageData(cfg map[string]any) map[string]string {
 func carriedConfig(cfg map[string]any) (string, error) {
 	out := deepCopy(cfg)
 	delete(out, "etcd")
+	// The operator renders TLS for the certificates it mounts. The carried config
+	// wins a merge, so its paths would point at files the new pods do not have.
+	delete(out, "tls")
+	delete(out, "internaltls")
+	if common, ok := out["common"].(map[string]any); ok {
+		if sec, ok := common["security"].(map[string]any); ok {
+			delete(sec, "tlsMode")
+			delete(sec, "internaltlsEnabled")
+		}
+	}
 	if v, ok := lookup(out, "proxy.http.port"); !ok || v == nil {
 		proxy, _ := out["proxy"].(map[string]any)
 		if proxy == nil {
@@ -222,7 +232,11 @@ var criticalConfigPaths = []string{
 	"minio.useIAM", "minio.cloudProvider", "minio.region", "minio.accessKeyID", "minio.secretAccessKey",
 	"mq.type", "woodpecker.storage.type", "woodpecker.storage.rootPath",
 	"common.security.authorizationEnabled", "proxy.port", "proxy.http.port",
+	"common.security.tlsMode", "common.security.internaltlsEnabled", "etcd.ssl.enabled",
 }
+
+// tlsSwitchPaths are off when the operator renders nothing for them.
+var tlsSwitchPaths = []string{"common.security.tlsMode", "common.security.internaltlsEnabled", "etcd.ssl.enabled"}
 
 // configMismatches compares the running config with the one the operator
 // rendered. A path the running config does not set is compared only for the
@@ -243,6 +257,9 @@ func configMismatches(running, rendered map[string]any) []string {
 			}
 		}
 		a, b := scalarString(rv), lookupString(rendered, p)
+		if b == "" && (a == "false" || a == "0") && contains(tlsSwitchPaths, p) {
+			continue
+		}
 		if a != b {
 			if strings.Contains(strings.ToLower(p), "secret") || strings.HasSuffix(p, "accessKeyID") {
 				out = append(out, p+": differs")

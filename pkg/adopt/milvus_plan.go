@@ -34,6 +34,8 @@ type planOptions struct {
 	AuthSecret          string
 	RootPasswordFile    string
 	EtcdAuthSecret      string
+	TLSIssuer           string
+	TLSClientSecret     string
 	ConfigFile          string
 	RestrictedSCC       bool
 	SkipCredentialCheck bool
@@ -132,9 +134,6 @@ func buildPlan(ctx context.Context, c *cluster, o planOptions) (*adoptPlan, erro
 	} else {
 		fs.infof("etcd %s, root path %q (kept)", strings.Join(etcd.Endpoints, ","), etcd.RootPath)
 	}
-	if etcd.TLSEnabled {
-		fs.errorf("the etcd uses TLS; this command does not carry etcd client certificates yet, see the adoption guide")
-	}
 	if etcd.AuthEnabled {
 		if o.EtcdAuthSecret == "" {
 			fs.errorf("the etcd uses authentication; give its root user in a basic-auth Secret with --etcd-auth-secret")
@@ -173,6 +172,9 @@ func buildPlan(ctx context.Context, c *cluster, o planOptions) (*adoptPlan, erro
 	in := renderInput{
 		Namespace: c.ns, Name: name, Version: version, Release: o.Release, Source: src,
 		EtcdAuthSecret: o.EtcdAuthSecret, RestrictedSCC: o.RestrictedSCC,
+	}
+	if err := c.planTLS(ctx, o, src, &in, fs); err != nil {
+		return nil, err
 	}
 	if !lookupBool(cfg, "common.security.authorizationEnabled") {
 		in.DisableAuth = true

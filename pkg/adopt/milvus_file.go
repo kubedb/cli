@@ -43,6 +43,7 @@ type adoptionFile struct {
 	Version       string           `json:"version,omitempty"`
 	Source        adoptionSource   `json:"source,omitempty"`
 	Auth          adoptionAuth     `json:"auth,omitempty"`
+	TLS           adoptionTLSFile  `json:"tls,omitempty"`
 	RestrictedSCC *bool            `json:"restrictedSCC,omitempty"`
 	Handover      adoptionHandover `json:"handover,omitempty"`
 	Rollback      adoptionRollback `json:"rollback,omitempty"`
@@ -67,6 +68,11 @@ type adoptionAuth struct {
 	RootPasswordFile    string `json:"rootPasswordFile,omitempty"`
 	EtcdAuthSecret      string `json:"etcdAuthSecret,omitempty"`
 	SkipCredentialCheck *bool  `json:"skipCredentialCheck,omitempty"`
+}
+
+type adoptionTLSFile struct {
+	Issuer       string `json:"issuer,omitempty"`
+	ClientSecret string `json:"clientSecret,omitempty"`
 }
 
 type adoptionHandover struct {
@@ -171,6 +177,8 @@ func (af *adoptionFile) flagValues() []flagValue {
 	str("root-password-file", af.Auth.RootPasswordFile)
 	str("etcd-auth-secret", af.Auth.EtcdAuthSecret)
 	boolean("skip-credential-check", af.Auth.SkipCredentialCheck)
+	str("tls-issuer", af.TLS.Issuer)
+	str("tls-client-secret", af.TLS.ClientSecret)
 	boolean("restricted-scc", af.RestrictedSCC)
 	str("method", af.Handover.Method)
 	duration("querynode-delay", af.Handover.QueryNodeDelay)
@@ -262,6 +270,7 @@ func adoptionFileFor(p *adoptPlan, o planOptions, ns string) ([]byte, error) {
 			RootPasswordFile: o.RootPasswordFile,
 			EtcdAuthSecret:   o.EtcdAuthSecret,
 		},
+		TLS: adoptionTLSFile{Issuer: o.TLSIssuer, ClientSecret: o.TLSClientSecret},
 		Handover: adoptionHandover{
 			Method:         methodOverlap,
 			QueryNodeDelay: &metav1.Duration{Duration: time.Minute},

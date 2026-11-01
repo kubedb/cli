@@ -448,6 +448,24 @@ func (c *cluster) cleanupKubeDBObjects(ctx context.Context, st *State) error {
 		}
 		c.logf("deleted Secret %s (rendered config)", s.Name)
 	}
+	// Copies of certificates. The label keeps a Secret of the user's with the same
+	// name, which run reuses, out of this.
+	for _, name := range []string{serverTLSSecretName(st.Name), etcdTLSSecretName(st.Name)} {
+		s, err := c.kube.CoreV1().Secrets(c.ns).Get(ctx, name, metav1.GetOptions{})
+		if kerr.IsNotFound(err) {
+			continue
+		}
+		if err != nil {
+			return err
+		}
+		if s.Labels[LabelRelease] == "" {
+			continue
+		}
+		if err := c.kube.CoreV1().Secrets(c.ns).Delete(ctx, name, metav1.DeleteOptions{}); err != nil && !kerr.IsNotFound(err) {
+			return err
+		}
+		c.logf("deleted Secret %s (copy of a certificate)", name)
+	}
 	for _, rec := range st.RemovedServices {
 		svc := &core.Service{
 			ObjectMeta: metav1.ObjectMeta{Name: rec.Name, Namespace: c.ns, Labels: rec.Labels, Annotations: rec.Annotations},

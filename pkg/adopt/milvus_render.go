@@ -48,6 +48,8 @@ const (
 func stateConfigMapName(name string) string      { return name + "-adopt" }
 func authSecretName(name string) string          { return name + "-auth" }
 func objectStorageSecretName(name string) string { return name + "-object-storage" }
+func serverTLSSecretName(name string) string     { return name + "-tls-server" }
+func etcdTLSSecretName(name string) string       { return name + "-etcd-tls" }
 func configSecretName(name string) string        { return name + "-adopt-config" }
 
 // petSetName is the KubeDB PetSet that replaces a Unit.
@@ -87,6 +89,8 @@ type renderInput struct {
 	RootPassword   string
 	DisableAuth    bool
 	EtcdAuthSecret string
+	EtcdTLS        *tlsMaterial
+	TLS            *adoptionTLS
 	RestrictedSCC  bool
 }
 
@@ -141,6 +145,21 @@ func render(in renderInput, st *State) (*adoptObjects, error) {
 		Data:       map[string]string{stateKey: string(raw)},
 	}
 
+	// secretFor returns the Secret that holds m: the running one when KubeDB can
+	// read it as it is, otherwise a copy that rollback removes again.
+	secretFor := func(m *tlsMaterial, copyName string) string {
+		if m.Secret != "" {
+			return m.Secret
+		}
+		objs.Secrets = append(objs.Secrets, &core.Secret{
+			TypeMeta:   metav1.TypeMeta{APIVersion: "v1", Kind: "Secret"},
+			ObjectMeta: metav1.ObjectMeta{Name: copyName, Namespace: in.Namespace, Labels: lbl},
+			Type:       core.SecretTypeOpaque,
+			StringData: m.secretData(),
+		})
+		return copyName
+	}
+
 	etcd := etcdFromConfig(cfg)
 	meta := map[string]any{
 		"externallyManaged": true,
@@ -149,6 +168,9 @@ func render(in renderInput, st *State) (*adoptObjects, error) {
 	}
 	if in.EtcdAuthSecret != "" {
 		meta["authSecret"] = map[string]any{"name": in.EtcdAuthSecret}
+	}
+	if in.EtcdTLS != nil {
+		meta["clientTLSSecret"] = map[string]any{"name": secretFor(in.EtcdTLS, etcdTLSSecretName(in.Name))}
 	}
 	spec := map[string]any{
 		"version":        in.Version,
@@ -170,6 +192,9 @@ func render(in renderInput, st *State) (*adoptObjects, error) {
 	}
 	if in.RestrictedSCC {
 		spec["restrictedSCC"] = true
+	}
+	if in.TLS != nil {
+		spec["tls"] = tlsSpec(in.TLS, secretFor(in.TLS.Server, serverTLSSecretName(in.Name)))
 	}
 	objs.Milvus = &unstructured.Unstructured{Object: map[string]any{
 		"apiVersion": "kubedb.com/v1alpha2",

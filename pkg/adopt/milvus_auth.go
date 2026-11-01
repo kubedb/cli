@@ -70,7 +70,12 @@ func (c *cluster) checkCredentials(ctx context.Context, proxy Unit, restPort int
 	}
 	defer tunnel.Close()
 
-	url := "http://127.0.0.1:" + strconv.Itoa(tunnel.Local) + "/v2/vectordb/collections/list"
+	scheme, httpc := "http", http.DefaultClient
+	if c.restTLS != nil {
+		scheme = "https"
+		httpc = &http.Client{Transport: &http.Transport{TLSClientConfig: c.restTLS}}
+	}
+	url := scheme + "://127.0.0.1:" + strconv.Itoa(tunnel.Local) + "/v2/vectordb/collections/list"
 	reqCtx, cancel := context.WithTimeout(ctx, 15*time.Second)
 	defer cancel()
 	req, err := http.NewRequestWithContext(reqCtx, http.MethodPost, url, bytes.NewBufferString("{}"))
@@ -79,7 +84,7 @@ func (c *cluster) checkCredentials(ctx context.Context, proxy Unit, restPort int
 	}
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", "Bearer "+user+":"+password)
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := httpc.Do(req)
 	if err != nil {
 		return credentialsUnverified, fmt.Sprintf("RESTful API of %s on port %d: %v", pod, restPort, err)
 	}

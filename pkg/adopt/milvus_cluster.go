@@ -15,6 +15,7 @@ package adopt
 
 import (
 	"context"
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -41,6 +42,8 @@ type cluster struct {
 	out  io.Writer
 	// poll is the interval of every wait.
 	poll time.Duration
+	// restTLS is set when the running proxies serve TLS.
+	restTLS *tls.Config
 }
 
 // newCluster connects to the cluster. fileNamespace, from an adoption file, is
