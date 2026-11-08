@@ -77,6 +77,10 @@ func addPlanFlags(cmd *cobra.Command, o *planOptions) {
 	cmd.Flags().StringVar(&o.TLSIssuer, "tls-issuer", "", "cert-manager issuer on the CA clients trust, as name, Issuer/name or ClusterIssuer/name; KubeDB then issues and renews the certificates (found by itself if the running certificate came from cert-manager)")
 	cmd.Flags().StringVar(&o.TLSCASecret, "tls-ca-secret", "", "Secret (tls.crt, tls.key) with the CA clients trust; an Issuer is created from it and KubeDB issues and renews the certificates")
 	cmd.Flags().StringVar(&o.TLSClientSecret, "tls-client-secret", "", "Existing Secret (tls.crt, tls.key, ca.crt) with the client certificate KubeDB presents when client mTLS is on")
+	cmd.Flags().StringVar(&o.ObjectStorageCASecret, "object-storage-ca-secret", "", "Secret NAME[/KEY] (default key ca.crt) with the CA that signed the object storage certificate; the Milvus then reaches the object storage over TLS (spec.objectStorage.tls)")
+	cmd.Flags().StringVar(&o.ObjectStorageCAConfigMap, "object-storage-ca-configmap", "", "ConfigMap NAME[/KEY] (default key ca.crt) with that CA, instead of a Secret")
+	cmd.Flags().StringVar(&o.ObjectStorageAddress, "object-storage-address", "", "Object storage host when the TLS endpoint differs from the running one (needs a CA flag)")
+	cmd.Flags().IntVar(&o.ObjectStoragePort, "object-storage-port", 0, "Object storage port when the TLS endpoint differs from the running one (needs a CA flag)")
 	cmd.Flags().StringVar(&o.ConfigFile, "config-file", "", "The effective milvus.yaml, when it is not mounted from a ConfigMap or Secret")
 	cmd.Flags().BoolVar(&o.RestrictedSCC, "restricted-scc", false, "Set spec.restrictedSCC (OpenShift)")
 	cmd.Flags().BoolVar(&o.SkipCredentialCheck, "skip-credential-check", false, "Do not log in to the running cluster to check the root credentials")
@@ -301,7 +305,7 @@ func runAdoption(ctx context.Context, c *cluster, o runOptions) error {
 			return err
 		}
 		if !o.SkipConfigCheck {
-			diffs, err := c.checkRenderedConfig(ctx, st.Name, p.Source.Config)
+			diffs, err := c.checkRenderedConfig(ctx, st.Name, p.ObjStore.expected(p.Source.Config))
 			if err != nil {
 				return err
 			}

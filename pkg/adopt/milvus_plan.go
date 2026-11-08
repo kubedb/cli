@@ -29,17 +29,21 @@ import (
 // planOptions are the inputs of an adoption that discovery cannot find.
 type planOptions struct {
 	sourceOptions
-	Name                string
-	Version             string
-	AuthSecret          string
-	RootPasswordFile    string
-	EtcdAuthSecret      string
-	TLSIssuer           string
-	TLSCASecret         string
-	TLSClientSecret     string
-	ConfigFile          string
-	RestrictedSCC       bool
-	SkipCredentialCheck bool
+	Name                     string
+	Version                  string
+	AuthSecret               string
+	RootPasswordFile         string
+	EtcdAuthSecret           string
+	TLSIssuer                string
+	TLSCASecret              string
+	TLSClientSecret          string
+	ObjectStorageCASecret    string
+	ObjectStorageCAConfigMap string
+	ObjectStorageAddress     string
+	ObjectStoragePort        int
+	ConfigFile               string
+	RestrictedSCC            bool
+	SkipCredentialCheck      bool
 	// allowExisting accepts a Milvus of that name: run resumes an adoption
 	// whose Milvus it already created.
 	allowExisting bool
@@ -53,6 +57,7 @@ type adoptPlan struct {
 	State    *State
 	Objects  *adoptObjects
 	TLS      *adoptionTLS
+	ObjStore *objectStorageTLS
 	// GoverningServices are the chart's Services on names KubeDB needs headless;
 	// run deletes them before it creates the Milvus.
 	GoverningServices []core.Service
@@ -178,6 +183,10 @@ func buildPlan(ctx context.Context, c *cluster, o planOptions) (*adoptPlan, erro
 	if err := c.planTLS(ctx, o, src, &in, fs); err != nil {
 		return nil, err
 	}
+	if err := c.planObjectStorageTLS(ctx, o, cfg, &in, fs); err != nil {
+		return nil, err
+	}
+	c.planNetworks(ctx, src, fs)
 	if !lookupBool(cfg, "common.security.authorizationEnabled") {
 		in.DisableAuth = true
 		fs.infof("authentication is off; the Milvus gets spec.disableSecurity: true")
@@ -209,6 +218,7 @@ func buildPlan(ctx context.Context, c *cluster, o planOptions) (*adoptPlan, erro
 		return p, nil
 	}
 	p.TLS = in.TLS
+	p.ObjStore = in.ObjStore
 	p.State = newState(in)
 	if p.Objects, err = render(in, p.State); err != nil {
 		return nil, err

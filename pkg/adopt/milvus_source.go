@@ -126,8 +126,10 @@ func (s *State) unmarkDone(u Unit) {
 
 // Source is what discovery found about the running cluster.
 type Source struct {
-	Units      []Unit
-	Templates  map[string]core.PodTemplateSpec // by Unit.key()
+	Units     []Unit
+	Templates map[string]core.PodTemplateSpec // by Unit.key()
+	// Networks is spec.network of each unit, mapped from the chart pod's Multus annotation (by Unit.key()).
+	Networks   map[string]map[string]any
 	Config     map[string]any
 	ConfigFrom []string
 	Image      string
@@ -525,11 +527,8 @@ func (s *Source) checkTemplates() {
 		if t.Spec.Affinity != nil {
 			s.Findings.warnf("%s sets affinity, which is not carried over; use a PlacementPolicy (spec.topology.distributed.%s.podTemplate.spec.podPlacementPolicy)", id, u.Role)
 		}
-		if n := t.Annotations["k8s.v1.cni.cncf.io/networks"]; n != "" {
-			s.Findings.warnf("%s attaches secondary networks (%s); set spec.topology.distributed.%s.network before handing it over (see the GPU and SR-IOV guide)", id, n, u.Role)
-		}
 		for _, ic := range t.Spec.InitContainers {
-			s.Findings.warnf("%s has init container %q, which is not carried over", id, ic.Name)
+			s.Findings.warnf("%s has init container %q, which is not carried over (on a role with an SR-IOV network, KubeDB generates its own init container)", id, ic.Name)
 		}
 		if c := milvusContainer(t); c != nil {
 			for _, e := range c.Env {

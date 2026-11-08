@@ -94,6 +94,7 @@ type renderInput struct {
 	EtcdTLS        *tlsMaterial
 	TLS            *adoptionTLS
 	RestrictedSCC  bool
+	ObjStore       *objectStorageTLS // nil: the object storage is reached as it is today
 }
 
 func newState(in renderInput) *State {
@@ -124,9 +125,9 @@ func render(in renderInput, st *State) (*adoptObjects, error) {
 		TypeMeta:   metav1.TypeMeta{APIVersion: "v1", Kind: "Secret"},
 		ObjectMeta: metav1.ObjectMeta{Name: objectStorageSecretName(in.Name), Namespace: in.Namespace, Labels: lbl},
 		Type:       core.SecretTypeOpaque,
-		StringData: objectStorageData(cfg),
+		StringData: in.ObjStore.storageData(objectStorageData(cfg)),
 	})
-	carried, err := carriedConfig(cfg)
+	carried, err := carriedConfig(in.ObjStore.carry(cfg))
 	if err != nil {
 		return nil, err
 	}
@@ -187,6 +188,9 @@ func render(in renderInput, st *State) (*adoptObjects, error) {
 			"distributed": distributedSpec(in.Source),
 		},
 	}
+	if in.ObjStore != nil {
+		spec["objectStorage"].(map[string]any)["tls"] = in.ObjStore.specTLS()
+	}
 	if in.DisableAuth {
 		spec["disableSecurity"] = true
 	} else {
@@ -244,14 +248,14 @@ func distributedSpec(src *Source) map[string]any {
 			continue
 		}
 		if len(units) == 1 && units[0].Group == "" {
-			node := nodeSpec(src.Templates[units[0].key()])
+			node := nodeSpec(src.Templates[units[0].key()], src.Networks[units[0].key()])
 			node["replicas"] = int64(0)
 			out[role] = node
 			continue
 		}
 		groups := make([]any, 0, len(units))
 		for _, u := range units {
-			g := nodeSpec(src.Templates[u.key()])
+			g := nodeSpec(src.Templates[u.key()], src.Networks[u.key()])
 			g["name"] = u.Group
 			g["replicas"] = int64(0)
 			groups = append(groups, g)
@@ -273,8 +277,11 @@ func gpuResource(name core.ResourceName) bool {
 	return strings.HasSuffix(string(name), "/gpu")
 }
 
-func nodeSpec(t core.PodTemplateSpec) map[string]any {
+func nodeSpec(t core.PodTemplateSpec, network map[string]any) map[string]any {
 	node := map[string]any{}
+	if network != nil {
+		node["network"] = network
+	}
 	podSpec := map[string]any{}
 	c := milvusContainer(t)
 	if c != nil {

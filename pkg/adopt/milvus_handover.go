@@ -16,6 +16,8 @@ package adopt
 import (
 	"context"
 	"fmt"
+	"sort"
+	"strings"
 	"time"
 
 	core "k8s.io/api/core/v1"
@@ -289,6 +291,11 @@ func (c *cluster) createObjects(ctx context.Context, p *adoptPlan) error {
 		switch {
 		case kerr.IsAlreadyExists(err):
 			c.logf("Secret %s exists; using it", s.Name)
+			if cur, gerr := c.kube.CoreV1().Secrets(c.ns).Get(ctx, s.Name, metav1.GetOptions{}); gerr == nil {
+				if keys := secretKeysDiffering(cur, s); len(keys) > 0 {
+					c.logf("  WARNING: Secret %s differs from what this plan would create (%s); it is used as it is, so edit it, or delete it and run again, to change it", s.Name, strings.Join(keys, ", "))
+				}
+			}
 		case err != nil:
 			return fmt.Errorf("failed to create Secret %s: %w", s.Name, err)
 		default:
@@ -541,4 +548,17 @@ func sleep(ctx context.Context, d time.Duration) {
 	case <-ctx.Done():
 	case <-time.After(d):
 	}
+}
+
+// secretKeysDiffering lists the keys whose value in the existing Secret is not the
+// one the plan renders. It never returns values, which may be credentials.
+func secretKeysDiffering(existing, want *core.Secret) []string {
+	var out []string
+	for k, v := range want.StringData {
+		if got, ok := existing.Data[k]; !ok || string(got) != v {
+			out = append(out, k)
+		}
+	}
+	sort.Strings(out)
+	return out
 }

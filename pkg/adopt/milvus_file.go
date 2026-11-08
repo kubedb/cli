@@ -35,18 +35,19 @@ const (
 // adoptionFile holds the options of an adoption, so they need not be typed as
 // flags on every command. A flag given on the command line wins over the file.
 type adoptionFile struct {
-	APIVersion    string           `json:"apiVersion"`
-	Kind          string           `json:"kind"`
-	Release       string           `json:"release"`
-	Namespace     string           `json:"namespace,omitempty"`
-	Name          string           `json:"name,omitempty"`
-	Version       string           `json:"version,omitempty"`
-	Source        adoptionSource   `json:"source,omitempty"`
-	Auth          adoptionAuth     `json:"auth,omitempty"`
-	TLS           adoptionTLSFile  `json:"tls,omitempty"`
-	RestrictedSCC *bool            `json:"restrictedSCC,omitempty"`
-	Handover      adoptionHandover `json:"handover,omitempty"`
-	Rollback      adoptionRollback `json:"rollback,omitempty"`
+	APIVersion    string                `json:"apiVersion"`
+	Kind          string                `json:"kind"`
+	Release       string                `json:"release"`
+	Namespace     string                `json:"namespace,omitempty"`
+	Name          string                `json:"name,omitempty"`
+	Version       string                `json:"version,omitempty"`
+	Source        adoptionSource        `json:"source,omitempty"`
+	Auth          adoptionAuth          `json:"auth,omitempty"`
+	TLS           adoptionTLSFile       `json:"tls,omitempty"`
+	ObjectStorage adoptionObjectStorage `json:"objectStorage,omitempty"`
+	RestrictedSCC *bool                 `json:"restrictedSCC,omitempty"`
+	Handover      adoptionHandover      `json:"handover,omitempty"`
+	Rollback      adoptionRollback      `json:"rollback,omitempty"`
 }
 
 type adoptionSource struct {
@@ -74,6 +75,13 @@ type adoptionTLSFile struct {
 	Issuer       string `json:"issuer,omitempty"`
 	CASecret     string `json:"caSecret,omitempty"`
 	ClientSecret string `json:"clientSecret,omitempty"`
+}
+
+type adoptionObjectStorage struct {
+	CASecret    string `json:"caSecret,omitempty"`
+	CAConfigMap string `json:"caConfigMap,omitempty"`
+	Address     string `json:"address,omitempty"`
+	Port        int    `json:"port,omitempty"`
 }
 
 type adoptionHandover struct {
@@ -181,6 +189,12 @@ func (af *adoptionFile) flagValues() []flagValue {
 	str("tls-issuer", af.TLS.Issuer)
 	str("tls-ca-secret", af.TLS.CASecret)
 	str("tls-client-secret", af.TLS.ClientSecret)
+	str("object-storage-ca-secret", af.ObjectStorage.CASecret)
+	str("object-storage-ca-configmap", af.ObjectStorage.CAConfigMap)
+	str("object-storage-address", af.ObjectStorage.Address)
+	if af.ObjectStorage.Port > 0 {
+		str("object-storage-port", strconv.Itoa(af.ObjectStorage.Port))
+	}
 	boolean("restricted-scc", af.RestrictedSCC)
 	str("method", af.Handover.Method)
 	duration("querynode-delay", af.Handover.QueryNodeDelay)
@@ -273,6 +287,10 @@ func adoptionFileFor(p *adoptPlan, o planOptions, ns string) ([]byte, error) {
 			EtcdAuthSecret:   o.EtcdAuthSecret,
 		},
 		TLS: adoptionTLSFile{Issuer: o.TLSIssuer, CASecret: o.TLSCASecret, ClientSecret: o.TLSClientSecret},
+		ObjectStorage: adoptionObjectStorage{
+			CASecret: o.ObjectStorageCASecret, CAConfigMap: o.ObjectStorageCAConfigMap,
+			Address: o.ObjectStorageAddress, Port: o.ObjectStoragePort,
+		},
 		Handover: adoptionHandover{
 			Method:         methodOverlap,
 			QueryNodeDelay: &metav1.Duration{Duration: time.Minute},
