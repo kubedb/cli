@@ -300,6 +300,16 @@ func (s petSetSide) desired(ctx context.Context) (int32, error) {
 	return int32(n), nil
 }
 
+// remove deletes the PetSet and, with it, its pods.
+func (s petSetSide) remove(ctx context.Context) error {
+	bg := metav1.DeletePropagationBackground
+	err := s.c.dyn.Resource(PetSetGVR).Namespace(s.c.ns).Delete(ctx, petSetName(s.name, s.u), metav1.DeleteOptions{PropagationPolicy: &bg})
+	if err != nil && !kerr.IsNotFound(err) {
+		return fmt.Errorf("failed to delete %s: %w", s, err)
+	}
+	return nil
+}
+
 func (s petSetSide) scale(ctx context.Context, n int32) error {
 	patch := []byte(fmt.Sprintf(`{"spec":{"replicas":%d}}`, n))
 	_, err := s.c.dyn.Resource(PetSetGVR).Namespace(s.c.ns).Patch(ctx, petSetName(s.name, s.u), types.MergePatchType, patch, metav1.PatchOptions{})

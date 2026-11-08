@@ -180,6 +180,7 @@ func (c *cluster) planObjectStorageTLS(ctx context.Context, o planOptions, cfg m
 	if lookupBool(cfg, "minio.useSSL") {
 		fs.warnf("the running cluster already uses TLS to the object storage; the CA you give replaces its minio.ssl settings")
 	}
+	fs.infof("run tests TLS to %s:%s from a short-lived Pod before it creates anything (skip with --skip-object-storage-check)", osData["address"], osData["port"])
 	if t.Address == "" && t.Port == 0 {
 		fs.warnf("the object storage endpoint stays %s:%s; it must serve TLS there, and its certificate must name that host", osData["address"], osData["port"])
 	}

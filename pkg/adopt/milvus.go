@@ -198,7 +198,9 @@ type runOptions struct {
 	Method          string
 	Yes             bool
 	SkipConfigCheck bool
-	ReadyTimeout    time.Duration
+	// SkipObjectStorageCheck does not test TLS to the object storage from a Pod first.
+	SkipObjectStorageCheck bool
+	ReadyTimeout           time.Duration
 }
 
 func newCmdMilvusRun(f cmdutil.Factory) *cobra.Command {
@@ -254,6 +256,7 @@ func newCmdMilvusRun(f cmdutil.Factory) *cobra.Command {
 	cmd.Flags().StringVar(&o.Method, "method", methodOverlap, "Handover method: overlap or stop-start")
 	cmd.Flags().BoolVar(&o.Yes, "yes", false, "Proceed; without it, run only shows what it would do")
 	cmd.Flags().BoolVar(&o.SkipConfigCheck, "skip-config-check", false, "Do not stop when the rendered config differs from the running one")
+	cmd.Flags().BoolVar(&o.SkipObjectStorageCheck, "skip-object-storage-check", false, "Do not test TLS to the object storage from a short-lived Pod before anything moves (only with an --object-storage-ca-* flag)")
 	cmd.Flags().DurationVar(&o.ReadyTimeout, "ready-timeout", 15*time.Minute, "Longest wait for the operator, and for the Milvus to be Ready at the end")
 	return cmd
 }
@@ -295,6 +298,11 @@ func runAdoption(ctx context.Context, c *cluster, o runOptions) error {
 	}
 
 	if p != nil {
+		if p.ObjStore != nil && !o.SkipObjectStorageCheck {
+			if err := c.checkObjectStorageTLS(ctx, p, st.Name, o.Release); err != nil {
+				return fmt.Errorf("nothing was created or moved: %w", err)
+			}
+		}
 		if err := c.createObjects(ctx, p); err != nil {
 			return err
 		}

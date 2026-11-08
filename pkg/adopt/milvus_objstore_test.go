@@ -265,3 +265,43 @@ func TestSecretKeysDiffering(t *testing.T) {
 		t.Fatalf("equal Secrets: %v", got)
 	}
 }
+
+func TestObjectStorageCheckPod(t *testing.T) {
+	cfg := chartConfig(t)
+	host, port := objectStorageEndpoint(cfg, nil)
+	if host != "minio.storage.svc" || port != "9000" {
+		t.Fatalf("running endpoint: %s:%s", host, port)
+	}
+	tls := &objectStorageTLS{Kind: "Secret", Name: "s3-ca", Key: "root.pem", Address: "rgw.example.svc", Port: 443}
+	host, port = objectStorageEndpoint(cfg, tls)
+	if host != "rgw.example.svc" || port != "443" {
+		t.Fatalf("new endpoint: %s:%s", host, port)
+	}
+	pull := []core.LocalObjectReference{{Name: "reg"}}
+	pod := objectStorageCheckPod("ns", "rel-milvus", "rel", "milvusdb/milvus:v2.6.15", pull, tls, host, port)
+	if pod.Name != "rel-milvus-adopt-objstore-check" || pod.Labels[LabelRelease] != "rel" || pod.Spec.RestartPolicy != core.RestartPolicyNever {
+		t.Fatalf("pod %v", pod.ObjectMeta)
+	}
+	v := pod.Spec.Volumes[0]
+	if v.Secret == nil || v.Secret.SecretName != "s3-ca" || v.Secret.Items[0].Key != "root.pem" || v.Secret.Items[0].Path != "ca.crt" {
+		t.Fatalf("the CA must be mounted as ca.crt from the key given: %+v", v)
+	}
+	c := pod.Spec.Containers[0]
+	env := map[string]string{}
+	for _, e := range c.Env {
+		env[e.Name] = e.Value
+	}
+	if env["HOST"] != "rgw.example.svc" || env["PORT"] != "443" || c.Image != "milvusdb/milvus:v2.6.15" || len(pod.Spec.ImagePullSecrets) != 1 {
+		t.Fatalf("container %+v", c)
+	}
+	if strings.Contains(c.Command[2], "rgw.example.svc") {
+		t.Fatal("the host must reach the script as an environment variable, not inside the script text")
+	}
+	if c.SecurityContext == nil || *c.SecurityContext.AllowPrivilegeEscalation || pod.Spec.SecurityContext.RunAsNonRoot == nil || !*pod.Spec.SecurityContext.RunAsNonRoot {
+		t.Fatal("the check Pod must pass a restricted Pod Security profile")
+	}
+	cm := objectStorageCheckPod("ns", "rel-milvus", "rel", "img", nil, &objectStorageTLS{Kind: "ConfigMap", Name: "ca", Key: "ca.crt"}, "h", "443")
+	if cm.Spec.Volumes[0].ConfigMap == nil || cm.Spec.Volumes[0].ConfigMap.Name != "ca" {
+		t.Fatalf("ConfigMap CA: %+v", cm.Spec.Volumes[0])
+	}
+}

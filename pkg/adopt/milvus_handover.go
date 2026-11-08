@@ -192,7 +192,7 @@ func (c *cluster) rollBack(ctx context.Context, st *State, t timing) error {
 			if err != nil {
 				return err
 			}
-			_, pods, err := c.podCounts(ctx, from.selector())
+			ready, pods, err := c.podCounts(ctx, from.selector())
 			if err != nil {
 				return err
 			}
@@ -224,6 +224,19 @@ func (c *cluster) rollBack(ctx context.Context, st *State, t timing) error {
 			}
 			start := time.Now()
 			c.logf("== %s (%s): back to the chart, %d replicas", u.key(), u.Name, u.Replicas)
+			if ready < pods {
+				// A PetSet scales down in order and waits for its other pods to be
+				// Ready, so pods that keep crashing would block it for ever. Start the
+				// chart first, then delete the PetSet with its pods.
+				c.logf("  %d of %d pods of %s are not Ready, so it cannot scale down in order: the chart starts first, then the PetSet is deleted", pods-ready, pods, from)
+				if err := c.chartFirstThenRemove(ctx, from, to, u, t, restore); err != nil {
+					return fmt.Errorf("%s: %w", u.key(), err)
+				}
+				st.unmarkDone(u)
+				c.logf("== %s back on the chart in %s", u.key(), time.Since(start).Round(time.Second))
+				sleep(ctx, t.Settle)
+				continue
+			}
 			if err := c.overlapSwap(ctx, from, to, u.Replicas, u.Role == roleQueryNode, t, restore); err != nil {
 				return fmt.Errorf("%s: %w", u.key(), err)
 			}
@@ -233,6 +246,32 @@ func (c *cluster) rollBack(ctx context.Context, st *State, t timing) error {
 		}
 	}
 	return nil
+}
+
+// chartFirstThenRemove returns a Unit whose KubeDB pods are not all Ready: the
+// chart's workload grows to its full size, then the PetSet is deleted.
+func (c *cluster) chartFirstThenRemove(ctx context.Context, from petSetSide, to side, u Unit, t timing, restore func() error) error {
+	if n, err := to.desired(ctx); err != nil {
+		return err
+	} else if n < u.Replicas {
+		c.logf("%s -> %d replicas", to, u.Replicas)
+		if err := to.scale(ctx, u.Replicas); err != nil {
+			return err
+		}
+	}
+	if err := c.waitReady(ctx, to, u.Replicas, t.Timeout); err != nil {
+		return err
+	}
+	if restore != nil {
+		if err := restore(); err != nil {
+			return err
+		}
+	}
+	c.logf("deleting %s", from)
+	if err := from.remove(ctx); err != nil {
+		return err
+	}
+	return c.waitGone(ctx, from, 0, t.Timeout)
 }
 
 // restoreClientService points the client Service back at the chart's proxies,
