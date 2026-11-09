@@ -187,6 +187,7 @@ func buildPlan(ctx context.Context, c *cluster, o planOptions) (*adoptPlan, erro
 		return nil, err
 	}
 	c.planNetworks(ctx, src, fs)
+	c.planEnv(ctx, src, fs)
 	if !lookupBool(cfg, "common.security.authorizationEnabled") {
 		in.DisableAuth = true
 		fs.infof("authentication is off; the Milvus gets spec.disableSecurity: true")

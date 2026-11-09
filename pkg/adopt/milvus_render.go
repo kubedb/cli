@@ -283,6 +283,7 @@ func nodeSpec(t core.PodTemplateSpec, network map[string]any) map[string]any {
 		node["network"] = network
 	}
 	podSpec := map[string]any{}
+	main := map[string]any{"name": milvusContainerName}
 	c := milvusContainer(t)
 	if c != nil {
 		res := map[string]any{}
@@ -307,7 +308,14 @@ func nodeSpec(t core.PodTemplateSpec, network map[string]any) map[string]any {
 			}
 		}
 		if len(res) > 0 {
-			podSpec["containers"] = []any{map[string]any{"name": milvusContainerName, "resources": res}}
+			main["resources"] = res
+		}
+		env, envFrom, _ := carriedEnv(t, network != nil)
+		if len(env) > 0 {
+			main["env"] = toMaps(env)
+		}
+		if len(envFrom) > 0 {
+			main["envFrom"] = toMaps(envFrom)
 		}
 		if gpuCount > 0 {
 			gpu := map[string]any{"count": gpuCount}
@@ -316,6 +324,9 @@ func nodeSpec(t core.PodTemplateSpec, network map[string]any) map[string]any {
 			}
 			node["gpu"] = gpu
 		}
+	}
+	if len(main) > 1 {
+		podSpec["containers"] = []any{main}
 	}
 	if len(t.Spec.NodeSelector) > 0 {
 		ns := map[string]any{}

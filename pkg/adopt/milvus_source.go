@@ -531,9 +531,6 @@ func (s *Source) checkTemplates() {
 			s.Findings.warnf("%s has init container %q, which is not carried over (on a role with an SR-IOV network, KubeDB generates its own init container)", id, ic.Name)
 		}
 		if c := milvusContainer(t); c != nil {
-			for _, e := range c.Env {
-				s.Findings.warnf("%s sets environment variable %s; Milvus may read it as configuration, and it is not carried over", id, e.Name)
-			}
 			if c.Image != s.Image {
 				s.Findings.errorf("%s runs image %s, the proxy runs %s; adopt a cluster that runs one version", id, c.Image, s.Image)
 			}
