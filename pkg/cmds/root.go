@@ -115,6 +115,12 @@ func NewKubeDBCommand(in io.Reader, out, err io.Writer) *cobra.Command {
 			},
 		},
 		{
+			Message: "Adopt a running database in place",
+			Commands: []*cobra.Command{
+				NewCmdAdopt(f),
+			},
+		},
+		{
 			Message: "Cross Data Center DR Commands",
 			Commands: []*cobra.Command{
 				NewCmdDCDR(f),
