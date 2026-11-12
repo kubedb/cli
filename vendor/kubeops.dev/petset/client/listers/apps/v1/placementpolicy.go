@@ -19,11 +19,11 @@ limitations under the License.
 package v1
 
 import (
-	v1 "kubeops.dev/petset/apis/apps/v1"
+	appsv1 "kubeops.dev/petset/apis/apps/v1"
 
-	"k8s.io/apimachinery/pkg/api/errors"
-	"k8s.io/apimachinery/pkg/labels"
-	"k8s.io/client-go/tools/cache"
+	labels "k8s.io/apimachinery/pkg/labels"
+	listers "k8s.io/client-go/listers"
+	cache "k8s.io/client-go/tools/cache"
 )
 
 // PlacementPolicyLister helps list PlacementPolicies.
@@ -31,39 +31,19 @@ import (
 type PlacementPolicyLister interface {
 	// List lists all PlacementPolicies in the indexer.
 	// Objects returned here must be treated as read-only.
-	List(selector labels.Selector) (ret []*v1.PlacementPolicy, err error)
+	List(selector labels.Selector) (ret []*appsv1.PlacementPolicy, err error)
 	// Get retrieves the PlacementPolicy from the index for a given name.
 	// Objects returned here must be treated as read-only.
-	Get(name string) (*v1.PlacementPolicy, error)
+	Get(name string) (*appsv1.PlacementPolicy, error)
 	PlacementPolicyListerExpansion
 }
 
 // placementPolicyLister implements the PlacementPolicyLister interface.
 type placementPolicyLister struct {
-	indexer cache.Indexer
+	listers.ResourceIndexer[*appsv1.PlacementPolicy]
 }
 
 // NewPlacementPolicyLister returns a new PlacementPolicyLister.
 func NewPlacementPolicyLister(indexer cache.Indexer) PlacementPolicyLister {
-	return &placementPolicyLister{indexer: indexer}
-}
-
-// List lists all PlacementPolicies in the indexer.
-func (s *placementPolicyLister) List(selector labels.Selector) (ret []*v1.PlacementPolicy, err error) {
-	err = cache.ListAll(s.indexer, selector, func(m interface{}) {
-		ret = append(ret, m.(*v1.PlacementPolicy))
-	})
-	return ret, err
-}
-
-// Get retrieves the PlacementPolicy from the index for a given name.
-func (s *placementPolicyLister) Get(name string) (*v1.PlacementPolicy, error) {
-	obj, exists, err := s.indexer.GetByKey(name)
-	if err != nil {
-		return nil, err
-	}
-	if !exists {
-		return nil, errors.NewNotFound(v1.Resource("placementpolicy"), name)
-	}
-	return obj.(*v1.PlacementPolicy), nil
+	return &placementPolicyLister{listers.New[*appsv1.PlacementPolicy](indexer, appsv1.Resource("placementpolicy"))}
 }

@@ -1,9 +1,9 @@
+---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  creationTimestamp: null
-  labels:
-    app.kubernetes.io/name: kubestash
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.18.0
   name: restoresessions.core.kubestash.com
 spec:
   group: core.kubestash.com
@@ -9727,6 +9727,46 @@ spec:
                         - name
                         type: object
                         x-kubernetes-map-type: atomic
+                    type: object
+                  documentDB:
+                    properties:
+                      adminAuthSecret:
+                        default: true
+                        type: boolean
+                      adminAuthSecretName:
+                        type: string
+                      archiver:
+                        default: false
+                        type: boolean
+                      archiverRef:
+                        properties:
+                          name:
+                            type: string
+                          namespace:
+                            type: string
+                        required:
+                        - name
+                        type: object
+                      authSecret:
+                        default: true
+                        type: boolean
+                      authSecretName:
+                        type: string
+                      configSecret:
+                        default: true
+                        type: boolean
+                      configSecretName:
+                        type: string
+                      db:
+                        default: true
+                        type: boolean
+                      dbName:
+                        type: string
+                      initScript:
+                        default: true
+                        type: boolean
+                      restoreNamespace:
+                        type: string
                     type: object
                   druid:
                     properties:

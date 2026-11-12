@@ -4,13 +4,13 @@ go 1.26.0
 
 require (
 	github.com/Masterminds/semver/v3 v3.4.0
-	github.com/cert-manager/cert-manager v1.19.4
+	github.com/cert-manager/cert-manager v1.19.6
 	github.com/fatih/camelcase v1.0.0
 	github.com/go-sql-driver/mysql v1.9.3
 	github.com/prometheus/client_golang v1.23.2
 	github.com/prometheus/common v0.66.1
 	github.com/spf13/cobra v1.10.1
-	golang.org/x/text v0.41.0
+	golang.org/x/text v0.43.0
 	gomodules.xyz/go-sh v0.3.0
 	gomodules.xyz/logs v0.0.7
 	gomodules.xyz/pointer v0.1.0
@@ -24,12 +24,12 @@ require (
 	k8s.io/klog/v2 v2.130.1
 	k8s.io/kubectl v0.32.3
 	kmodules.xyz/cert-manager-util v0.29.0
-	kmodules.xyz/client-go v0.34.7-0.20260916091548-45e2a0e7782d
+	kmodules.xyz/client-go v0.34.7
 	kmodules.xyz/custom-resources v0.34.0
 	kmodules.xyz/monitoring-agent-api v0.34.1
-	kubedb.dev/apimachinery v0.68.0
-	kubedb.dev/db-client-go v0.23.0
-	kubeops.dev/petset v0.1.1-0.20260709161836-19b3570c41ab
+	kubedb.dev/apimachinery v0.69.0
+	kubedb.dev/db-client-go v0.24.0
+	kubeops.dev/petset v0.2.0
 	sigs.k8s.io/controller-runtime v0.22.4
 	sigs.k8s.io/yaml v1.6.0
 	stash.appscode.dev/apimachinery v0.42.1
@@ -107,7 +107,7 @@ require (
 	github.com/imdario/mergo v0.3.16 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
-	github.com/klauspost/compress v1.18.7 // indirect
+	github.com/klauspost/compress v1.20.2 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.10 // indirect
 	github.com/kubernetes-csi/external-snapshotter/client/v8 v8.4.0 // indirect
 	github.com/liggitt/tabwriter v0.0.0-20181228230101-89fcab3d43de // indirect
@@ -140,7 +140,7 @@ require (
 	github.com/sergi/go-diff v1.3.1 // indirect
 	github.com/shopspring/decimal v1.4.0 // indirect
 	github.com/sirupsen/logrus v1.9.4 // indirect
-	github.com/spf13/cast v1.7.0 // indirect
+	github.com/spf13/cast v1.9.2 // indirect
 	github.com/spf13/pflag v1.0.10 // indirect
 	github.com/vbatts/tar-split v0.12.2 // indirect
 	github.com/x448/float16 v0.8.4 // indirect
@@ -153,12 +153,12 @@ require (
 	go.opentelemetry.io/otel/metric v1.45.0 // indirect
 	go.opentelemetry.io/otel/trace v1.45.0 // indirect
 	go.virtual-secrets.dev/apimachinery v0.2.0 // indirect
-	golang.org/x/crypto v0.56.0 // indirect
-	golang.org/x/net v0.58.0 // indirect
+	golang.org/x/crypto v0.58.1-0.20261009181718-2f1f834330b2 // indirect
+	golang.org/x/net v0.62.0 // indirect
 	golang.org/x/oauth2 v0.36.0 // indirect
-	golang.org/x/sync v0.23.0 // indirect
-	golang.org/x/sys v0.48.0 // indirect
-	golang.org/x/term v0.46.0 // indirect
+	golang.org/x/sync v0.24.0 // indirect
+	golang.org/x/sys v0.49.0 // indirect
+	golang.org/x/term v0.47.0 // indirect
 	golang.org/x/time v0.14.0 // indirect
 	gomodules.xyz/clock v0.0.0-20200817085942-06523dba733f // indirect
 	gomodules.xyz/encoding v0.0.8 // indirect
@@ -184,12 +184,12 @@ require (
 	kmodules.xyz/objectstore-api v0.34.0 // indirect
 	kmodules.xyz/offshoot-api v0.34.0 // indirect
 	kmodules.xyz/prober v0.34.0 // indirect
-	kmodules.xyz/resource-metadata v0.49.1-0.20260916091615-a7e699f904a2 // indirect
+	kmodules.xyz/resource-metadata v0.52.1 // indirect
 	kmodules.xyz/resource-metrics v0.34.0 // indirect
 	kubeops.dev/csi-driver-cacerts v0.5.1-0.20260418091014-4f539f46235c // indirect
-	kubeops.dev/operator-shard-manager v0.0.6-0.20260418091213-65daf7da824d // indirect
-	kubeops.dev/sidekick v0.0.16-0.20260711064558-9f0ad344e447 // indirect
-	kubestash.dev/apimachinery v0.30.0 // indirect
+	kubeops.dev/operator-shard-manager v0.0.7 // indirect
+	kubeops.dev/sidekick v0.0.17 // indirect
+	kubestash.dev/apimachinery v0.32.0 // indirect
 	open-cluster-management.io/api v1.2.0 // indirect
 	sigs.k8s.io/cli-utils v0.37.2 // indirect
 	sigs.k8s.io/gateway-api v1.4.0 // indirect

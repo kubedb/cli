@@ -31,6 +31,8 @@ const (
 	MySQLOpsRequestTypeReplicationModeTransformation MySQLOpsRequestType = "ReplicationModeTransformation"
 	// MySQLOpsRequestTypeStorageMigration is a MySQLOpsRequestType of type StorageMigration.
 	MySQLOpsRequestTypeStorageMigration MySQLOpsRequestType = "StorageMigration"
+	// MySQLOpsRequestTypeArchiverRestore is a MySQLOpsRequestType of type ArchiverRestore.
+	MySQLOpsRequestTypeArchiverRestore MySQLOpsRequestType = "ArchiverRestore"
 )
 
 var ErrInvalidMySQLOpsRequestType = fmt.Errorf("not a valid MySQLOpsRequestType, try [%s]", strings.Join(_MySQLOpsRequestTypeNames, ", "))
@@ -46,6 +48,7 @@ var _MySQLOpsRequestTypeNames = []string{
 	string(MySQLOpsRequestTypeRotateAuth),
 	string(MySQLOpsRequestTypeReplicationModeTransformation),
 	string(MySQLOpsRequestTypeStorageMigration),
+	string(MySQLOpsRequestTypeArchiverRestore),
 }
 
 // MySQLOpsRequestTypeNames returns a list of possible string values of MySQLOpsRequestType.
@@ -68,6 +71,7 @@ func MySQLOpsRequestTypeValues() []MySQLOpsRequestType {
 		MySQLOpsRequestTypeRotateAuth,
 		MySQLOpsRequestTypeReplicationModeTransformation,
 		MySQLOpsRequestTypeStorageMigration,
+		MySQLOpsRequestTypeArchiverRestore,
 	}
 }
 
@@ -94,6 +98,7 @@ var _MySQLOpsRequestTypeValue = map[string]MySQLOpsRequestType{
 	"RotateAuth":                    MySQLOpsRequestTypeRotateAuth,
 	"ReplicationModeTransformation": MySQLOpsRequestTypeReplicationModeTransformation,
 	"StorageMigration":              MySQLOpsRequestTypeStorageMigration,
+	"ArchiverRestore":               MySQLOpsRequestTypeArchiverRestore,
 }
 
 // ParseMySQLOpsRequestType attempts to convert a string to a MySQLOpsRequestType.

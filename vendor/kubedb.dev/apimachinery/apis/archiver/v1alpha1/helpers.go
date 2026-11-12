@@ -62,6 +62,10 @@ func (MilvusArchiver) CustomResourceDefinition() *apiextensions.CustomResourceDe
 	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralMilvusArchiver))
 }
 
+func (Neo4jArchiver) CustomResourceDefinition() *apiextensions.CustomResourceDefinition {
+	return crds.MustCustomResourceDefinition(SchemeGroupVersion.WithResource(ResourcePluralNeo4jArchiver))
+}
+
 func SetDefaultLogBackupOptions(log *LogBackupOptions) *LogBackupOptions {
 	if log == nil {
 		log = &LogBackupOptions{

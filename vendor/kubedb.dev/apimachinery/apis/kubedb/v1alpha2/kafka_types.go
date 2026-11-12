@@ -112,7 +112,7 @@ type KafkaSpec struct {
 
 	// ServiceTemplates is an optional configuration for services used to expose database
 	// +optional
-	ServiceTemplates []NamedServiceTemplateSpec `json:"serviceTemplates,omitempty"`
+	ServiceTemplates []KafkaNamedServiceTemplateSpec `json:"serviceTemplates,omitempty"`
 
 	// DeletionPolicy controls the delete operation for database
 	// +optional

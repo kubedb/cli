@@ -66,9 +66,9 @@ func checkReplicasOfPetSet(lister pslister.PetSetNamespaceLister, selector label
 
 // HasServiceTemplate returns "true" if the desired serviceTemplate provided in "aliaS" is present in the serviceTemplate list.
 // Otherwise, it returns "false".
-func HasServiceTemplate(templates []NamedServiceTemplateSpec, alias ServiceAlias) bool {
+func HasServiceTemplate[T NamedServiceTemplate](templates []T, alias ServiceAlias) bool {
 	for i := range templates {
-		if templates[i].Alias == alias {
+		if templates[i].GetAlias() == alias {
 			return true
 		}
 	}
@@ -76,11 +76,10 @@ func HasServiceTemplate(templates []NamedServiceTemplateSpec, alias ServiceAlias
 }
 
 // GetServiceTemplate returns a pointer to the desired serviceTemplate referred by "aliaS". Otherwise, it returns nil.
-func GetServiceTemplate(templates []NamedServiceTemplateSpec, alias ServiceAlias) ofst.ServiceTemplateSpec {
+func GetServiceTemplate[T NamedServiceTemplate](templates []T, alias ServiceAlias) ofst.ServiceTemplateSpec {
 	for i := range templates {
-		c := templates[i]
-		if c.Alias == alias {
-			return c.ServiceTemplateSpec
+		if templates[i].GetAlias() == alias {
+			return templates[i].GetServiceTemplateSpec()
 		}
 	}
 	return ofst.ServiceTemplateSpec{}

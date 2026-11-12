@@ -56,6 +56,7 @@ type FullBackupOptions struct {
 	// +optional
 	RetryConfig *stashcoreapi.RetryConfig `json:"retryConfig,omitempty"`
 	// +optional
+	// +kubebuilder:validation:XValidation:rule="self.matches('^([0-9]+(ns|us|ms|s|m|h))+$')",message="must be a Go duration such as 30s, 5m or 1h30m"
 	Timeout *metav1.Duration `json:"timeout,omitempty"`
 	// +optional
 	SessionHistoryLimit int32 `json:"sessionHistoryLimit,omitempty"`
@@ -71,6 +72,7 @@ type ManifestBackupOptions struct {
 	// +optional
 	RetryConfig *stashcoreapi.RetryConfig `json:"retryConfig,omitempty"`
 	// +optional
+	// +kubebuilder:validation:XValidation:rule="self.matches('^([0-9]+(ns|us|ms|s|m|h))+$')",message="must be a Go duration such as 30s, 5m or 1h30m"
 	Timeout *metav1.Duration `json:"timeout,omitempty"`
 	// +optional
 	SessionHistoryLimit int32 `json:"sessionHistoryLimit,omitempty"`
@@ -114,6 +116,21 @@ type LogBackupOptions struct {
 	// +kubebuilder:default=5
 	// +optional
 	LogRetentionHistoryLimit int32 `json:"logRetentionHistoryLimit,omitempty"`
+
+	// LogRotateInterval defines how often the archiver rotates the log file when new transactions exist.
+	// Zero disables rotation.
+	// The default value is 10m.
+	// +kubebuilder:default="10m"
+	// +optional
+	// +kubebuilder:validation:XValidation:rule="self.matches('^([0-9]+(ns|us|ms|s|m|h))+$')",message="must be a Go duration such as 30s, 5m or 1h30m"
+	LogRotateInterval *metav1.Duration `json:"logRotateInterval,omitempty"`
+
+	// PushInterval defines how often the archiver pushes the closed log files to the backup storage.
+	// The default value is 15s.
+	// +kubebuilder:default="15s"
+	// +optional
+	// +kubebuilder:validation:XValidation:rule="self.matches('^([0-9]+(ns|us|ms|s|m|h))+$')",message="must be a Go duration such as 30s, 5m or 1h30m"
+	PushInterval *metav1.Duration `json:"pushInterval,omitempty"`
 }
 
 func ParseCutoffTimeFromPeriod(period string, now time.Time) (time.Time, error) {
@@ -183,6 +200,7 @@ type ClickHouseFullBackupOptions struct {
 	// +optional
 	RetryConfig *stashcoreapi.RetryConfig `json:"retryConfig,omitempty"`
 	// +optional
+	// +kubebuilder:validation:XValidation:rule="self.matches('^([0-9]+(ns|us|ms|s|m|h))+$')",message="must be a Go duration such as 30s, 5m or 1h30m"
 	Timeout *metav1.Duration `json:"timeout,omitempty"`
 	// +optional
 	SessionHistoryLimit int32 `json:"sessionHistoryLimit,omitempty"`

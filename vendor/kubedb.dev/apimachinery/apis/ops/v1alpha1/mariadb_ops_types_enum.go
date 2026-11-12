@@ -29,6 +29,8 @@ const (
 	MariaDBOpsRequestTypeRotateAuth MariaDBOpsRequestType = "RotateAuth"
 	// MariaDBOpsRequestTypeStorageMigration is a MariaDBOpsRequestType of type StorageMigration.
 	MariaDBOpsRequestTypeStorageMigration MariaDBOpsRequestType = "StorageMigration"
+	// MariaDBOpsRequestTypeArchiverRestore is a MariaDBOpsRequestType of type ArchiverRestore.
+	MariaDBOpsRequestTypeArchiverRestore MariaDBOpsRequestType = "ArchiverRestore"
 )
 
 var ErrInvalidMariaDBOpsRequestType = fmt.Errorf("not a valid MariaDBOpsRequestType, try [%s]", strings.Join(_MariaDBOpsRequestTypeNames, ", "))
@@ -43,6 +45,7 @@ var _MariaDBOpsRequestTypeNames = []string{
 	string(MariaDBOpsRequestTypeReconfigureTLS),
 	string(MariaDBOpsRequestTypeRotateAuth),
 	string(MariaDBOpsRequestTypeStorageMigration),
+	string(MariaDBOpsRequestTypeArchiverRestore),
 }
 
 // MariaDBOpsRequestTypeNames returns a list of possible string values of MariaDBOpsRequestType.
@@ -64,6 +67,7 @@ func MariaDBOpsRequestTypeValues() []MariaDBOpsRequestType {
 		MariaDBOpsRequestTypeReconfigureTLS,
 		MariaDBOpsRequestTypeRotateAuth,
 		MariaDBOpsRequestTypeStorageMigration,
+		MariaDBOpsRequestTypeArchiverRestore,
 	}
 }
 
@@ -89,6 +93,7 @@ var _MariaDBOpsRequestTypeValue = map[string]MariaDBOpsRequestType{
 	"ReconfigureTLS":    MariaDBOpsRequestTypeReconfigureTLS,
 	"RotateAuth":        MariaDBOpsRequestTypeRotateAuth,
 	"StorageMigration":  MariaDBOpsRequestTypeStorageMigration,
+	"ArchiverRestore":   MariaDBOpsRequestTypeArchiverRestore,
 }
 
 // ParseMariaDBOpsRequestType attempts to convert a string to a MariaDBOpsRequestType.

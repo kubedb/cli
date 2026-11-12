@@ -4920,8 +4920,6 @@ spec:
                       - primary
                       - standby
                       - stats
-                      - dashboard
-                      - readreplica
                       type: string
                     metadata:
                       properties:
@@ -9691,8 +9689,6 @@ spec:
                       - primary
                       - standby
                       - stats
-                      - dashboard
-                      - readreplica
                       type: string
                     metadata:
                       properties:

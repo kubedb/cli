@@ -39,6 +39,8 @@ const (
 	EtcdOpsRequestTypeRecoverFromQuorumLoss EtcdOpsRequestType = "RecoverFromQuorumLoss"
 	// EtcdOpsRequestTypeRestore is a EtcdOpsRequestType of type Restore.
 	EtcdOpsRequestTypeRestore EtcdOpsRequestType = "Restore"
+	// EtcdOpsRequestTypeRecoverMember is a EtcdOpsRequestType of type RecoverMember.
+	EtcdOpsRequestTypeRecoverMember EtcdOpsRequestType = "RecoverMember"
 )
 
 var ErrInvalidEtcdOpsRequestType = fmt.Errorf("not a valid EtcdOpsRequestType, try [%s]", strings.Join(_EtcdOpsRequestTypeNames, ", "))
@@ -58,6 +60,7 @@ var _EtcdOpsRequestTypeNames = []string{
 	string(EtcdOpsRequestTypeCompact),
 	string(EtcdOpsRequestTypeRecoverFromQuorumLoss),
 	string(EtcdOpsRequestTypeRestore),
+	string(EtcdOpsRequestTypeRecoverMember),
 }
 
 // EtcdOpsRequestTypeNames returns a list of possible string values of EtcdOpsRequestType.
@@ -84,6 +87,7 @@ func EtcdOpsRequestTypeValues() []EtcdOpsRequestType {
 		EtcdOpsRequestTypeCompact,
 		EtcdOpsRequestTypeRecoverFromQuorumLoss,
 		EtcdOpsRequestTypeRestore,
+		EtcdOpsRequestTypeRecoverMember,
 	}
 }
 
@@ -114,6 +118,7 @@ var _EtcdOpsRequestTypeValue = map[string]EtcdOpsRequestType{
 	"Compact":               EtcdOpsRequestTypeCompact,
 	"RecoverFromQuorumLoss": EtcdOpsRequestTypeRecoverFromQuorumLoss,
 	"Restore":               EtcdOpsRequestTypeRestore,
+	"RecoverMember":         EtcdOpsRequestTypeRecoverMember,
 }
 
 // ParseEtcdOpsRequestType attempts to convert a string to a EtcdOpsRequestType.

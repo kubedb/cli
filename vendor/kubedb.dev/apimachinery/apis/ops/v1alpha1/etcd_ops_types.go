@@ -92,6 +92,11 @@ type EtcdOpsRequestSpec struct {
 	// contents of a snapshot. This destroys all data currently in the database.
 	// +optional
 	Restore *EtcdRestoreSpec `json:"restore,omitempty"`
+	// RecoverMember replaces a single etcd member that lost its data while still
+	// part of the raft membership. The member is removed, its data volume is
+	// discarded, and it rejoins as a fresh learner at the same peer URL.
+	// +optional
+	RecoverMember *EtcdRecoverMemberSpec `json:"recoverMember,omitempty"`
 	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
 	Timeout *metav1.Duration `json:"timeout,omitempty"`
 	// ApplyOption is to control the execution of OpsRequest depending on the database state.
@@ -101,8 +106,8 @@ type EtcdOpsRequestSpec struct {
 	MaxRetries int32 `json:"maxRetries,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS;RotateAuth;StorageMigration;MoveLeader;Defragment;Compact;RecoverFromQuorumLoss;Restore
-// ENUM(UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Restart, Reconfigure, ReconfigureTLS, RotateAuth, StorageMigration, MoveLeader, Defragment, Compact, RecoverFromQuorumLoss, Restore)
+// +kubebuilder:validation:Enum=UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS;RotateAuth;StorageMigration;MoveLeader;Defragment;Compact;RecoverFromQuorumLoss;Restore;RecoverMember
+// ENUM(UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Restart, Reconfigure, ReconfigureTLS, RotateAuth, StorageMigration, MoveLeader, Defragment, Compact, RecoverFromQuorumLoss, Restore, RecoverMember)
 type EtcdOpsRequestType string
 
 // EtcdUpdateVersionSpec contains the update version information of an Etcd cluster
@@ -234,6 +239,13 @@ type EtcdRestoreSpec struct {
 	// snapshot from. Required: unlike bootstrap-time restore there is no
 	// safe default here, since this destroys the database's existing data.
 	FullDBRepository kmapi.ObjectReference `json:"fullDBRepository"`
+}
+
+// EtcdRecoverMemberSpec names the etcd member to replace. The operator refuses
+// the request if the named member looks healthy.
+type EtcdRecoverMemberSpec struct {
+	// MemberName is the pod name of the etcd member to recover.
+	MemberName string `json:"memberName"`
 }
 
 // +kubebuilder:object:root=true

@@ -609,6 +609,23 @@ func (k *Kafka) GetKafkaBrokerCounts() int {
 	return int(*k.Spec.Replicas)
 }
 
+func (k *Kafka) ExternalAccessEnabled() bool {
+	return GetServiceTemplate(k.Spec.ServiceTemplates, BrokerServiceAlias).Spec.Type == core.ServiceTypeLoadBalancer
+}
+
+func (k *Kafka) BrokerPodNames() []string {
+	petSetName := k.CombinedPetSetName()
+	if k.Spec.Topology != nil {
+		petSetName = k.BrokerPetSetName()
+	}
+	count := k.GetKafkaBrokerCounts()
+	names := make([]string, 0, count)
+	for i := 0; i < count; i++ {
+		names = append(names, fmt.Sprintf("%s-%d", petSetName, i))
+	}
+	return names
+}
+
 func (k *Kafka) GetDeletionPolicy() string {
 	return string(k.Spec.DeletionPolicy)
 }

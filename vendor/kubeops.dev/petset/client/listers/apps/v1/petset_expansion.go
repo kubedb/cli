@@ -129,7 +129,9 @@ func (s *petSetLister) GetManifestWorkPetSets(mw *apiworkv1.ManifestWork) ([]*ap
 		utilruntime.HandleError(
 			fmt.Errorf(
 				"user error: more than one PetSet is selecting manifestwork with labels: %+v. Sets: %v",
-				mw.Labels, setNames))
+				mw.Labels, setNames,
+			),
+		)
 	}
 
 	return psList, nil

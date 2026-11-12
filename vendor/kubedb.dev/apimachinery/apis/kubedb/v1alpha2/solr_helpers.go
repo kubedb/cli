@@ -169,7 +169,7 @@ func (s *Solr) Append(opt map[string]string) string {
 		if fl == 1 {
 			as.WriteString(" ")
 		}
-		as.WriteString(fmt.Sprintf("%s=%s", x, opt[x]))
+		fmt.Fprintf(&as, "%s=%s", x, opt[x])
 		fl = 1
 
 	}

@@ -31,6 +31,7 @@ import (
 	esv6 "github.com/elastic/go-elasticsearch/v6"
 	"github.com/elastic/go-elasticsearch/v6/esapi"
 	"github.com/pkg/errors"
+	"gomodules.xyz/pointer"
 	core "k8s.io/api/core/v1"
 	"k8s.io/klog/v2"
 	kutil "kmodules.xyz/client-go"
@@ -597,5 +598,87 @@ func (es *ESClientV6) EnableUpgradeModeML() error {
 //
 //	Elasticsearch v6.x doesn't have ML nodes. Return nil.
 func (es *ESClientV6) DisableUpgradeModeML() error {
+	return nil
+}
+
+// GetLicense returns the license currently installed on the cluster.
+func (es *ESClientV6) GetLicense() (map[string]any, error) {
+	req := esapi.XPackLicenseGetRequest{
+		Pretty: true,
+	}
+	res, err := req.Do(context.Background(), es.client)
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close() // nolint:errcheck
+
+	if res.IsError() {
+		return nil, fmt.Errorf("failed to get license, received status code: %d", res.StatusCode)
+	}
+
+	response := make(map[string]any)
+	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
+		return nil, errors.Wrap(err, "failed to parse the response body")
+	}
+	return response, nil
+}
+
+// ActivateLicense installs a signed license on the cluster.
+func (es *ESClientV6) ActivateLicense(license []byte) error {
+	req := esapi.XPackLicensePostRequest{
+		Body:        bytes.NewReader(license),
+		Acknowledge: pointer.BoolP(true),
+		Pretty:      true,
+	}
+	res, err := req.Do(context.Background(), es.client)
+	if err != nil {
+		return err
+	}
+	defer res.Body.Close() // nolint:errcheck
+
+	if res.IsError() {
+		return fmt.Errorf("failed to activate license, received status code: %d", res.StatusCode)
+	}
+
+	var response struct {
+		Acknowledged  bool   `json:"acknowledged"`
+		LicenseStatus string `json:"license_status"`
+	}
+	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
+		return errors.Wrap(err, "failed to parse license activation response")
+	}
+	if !response.Acknowledged || (response.LicenseStatus != "active" && response.LicenseStatus != "valid") {
+		return fmt.Errorf("failed to activate license: acknowledged=%t, license_status=%q",
+			response.Acknowledged, response.LicenseStatus)
+	}
+	return nil
+}
+
+// StartTrial activates Elastic's built-in one-time 30-day trial license.
+func (es *ESClientV6) StartTrial() error {
+	req := esapi.XPackLicensePostStartTrialRequest{
+		Acknowledge: pointer.BoolP(true),
+		Pretty:      true,
+	}
+	res, err := req.Do(context.Background(), es.client)
+	if err != nil {
+		return err
+	}
+	defer res.Body.Close() // nolint:errcheck
+
+	if res.IsError() {
+		return fmt.Errorf("failed to start trial license, received status code: %d", res.StatusCode)
+	}
+
+	var response struct {
+		TrialWasStarted bool   `json:"trial_was_started"`
+		ErrorMessage    string `json:"error_message"`
+	}
+	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
+		return errors.Wrap(err, "failed to parse start-trial response")
+	}
+	if !response.TrialWasStarted {
+		return fmt.Errorf("failed to start trial license: %s", response.ErrorMessage)
+	}
 	return nil
 }

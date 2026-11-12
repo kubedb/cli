@@ -150,6 +150,13 @@ spec:
                   member:
                     type: string
                 type: object
+              recoverMember:
+                properties:
+                  memberName:
+                    type: string
+                required:
+                - memberName
+                type: object
               restart:
                 type: object
               restore:
@@ -301,6 +308,7 @@ spec:
                 - Compact
                 - RecoverFromQuorumLoss
                 - Restore
+                - RecoverMember
                 type: string
               updateVersion:
                 properties:

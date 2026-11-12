@@ -78,6 +78,8 @@ type MySQLOpsRequestSpec struct {
 	Restart *RestartSpec `json:"restart,omitempty"`
 	// Specifies information necessary for migrating storageClass or data
 	Migration *StorageMigrationSpec `json:"migration,omitempty"`
+	// Specifies information necessary for restoring the database in place from its archiver backup
+	Archiver *MySQLArchiverRestoreSpec `json:"archiver,omitempty"`
 	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
 	Timeout *metav1.Duration `json:"timeout,omitempty"`
 	// ApplyOption is to control the execution of OpsRequest depending on the database state.
@@ -87,9 +89,29 @@ type MySQLOpsRequestSpec struct {
 	MaxRetries int32 `json:"maxRetries,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS;RotateAuth;ReplicationModeTransformation;StorageMigration
-// ENUM(UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Restart, Reconfigure, ReconfigureTLS, RotateAuth, ReplicationModeTransformation, StorageMigration)
+// +kubebuilder:validation:Enum=UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS;RotateAuth;ReplicationModeTransformation;StorageMigration;ArchiverRestore
+// ENUM(UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Restart, Reconfigure, ReconfigureTLS, RotateAuth, ReplicationModeTransformation, StorageMigration, ArchiverRestore)
 type MySQLOpsRequestType string
+
+// MySQLArchiverRestoreSpec carries the archiver recovery information for an
+// ArchiverRestore ops request. The ops request wipes the referenced database's data
+// volumes and feeds this payload to the same restore path a freshly created restore
+// target uses, so the fields are dbapi.ArchiverRecovery embedded inline.
+type MySQLArchiverRestoreSpec struct {
+	dbapi.ArchiverRecovery `json:",inline"`
+
+	// RetainPV decides whether the pre-restore data PersistentVolumes survive a
+	// *successful* restore. Either way they are forced to Retain for the duration, so a
+	// failure after the wipe can be undone.
+	//
+	// When true (the default), released volumes keep Retain and are named in an
+	// ArchiverRestoreManualCleanupRequired condition; deleting them stays an operator
+	// action. When false, they are deleted once the request succeeds.
+	//
+	// +optional
+	// +kubebuilder:default=true
+	RetainPV *bool `json:"retainPV,omitempty"`
+}
 
 // MySQLReplicaReadinessCriteria is the criteria for checking readiness of a MySQL pod
 // after updating, horizontal scaling etc.

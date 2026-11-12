@@ -47,6 +47,69 @@ spec:
                 - IfReady
                 - Always
                 type: string
+              archiver:
+                properties:
+                  encryptionSecret:
+                    properties:
+                      name:
+                        type: string
+                      namespace:
+                        type: string
+                    required:
+                    - name
+                    type: object
+                  fullDBRepository:
+                    properties:
+                      name:
+                        type: string
+                      namespace:
+                        type: string
+                    required:
+                    - name
+                    type: object
+                  manifestOptions:
+                    properties:
+                      archiver:
+                        default: false
+                        type: boolean
+                      archiverRef:
+                        properties:
+                          name:
+                            type: string
+                          namespace:
+                            type: string
+                        required:
+                        - name
+                        type: object
+                      initScript:
+                        default: false
+                        type: boolean
+                    type: object
+                  manifestRepository:
+                    properties:
+                      name:
+                        type: string
+                      namespace:
+                        type: string
+                    required:
+                    - name
+                    type: object
+                  recoveryTimestamp:
+                    format: date-time
+                    type: string
+                  replicationStrategy:
+                    enum:
+                    - fscopy
+                    - clone
+                    - sync
+                    - none
+                    type: string
+                  retainPV:
+                    default: true
+                    type: boolean
+                required:
+                - recoveryTimestamp
+                type: object
               authentication:
                 properties:
                   secretRef:
@@ -243,6 +306,7 @@ spec:
                 - ReconfigureTLS
                 - RotateAuth
                 - StorageMigration
+                - ArchiverRestore
                 type: string
               updateVersion:
                 properties:

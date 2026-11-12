@@ -65,6 +65,11 @@ spec:
                 - name
                 type: object
                 x-kubernetes-map-type: atomic
+              autoOps:
+                properties:
+                  disabled:
+                    type: boolean
+                type: object
               configuration:
                 properties:
                   inline:
@@ -1244,6 +1249,13 @@ spec:
                     - name
                     type: object
                     x-kubernetes-map-type: atomic
+                  clientTLSSecret:
+                    properties:
+                      name:
+                        default: ""
+                        type: string
+                    type: object
+                    x-kubernetes-map-type: atomic
                   endpoints:
                     items:
                       type: string
@@ -1251,6 +1263,8 @@ spec:
                     type: array
                   externallyManaged:
                     type: boolean
+                  rootPath:
+                    type: string
                   size:
                     minimum: 1
                     type: integer
@@ -1818,6 +1832,35 @@ spec:
                         type: string
                     type: object
                     x-kubernetes-map-type: atomic
+                  tls:
+                    properties:
+                      caConfigMap:
+                        properties:
+                          key:
+                            type: string
+                          name:
+                            default: ""
+                            type: string
+                          optional:
+                            type: boolean
+                        required:
+                        - key
+                        type: object
+                        x-kubernetes-map-type: atomic
+                      caSecret:
+                        properties:
+                          key:
+                            type: string
+                          name:
+                            default: ""
+                            type: string
+                          optional:
+                            type: boolean
+                        required:
+                        - key
+                        type: object
+                        x-kubernetes-map-type: atomic
+                    type: object
                 type: object
               podTemplate:
                 properties:
@@ -5055,6 +5098,8 @@ spec:
                         type: array
                     type: object
                 type: object
+              restrictedSCC:
+                type: boolean
               serviceTemplates:
                 items:
                   properties:
@@ -5063,8 +5108,6 @@ spec:
                       - primary
                       - standby
                       - stats
-                      - dashboard
-                      - readreplica
                       type: string
                     metadata:
                       properties:
@@ -5307,6 +5350,23 @@ spec:
                       - alias
                       type: object
                     type: array
+                  existingSecrets:
+                    properties:
+                      client:
+                        properties:
+                          name:
+                            default: ""
+                            type: string
+                        type: object
+                        x-kubernetes-map-type: atomic
+                      server:
+                        properties:
+                          name:
+                            default: ""
+                            type: string
+                        type: object
+                        x-kubernetes-map-type: atomic
+                    type: object
                   external:
                     properties:
                       mode:

@@ -128,6 +128,67 @@ type ManifestRestoreOptions struct {
 	// Milvus specifies the options for restoring a Milvus manifest
 	// +optional
 	Milvus *MilvusManifestOptions `json:"milvus,omitempty"`
+
+	// DocumentDB specifies the options for selecting particular DocumentDB components to restore in manifest restore
+	// +optional
+	DocumentDB *DocumentDBManifestOptions `json:"documentDB,omitempty"`
+}
+
+// DocumentDBManifestOptions mirrors KubeDBManifestOptions, plus the backend Postgres superuser credential
+type DocumentDBManifestOptions struct {
+	// RestoreNamespace specifies the Namespace where the restored files will be applied
+	// +optional
+	RestoreNamespace string `json:"restoreNamespace,omitempty"`
+
+	// DB specifies whether to restore the DB manifest or not
+	// +kubebuilder:default=true
+	// +optional
+	DB *bool `json:"db,omitempty"`
+
+	// DBName specifies the new name of the DB yaml after restore
+	// +optional
+	DBName string `json:"dbName,omitempty"`
+
+	// AuthSecret specifies whether to restore the gateway AuthSecret manifest or not
+	// +kubebuilder:default=true
+	// +optional
+	AuthSecret *bool `json:"authSecret,omitempty"`
+
+	// AuthSecretName specifies new name of the gateway AuthSecret yaml after restore
+	// +optional
+	AuthSecretName string `json:"authSecretName,omitempty"`
+
+	// AdminAuthSecret specifies whether to restore the backend Postgres superuser AuthSecret manifest or not
+	// +kubebuilder:default=true
+	// +optional
+	AdminAuthSecret *bool `json:"adminAuthSecret,omitempty"`
+
+	// AdminAuthSecretName specifies new name of the backend Postgres superuser AuthSecret yaml after restore
+	// +optional
+	AdminAuthSecretName string `json:"adminAuthSecretName,omitempty"`
+
+	// Archiver specifies whether to restore the Archiver manifest or not
+	// +kubebuilder:default=false
+	// +optional
+	Archiver *bool `json:"archiver,omitempty"`
+
+	// ArchiverRef specifies the new name and namespace of the Archiver yaml after restore
+	// +optional
+	ArchiverRef *kmapi.ObjectReference `json:"archiverRef,omitempty"`
+
+	// ConfigSecret specifies whether to restore the ConfigSecret manifest or not
+	// +kubebuilder:default=true
+	// +optional
+	ConfigSecret *bool `json:"configSecret,omitempty"`
+
+	// ConfigSecretName specifies new name of the ConfigSecret yaml after restore
+	// +optional
+	ConfigSecretName string `json:"configSecretName,omitempty"`
+
+	// InitScript specifies whether to restore the InitScript manifest or not
+	// +kubebuilder:default=true
+	// +optional
+	InitScript *bool `json:"initScript,omitempty"`
 }
 
 type RedisSentinelManifestOptions struct {

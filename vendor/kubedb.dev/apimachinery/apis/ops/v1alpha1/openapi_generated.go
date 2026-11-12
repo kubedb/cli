@@ -652,6 +652,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdOpsRequestList":                               schema_apimachinery_apis_ops_v1alpha1_EtcdOpsRequestList(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdOpsRequestSpec":                               schema_apimachinery_apis_ops_v1alpha1_EtcdOpsRequestSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdRecoverFromQuorumLossSpec":                    schema_apimachinery_apis_ops_v1alpha1_EtcdRecoverFromQuorumLossSpec(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdRecoverMemberSpec":                            schema_apimachinery_apis_ops_v1alpha1_EtcdRecoverMemberSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdRestoreSpec":                                  schema_apimachinery_apis_ops_v1alpha1_EtcdRestoreSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdTLSSpec":                                      schema_apimachinery_apis_ops_v1alpha1_EtcdTLSSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdUpdateVersionSpec":                            schema_apimachinery_apis_ops_v1alpha1_EtcdUpdateVersionSpec(ref),
@@ -700,6 +701,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerUpdateVersionSpec":                     schema_apimachinery_apis_ops_v1alpha1_MSSQLServerUpdateVersionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerVerticalScalingSpec":                   schema_apimachinery_apis_ops_v1alpha1_MSSQLServerVerticalScalingSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MSSQLServerVolumeExpansionSpec":                   schema_apimachinery_apis_ops_v1alpha1_MSSQLServerVolumeExpansionSpec(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBArchiverRestoreSpec":                       schema_apimachinery_apis_ops_v1alpha1_MariaDBArchiverRestoreSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBCustomConfiguration":                       schema_apimachinery_apis_ops_v1alpha1_MariaDBCustomConfiguration(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBHorizontalScalingSpec":                     schema_apimachinery_apis_ops_v1alpha1_MariaDBHorizontalScalingSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBMigrationSpec":                             schema_apimachinery_apis_ops_v1alpha1_MariaDBMigrationSpec(ref),
@@ -745,6 +747,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBVerticalScalingSpec":                       schema_apimachinery_apis_ops_v1alpha1_MongoDBVerticalScalingSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MongoDBVolumeExpansionSpec":                       schema_apimachinery_apis_ops_v1alpha1_MongoDBVolumeExpansionSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MongosNode":                                       schema_apimachinery_apis_ops_v1alpha1_MongosNode(ref),
+		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLArchiverRestoreSpec":                         schema_apimachinery_apis_ops_v1alpha1_MySQLArchiverRestoreSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLHorizontalScalingSpec":                       schema_apimachinery_apis_ops_v1alpha1_MySQLHorizontalScalingSpec(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLOpsRequest":                                  schema_apimachinery_apis_ops_v1alpha1_MySQLOpsRequest(ref),
 		"kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLOpsRequestList":                              schema_apimachinery_apis_ops_v1alpha1_MySQLOpsRequestList(ref),
@@ -37162,6 +37165,12 @@ func schema_apimachinery_apis_ops_v1alpha1_EtcdOpsRequestSpec(ref common.Referen
 							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdRestoreSpec"),
 						},
 					},
+					"recoverMember": {
+						SchemaProps: spec.SchemaProps{
+							Description: "RecoverMember replaces a single etcd member that lost its data while still part of the raft membership. The member is removed, its data volume is discarded, and it rejoins as a fresh learner at the same peer URL.",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdRecoverMemberSpec"),
+						},
+					},
 					"timeout": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.",
@@ -37186,7 +37195,7 @@ func schema_apimachinery_apis_ops_v1alpha1_EtcdOpsRequestSpec(ref common.Referen
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.AuthSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdCompactSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdDefragmentSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdMoveLeaderSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdRecoverFromQuorumLossSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdRestoreSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdTLSSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdUpdateVersionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.StorageMigrationSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.AuthSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdCompactSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdCustomConfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdDefragmentSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdMoveLeaderSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdRecoverFromQuorumLossSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdRecoverMemberSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdRestoreSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdTLSSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdUpdateVersionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.EtcdVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.StorageMigrationSpec"},
 	}
 }
 
@@ -37212,6 +37221,28 @@ func schema_apimachinery_apis_ops_v1alpha1_EtcdRecoverFromQuorumLossSpec(ref com
 						},
 					},
 				},
+			},
+		},
+	}
+}
+
+func schema_apimachinery_apis_ops_v1alpha1_EtcdRecoverMemberSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "EtcdRecoverMemberSpec names the etcd member to replace. The operator refuses the request if the named member looks healthy.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"memberName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "MemberName is the pod name of the etcd member to recover.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"memberName"},
 			},
 		},
 	}
@@ -39144,6 +39175,62 @@ func schema_apimachinery_apis_ops_v1alpha1_MSSQLServerVolumeExpansionSpec(ref co
 	}
 }
 
+func schema_apimachinery_apis_ops_v1alpha1_MariaDBArchiverRestoreSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "MariaDBArchiverRestoreSpec carries the archiver recovery information for an ArchiverRestore ops request. The ops request wipes the referenced database's data volumes and feeds this payload to the same restore path a freshly created restore target uses, so the fields are dbapi.ArchiverRecovery embedded inline.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"recoveryTimestamp": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
+						},
+					},
+					"encryptionSecret": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kmodules.xyz/client-go/api/v1.ObjectReference"),
+						},
+					},
+					"manifestRepository": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kmodules.xyz/client-go/api/v1.ObjectReference"),
+						},
+					},
+					"fullDBRepository": {
+						SchemaProps: spec.SchemaProps{
+							Description: "FullDBRepository means db restore + manifest restore",
+							Ref:         ref("kmodules.xyz/client-go/api/v1.ObjectReference"),
+						},
+					},
+					"replicationStrategy": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"manifestOptions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ManifestOptions provide options to select particular manifest object to restore",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1.ManifestOptions"),
+						},
+					},
+					"retainPV": {
+						SchemaProps: spec.SchemaProps{
+							Description: "RetainPV decides whether the pre-restore data PersistentVolumes survive a *successful* restore. Either way they are forced to Retain for the duration, so a failure after the wipe can be undone.\n\nWhen true (the default), released volumes keep Retain and are named in an ArchiverRestoreManualCleanupRequired condition; deleting them stays an operator action. When false, they are deleted once the request succeeds.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"recoveryTimestamp"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.Time", "kmodules.xyz/client-go/api/v1.ObjectReference", "kubedb.dev/apimachinery/apis/kubedb/v1.ManifestOptions"},
+	}
+}
+
 func schema_apimachinery_apis_ops_v1alpha1_MariaDBCustomConfiguration(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -39424,6 +39511,12 @@ func schema_apimachinery_apis_ops_v1alpha1_MariaDBOpsRequestSpec(ref common.Refe
 							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBMigrationSpec"),
 						},
 					},
+					"archiver": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies information necessary for restoring the database in place from its archiver",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBArchiverRestoreSpec"),
+						},
+					},
 					"timeout": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.",
@@ -39448,7 +39541,7 @@ func schema_apimachinery_apis_ops_v1alpha1_MariaDBOpsRequestSpec(ref common.Refe
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.AuthSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBMigrationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBTLSSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBUpdateVersionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ReconfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.AuthSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBArchiverRestoreSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBMigrationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBTLSSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBUpdateVersionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MariaDBVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ReconfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec"},
 	}
 }
 
@@ -40360,6 +40453,12 @@ func schema_apimachinery_apis_ops_v1alpha1_MilvusTLSSpec(ref common.ReferenceCal
 							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ProtocolTLSConfig"),
 						},
 					},
+					"existingSecrets": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ExistingSecrets names certificates that already exist, for example when a running Milvus is adopted. KubeDB uses them as they are: it does not issue, renew or take ownership of them. Any other certificate that is needed is issued from issuerRef.",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MilvusExistingTLSSecrets"),
+						},
+					},
 					"rotateCertificates": {
 						SchemaProps: spec.SchemaProps{
 							Description: "RotateCertificates tells operator to initiate certificate rotation",
@@ -40378,7 +40477,7 @@ func schema_apimachinery_apis_ops_v1alpha1_MilvusTLSSpec(ref common.ReferenceCal
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.TypedLocalObjectReference", "kmodules.xyz/client-go/api/v1.CertificateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ProtocolTLSConfig"},
+			"k8s.io/api/core/v1.TypedLocalObjectReference", "kmodules.xyz/client-go/api/v1.CertificateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MilvusExistingTLSSecrets", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ProtocolTLSConfig"},
 	}
 }
 
@@ -41105,6 +41204,62 @@ func schema_apimachinery_apis_ops_v1alpha1_MongosNode(ref common.ReferenceCallba
 	}
 }
 
+func schema_apimachinery_apis_ops_v1alpha1_MySQLArchiverRestoreSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "MySQLArchiverRestoreSpec carries the archiver recovery information for an ArchiverRestore ops request. The ops request wipes the referenced database's data volumes and feeds this payload to the same restore path a freshly created restore target uses, so the fields are dbapi.ArchiverRecovery embedded inline.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"recoveryTimestamp": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
+						},
+					},
+					"encryptionSecret": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kmodules.xyz/client-go/api/v1.ObjectReference"),
+						},
+					},
+					"manifestRepository": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kmodules.xyz/client-go/api/v1.ObjectReference"),
+						},
+					},
+					"fullDBRepository": {
+						SchemaProps: spec.SchemaProps{
+							Description: "FullDBRepository means db restore + manifest restore",
+							Ref:         ref("kmodules.xyz/client-go/api/v1.ObjectReference"),
+						},
+					},
+					"replicationStrategy": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"manifestOptions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ManifestOptions provide options to select particular manifest object to restore",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1.ManifestOptions"),
+						},
+					},
+					"retainPV": {
+						SchemaProps: spec.SchemaProps{
+							Description: "RetainPV decides whether the pre-restore data PersistentVolumes survive a *successful* restore. Either way they are forced to Retain for the duration, so a failure after the wipe can be undone.\n\nWhen true (the default), released volumes keep Retain and are named in an ArchiverRestoreManualCleanupRequired condition; deleting them stays an operator action. When false, they are deleted once the request succeeds.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"recoveryTimestamp"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.Time", "kmodules.xyz/client-go/api/v1.ObjectReference", "kubedb.dev/apimachinery/apis/kubedb/v1.ManifestOptions"},
+	}
+}
+
 func schema_apimachinery_apis_ops_v1alpha1_MySQLHorizontalScalingSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -41301,6 +41456,12 @@ func schema_apimachinery_apis_ops_v1alpha1_MySQLOpsRequestSpec(ref common.Refere
 							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.StorageMigrationSpec"),
 						},
 					},
+					"archiver": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies information necessary for restoring the database in place from its archiver backup",
+							Ref:         ref("kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLArchiverRestoreSpec"),
+						},
+					},
 					"timeout": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.",
@@ -41325,7 +41486,7 @@ func schema_apimachinery_apis_ops_v1alpha1_MySQLOpsRequestSpec(ref common.Refere
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.AuthSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLReplicationModeTransformSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLTLSSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLUpdateVersionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ReconfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.StorageMigrationSpec"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kubedb.dev/apimachinery/apis/ops/v1alpha1.AuthSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLArchiverRestoreSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLHorizontalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLReplicationModeTransformSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLTLSSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLUpdateVersionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLVerticalScalingSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.MySQLVolumeExpansionSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.ReconfigurationSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.RestartSpec", "kubedb.dev/apimachinery/apis/ops/v1alpha1.StorageMigrationSpec"},
 	}
 }
 

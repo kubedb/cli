@@ -632,6 +632,16 @@ func (in *LogBackupOptions) DeepCopyInto(out *LogBackupOptions) {
 		*out = new(GenericSecretReference)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.LogRotateInterval != nil {
+		in, out := &in.LogRotateInterval, &out.LogRotateInterval
+		*out = new(metav1.Duration)
+		**out = **in
+	}
+	if in.PushInterval != nil {
+		in, out := &in.PushInterval, &out.PushInterval
+		*out = new(metav1.Duration)
+		**out = **in
+	}
 	return
 }
 

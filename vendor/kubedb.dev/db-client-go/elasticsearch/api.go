@@ -200,4 +200,7 @@ type ESClient interface {
 	AssignedShardsSize(node string) (int64, error)
 	EnableUpgradeModeML() error
 	DisableUpgradeModeML() error
+	GetLicense() (map[string]any, error)
+	ActivateLicense(license []byte) error
+	StartTrial() error
 }

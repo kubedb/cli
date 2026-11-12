@@ -246,7 +246,7 @@ func Convert_v1alpha2_PostgresSpec_To_v1_PostgresSpec(in *PostgresSpec, out *v1.
 	if len(out.PodTemplate.Spec.Containers) > 0 {
 		out.PodTemplate.Spec.Containers[0].Name = kubedb.PostgresContainerName
 	}
-	out.ServiceTemplates = *(*[]v1.NamedServiceTemplateSpec)(unsafe.Pointer(&in.ServiceTemplates))
+	out.ServiceTemplates = *(*[]v1.PostgresNamedServiceTemplateSpec)(unsafe.Pointer(&in.ServiceTemplates))
 	out.TLS = (*clientgoapiv1.TLSConfig)(unsafe.Pointer(in.TLS))
 	out.Halted = in.Halted
 	out.DeletionPolicy = v1.DeletionPolicy(in.TerminationPolicy)
@@ -303,7 +303,7 @@ func Convert_v1_PostgresSpec_To_v1alpha2_PostgresSpec(in *v1.PostgresSpec, out *
 	if err := Convert_Slice_v1_Container_To_v1alpha2_CoordinatorSpec(&in.PodTemplate.Spec.Containers, &out.Coordinator, s); err != nil {
 		return err
 	}
-	out.ServiceTemplates = *(*[]NamedServiceTemplateSpec)(unsafe.Pointer(&in.ServiceTemplates))
+	out.ServiceTemplates = *(*[]PostgresNamedServiceTemplateSpec)(unsafe.Pointer(&in.ServiceTemplates))
 	out.TLS = (*clientgoapiv1.TLSConfig)(unsafe.Pointer(in.TLS))
 	out.Halted = in.Halted
 	out.TerminationPolicy = DeletionPolicy(in.DeletionPolicy)
@@ -1065,7 +1065,7 @@ func Convert_v1_KafkaSpec_To_v1alpha2_KafkaSpec(in *v1.KafkaSpec, out *KafkaSpec
 	out.ConfigSecret = (*corev1.LocalObjectReference)(unsafe.Pointer(in.ConfigSecret))
 	out.CruiseControl = (*KafkaCruiseControl)(unsafe.Pointer(in.CruiseControl))
 	out.PodTemplate = in.PodTemplate
-	out.ServiceTemplates = *(*[]NamedServiceTemplateSpec)(unsafe.Pointer(&in.ServiceTemplates))
+	out.ServiceTemplates = *(*[]KafkaNamedServiceTemplateSpec)(unsafe.Pointer(&in.ServiceTemplates))
 	out.TLS = (*clientgoapiv1.TLSConfig)(unsafe.Pointer(in.TLS))
 	out.Halted = in.Halted
 	out.DeletionPolicy = DeletionPolicy(in.DeletionPolicy)

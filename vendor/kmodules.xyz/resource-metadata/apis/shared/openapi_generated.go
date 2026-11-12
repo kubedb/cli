@@ -47,6 +47,8 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kmodules.xyz/resource-metadata/apis/shared.RegistryProxies":      schema_kmodulesxyz_resource_metadata_apis_shared_RegistryProxies(ref),
 		"kmodules.xyz/resource-metadata/apis/shared.ResourceLocator":      schema_kmodulesxyz_resource_metadata_apis_shared_ResourceLocator(ref),
 		"kmodules.xyz/resource-metadata/apis/shared.ResourceQuery":        schema_kmodulesxyz_resource_metadata_apis_shared_ResourceQuery(ref),
+		"kmodules.xyz/resource-metadata/apis/shared.SelfhostPresets":      schema_kmodulesxyz_resource_metadata_apis_shared_SelfhostPresets(ref),
+		"kmodules.xyz/resource-metadata/apis/shared.SelfhostVersion":      schema_kmodulesxyz_resource_metadata_apis_shared_SelfhostVersion(ref),
 		"kmodules.xyz/resource-metadata/apis/shared.SourceLocator":        schema_kmodulesxyz_resource_metadata_apis_shared_SourceLocator(ref),
 		"kmodules.xyz/resource-metadata/apis/shared.UIParameterTemplate":  schema_kmodulesxyz_resource_metadata_apis_shared_UIParameterTemplate(ref),
 		"kmodules.xyz/resource-metadata/apis/shared.UIParameters":         schema_kmodulesxyz_resource_metadata_apis_shared_UIParameters(ref),
@@ -362,12 +364,17 @@ func schema_kmodulesxyz_resource_metadata_apis_shared_BootstrapPresets(ref commo
 							Ref:     ref("kmodules.xyz/resource-metadata/apis/shared.HelmInfo"),
 						},
 					},
+					"selfhost": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kmodules.xyz/resource-metadata/apis/shared.SelfhostPresets"),
+						},
+					},
 				},
 				Required: []string{"image", "registry", "helm"},
 			},
 		},
 		Dependencies: []string{
-			"kmodules.xyz/resource-metadata/apis/shared.HelmInfo", "kmodules.xyz/resource-metadata/apis/shared.ImageRegistrySpec", "kmodules.xyz/resource-metadata/apis/shared.RegistryInfo"},
+			"kmodules.xyz/resource-metadata/apis/shared.HelmInfo", "kmodules.xyz/resource-metadata/apis/shared.ImageRegistrySpec", "kmodules.xyz/resource-metadata/apis/shared.RegistryInfo", "kmodules.xyz/resource-metadata/apis/shared.SelfhostPresets"},
 	}
 }
 
@@ -580,6 +587,12 @@ func schema_kmodulesxyz_resource_metadata_apis_shared_HelmRelease(ref common.Ref
 							Default: "",
 							Type:    []string{"string"},
 							Format:  "",
+						},
+					},
+					"namespace": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
 						},
 					},
 					"values": {
@@ -899,6 +912,70 @@ func schema_kmodulesxyz_resource_metadata_apis_shared_ResourceQuery(ref common.R
 				Required: []string{"type"},
 			},
 		},
+	}
+}
+
+func schema_kmodulesxyz_resource_metadata_apis_shared_SelfhostPresets(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"versions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Older ace-installer versions that can still be rendered; the latest is helm.releases[\"ace-installer\"].",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("kmodules.xyz/resource-metadata/apis/shared.SelfhostVersion"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/resource-metadata/apis/shared.SelfhostVersion"},
+	}
+}
+
+func schema_kmodulesxyz_resource_metadata_apis_shared_SelfhostVersion(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"version": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"image": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"helm": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Snapshot of the bootstrap helm presets that shipped with this version.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kmodules.xyz/resource-metadata/apis/shared.HelmInfo"),
+						},
+					},
+				},
+				Required: []string{"version", "image"},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/resource-metadata/apis/shared.HelmInfo"},
 	}
 }
 
