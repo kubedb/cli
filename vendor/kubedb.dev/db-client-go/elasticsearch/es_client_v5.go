@@ -455,3 +455,18 @@ func (es *ESClientV5) EnableUpgradeModeML() error {
 func (es *ESClientV5) DisableUpgradeModeML() error {
 	return nil
 }
+
+// GetLicense is not supported for Elasticsearch v5.
+func (es *ESClientV5) GetLicense() (map[string]any, error) {
+	return nil, errors.New("license API is not supported for Elasticsearch v5")
+}
+
+// ActivateLicense is not supported for Elasticsearch v5.
+func (es *ESClientV5) ActivateLicense(license []byte) error {
+	return errors.New("license API is not supported for Elasticsearch v5")
+}
+
+// StartTrial is not supported for Elasticsearch v5.
+func (es *ESClientV5) StartTrial() error {
+	return errors.New("license API is not supported for Elasticsearch v5")
+}

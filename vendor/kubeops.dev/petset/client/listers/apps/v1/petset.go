@@ -19,11 +19,11 @@ limitations under the License.
 package v1
 
 import (
-	v1 "kubeops.dev/petset/apis/apps/v1"
+	appsv1 "kubeops.dev/petset/apis/apps/v1"
 
-	"k8s.io/apimachinery/pkg/api/errors"
-	"k8s.io/apimachinery/pkg/labels"
-	"k8s.io/client-go/tools/cache"
+	labels "k8s.io/apimachinery/pkg/labels"
+	listers "k8s.io/client-go/listers"
+	cache "k8s.io/client-go/tools/cache"
 )
 
 // PetSetLister helps list PetSets.
@@ -31,7 +31,7 @@ import (
 type PetSetLister interface {
 	// List lists all PetSets in the indexer.
 	// Objects returned here must be treated as read-only.
-	List(selector labels.Selector) (ret []*v1.PetSet, err error)
+	List(selector labels.Selector) (ret []*appsv1.PetSet, err error)
 	// PetSets returns an object that can list and get PetSets.
 	PetSets(namespace string) PetSetNamespaceLister
 	PetSetListerExpansion
@@ -39,25 +39,17 @@ type PetSetLister interface {
 
 // petSetLister implements the PetSetLister interface.
 type petSetLister struct {
-	indexer cache.Indexer
+	listers.ResourceIndexer[*appsv1.PetSet]
 }
 
 // NewPetSetLister returns a new PetSetLister.
 func NewPetSetLister(indexer cache.Indexer) PetSetLister {
-	return &petSetLister{indexer: indexer}
-}
-
-// List lists all PetSets in the indexer.
-func (s *petSetLister) List(selector labels.Selector) (ret []*v1.PetSet, err error) {
-	err = cache.ListAll(s.indexer, selector, func(m interface{}) {
-		ret = append(ret, m.(*v1.PetSet))
-	})
-	return ret, err
+	return &petSetLister{listers.New[*appsv1.PetSet](indexer, appsv1.Resource("petset"))}
 }
 
 // PetSets returns an object that can list and get PetSets.
 func (s *petSetLister) PetSets(namespace string) PetSetNamespaceLister {
-	return petSetNamespaceLister{indexer: s.indexer, namespace: namespace}
+	return petSetNamespaceLister{listers.NewNamespaced[*appsv1.PetSet](s.ResourceIndexer, namespace)}
 }
 
 // PetSetNamespaceLister helps list and get PetSets.
@@ -65,36 +57,15 @@ func (s *petSetLister) PetSets(namespace string) PetSetNamespaceLister {
 type PetSetNamespaceLister interface {
 	// List lists all PetSets in the indexer for a given namespace.
 	// Objects returned here must be treated as read-only.
-	List(selector labels.Selector) (ret []*v1.PetSet, err error)
+	List(selector labels.Selector) (ret []*appsv1.PetSet, err error)
 	// Get retrieves the PetSet from the indexer for a given namespace and name.
 	// Objects returned here must be treated as read-only.
-	Get(name string) (*v1.PetSet, error)
+	Get(name string) (*appsv1.PetSet, error)
 	PetSetNamespaceListerExpansion
 }
 
 // petSetNamespaceLister implements the PetSetNamespaceLister
 // interface.
 type petSetNamespaceLister struct {
-	indexer   cache.Indexer
-	namespace string
-}
-
-// List lists all PetSets in the indexer for a given namespace.
-func (s petSetNamespaceLister) List(selector labels.Selector) (ret []*v1.PetSet, err error) {
-	err = cache.ListAllByNamespace(s.indexer, s.namespace, selector, func(m interface{}) {
-		ret = append(ret, m.(*v1.PetSet))
-	})
-	return ret, err
-}
-
-// Get retrieves the PetSet from the indexer for a given namespace and name.
-func (s petSetNamespaceLister) Get(name string) (*v1.PetSet, error) {
-	obj, exists, err := s.indexer.GetByKey(s.namespace + "/" + name)
-	if err != nil {
-		return nil, err
-	}
-	if !exists {
-		return nil, errors.NewNotFound(v1.Resource("petset"), name)
-	}
-	return obj.(*v1.PetSet), nil
+	listers.ResourceIndexer[*appsv1.PetSet]
 }

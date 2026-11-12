@@ -18,6 +18,8 @@ limitations under the License.
 package v1alpha1
 
 import (
+	dbapi "kubedb.dev/apimachinery/apis/kubedb/v1"
+
 	core "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -73,6 +75,8 @@ type MariaDBOpsRequestSpec struct {
 	Restart *RestartSpec `json:"restart,omitempty"`
 	// Specifies information necessary for migrating storageClass or data
 	Migration *MariaDBMigrationSpec `json:"migration,omitempty"`
+	// Specifies information necessary for restoring the database in place from its archiver
+	Archiver *MariaDBArchiverRestoreSpec `json:"archiver,omitempty"`
 	// Timeout for each step of the ops request in second. If a step doesn't finish within the specified timeout, the ops request will result in failure.
 	Timeout *metav1.Duration `json:"timeout,omitempty"`
 	// ApplyOption is to control the execution of OpsRequest depending on the database state.
@@ -82,9 +86,29 @@ type MariaDBOpsRequestSpec struct {
 	MaxRetries int32 `json:"maxRetries,omitempty"`
 }
 
-// +kubebuilder:validation:Enum=UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS;RotateAuth;StorageMigration
-// ENUM(UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Restart, Reconfigure, ReconfigureTLS, RotateAuth, StorageMigration)
+// +kubebuilder:validation:Enum=UpdateVersion;HorizontalScaling;VerticalScaling;VolumeExpansion;Restart;Reconfigure;ReconfigureTLS;RotateAuth;StorageMigration;ArchiverRestore
+// ENUM(UpdateVersion, HorizontalScaling, VerticalScaling, VolumeExpansion, Restart, Reconfigure, ReconfigureTLS, RotateAuth, StorageMigration, ArchiverRestore)
 type MariaDBOpsRequestType string
+
+// MariaDBArchiverRestoreSpec carries the archiver recovery information for an
+// ArchiverRestore ops request. The ops request wipes the referenced database's data
+// volumes and feeds this payload to the same restore path a freshly created restore
+// target uses, so the fields are dbapi.ArchiverRecovery embedded inline.
+type MariaDBArchiverRestoreSpec struct {
+	dbapi.ArchiverRecovery `json:",inline"`
+
+	// RetainPV decides whether the pre-restore data PersistentVolumes survive a
+	// *successful* restore. Either way they are forced to Retain for the duration, so a
+	// failure after the wipe can be undone.
+	//
+	// When true (the default), released volumes keep Retain and are named in an
+	// ArchiverRestoreManualCleanupRequired condition; deleting them stays an operator
+	// action. When false, they are deleted once the request succeeds.
+	//
+	// +optional
+	// +kubebuilder:default=true
+	RetainPV *bool `json:"retainPV,omitempty"`
+}
 
 // MariaDBMigrationSpec is the spec for storage migration of a MariaDB database.
 type MariaDBMigrationSpec struct {

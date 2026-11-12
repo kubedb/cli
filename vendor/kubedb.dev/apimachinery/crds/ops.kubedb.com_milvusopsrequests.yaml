@@ -236,6 +236,23 @@ spec:
                       - alias
                       type: object
                     type: array
+                  existingSecrets:
+                    properties:
+                      client:
+                        properties:
+                          name:
+                            default: ""
+                            type: string
+                        type: object
+                        x-kubernetes-map-type: atomic
+                      server:
+                        properties:
+                          name:
+                            default: ""
+                            type: string
+                        type: object
+                        x-kubernetes-map-type: atomic
+                    type: object
                   external:
                     properties:
                       mode:

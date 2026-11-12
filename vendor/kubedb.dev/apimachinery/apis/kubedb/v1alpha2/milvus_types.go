@@ -109,6 +109,10 @@ type MilvusSpec struct {
 	// +kubebuilder:default={periodSeconds: 10, timeoutSeconds: 10, failureThreshold: 3}
 	HealthChecker kmapi.HealthCheckSpec `json:"healthChecker"`
 
+	// AutoOps contains configuration of automatic ops-request-recommendation generation
+	// +optional
+	AutoOps AutoOpsSpec `json:"autoOps,omitempty"`
+
 	// Monitor is used monitor database instance
 	// +optional
 	Monitor *mona.AgentSpec `json:"monitor,omitempty"`
@@ -116,6 +120,16 @@ type MilvusSpec struct {
 	// TLS contains tls configurations
 	// +optional
 	TLS *MilvusTLSConfig `json:"tls,omitempty"`
+
+	// RestrictedSCC lets the platform choose the pods' user, group and fsGroup
+	// instead of KubeDB defaulting them from the MilvusVersion (uid 1000). Set
+	// it on OpenShift under the restricted-v2 SCC, which assigns IDs from the
+	// namespace range and rejects a fixed uid outside it. runAsNonRoot and the
+	// rest of the container hardening stay on. Explicit values in the pod
+	// template still win. The Milvus image must tolerate an arbitrary uid
+	// (writable paths owned by group 0).
+	// +optional
+	RestrictedSCC bool `json:"restrictedSCC,omitempty"`
 
 	// Network configures secondary networking (e.g. SR-IOV via Multus) for
 	// this component. Only meaningful in Standalone mode; Distributed roles
@@ -244,6 +258,27 @@ type MilvusTLSConfig struct {
 	// Internal enables TLS for inter-component communication (one-way only)
 	// +optional
 	Internal *ProtocolTLSConfig `json:"internal,omitempty"`
+
+	// ExistingSecrets names certificates that already exist, for example when a
+	// running Milvus is adopted. KubeDB uses them as they are: it does not issue,
+	// renew or take ownership of them. Any other certificate that is needed is
+	// issued from issuerRef.
+	// +optional
+	ExistingSecrets *MilvusExistingTLSSecrets `json:"existingSecrets,omitempty"`
+}
+
+// MilvusExistingTLSSecrets lists Secrets in the Milvus namespace with the keys
+// "tls.crt", "tls.key" and "ca.crt".
+type MilvusExistingTLSSecrets struct {
+	// Server is the certificate the Milvus pods serve.
+	// +optional
+	Server *core.LocalObjectReference `json:"server,omitempty"`
+
+	// Client is the certificate KubeDB presents to Milvus when
+	// spec.tls.external.mode is mTLS. Without mTLS it is not needed: KubeDB reads
+	// the CA from the server Secret.
+	// +optional
+	Client *core.LocalObjectReference `json:"client,omitempty"`
 }
 
 // +kubebuilder:validation:Enum=server;client
@@ -405,11 +440,31 @@ type MetaStorageSpec struct {
 	// +optional
 	TLS *kmapi.TLSConfig `json:"tls,omitempty"`
 
-	// AuthSecret is the root credential for the internally-managed meta etcd.
-	// If omitted, the etcd operator auto-generates one. Only used when
-	// ExternallyManaged is false.
+	// AuthSecret is the root credential for the meta etcd.
+	// When ExternallyManaged is false and this is omitted, the etcd operator
+	// auto-generates one. When ExternallyManaged is true, it names an existing
+	// basic-auth Secret (keys "username" and "password") in this namespace that
+	// Milvus uses to authenticate to the external etcd; omit it if the external
+	// etcd has authentication disabled. Virtual secrets are not supported for
+	// an external etcd.
 	// +optional
 	AuthSecret *SecretReference `json:"authSecret,omitempty"`
+
+	// ClientTLSSecret names a Secret in this namespace with the client
+	// certificate Milvus presents to an external etcd ("tls.crt", "tls.key")
+	// and the CA that signed the etcd server certificate ("ca.crt"). Only used,
+	// and only allowed, when ExternallyManaged is true; for the
+	// internally-managed etcd, use TLS instead.
+	// +optional
+	ClientTLSSecret *core.LocalObjectReference `json:"clientTLSSecret,omitempty"`
+
+	// RootPath is the etcd key prefix Milvus stores its metadata under
+	// (etcd.rootPath in milvus.yaml). Defaults to "<milvus name>-etcd". Set it to
+	// reuse the metadata of an existing deployment, e.g. "by-dev", the Milvus
+	// Helm chart default. Changing it on a running Milvus points it at a
+	// different (likely empty) metadata tree.
+	// +optional
+	RootPath string `json:"rootPath,omitempty"`
 }
 
 // +k8s:deepcopy-gen=true
@@ -418,6 +473,26 @@ type ObjectStorageSpec struct {
 	// ConfigSecret should contain the necessary data to connect to external MinIO
 	// +optional
 	ConfigSecret *core.LocalObjectReference `json:"configSecret,omitempty"`
+
+	// TLS configures how Milvus verifies the object storage server certificate.
+	// +optional
+	TLS *ObjectStorageTLS `json:"tls,omitempty"`
+}
+
+// +k8s:deepcopy-gen=true
+// ObjectStorageTLS names the CA bundle that signed the object storage server certificate.
+// Set exactly one of CASecret or CAConfigMap. KubeDB mounts it into every Milvus pod,
+// enables minio.useSSL and sets minio.ssl.tlsCACert; the endpoint and port still come
+// from the object storage config secret.
+type ObjectStorageTLS struct {
+	// CASecret selects a key of a Secret in this namespace that holds the PEM CA bundle.
+	// +optional
+	CASecret *core.SecretKeySelector `json:"caSecret,omitempty"`
+
+	// CAConfigMap selects a key of a ConfigMap in this namespace that holds the PEM CA
+	// bundle, e.g. the OpenShift service CA: openshift-service-ca.crt / service-ca.crt.
+	// +optional
+	CAConfigMap *core.ConfigMapKeySelector `json:"caConfigMap,omitempty"`
 }
 
 // +k8s:deepcopy-gen=true

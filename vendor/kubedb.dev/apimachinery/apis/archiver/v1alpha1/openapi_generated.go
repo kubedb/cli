@@ -34276,11 +34276,23 @@ func schema_apimachinery_apis_archiver_v1alpha1_LogBackupOptions(ref common.Refe
 							Format:      "int32",
 						},
 					},
+					"logRotateInterval": {
+						SchemaProps: spec.SchemaProps{
+							Description: "LogRotateInterval defines how often the archiver rotates the log file when new transactions exist. Zero disables rotation. The default value is 10m.",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Duration"),
+						},
+					},
+					"pushInterval": {
+						SchemaProps: spec.SchemaProps{
+							Description: "PushInterval defines how often the archiver pushes the closed log files to the backup storage. The default value is 15s.",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Duration"),
+						},
+					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"kmodules.xyz/offshoot-api/api/v1.RuntimeSettings", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.GenericSecretReference"},
+			"k8s.io/apimachinery/pkg/apis/meta/v1.Duration", "kmodules.xyz/offshoot-api/api/v1.RuntimeSettings", "kubedb.dev/apimachinery/apis/archiver/v1alpha1.GenericSecretReference"},
 	}
 }
 

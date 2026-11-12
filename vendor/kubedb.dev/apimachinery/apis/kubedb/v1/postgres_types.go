@@ -131,7 +131,7 @@ type PostgresSpec struct {
 
 	// ServiceTemplates is an optional configuration for services used to expose database
 	// +optional
-	ServiceTemplates []NamedServiceTemplateSpec `json:"serviceTemplates,omitempty"`
+	ServiceTemplates []PostgresNamedServiceTemplateSpec `json:"serviceTemplates,omitempty"`
 
 	// TLS contains tls configurations for client and server.
 	// +optional

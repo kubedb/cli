@@ -4759,8 +4759,6 @@ spec:
                       - primary
                       - standby
                       - stats
-                      - dashboard
-                      - readreplica
                       type: string
                     metadata:
                       properties:

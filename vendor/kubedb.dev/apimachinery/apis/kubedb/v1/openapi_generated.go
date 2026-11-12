@@ -605,6 +605,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1.KafkaClusterTopology":                                schema_apimachinery_apis_kubedb_v1_KafkaClusterTopology(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.KafkaCruiseControl":                                  schema_apimachinery_apis_kubedb_v1_KafkaCruiseControl(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.KafkaList":                                           schema_apimachinery_apis_kubedb_v1_KafkaList(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1.KafkaNamedServiceTemplateSpec":                       schema_apimachinery_apis_kubedb_v1_KafkaNamedServiceTemplateSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.KafkaNode":                                           schema_apimachinery_apis_kubedb_v1_KafkaNode(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.KafkaSpec":                                           schema_apimachinery_apis_kubedb_v1_KafkaSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.KafkaStatus":                                         schema_apimachinery_apis_kubedb_v1_KafkaStatus(ref),
@@ -658,6 +659,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1.PostgresDisasterRecoveryStatus":                      schema_apimachinery_apis_kubedb_v1_PostgresDisasterRecoveryStatus(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.PostgresLicenseSpec":                                 schema_apimachinery_apis_kubedb_v1_PostgresLicenseSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.PostgresList":                                        schema_apimachinery_apis_kubedb_v1_PostgresList(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1.PostgresNamedServiceTemplateSpec":                    schema_apimachinery_apis_kubedb_v1_PostgresNamedServiceTemplateSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.PostgresReplication":                                 schema_apimachinery_apis_kubedb_v1_PostgresReplication(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.PostgresSpec":                                        schema_apimachinery_apis_kubedb_v1_PostgresSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1.PostgresStatus":                                      schema_apimachinery_apis_kubedb_v1_PostgresStatus(ref),
@@ -35011,6 +35013,43 @@ func schema_apimachinery_apis_kubedb_v1_KafkaList(ref common.ReferenceCallback) 
 	}
 }
 
+func schema_apimachinery_apis_kubedb_v1_KafkaNamedServiceTemplateSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"alias": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Alias represents the identifier of the service.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.ObjectMeta"),
+						},
+					},
+					"spec": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specification of the desired behavior of the service. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#spec-and-status",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.ServiceSpec"),
+						},
+					},
+				},
+				Required: []string{"alias"},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/offshoot-api/api/v1.ObjectMeta", "kmodules.xyz/offshoot-api/api/v1.ServiceSpec"},
+	}
+}
+
 func schema_apimachinery_apis_kubedb_v1_KafkaNode(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -35177,7 +35216,7 @@ func schema_apimachinery_apis_kubedb_v1_KafkaSpec(ref common.ReferenceCallback) 
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec"),
+										Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1.KafkaNamedServiceTemplateSpec"),
 									},
 								},
 							},
@@ -35214,7 +35253,7 @@ func schema_apimachinery_apis_kubedb_v1_KafkaSpec(ref common.ReferenceCallback) 
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.BrokerRack", "kubedb.dev/apimachinery/apis/kubedb/v1.ConfigurationSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.KafkaClusterTopology", "kubedb.dev/apimachinery/apis/kubedb/v1.KafkaCruiseControl", "kubedb.dev/apimachinery/apis/kubedb/v1.KafkaTieredStorage", "kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.BrokerRack", "kubedb.dev/apimachinery/apis/kubedb/v1.ConfigurationSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.KafkaClusterTopology", "kubedb.dev/apimachinery/apis/kubedb/v1.KafkaCruiseControl", "kubedb.dev/apimachinery/apis/kubedb/v1.KafkaNamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.KafkaTieredStorage", "kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"},
 	}
 }
 
@@ -38209,6 +38248,43 @@ func schema_apimachinery_apis_kubedb_v1_PostgresList(ref common.ReferenceCallbac
 	}
 }
 
+func schema_apimachinery_apis_kubedb_v1_PostgresNamedServiceTemplateSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"alias": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Alias represents the identifier of the service.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.ObjectMeta"),
+						},
+					},
+					"spec": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specification of the desired behavior of the service. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#spec-and-status",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.ServiceSpec"),
+						},
+					},
+				},
+				Required: []string{"alias"},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/offshoot-api/api/v1.ObjectMeta", "kmodules.xyz/offshoot-api/api/v1.ServiceSpec"},
+	}
+}
+
 func schema_apimachinery_apis_kubedb_v1_PostgresReplication(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -38407,7 +38483,7 @@ func schema_apimachinery_apis_kubedb_v1_PostgresSpec(ref common.ReferenceCallbac
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec"),
+										Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1.PostgresNamedServiceTemplateSpec"),
 									},
 								},
 							},
@@ -38500,7 +38576,7 @@ func schema_apimachinery_apis_kubedb_v1_PostgresSpec(ref common.ReferenceCallbac
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.AllowedConsumers", "kubedb.dev/apimachinery/apis/kubedb/v1.ArbiterSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.Archiver", "kubedb.dev/apimachinery/apis/kubedb/v1.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgreLeaderElectionConfig", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgresConfiguration", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgresLicenseSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgresReplication", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgresSynchronousReplicationSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgresTDESpec", "kubedb.dev/apimachinery/apis/kubedb/v1.ReadReplicaSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.RemoteReplicaSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.AllowedConsumers", "kubedb.dev/apimachinery/apis/kubedb/v1.ArbiterSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.Archiver", "kubedb.dev/apimachinery/apis/kubedb/v1.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgreLeaderElectionConfig", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgresConfiguration", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgresLicenseSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgresNamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgresReplication", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgresSynchronousReplicationSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.PostgresTDESpec", "kubedb.dev/apimachinery/apis/kubedb/v1.ReadReplicaSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.RemoteReplicaSpec", "kubedb.dev/apimachinery/apis/kubedb/v1.SecretReference"},
 	}
 }
 

@@ -851,14 +851,14 @@ func Convert_v1alpha1_PostgresSpec_To_v1alpha2_PostgresSpec(in *PostgresSpec, ou
 	}
 	out.PodTemplate = in.PodTemplate
 	if !reflect.DeepEqual(in.ServiceTemplate, ofst.ServiceTemplateSpec{}) {
-		out.ServiceTemplates = append(out.ServiceTemplates, v1alpha2.NamedServiceTemplateSpec{
-			Alias:               v1alpha2.PrimaryServiceAlias,
+		out.ServiceTemplates = append(out.ServiceTemplates, v1alpha2.PostgresNamedServiceTemplateSpec{
+			Alias:               v1alpha2.PostgresServiceAlias(v1alpha2.PrimaryServiceAlias),
 			ServiceTemplateSpec: in.ServiceTemplate,
 		})
 	}
 	if !reflect.DeepEqual(in.ReplicaServiceTemplate, ofst.ServiceTemplateSpec{}) {
-		out.ServiceTemplates = append(out.ServiceTemplates, v1alpha2.NamedServiceTemplateSpec{
-			Alias:               v1alpha2.StandbyServiceAlias,
+		out.ServiceTemplates = append(out.ServiceTemplates, v1alpha2.PostgresNamedServiceTemplateSpec{
+			Alias:               v1alpha2.PostgresServiceAlias(v1alpha2.StandbyServiceAlias),
 			ServiceTemplateSpec: in.ReplicaServiceTemplate,
 		})
 	}

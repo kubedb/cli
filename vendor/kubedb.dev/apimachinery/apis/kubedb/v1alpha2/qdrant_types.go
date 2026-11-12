@@ -100,6 +100,10 @@ type QdrantSpec struct {
 	// +optional
 	JWTRBAC bool `json:"jwtRbac,omitempty"`
 
+	// Init is used to initialize database
+	// +optional
+	Init *InitSpec `json:"init,omitempty"`
+
 	// +optional
 	Configuration *ConfigurationSpec `json:"configuration,omitempty"`
 

@@ -103,7 +103,6 @@ func ToGenericResource(item client.Object, apiType *kmapi.ResourceID, cmeta *kma
 			Name:                       GetGenericResourceName(item),
 			GenerateName:               item.GetGenerateName(),
 			Namespace:                  item.GetNamespace(),
-			SelfLink:                   "",
 			UID:                        "gres-" + item.GetUID(),
 			ResourceVersion:            item.GetResourceVersion(),
 			Generation:                 item.GetGeneration(),

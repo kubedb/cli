@@ -121,7 +121,7 @@ type KafkaSpec struct {
 
 	// ServiceTemplates is an optional configuration for services used to expose database
 	// +optional
-	ServiceTemplates []NamedServiceTemplateSpec `json:"serviceTemplates,omitempty"`
+	ServiceTemplates []KafkaNamedServiceTemplateSpec `json:"serviceTemplates,omitempty"`
 
 	// DeletionPolicy controls the delete operation for database
 	// +optional
@@ -245,6 +245,7 @@ const (
 	KafkaListenerController KafkaListenerType = "CONTROLLER"
 	KafkaListenerLocal      KafkaListenerType = "LOCAL"
 	KafkaListenerCC         KafkaListenerType = "CC"
+	KafkaListenerExternal   KafkaListenerType = "EXTERNAL"
 )
 
 // +kubebuilder:validation:Enum=ca;transport;http;client;server

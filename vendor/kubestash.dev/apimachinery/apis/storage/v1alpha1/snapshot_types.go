@@ -198,6 +198,14 @@ type Component struct {
 	// +optional
 	ResticStats []ResticStats `json:"resticStats,omitempty"`
 
+	// ResticCBTStats specifies the ordered lineage information needed when
+	// the Restic driver stores a KubeVirt Changed Block Tracking (CBT) extent
+	// artifact. The component driver remains Restic; this field tells a
+	// KubeVirt restore worker that the artifact must be replayed with its
+	// ancestors rather than restored as an independent file tree.
+	// +optional
+	ResticCBTStats []ResticCBTStats `json:"resticCBTStats,omitempty"`
+
 	// SolrStats specifies the "Solr" driver specific information
 	// +optional
 	SolrStats []SolrStats `json:"solrStats,omitempty"`
@@ -573,4 +581,57 @@ type SnapshotList struct {
 
 func init() {
 	SchemeBuilder.Register(&Snapshot{}, &SnapshotList{})
+}
+
+// ResticCBTStats identifies one immutable KubeVirt Pull-mode CBT artifact
+// stored by the Restic driver. Incremental artifacts contain only changed
+// extents, so ParentSnapshot and ParentCheckpoint are part of the durable
+// recovery contract.
+type ResticCBTStats struct {
+	// CapturedAt is when this artifact became durable in Restic. The resident
+	// archiver uses it to re-anchor a chain with a periodic full base.
+	// +optional
+	CapturedAt string `json:"capturedAt,omitempty"`
+
+	// ResticSnapshotID is the immutable Restic snapshot that contains this
+	// artifact. It is separate from the KubeStash Snapshot, which can contain a
+	// long-lived sequence of checkpoints.
+	// +optional
+	ResticSnapshotID string `json:"resticSnapshotID,omitempty"`
+
+	// Kind is either full or incremental.
+	// +optional
+	Kind string `json:"kind,omitempty"`
+
+	// ArtifactPath is the path inside the Restic snapshot containing
+	// checkpoint.json, map.json, and the payload extent files.
+	// +optional
+	ArtifactPath string `json:"artifactPath,omitempty"`
+
+	// Checkpoint is the KubeVirt checkpoint captured by this artifact.
+	// +optional
+	Checkpoint string `json:"checkpoint,omitempty"`
+
+	// ParentCheckpoint is the KubeVirt checkpoint this incremental is based
+	// on. It is empty for a full backup.
+	// +optional
+	ParentCheckpoint string `json:"parentCheckpoint,omitempty"`
+
+	// ParentSnapshot is the KubeStash Snapshot that contains the parent artifact
+	// for this component. It is empty for a full backup.
+	// +optional
+	ParentSnapshot string `json:"parentSnapshot,omitempty"`
+
+	// DiskSize is the virtual disk size in bytes used to validate replay.
+	// +optional
+	DiskSize int64 `json:"diskSize,omitempty"`
+
+	// MapChecksum is the SHA-256 checksum of the normalized extent map.
+	// +optional
+	MapChecksum string `json:"mapChecksum,omitempty"`
+
+	// PayloadChecksum is the SHA-256 checksum of the ordered extent payload
+	// files and their declared lengths.
+	// +optional
+	PayloadChecksum string `json:"payloadChecksum,omitempty"`
 }

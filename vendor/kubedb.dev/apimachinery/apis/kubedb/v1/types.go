@@ -112,7 +112,7 @@ const (
 	DeletionPolicyDoNotTerminate DeletionPolicy = "DoNotTerminate"
 )
 
-// +kubebuilder:validation:Enum=primary;standby;stats;dashboard;readreplica
+// +kubebuilder:validation:Enum=primary;standby;stats
 type ServiceAlias string
 
 const (
@@ -121,6 +121,7 @@ const (
 	StatsServiceAlias       ServiceAlias = "stats"
 	DashboardServiceAlias   ServiceAlias = "dashboard"
 	ReadReplicaServiceAlias ServiceAlias = "readreplica"
+	BrokerServiceAlias      ServiceAlias = "broker"
 )
 
 // +kubebuilder:validation:Enum=fscopy;clone;sync;none
@@ -162,6 +163,60 @@ type NamedServiceTemplateSpec struct {
 	// ServiceTemplate is an optional configuration for a service used to expose database
 	// +optional
 	ofstv1.ServiceTemplateSpec `json:",inline,omitempty"`
+}
+
+// NamedServiceTemplate lets the service template helpers work on every DB's serviceTemplates list.
+type NamedServiceTemplate interface {
+	GetAlias() ServiceAlias
+	GetServiceTemplateSpec() ofstv1.ServiceTemplateSpec
+}
+
+func (t NamedServiceTemplateSpec) GetAlias() ServiceAlias {
+	return t.Alias
+}
+
+func (t NamedServiceTemplateSpec) GetServiceTemplateSpec() ofstv1.ServiceTemplateSpec {
+	return t.ServiceTemplateSpec
+}
+
+// +kubebuilder:validation:Enum=primary;standby;stats;readreplica
+type PostgresServiceAlias string
+
+type PostgresNamedServiceTemplateSpec struct {
+	// Alias represents the identifier of the service.
+	Alias PostgresServiceAlias `json:"alias"`
+
+	// ServiceTemplate is an optional configuration for a service used to expose database
+	// +optional
+	ofstv1.ServiceTemplateSpec `json:",inline,omitempty"`
+}
+
+func (t PostgresNamedServiceTemplateSpec) GetAlias() ServiceAlias {
+	return ServiceAlias(t.Alias)
+}
+
+func (t PostgresNamedServiceTemplateSpec) GetServiceTemplateSpec() ofstv1.ServiceTemplateSpec {
+	return t.ServiceTemplateSpec
+}
+
+// +kubebuilder:validation:Enum=primary;stats;broker
+type KafkaServiceAlias string
+
+type KafkaNamedServiceTemplateSpec struct {
+	// Alias represents the identifier of the service.
+	Alias KafkaServiceAlias `json:"alias"`
+
+	// ServiceTemplate is an optional configuration for a service used to expose database
+	// +optional
+	ofstv1.ServiceTemplateSpec `json:",inline,omitempty"`
+}
+
+func (t KafkaNamedServiceTemplateSpec) GetAlias() ServiceAlias {
+	return ServiceAlias(t.Alias)
+}
+
+func (t KafkaNamedServiceTemplateSpec) GetServiceTemplateSpec() ofstv1.ServiceTemplateSpec {
+	return t.ServiceTemplateSpec
 }
 
 type KernelSettings struct {

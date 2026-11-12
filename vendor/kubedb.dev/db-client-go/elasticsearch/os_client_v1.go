@@ -752,3 +752,18 @@ func (os *OSClientV1) EnableUpgradeModeML() error {
 func (os *OSClientV1) DisableUpgradeModeML() error {
 	return nil
 }
+
+// GetLicense is not supported for OpenSearch, which has no X-Pack license concept.
+func (os *OSClientV1) GetLicense() (map[string]any, error) {
+	return nil, errors.New("license API is not supported for OpenSearch")
+}
+
+// ActivateLicense is not supported for OpenSearch, which has no X-Pack license concept.
+func (os *OSClientV1) ActivateLicense(license []byte) error {
+	return errors.New("license API is not supported for OpenSearch")
+}
+
+// StartTrial is not supported for OpenSearch, which has no X-Pack license concept.
+func (os *OSClientV1) StartTrial() error {
+	return errors.New("license API is not supported for OpenSearch")
+}

@@ -680,6 +680,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.KafkaClusterTopology":                          schema_apimachinery_apis_kubedb_v1alpha2_KafkaClusterTopology(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.KafkaCruiseControl":                            schema_apimachinery_apis_kubedb_v1alpha2_KafkaCruiseControl(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.KafkaList":                                     schema_apimachinery_apis_kubedb_v1alpha2_KafkaList(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.KafkaNamedServiceTemplateSpec":                 schema_apimachinery_apis_kubedb_v1alpha2_KafkaNamedServiceTemplateSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.KafkaNode":                                     schema_apimachinery_apis_kubedb_v1alpha2_KafkaNode(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.KafkaSpec":                                     schema_apimachinery_apis_kubedb_v1alpha2_KafkaSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.KafkaStatus":                                   schema_apimachinery_apis_kubedb_v1alpha2_KafkaStatus(ref),
@@ -713,6 +714,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MilvusBind":                                    schema_apimachinery_apis_kubedb_v1alpha2_MilvusBind(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MilvusDataNode":                                schema_apimachinery_apis_kubedb_v1alpha2_MilvusDataNode(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MilvusDistributedSpec":                         schema_apimachinery_apis_kubedb_v1alpha2_MilvusDistributedSpec(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MilvusExistingTLSSecrets":                      schema_apimachinery_apis_kubedb_v1alpha2_MilvusExistingTLSSecrets(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MilvusGPUSpec":                                 schema_apimachinery_apis_kubedb_v1alpha2_MilvusGPUSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MilvusList":                                    schema_apimachinery_apis_kubedb_v1alpha2_MilvusList(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MilvusNetworkSpec":                             schema_apimachinery_apis_kubedb_v1alpha2_MilvusNetworkSpec(ref),
@@ -756,6 +758,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Neo4jStatus":                                   schema_apimachinery_apis_kubedb_v1alpha2_Neo4jStatus(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Neo4jTLSConfig":                                schema_apimachinery_apis_kubedb_v1alpha2_Neo4jTLSConfig(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ObjectStorageSpec":                             schema_apimachinery_apis_kubedb_v1alpha2_ObjectStorageSpec(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ObjectStorageTLS":                              schema_apimachinery_apis_kubedb_v1alpha2_ObjectStorageTLS(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ObserverSpec":                                  schema_apimachinery_apis_kubedb_v1alpha2_ObserverSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Oracle":                                        schema_apimachinery_apis_kubedb_v1alpha2_Oracle(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.OracleConfiguration":                           schema_apimachinery_apis_kubedb_v1alpha2_OracleConfiguration(ref),
@@ -781,6 +784,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PostgreLeaderElectionConfig":                   schema_apimachinery_apis_kubedb_v1alpha2_PostgreLeaderElectionConfig(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Postgres":                                      schema_apimachinery_apis_kubedb_v1alpha2_Postgres(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PostgresList":                                  schema_apimachinery_apis_kubedb_v1alpha2_PostgresList(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PostgresNamedServiceTemplateSpec":              schema_apimachinery_apis_kubedb_v1alpha2_PostgresNamedServiceTemplateSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PostgresReplication":                           schema_apimachinery_apis_kubedb_v1alpha2_PostgresReplication(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PostgresSpec":                                  schema_apimachinery_apis_kubedb_v1alpha2_PostgresSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PostgresStatus":                                schema_apimachinery_apis_kubedb_v1alpha2_PostgresStatus(ref),
@@ -800,6 +804,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.RabbitMQ":                                      schema_apimachinery_apis_kubedb_v1alpha2_RabbitMQ(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.RabbitMQBind":                                  schema_apimachinery_apis_kubedb_v1alpha2_RabbitMQBind(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.RabbitMQList":                                  schema_apimachinery_apis_kubedb_v1alpha2_RabbitMQList(ref),
+		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.RabbitMQNamedServiceTemplateSpec":              schema_apimachinery_apis_kubedb_v1alpha2_RabbitMQNamedServiceTemplateSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.RabbitMQSpec":                                  schema_apimachinery_apis_kubedb_v1alpha2_RabbitMQSpec(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.RabbitMQStatus":                                schema_apimachinery_apis_kubedb_v1alpha2_RabbitMQStatus(ref),
 		"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.RabbitmqApp":                                   schema_apimachinery_apis_kubedb_v1alpha2_RabbitmqApp(ref),
@@ -39159,6 +39164,43 @@ func schema_apimachinery_apis_kubedb_v1alpha2_KafkaList(ref common.ReferenceCall
 	}
 }
 
+func schema_apimachinery_apis_kubedb_v1alpha2_KafkaNamedServiceTemplateSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"alias": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Alias represents the identifier of the service.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.ObjectMeta"),
+						},
+					},
+					"spec": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specification of the desired behavior of the service. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#spec-and-status",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.ServiceSpec"),
+						},
+					},
+				},
+				Required: []string{"alias"},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/offshoot-api/api/v1.ObjectMeta", "kmodules.xyz/offshoot-api/api/v1.ServiceSpec"},
+	}
+}
+
 func schema_apimachinery_apis_kubedb_v1alpha2_KafkaNode(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -39349,7 +39391,7 @@ func schema_apimachinery_apis_kubedb_v1alpha2_KafkaSpec(ref common.ReferenceCall
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec"),
+										Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.KafkaNamedServiceTemplateSpec"),
 									},
 								},
 							},
@@ -39386,7 +39428,7 @@ func schema_apimachinery_apis_kubedb_v1alpha2_KafkaSpec(ref common.ReferenceCall
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.BrokerRack", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.KafkaClusterTopology", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.KafkaCruiseControl", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.BrokerRack", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.KafkaClusterTopology", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.KafkaCruiseControl", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.KafkaNamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"},
 	}
 }
 
@@ -40721,15 +40763,28 @@ func schema_apimachinery_apis_kubedb_v1alpha2_MetaStorageSpec(ref common.Referen
 					},
 					"authSecret": {
 						SchemaProps: spec.SchemaProps{
-							Description: "AuthSecret is the root credential for the internally-managed meta etcd. If omitted, the etcd operator auto-generates one. Only used when ExternallyManaged is false.",
+							Description: "AuthSecret is the root credential for the meta etcd. When ExternallyManaged is false and this is omitted, the etcd operator auto-generates one. When ExternallyManaged is true, it names an existing basic-auth Secret (keys \"username\" and \"password\") in this namespace that Milvus uses to authenticate to the external etcd; omit it if the external etcd has authentication disabled. Virtual secrets are not supported for an external etcd.",
 							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"),
+						},
+					},
+					"clientTLSSecret": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ClientTLSSecret names a Secret in this namespace with the client certificate Milvus presents to an external etcd (\"tls.crt\", \"tls.key\") and the CA that signed the etcd server certificate (\"ca.crt\"). Only used, and only allowed, when ExternallyManaged is true; for the internally-managed etcd, use TLS instead.",
+							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
+						},
+					},
+					"rootPath": {
+						SchemaProps: spec.SchemaProps{
+							Description: "RootPath is the etcd key prefix Milvus stores its metadata under (etcd.rootPath in milvus.yaml). Defaults to \"<milvus name>-etcd\". Set it to reuse the metadata of an existing deployment, e.g. \"by-dev\", the Milvus Helm chart default. Changing it on a running Milvus points it at a different (likely empty) metadata tree.",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"},
 	}
 }
 
@@ -40966,6 +41021,33 @@ func schema_apimachinery_apis_kubedb_v1alpha2_MilvusDistributedSpec(ref common.R
 		},
 		Dependencies: []string{
 			"kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MilvusDataNode", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MilvusNode"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1alpha2_MilvusExistingTLSSecrets(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "MilvusExistingTLSSecrets lists Secrets in the Milvus namespace with the keys \"tls.crt\", \"tls.key\" and \"ca.crt\".",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"server": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Server is the certificate the Milvus pods serve.",
+							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
+						},
+					},
+					"client": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Client is the certificate KubeDB presents to Milvus when spec.tls.external.mode is mTLS. Without mTLS it is not needed: KubeDB reads the CA from the server Secret.",
+							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.LocalObjectReference"},
 	}
 }
 
@@ -41406,6 +41488,13 @@ func schema_apimachinery_apis_kubedb_v1alpha2_MilvusSpec(ref common.ReferenceCal
 							Ref:         ref("kmodules.xyz/client-go/api/v1.HealthCheckSpec"),
 						},
 					},
+					"autoOps": {
+						SchemaProps: spec.SchemaProps{
+							Description: "AutoOps contains configuration of automatic ops-request-recommendation generation",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.AutoOpsSpec"),
+						},
+					},
 					"monitor": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Monitor is used monitor database instance",
@@ -41416,6 +41505,13 @@ func schema_apimachinery_apis_kubedb_v1alpha2_MilvusSpec(ref common.ReferenceCal
 						SchemaProps: spec.SchemaProps{
 							Description: "TLS contains tls configurations",
 							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MilvusTLSConfig"),
+						},
+					},
+					"restrictedSCC": {
+						SchemaProps: spec.SchemaProps{
+							Description: "RestrictedSCC lets the platform choose the pods' user, group and fsGroup instead of KubeDB defaulting them from the MilvusVersion (uid 1000). Set it on OpenShift under the restricted-v2 SCC, which assigns IDs from the namespace range and rejects a fixed uid outside it. runAsNonRoot and the rest of the container hardening stay on. Explicit values in the pod template still win. The Milvus image must tolerate an arbitrary uid (writable paths owned by group 0).",
+							Type:        []string{"boolean"},
+							Format:      "",
 						},
 					},
 					"network": {
@@ -41447,7 +41543,7 @@ func schema_apimachinery_apis_kubedb_v1alpha2_MilvusSpec(ref common.ReferenceCal
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Archiver", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ConfigurationSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MetaStorageSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MilvusGPUSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MilvusNetworkSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MilvusTLSConfig", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MilvusTopology", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ObjectStorageSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"},
+			"k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Archiver", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ConfigurationSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MetaStorageSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MilvusGPUSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MilvusNetworkSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MilvusTLSConfig", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MilvusTopology", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ObjectStorageSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"},
 	}
 }
 
@@ -41532,11 +41628,17 @@ func schema_apimachinery_apis_kubedb_v1alpha2_MilvusTLSConfig(ref common.Referen
 							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ProtocolTLSConfig"),
 						},
 					},
+					"existingSecrets": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ExistingSecrets names certificates that already exist, for example when a running Milvus is adopted. KubeDB uses them as they are: it does not issue, renew or take ownership of them. Any other certificate that is needed is issued from issuerRef.",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MilvusExistingTLSSecrets"),
+						},
+					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.TypedLocalObjectReference", "kmodules.xyz/client-go/api/v1.CertificateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ProtocolTLSConfig"},
+			"k8s.io/api/core/v1.TypedLocalObjectReference", "kmodules.xyz/client-go/api/v1.CertificateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.MilvusExistingTLSSecrets", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ProtocolTLSConfig"},
 	}
 }
 
@@ -43265,11 +43367,44 @@ func schema_apimachinery_apis_kubedb_v1alpha2_ObjectStorageSpec(ref common.Refer
 							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
 						},
 					},
+					"tls": {
+						SchemaProps: spec.SchemaProps{
+							Description: "TLS configures how Milvus verifies the object storage server certificate.",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ObjectStorageTLS"),
+						},
+					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference"},
+			"k8s.io/api/core/v1.LocalObjectReference", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ObjectStorageTLS"},
+	}
+}
+
+func schema_apimachinery_apis_kubedb_v1alpha2_ObjectStorageTLS(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ObjectStorageTLS names the CA bundle that signed the object storage server certificate. Set exactly one of CASecret or CAConfigMap. KubeDB mounts it into every Milvus pod, enables minio.useSSL and sets minio.ssl.tlsCACert; the endpoint and port still come from the object storage config secret.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"caSecret": {
+						SchemaProps: spec.SchemaProps{
+							Description: "CASecret selects a key of a Secret in this namespace that holds the PEM CA bundle.",
+							Ref:         ref("k8s.io/api/core/v1.SecretKeySelector"),
+						},
+					},
+					"caConfigMap": {
+						SchemaProps: spec.SchemaProps{
+							Description: "CAConfigMap selects a key of a ConfigMap in this namespace that holds the PEM CA bundle, e.g. the OpenShift service CA: openshift-service-ca.crt / service-ca.crt.",
+							Ref:         ref("k8s.io/api/core/v1.ConfigMapKeySelector"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.ConfigMapKeySelector", "k8s.io/api/core/v1.SecretKeySelector"},
 	}
 }
 
@@ -44756,6 +44891,43 @@ func schema_apimachinery_apis_kubedb_v1alpha2_PostgresList(ref common.ReferenceC
 	}
 }
 
+func schema_apimachinery_apis_kubedb_v1alpha2_PostgresNamedServiceTemplateSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"alias": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Alias represents the identifier of the service.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.ObjectMeta"),
+						},
+					},
+					"spec": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specification of the desired behavior of the service. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#spec-and-status",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.ServiceSpec"),
+						},
+					},
+				},
+				Required: []string{"alias"},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/offshoot-api/api/v1.ObjectMeta", "kmodules.xyz/offshoot-api/api/v1.ServiceSpec"},
+	}
+}
+
 func schema_apimachinery_apis_kubedb_v1alpha2_PostgresReplication(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -44928,7 +45100,7 @@ func schema_apimachinery_apis_kubedb_v1alpha2_PostgresSpec(ref common.ReferenceC
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec"),
+										Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PostgresNamedServiceTemplateSpec"),
 									},
 								},
 							},
@@ -45003,7 +45175,7 @@ func schema_apimachinery_apis_kubedb_v1alpha2_PostgresSpec(ref common.ReferenceC
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.AllowedConsumers", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ArbiterSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Archiver", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.CoordinatorSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PostgreLeaderElectionConfig", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PostgresReplication", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.RemoteReplicaSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v1.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.AllowedConsumers", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ArbiterSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.Archiver", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.CoordinatorSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PostgreLeaderElectionConfig", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PostgresNamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.PostgresReplication", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.RemoteReplicaSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"},
 	}
 }
 
@@ -45586,6 +45758,12 @@ func schema_apimachinery_apis_kubedb_v1alpha2_QdrantSpec(ref common.ReferenceCal
 							Format:      "",
 						},
 					},
+					"init": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Init is used to initialize database",
+							Ref:         ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec"),
+						},
+					},
 					"configuration": {
 						SchemaProps: spec.SchemaProps{
 							Ref: ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ConfigurationSpec"),
@@ -45649,7 +45827,7 @@ func schema_apimachinery_apis_kubedb_v1alpha2_QdrantSpec(ref common.ReferenceCal
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ConfigurationSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.QdrantTLSConfig", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"},
+			"k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ConfigurationSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.InitSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.QdrantTLSConfig", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"},
 	}
 }
 
@@ -45856,6 +46034,43 @@ func schema_apimachinery_apis_kubedb_v1alpha2_RabbitMQList(ref common.ReferenceC
 	}
 }
 
+func schema_apimachinery_apis_kubedb_v1alpha2_RabbitMQNamedServiceTemplateSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"alias": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Alias represents the identifier of the service.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.ObjectMeta"),
+						},
+					},
+					"spec": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specification of the desired behavior of the service. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#spec-and-status",
+							Default:     map[string]interface{}{},
+							Ref:         ref("kmodules.xyz/offshoot-api/api/v1.ServiceSpec"),
+						},
+					},
+				},
+				Required: []string{"alias"},
+			},
+		},
+		Dependencies: []string{
+			"kmodules.xyz/offshoot-api/api/v1.ObjectMeta", "kmodules.xyz/offshoot-api/api/v1.ServiceSpec"},
+	}
+}
+
 func schema_apimachinery_apis_kubedb_v1alpha2_RabbitMQSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -45950,7 +46165,7 @@ func schema_apimachinery_apis_kubedb_v1alpha2_RabbitMQSpec(ref common.ReferenceC
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec"),
+										Ref:     ref("kubedb.dev/apimachinery/apis/kubedb/v1alpha2.RabbitMQNamedServiceTemplateSpec"),
 									},
 								},
 							},
@@ -46003,7 +46218,7 @@ func schema_apimachinery_apis_kubedb_v1alpha2_RabbitMQSpec(ref common.ReferenceC
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ConfigurationSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.NamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"},
+			"k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PersistentVolumeClaimSpec", "kmodules.xyz/client-go/api/v1.HealthCheckSpec", "kmodules.xyz/client-go/api/v1.TLSConfig", "kmodules.xyz/monitoring-agent-api/api/v1.AgentSpec", "kmodules.xyz/offshoot-api/api/v2.PodTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.AutoOpsSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.ConfigurationSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.RabbitMQNamedServiceTemplateSpec", "kubedb.dev/apimachinery/apis/kubedb/v1alpha2.SecretReference"},
 	}
 }
 

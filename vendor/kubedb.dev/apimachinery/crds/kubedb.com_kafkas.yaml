@@ -6987,10 +6987,8 @@ spec:
                     alias:
                       enum:
                       - primary
-                      - standby
                       - stats
-                      - dashboard
-                      - readreplica
+                      - broker
                       type: string
                     metadata:
                       properties:
@@ -21823,10 +21821,8 @@ spec:
                     alias:
                       enum:
                       - primary
-                      - standby
                       - stats
-                      - dashboard
-                      - readreplica
+                      - broker
                       type: string
                     metadata:
                       properties:

@@ -85,6 +85,12 @@ const (
 	Reconfigure          = "Reconfigure"
 	ReconfigureSucceeded = "ReconfigureSucceeded"
 	ReconfigureFailed    = "ReconfigureFailed"
+
+	DynamicConfigTried             = "DynamicConfigTried"
+	DynamicConfigTriedSucceeded    = "DynamicConfigTriedSucceeded"
+	DynamicConfigApplied           = "DynamicConfigApplied"
+	DynamicConfigAppliedSucceeded  = "DynamicConfigAppliedSucceeded"
+	DynamicConfigFallbackToRestart = "DynamicConfigFallbackToRestart"
 )
 
 // ReconfigureTLS
@@ -333,6 +339,29 @@ const (
 	DBPatchSucceeded             = "DBPatchSucceeded"
 	RestartMaxscale              = "RestartMaxscale"
 	RestartMaxscalePodsSucceeded = "RestartMaxscalePodsSucceeded"
+
+	ArchiverRestoreRetainPV     = "ArchiverRestoreRetainPV"
+	ArchiverRestoreWipeVolumes  = "ArchiverRestoreWipeVolumes"
+	ArchiverRestoreTriggered    = "ArchiverRestoreTriggered"
+	ArchiverRestoreDataRestored = "ArchiverRestoreDataRestored"
+
+	ArchiverRestoreRetainPVSucceeded      = "ArchiverRestoreRetainPVSucceeded"
+	ArchiverRestoreWipeVolumesSucceeded   = "ArchiverRestoreWipeVolumesSucceeded"
+	ArchiverRestoreTriggeredSucceeded     = "ArchiverRestoreTriggeredSucceeded"
+	ArchiverRestoreDataRestoredSucceeded  = "ArchiverRestoreDataRestoredSucceeded"
+	ArchiverRestoreDatabaseReadySucceeded = "ArchiverRestoreDatabaseReadySucceeded"
+
+	ArchiverRestoreRetainPVFailed      = "ArchiverRestoreRetainPVFailed"
+	ArchiverRestoreWipeVolumesFailed   = "ArchiverRestoreWipeVolumesFailed"
+	ArchiverRestoreTriggeredFailed     = "ArchiverRestoreTriggeredFailed"
+	ArchiverRestoreDataRestoredFailed  = "ArchiverRestoreDataRestoredFailed"
+	ArchiverRestoreDatabaseReadyFailed = "ArchiverRestoreDatabaseReadyFailed"
+
+	ArchiverRestoreManualCleanupRequired = "ArchiverRestoreManualCleanupRequired"
+
+	ArchiverRestoreSuspendArchiver          = "ArchiverRestoreSuspendArchiver"
+	ArchiverRestoreSuspendArchiverSucceeded = "ArchiverRestoreSuspendArchiverSucceeded"
+	ArchiverRestoreSuspendArchiverFailed    = "ArchiverRestoreSuspendArchiverFailed"
 )
 
 // Postgres Constants
@@ -373,6 +402,8 @@ const (
 	OpsRequestProgressing                   = "OpsRequestProgressing"
 	SetRaftKeyOpsRequestProgressing         = "SetRaftKeyOpsRequestProgressing"
 	UnsetRaftKeyOpsRequestProgressing       = "UnsetRaftKeyOpsRequestProgressing"
+	SetRaftKeyMajorUpgradeInProgress        = "SetRaftKeyMajorUpgradeInProgress"
+	UnsetRaftKeyMajorUpgradeInProgress      = "UnsetRaftKeyMajorUpgradeInProgress"
 	NotReadyReplicas                        = "NotReadyReplicas"
 	RestartNotReadyStandby                  = "RestartNotReadyStandby"
 	StandbyReadyCheck                       = "StandbyReadyCheck"
