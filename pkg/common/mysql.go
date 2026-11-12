@@ -47,7 +47,9 @@ type MySQLOpts struct {
 	ErrWriter *bytes.Buffer
 }
 
-func NewMySQLOpts(f cmdutil.Factory, dbName, namespace string) (*MySQLOpts, error) {
+func NewMySQLOpts(f cmdutil.Factory, dbName, namespace string, options ...OptionFunc) (*MySQLOpts, error) {
+	cfg := buildOptionConfig(options)
+
 	config, err := f.ToRESTConfig()
 	if err != nil {
 		return nil, err
@@ -75,7 +77,7 @@ func NewMySQLOpts(f cmdutil.Factory, dbName, namespace string) (*MySQLOpts, erro
 		return nil, err
 	}
 
-	if db.Status.Phase != dbapi.DatabasePhaseReady {
+	if !cfg.skipReadinessCheck && db.Status.Phase != dbapi.DatabasePhaseReady {
 		return nil, fmt.Errorf("MySQL %s/%s is not ready", namespace, dbName)
 	}
 
